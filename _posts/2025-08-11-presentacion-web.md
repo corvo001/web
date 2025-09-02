@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Presentación del Portafolio"
-excerpt: "Un espacio donde convergen la ciencia, el desarrollo de software y la creación de prototipos funcionales."
+excerpt: "Un espacio donde convergen la ciencia y el desarrollo de software."
 date: 2025-08-11
 show_on_home: true
 permalink: /presentacion-portafolio/
