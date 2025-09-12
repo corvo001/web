@@ -14,8 +14,6 @@ tags:
 
 Dyson Swarm es un simulador interactivo que permite diseñar, manipular y visualizar enjambres de satélites orbitando alrededor de una estrella. Su propósito es explorar de forma experimental las arquitecturas de colectores solares masivos —conocidas como enjambres Dyson— y estudiar tanto su comportamiento orbital como su rendimiento energético.
 
-El sistema ofrece un entorno visual en tiempo real donde se pueden ajustar parámetros fundamentales como el número de satélites, el tamaño del enjambre, la inclinación orbital o la densidad de distribución. Estos controles permiten experimentar con diferentes configuraciones y observar cómo evoluciona la estructura global del enjambre, su cobertura energética y su estabilidad dinámica.
-
 ## Características principales
 - Simulación en tiempo real de miles de satélites orbitando una estrella.
 - Ajuste dinámico del número, tamaño y ángulo orbital del enjambre.
