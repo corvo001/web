@@ -31,8 +31,9 @@ El sistema permite manipular en tiempo real múltiples parámetros fractales, co
 ![Forma fractal personalizada](/assets/images/union/capture_144459.png)
 ![Variación morfológica](/assets/images/union/capture_144414.png)
 
-Este proyecto forma parte de mi investigación en **integración de software, arte generativo y análisis matemático**.  
 La meta es que UNION se convierta en una herramienta capaz no solo de crear fractales complejos, sino también de extraer información significativa de ellos para su uso en investigación científica y prototipado visual.
+
+Este proyecto forma parte de mi investigación en **integración de software, arte generativo y análisis matemático**.  
 
 ## Repositorio
 
