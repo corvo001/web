@@ -33,3 +33,8 @@ El sistema permite manipular en tiempo real múltiples parámetros fractales, co
 
 Este proyecto forma parte de mi investigación en **integración de software, arte generativo y análisis matemático**.  
 La meta es que UNION se convierta en una herramienta capaz no solo de crear fractales complejos, sino también de extraer información significativa de ellos para su uso en investigación científica y prototipado visual.
+
+## Repositorio
+
+Puedes consultar el código completo en [GitHub](https://github.com/corvo001/UNION).
+
