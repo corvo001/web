@@ -17,16 +17,11 @@ Dyson Swarm es un simulador interactivo que permite diseñar, manipular y visual
 El sistema ofrece un entorno visual en tiempo real donde se pueden ajustar parámetros fundamentales como el número de satélites, el tamaño del enjambre, la inclinación orbital o la densidad de distribución. Estos controles permiten experimentar con diferentes configuraciones y observar cómo evoluciona la estructura global del enjambre, su cobertura energética y su estabilidad dinámica.
 
 ## Características principales
-
-Simulación en tiempo real de miles de satélites orbitando una estrella.
-
-Ajuste dinámico del número, tamaño y ángulo orbital del enjambre.
-
-Visualización fluida con métricas de potencia captada y densidad de cobertura.
-
-Representación interactiva que permite explorar diferentes arquitecturas Dyson.
-
-Posibilidad de pausar, reseedear y capturar configuraciones para análisis comparativo.
+- Simulación en tiempo real de miles de satélites orbitando una estrella.
+- Ajuste dinámico del número, tamaño y ángulo orbital del enjambre.
+- Visualización fluida con métricas de potencia captada y densidad de cobertura.
+- Representación interactiva que permite explorar diferentes arquitecturas Dyson.
+- Posibilidad de pausar, reseedear y capturar configuraciones para análisis comparativo.
 
 ## Galería de capturas
 
