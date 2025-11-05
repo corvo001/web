@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Aerodeslizador"
-excerpt: "Simulación, diseño de control y prototipo experimental de aerodeslizador."
+excerpt: "Simulación, diseño de control y prototipo experimental de un aerodeslizador funcional."
 date: 2025-10-20
 show_on_home: true
 categories:
