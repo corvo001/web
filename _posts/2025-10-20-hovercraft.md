@@ -1,11 +1,11 @@
 ---
 layout: single
-title: "Hovercraft Sim + Control Lab"
+title: "Aerodeslizador"
 excerpt: "Simulación, diseño de control y prototipo experimental de aerodeslizador."
-date: 2025-11-05
+date: 2025-10-20
 show_on_home: true
 categories:
-  - Ingeniería
+  - Proyectos
 tags:
   - control
   - simulación
