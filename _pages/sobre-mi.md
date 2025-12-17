@@ -17,6 +17,6 @@ Soy **Cuervo**. Integro **software** y **ciencia** para convertir ideas en siste
 
 **Habilidades clave**
 - C++/Python, OpenGL, procesamiento de señales.
-- Diseño experimental y programación de prototipos.
+- Diseño experimental y programación.
 
 ¿Colaboramos? Escríbeme desde la página de **Contacto**.
