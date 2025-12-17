@@ -10,14 +10,13 @@ pagination: false
 
 Soy **Cuervo**. Integro **software** y **ciencia** para convertir ideas en sistemas funcionales.  
 
-
 **Foco actual**
 - Motores gráficos y **arte generativo fractal**.
-- **Prototipos hardware** y herramientas para I+D.
+- **Prototipos software** y herramientas para I+D.
 - Documentación técnica clara y reproducible.
 
 **Habilidades clave**
-- C/C++/Python, OpenGL, procesamiento de señales.
-- Diseño experimental y análisis de datos.
+- C++/Python, OpenGL, procesamiento de señales.
+- Diseño experimental y programación de prototipos.
 
 ¿Colaboramos? Escríbeme desde la página de **Contacto**.
