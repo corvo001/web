@@ -2,7 +2,7 @@
 layout: home
 author_profile: true
 title: "Soy Daniel Cuervo"
-excerpt: "Integración de software y ciencia."
+excerpt: "Integración de software y automatización."
 pagination: false
 header:
   overlay_color: "#000"
