@@ -13,11 +13,6 @@ tags:
   - IT-OT
   - simulación
 ---
-
-**UNION** es un motor experimental que combina generación y análisis de formas basadas en fractales, diseñado para explorar la geometría compleja y sus posibles aplicaciones científicas, artísticas y tecnológicas.
-
-El sistema permite manipular en tiempo real múltiples parámetros fractales, combinando funciones matemáticas, transformaciones y morfología dinámica para producir patrones únicos. Además, su arquitectura está pensada para integrarse con módulos de análisis que permitan clasificar, comparar y reutilizar patrones como base para nuevos diseños.
-
 ## Características principales
 -Modelo de planta industrial simulada con estaciones, robots y flujos de material.
 -Lógica de control secuencial tipo PLC, basada en máquinas de estados e interlocks.
