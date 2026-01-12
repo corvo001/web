@@ -2,7 +2,7 @@
 layout: single
 title: "Sistema automatizado de producción con robots coordinados"
 excerpt: "Simulación, control y supervisión de una línea de producción robotizada."
-date: 2025-08-11
+date: 2026-01-12
 show_on_home: false
 categories:
   - Proyectos
