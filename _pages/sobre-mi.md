@@ -14,7 +14,6 @@ Soy **Cuervo**. Integro **software** y **automatización** para convertir ideas 
 - Automatización y estructuración de proyectos software.
 - Entornos reproducibles mediante contenedores.
 - Prototipado técnico orientado a I+D aplicada.
-- Documentación técnica clara y reproducible.
 
 **Habilidades clave**
 - Python y C++ para desarrollo y automatización.
