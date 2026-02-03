@@ -18,8 +18,6 @@ Soy **Cuervo**. Integro **software** y **automatización** para convertir ideas 
 
 **Habilidades clave**
 - Python y C++ para desarrollo y automatización.
-- Scripting y organización de sistemas software.
-- Contenedores y entornos aislados para ejecución portable.
-- Diseño experimental y validación técnica de prototipos.
+- Scripting y contenedores de sistemas software portables.
 
 ¿Colaboramos? Escríbeme desde la página de **Contacto**.
