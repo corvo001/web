@@ -8,15 +8,18 @@ pagination: false
 
 ![Cuervo](/assets/images/cuervo.jpg){: .align-center width="260" }
 
-Soy **Cuervo**. Integro **software** y **ciencia** para convertir ideas en sistemas funcionales.  
+Soy **Cuervo**. Integro **software** y **automatización** para convertir ideas en sistemas funcionales.  
 
 **Foco actual**
-- Motores gráficos y **arte generativo fractal**.
-- **Prototipos software** y herramientas para I+D.
+- Automatización y estructuración de proyectos software.
+- Entornos reproducibles mediante contenedores.
+- Prototipado técnico orientado a I+D aplicada.
 - Documentación técnica clara y reproducible.
 
 **Habilidades clave**
-- C++/Python, OpenGL, procesamiento de señales.
-- Diseño experimental y programación.
+- Python y C++ para desarrollo y automatización.
+- Scripting y organización de sistemas software.
+- Contenedores y entornos aislados para ejecución portable.
+- Diseño experimental y validación técnica de prototipos.
 
 ¿Colaboramos? Escríbeme desde la página de **Contacto**.
