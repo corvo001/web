@@ -7,8 +7,8 @@ related: false
 pagination: false
 ---
 
--  **Email**: <danielcuervor01@gmail.com>  
 -  **Teléfono**: +34 639 218 007
+-  **Email**: <danielcuervor01@gmail.com>  
 -  **LinkedIn**: [linkedin.com/in/danielcuervor](https://www.linkedin.com/in/danielcuervor/)  
 -  **GitHub**: [github.com/corvo001](https://github.com/corvo001)  
 
