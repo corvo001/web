@@ -27,8 +27,6 @@ Dyson Swarm es un simulador interactivo que permite diseñar, manipular y visual
 ![Vista secundaria](/assets/images/swarm/DysonSwarm_2.png)
 ![Alteracion](/assets/images/swarm/DysonSwarm_3.png)
 
-Este proyecto forma parte de mi investigación en **integración de software, arte generativo y análisis matemático**.  
-
 ## Repositorio
 
 Puedes consultar el código completo en [GitHub](https://github.com/corvo001/DysonSwarm).
