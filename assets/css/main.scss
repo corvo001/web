@@ -175,7 +175,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   margin: 0; font-family: var(--display); font-weight: 400; line-height: .9;
   letter-spacing: clamp(.06em, 1.2vw, .14em); text-transform: uppercase;
 }
-.display-name { width: 100%; max-width: none; white-space: nowrap; font-size: clamp(2.15rem, 5.45vw, 7rem); letter-spacing: clamp(.01em, .18vw, .035em); text-align: center; }
+.display-name { width: 100%; max-width: none; white-space: nowrap; font-size: clamp(2rem, 4.8vw, 6.25rem); letter-spacing: clamp(.008em, .12vw, .025em); text-align: center; }
 
 .work-section { padding: clamp(4rem, 8vw, 8rem) 0 clamp(5rem, 10vw, 10rem); }
 .section-heading { display: flex; justify-content: space-between; align-items: center; width: min(calc(100vw - (2 * var(--page-pad))), 92rem); margin: 0 auto 2rem; }
@@ -268,7 +268,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   .portfolio-nav { grid-template-columns: auto 1fr auto; }
   .nav-links { justify-content: center; gap: 1rem; }
   .nav-links a { font-size: .64rem; }
-  .display-name { font-size: clamp(1.65rem, 6.35vw, 3rem); letter-spacing: 0; }
+  .display-name { font-size: clamp(1.5rem, 5.7vw, 2.7rem); letter-spacing: 0; }
   .portfolio-hero { min-height: 78svh; }
   .project-card { flex-basis: 100%; aspect-ratio: 4/5; }
   .project-card__content { opacity: 1; transform: none; align-items: end; padding-bottom: 2rem; }
