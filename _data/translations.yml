@@ -15,14 +15,12 @@ es:
     next: "Proyecto siguiente"
     back_to_hall: "Volver al inicio"
   about:
-    label: "Perfil / 01"
     title: "Sobre mí"
     body: |
       Soy Daniel Cuervo. Integro **software, automatización y experimentación técnica** para convertir ideas en sistemas funcionales.
 
       Trabajo especialmente cómodo en la intersección entre desarrollo, estructuración de proyectos e I+D aplicada. Me interesa construir herramientas claras, modulares y reproducibles que puedan evolucionar desde una prueba de concepto hasta un sistema real.
   contact:
-    label: "Conexión / 02"
     title: "Contacto"
     intro: "Disponible para colaboraciones técnicas, proyectos de I+D y conversaciones sobre sistemas que merezca la pena construir."
   project:
@@ -48,14 +46,12 @@ en:
     next: "Next project"
     back_to_hall: "Back to the top"
   about:
-    label: "Profile / 01"
     title: "About"
     body: |
       I’m Daniel Cuervo. I combine **software, automation and technical experimentation** to turn ideas into functional systems.
 
       I work comfortably where development, project architecture and applied R&D intersect. I’m interested in building clear, modular and reproducible tools that can evolve from a proof of concept into a real system.
   contact:
-    label: "Connection / 02"
     title: "Contact"
     intro: "Available for technical collaborations, R&D projects and conversations about systems worth building."
   project:
