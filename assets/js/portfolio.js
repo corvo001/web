@@ -20,13 +20,11 @@
       const y = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
       logo.style.setProperty('--nav-pupil-x', `${Math.max(-1, Math.min(1, x)) * 1.8}px`);
       logo.style.setProperty('--nav-pupil-y', `${Math.max(-1, Math.min(1, y)) * 1.4}px`);
-      logo.style.setProperty('--nav-pupil-scale', '1.45');
     });
 
     logo.addEventListener('pointerleave', () => {
       logo.style.setProperty('--nav-pupil-x', '0px');
       logo.style.setProperty('--nav-pupil-y', '0px');
-      logo.style.setProperty('--nav-pupil-scale', '1');
     });
   });
 

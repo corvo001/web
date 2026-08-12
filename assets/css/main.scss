@@ -175,7 +175,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   background: linear-gradient(to bottom, var(--nav-wash), transparent);
 }
 .nav-logo {
-  --nav-pupil-x: 0px; --nav-pupil-y: 0px; --nav-pupil-scale: 1;
+  --nav-pupil-x: 0px; --nav-pupil-y: 0px;
   position: relative; display: flex; align-items: center; width: fit-content; text-decoration: none;
 }
 .nav-logo img { width: 2.25rem; height: 2.25rem; object-fit: contain; }
@@ -183,7 +183,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   content: ""; position: absolute; left: 50%; top: 44.55%;
   width: .075rem; aspect-ratio: 1; border-radius: 50%;
   background: var(--text);
-  transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y))) scale(var(--nav-pupil-scale));
+  transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y)));
   transition: transform 120ms cubic-bezier(.22,1,.36,1); pointer-events: none;
 }
 .nav-links { display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
