@@ -13,6 +13,7 @@ es:
     title: "Proyectos"
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
+    back_to_hall: "Volver al inicio"
   about:
     label: "Perfil / 01"
     title: "Sobre mí"
@@ -49,6 +50,7 @@ en:
     title: "Projects"
     previous: "Previous project"
     next: "Next project"
+    back_to_hall: "Back to the top"
   about:
     label: "Profile / 01"
     title: "About"
