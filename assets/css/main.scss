@@ -264,7 +264,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .project-card__index { display: block; margin-bottom: .8rem; color: var(--accent); font: .68rem/1 var(--mono); letter-spacing: .12em; }
 .project-card h3 { margin: 0; color: var(--accent); font-size: clamp(1.8rem, 4vw, 4rem); text-align: center; text-shadow: 0 2px 18px rgba(0,0,0,.95); }
 .project-card p { max-width: 34rem; margin: 1rem 0 0; color: #c0c6c0; line-height: 1.5; opacity: 0; transition: opacity 250ms ease; }
-.project-card:hover .project-card__media, .project-card:focus-visible .project-card__media { transform: scale(1.006); filter: blur(.86px) brightness(.92) saturate(.95); }
+.project-card:hover .project-card__media, .project-card:focus-visible .project-card__media { transform: scale(1.006); filter: blur(.90px) brightness(.92) saturate(.95); }
 .project-card:hover::before, .project-card:focus-visible::before { opacity: 1; }
 .project-card:hover .project-card__content, .project-card:focus-visible .project-card__content { opacity: 1; transform: none; }
 .project-card:hover p, .project-card:focus-visible p { opacity: 1; }
