@@ -4,8 +4,7 @@
   status:
     es: "En desarrollo"
     en: "In development"
-  image: "/assets/images/logo-white.png"
-  placeholder: true
+  image: "/assets/images/aiden/aiden-results-graph.jpg"
   technologies: [Python, OSINT, Debian, Termux]
   repository: ""
   summary:
@@ -20,7 +19,9 @@
       AIDEN is a modular OSINT platform built around specialist tools to investigate, correlate and visualise public information.
 
       Its architecture separates discovery, extraction, correlation, visualisation and report generation. The aim is to integrate multiple sources and research engines in a single reproducible, extensible environment.
-  gallery: []
+  gallery:
+    - "/assets/images/aiden/aiden-results-graph.jpg"
+    - "/assets/images/aiden/aiden-maigret-terminal.jpg"
 
 - id: dyson-swarm
   name: "DYSON SWARM"
