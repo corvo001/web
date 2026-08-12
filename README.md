@@ -1,39 +1,61 @@
-#  Portfolio Profesional
+# Daniel Cuervo — Technical Portfolio
 
-Bienvenido a mi portfolio online, un espacio donde presento mi trabajo, proyectos y experiencia en  **software** y **ciencia**.  
-Este sitio está diseñado para mostrar no solo mis habilidades técnicas, sino también mi capacidad para integrar diferentes disciplinas y transformar ideas en **prototipos funcionales**.
+Portfolio técnico personal centrado en software, robótica y automatización industrial.
 
-##  Objetivo del portfolio
-Este sitio web funciona como mi **carta de presentación profesional**. Aquí muestro:
-- **Proyectos destacados** en ingeniería y tecnología.
-- **Prototipos funcionales** desarrollados desde cero.
-- **Investigación y experimentos** en neurociencia aplicada.
-- Mi enfoque y filosofía de trabajo.
+El sitio está construido con Jekyll y se publica mediante GitHub Pages en [corvo001.github.io](https://corvo001.github.io).
 
-Es un espacio pensado para que posibles colaboradores, empresas o reclutadores puedan conocer de forma clara quién soy y qué puedo aportar.
+## Idiomas y rutas
 
-##  Contenido
-En este portfolio encontrarás:
-- **Inicio:** Resumen de mi perfil y áreas de trabajo.
-- **Proyectos:** Detalles técnicos y visuales de mis creaciones.
-- **Sobre mí:** Trayectoria, formación y visión profesional.
-- **Contacto:** Formas de colaboración y conexión directa.
+- `/` — entrada y selector de idioma.
+- `/es/` — portfolio en español.
+- `/en/` — portfolio en inglés.
 
-##  Tecnologías
-Este sitio está desarrollado con:
-- [Jekyll](https://jekyllrb.com/) y el tema [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/)
-- GitHub Pages para su publicación
-- HTML, SCSS y Markdown
+Los textos globales están centralizados en `_data/translations.yml` y los proyectos en `_data/projects.yml`. Las páginas bilingües comparten layouts e includes para evitar duplicar la implementación.
 
-##  Enlace
-Puedes visitar mi portfolio aquí:  
-**➡ [https://corvo001.github.io](https://corvo001.github.io)**
+## Diseño
 
-##  Colaboraciones
-Estoy abierto a:
-- Proyectos de investigación y desarrollo
-- Colaboraciones tecnológicas
-- Consultoría técnica y prototipado rápido
+- Identidad oscura, técnica y minimalista con adaptación automática al tema claro del dispositivo.
+- Dune Rise para el nombre y los títulos de proyecto.
+- IBM Plex Sans para interfaz y contenido.
+- IBM Plex Mono para metadatos técnicos.
+- Showcase horizontal accesible mediante flechas, teclado y gesto táctil.
+- Entrada interactiva con el símbolo del portfolio y transición a través de la pupila.
 
-Si tienes una idea y quieres llevarla a la realidad, este portafolio es una muestra de lo que puedo hacer.  
-Puedes contactarme directamente a través de [LinkedIn](https://www.linkedin.com/in/danielcuervor/) o por correo en **danielcuervor01@gmail.com**.
+## Desarrollo local en Fedora
+
+Instala Ruby y las herramientas de compilación:
+
+```bash
+sudo dnf install ruby ruby-devel rubygem-bundler gcc-c++ make redhat-rpm-config zlib-devel
+bundle install
+```
+
+Con Ruby 4, genera el sitio usando el pequeño módulo de compatibilidad incluido:
+
+```bash
+RUBYOPT=-r./_plugins/ruby-4-compat.rb bundle exec jekyll build
+```
+
+Para servir la carpeta generada:
+
+```bash
+cd _site
+python3 -m http.server 4000 --bind 127.0.0.1
+```
+
+La vista previa estará disponible en `http://127.0.0.1:4000/`.
+
+## Estructura principal
+
+```text
+_data/       Traducciones y datos de proyectos
+_includes/   Navegación, footer y showcase
+_layouts/    Entrada, portfolio, páginas y proyectos
+assets/      Estilos, JavaScript e imágenes
+es/          Rutas españolas
+en/          Rutas inglesas
+```
+
+## Publicación
+
+GitHub Pages compila y publica automáticamente cada cambio enviado a `main`.
