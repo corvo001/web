@@ -27,8 +27,21 @@
     link.addEventListener('click', (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
+      const pupil = mark?.querySelector('.reactive-mark__pupil');
+      const transition = document.querySelector('[data-pupil-transition]');
+      if (pupil && transition) {
+        const rect = pupil.getBoundingClientRect();
+        const size = Math.max(rect.width, 1);
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const radius = Math.hypot(Math.max(centerX, window.innerWidth - centerX), Math.max(centerY, window.innerHeight - centerY));
+        transition.style.setProperty('--pupil-x', `${centerX}px`);
+        transition.style.setProperty('--pupil-y', `${centerY}px`);
+        transition.style.setProperty('--pupil-size', `${size}px`);
+        transition.style.setProperty('--pupil-scale', `${(radius * 2.15) / size}`);
+      }
       document.body.classList.add('gate-exiting');
-      window.setTimeout(() => window.location.assign(link.href), 820);
+      window.setTimeout(() => window.location.assign(link.href), 940);
     });
   });
 

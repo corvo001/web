@@ -3,16 +3,29 @@ layout: portfolio-base
 body_class: language-page
 ---
 <main class="language-gate" data-language-gate>
+  <div class="gate-preview" aria-hidden="true">
+    <div class="gate-preview__nav"><span></span><span></span><span></span></div>
+    <div class="gate-preview__hero">
+      <small>Software · Robotics · Industrial automation</small>
+      <strong>Daniel Cuervo</strong>
+      <i></i><i></i>
+    </div>
+    <div class="gate-preview__work"><small>Projects</small><div></div></div>
+  </div>
   <div class="gate-inner">
     <div class="reactive-mark" data-reactive-mark aria-hidden="true">
-      <img class="reactive-mark__image" src="{{ '/assets/images/logo-white.png' | relative_url }}" alt="">
+      <img class="reactive-mark__image" src="{{ '/assets/images/logo-entrance.png' | relative_url }}" alt="">
       <span class="reactive-mark__pupil"></span>
     </div>
-    <p class="gate-kicker">Select language / Selecciona idioma</p>
     <nav class="language-options" aria-label="Language selection / Selección de idioma">
-      <a href="{{ '/es/' | relative_url }}?v={{ site.time | date: '%s' }}" lang="es" data-language-link>ES</a>
+      <a href="{{ '/es/' | relative_url }}?v={{ site.time | date: '%s' }}" lang="es" data-language-link>
+        <span>Selecciona idioma</span><strong>ES</strong>
+      </a>
       <span class="language-divider" aria-hidden="true"></span>
-      <a href="{{ '/en/' | relative_url }}?v={{ site.time | date: '%s' }}" lang="en" data-language-link>EN</a>
+      <a href="{{ '/en/' | relative_url }}?v={{ site.time | date: '%s' }}" lang="en" data-language-link>
+        <span>Select language</span><strong>EN</strong>
+      </a>
     </nav>
   </div>
+  <span class="pupil-transition" data-pupil-transition aria-hidden="true"></span>
 </main>
