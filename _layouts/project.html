@@ -11,7 +11,7 @@ layout: portfolio-base
     <span class="technical-meta">{{ project.year }} / {{ project.status[page.lang] }}</span>
     <h1 class="project-display">{{ project.name }}</h1>
   </header>
-  <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}" alt="{{ project.name }}">
+  <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}">
   <div class="project-facts">
     <span>{{ t.project.status }}: {{ project.status[page.lang] }}</span>
     {% for technology in project.technologies %}<span>{{ technology }}</span>{% endfor %}
@@ -24,7 +24,7 @@ layout: portfolio-base
   </div>
   {% if project.gallery.size > 0 %}
     <section class="project-gallery" aria-label="{{ t.project.gallery }}">
-      {% for image in project.gallery %}<img src="{{ image | relative_url }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy">{% endfor %}
+      {% for image in project.gallery %}<img src="{{ image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy">{% endfor %}
     </section>
   {% endif %}
 </main>

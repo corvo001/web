@@ -23,7 +23,7 @@
           {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
         {% endif %}
         <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}">
-          <img class="project-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy">
+          <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy">
           <div class="project-card__content">
             <h3 class="project-display">{{ project.name }}</h3>
           </div>
