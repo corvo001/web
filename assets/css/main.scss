@@ -115,7 +115,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .reactive-mark::after {
   content: ""; position: absolute; z-index: 1;
   width: 7%; aspect-ratio: 1; border-radius: 50%;
-  left: 50%; top: 44.55%; background: var(--ink);
+  left: 50%; top: 44.55%; background: var(--accent);
   transform: translate(-50%, -50%); pointer-events: none;
 }
 .reactive-mark__pupil {
@@ -339,7 +339,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 @media (prefers-color-scheme: light) {
   .reactive-mark__image, .nav-logo img { filter: invert(1); }
   .reactive-mark__image { filter: invert(1); }
-  .reactive-mark__pupil { background: var(--text); }
+  .reactive-mark::after, .reactive-mark__pupil { background: var(--text); }
   .pupil-transition { border-color: var(--text); box-shadow: none; }
   .project-stage, .project-card { background: #101311; }
 }
