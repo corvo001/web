@@ -41,7 +41,7 @@
         transition.style.setProperty('--pupil-scale', `${(radius * 2.15) / size}`);
       }
       document.body.classList.add('gate-exiting');
-      window.setTimeout(() => window.location.assign(link.href), 1120);
+      window.setTimeout(() => window.location.assign(link.href), 820);
     });
   });
 
@@ -54,7 +54,7 @@
       if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
       event.preventDefault();
       document.body.classList.add('page-leaving');
-      window.setTimeout(() => window.location.assign(target.href), 470);
+      window.setTimeout(() => window.location.assign(target.href), 320);
     });
   });
 
