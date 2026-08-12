@@ -3,7 +3,7 @@
 ## Scope and workflow
 
 - This repository is `corvo001/corvo001.github.io`, a personal technical portfolio built with Jekyll and GitHub Pages.
-- Work only on the `redesign/portfolio-v1` branch. Do not modify `main`.
+- Work directly on `main`; this is the active development and deployment branch.
 - Inspect the repository before implementing changes.
 - Make incremental, reviewable changes and preserve existing project content where possible.
 - Keep Jekyll and GitHub Pages; do not migrate frameworks unless explicitly requested.
