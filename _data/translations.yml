@@ -17,9 +17,9 @@ es:
     title: "Sobre mí"
     subtitle: "YO"
     body: |
-      Soy Daniel Cuervo. Me dedico a la **creatividad tecnológica**: explorar ideas y convertirlas en sistemas que funcionan.
+      Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. Exploro ideas y las convierto en sistemas que funcionan.
 
-      Me interesa construir herramientas claras, modulares y reproducibles, combinando software, robótica y experimentación. Disfruto llevando un concepto desde sus primeras pruebas hasta convertirlo en algo útil, tangible y con identidad propia.
+      Combino software, robótica y experimentación para construir herramientas útiles, claras y con identidad propia.
   contact:
     title: "Contacto"
     intro: "DISPONIBLE CUANDO ME NECESITES"
@@ -48,9 +48,9 @@ en:
     title: "About"
     subtitle: "ME"
     body: |
-      I’m Daniel Cuervo. I work in **technological creativity**: exploring ideas and turning them into systems that work.
+      I’m Daniel Cuervo and I work in **technological creativity**. I explore ideas and turn them into systems that work.
 
-      I’m interested in building clear, modular and reproducible tools by combining software, robotics and experimentation. I enjoy taking a concept from its first tests to something useful, tangible and distinctly its own.
+      I combine software, robotics and experimentation to build useful, clear tools with an identity of their own.
   contact:
     title: "Contact"
     intro: "AVAILABLE WHENEVER YOU NEED"
