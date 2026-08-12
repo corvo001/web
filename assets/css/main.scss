@@ -58,7 +58,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 ::selection { color: var(--ink); background: var(--accent); }
 
 .portfolio-shell { width: 100%; max-width: 100vw; min-height: 100vh; overflow-x: clip; }
-.portfolio-shell > main {
+.portfolio-shell > .portfolio-main {
   clear: none;
   width: 100%;
   max-width: none;
@@ -275,7 +275,10 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .project-card:hover p, .project-card:focus-visible p { opacity: 1; }
 
 /* Internal portfolio pages */
-.internal-main { min-height: 100vh; padding: clamp(9rem, 16vw, 13rem) var(--page-pad) 6rem; }
+.internal-main {
+  min-height: 100vh;
+  padding: clamp(7.25rem, 14vh, 8.5rem) var(--page-pad) clamp(4rem, 8vh, 6rem);
+}
 .internal-header { max-width: 70rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
 .internal-header .technical-meta { color: var(--accent); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; }
 .internal-header h1 { margin: 1rem 0 0; font-size: clamp(3rem, 8vw, 8rem); font-weight: 300; letter-spacing: .05em; }
