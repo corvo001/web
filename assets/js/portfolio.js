@@ -41,7 +41,20 @@
         transition.style.setProperty('--pupil-scale', `${(radius * 2.15) / size}`);
       }
       document.body.classList.add('gate-exiting');
-      window.setTimeout(() => window.location.assign(link.href), 940);
+      window.setTimeout(() => window.location.assign(link.href), 1120);
+    });
+  });
+
+  document.querySelectorAll('a[href]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (link.hasAttribute('data-language-link') || reduceMotion.matches || event.defaultPrevented) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
+      const target = new URL(link.href, window.location.href);
+      if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;
+      if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
+      event.preventDefault();
+      document.body.classList.add('page-leaving');
+      window.setTimeout(() => window.location.assign(target.href), 470);
     });
   });
 

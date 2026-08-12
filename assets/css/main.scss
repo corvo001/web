@@ -50,6 +50,7 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  animation: page-arrival 520ms cubic-bezier(.2,.7,.2,1) both;
 }
 a { color: inherit; }
 button, input { font: inherit; }
@@ -57,6 +58,12 @@ code, pre, .technical-meta { font-family: var(--mono); }
 ::selection { color: var(--ink); background: var(--accent); }
 
 .portfolio-shell { min-height: 100vh; overflow-x: hidden; }
+.portfolio-shell::before {
+  content: ""; position: fixed; z-index: 90; inset: 0; pointer-events: none;
+  background: linear-gradient(to bottom, var(--accent) 0 2px, var(--ink) 2px 100%);
+  transform: translateY(100%); transition: transform 480ms cubic-bezier(.7,0,.25,1);
+}
+.portfolio-shell.page-leaving::before { transform: translateY(0); }
 .skip-link {
   position: fixed; left: 1rem; top: -4rem; z-index: 100;
   padding: .7rem 1rem; background: var(--text); color: var(--ink);
@@ -129,11 +136,13 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .language-options a:hover::after, .language-options a:focus-visible::after { transform: scaleX(1); }
 .language-divider { width: 1px; height: 1.25rem; background: var(--line); }
 
-.pupil-transition { position: fixed; z-index: 50; left: var(--pupil-x,50%); top: var(--pupil-y,50%); width: var(--pupil-size,1rem); aspect-ratio: 1; border-radius: 50%; background: var(--ink); transform: translate(-50%,-50%) scale(0); pointer-events: none; }
-.gate-exiting .reactive-mark { transform: perspective(800px) scale(1.08); transition: transform 360ms ease-in; }
+.pupil-transition { position: fixed; z-index: 100; left: var(--pupil-x,50%); top: var(--pupil-y,50%); width: var(--pupil-size,1rem); aspect-ratio: 1; border-radius: 50%; background: var(--accent); transform: translate(-50%,-50%) scale(0); pointer-events: none; box-shadow: 0 0 0 1px var(--accent); }
+.pupil-transition i { position: absolute; inset: 18%; border-radius: 50%; background: #030504; transform: scale(0); }
+.gate-exiting .reactive-mark { transform: perspective(800px) scale(1.38); filter: blur(1px); transition: transform 900ms cubic-bezier(.6,0,.8,.25), filter 600ms ease; }
 .gate-exiting .language-options { opacity: 0; transition: opacity 180ms ease; }
-.gate-exiting .gate-preview { filter: blur(20px); transform: scale(1.08); transition: filter 750ms ease, transform 900ms ease; }
-.gate-exiting .pupil-transition { animation: pupil-dive 920ms cubic-bezier(.7,0,.85,.3) forwards; }
+.gate-exiting .gate-preview { filter: blur(24px) brightness(.55); transform: scale(1.12); transition: filter 850ms ease, transform 1050ms ease; }
+.gate-exiting .pupil-transition { animation: pupil-dive 1100ms cubic-bezier(.7,0,.82,.25) forwards; }
+.gate-exiting .pupil-transition i { animation: pupil-core 650ms 410ms cubic-bezier(.7,0,.82,.25) forwards; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.88) translateY(1rem); filter: blur(8px); }
@@ -142,9 +151,12 @@ code, pre, .technical-meta { font-family: var(--mono); }
 @keyframes gate-copy { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
 @keyframes pupil-dive {
   0% { transform: translate(-50%, -50%) scale(0); }
-  22% { transform: translate(-50%, -50%) scale(1); }
+  18% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 1px var(--accent); }
+  42% { box-shadow: 0 0 0 calc(var(--pupil-size) + 6px) rgba(130,181,152,.18); }
   100% { transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); }
 }
+@keyframes pupil-core { to { transform: scale(1.8); } }
+@keyframes page-arrival { from { opacity: 0; transform: translateY(.75rem); } to { opacity: 1; transform: none; } }
 
 /* Shared navigation */
 .portfolio-nav {
@@ -165,8 +177,8 @@ code, pre, .technical-meta { font-family: var(--mono); }
 
 /* Home */
 .portfolio-hero {
-  min-height: min(82rem, 86svh); display: flex; align-items: center;
-  padding: clamp(7rem, 13vh, 10rem) var(--page-pad) clamp(3rem, 7vh, 5rem);
+  min-height: 100svh; display: flex; align-items: center;
+  padding: clamp(7rem, 13vh, 10rem) var(--page-pad) clamp(5rem, 10vh, 8rem);
   border-bottom: 1px solid var(--line);
 }
 .hero-copy { width: 100%; max-width: none; text-align: center; }
@@ -285,6 +297,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reactive-mark { transform: none !important; }
   .reactive-mark__pupil { transform: translate(-50%, -50%) !important; }
+  .portfolio-shell::before { display: none; }
 }
 
 @media (prefers-color-scheme: light) {
