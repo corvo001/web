@@ -27,6 +27,7 @@ es:
     gallery: "Galería"
     repository: "Ver repositorio"
     status: "Estado"
+  footer: "Portfolio técnico"
 
 en:
   language_name: "English"
@@ -57,3 +58,4 @@ en:
     gallery: "Gallery"
     repository: "View repository"
     status: "Status"
+  footer: "Technical portfolio"
