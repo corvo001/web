@@ -246,6 +246,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .internal-header { max-width: 70rem; margin-bottom: clamp(3rem, 7vw, 6rem); }
 .internal-header .technical-meta { color: var(--accent); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; }
 .internal-header h1 { margin: 1rem 0 0; font-size: clamp(3rem, 8vw, 8rem); font-weight: 300; letter-spacing: .05em; }
+.internal-subtitle { margin: 1.25rem 0 0; color: var(--accent); font: 500 .78rem/1 var(--mono); letter-spacing: .24em; }
 .internal-copy { max-width: 52rem; color: var(--copy); font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.8; }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }

@@ -8,6 +8,7 @@ layout: portfolio-base
 <main class="internal-main" id="main">
   <header class="internal-header">
     <h1>{{ section.title }}</h1>
+    {% if page.section == 'about' %}<p class="internal-subtitle">{{ section.subtitle }}</p>{% endif %}
   </header>
   <div class="internal-copy">
     {% if page.section == 'about' %}

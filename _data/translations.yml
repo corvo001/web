@@ -16,6 +16,7 @@ es:
     back_to_hall: "Volver al inicio"
   about:
     title: "Sobre mí"
+    subtitle: "YO"
     body: |
       Soy Daniel Cuervo. Integro **software, automatización y experimentación técnica** para convertir ideas en sistemas funcionales.
 
@@ -46,6 +47,7 @@ en:
     back_to_hall: "Back to the top"
   about:
     title: "About"
+    subtitle: "ME"
     body: |
       I’m Daniel Cuervo. I combine **software, automation and technical experimentation** to turn ideas into functional systems.
 
