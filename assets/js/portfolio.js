@@ -38,10 +38,10 @@
         transition.style.setProperty('--pupil-x', `${centerX}px`);
         transition.style.setProperty('--pupil-y', `${centerY}px`);
         transition.style.setProperty('--pupil-size', `${size}px`);
-        transition.style.setProperty('--pupil-scale', `${(radius * 2.15) / size}`);
+        transition.style.setProperty('--pupil-scale', `${(radius * 3.2) / size}`);
       }
       document.body.classList.add('gate-exiting');
-      window.setTimeout(() => window.location.assign(link.href), 820);
+      window.setTimeout(() => window.location.assign(link.href), 980);
     });
   });
 
