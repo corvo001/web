@@ -1,0 +1,24 @@
+{% assign t = site.data.translations[page.lang] %}
+{% assign home_url = '/' | append: page.lang | append: '/' %}
+{% if page.lang == 'es' %}
+  {% assign other_lang = 'EN' %}
+  {% assign other_url = '/en/' %}
+  {% assign about_url = '/es/sobre-mi/' %}
+  {% assign contact_url = '/es/contacto/' %}
+{% else %}
+  {% assign other_lang = 'ES' %}
+  {% assign other_url = '/es/' %}
+  {% assign about_url = '/en/about/' %}
+  {% assign contact_url = '/en/contact/' %}
+{% endif %}
+<nav class="portfolio-nav" aria-label="Primary">
+  <a class="nav-logo" href="{{ home_url | relative_url }}" aria-label="Daniel Cuervo — Home">
+    <img src="{{ '/assets/images/logo-white.png' | relative_url }}" alt="">
+  </a>
+  <div class="nav-links">
+    <a href="{{ home_url | append: '#work' | relative_url }}">{{ t.nav.work }}</a>
+    <a href="{{ about_url | relative_url }}">{{ t.nav.about }}</a>
+    <a href="{{ contact_url | relative_url }}">{{ t.nav.contact }}</a>
+  </div>
+  <a class="language-switch" href="{{ other_url | relative_url }}" hreflang="{% if page.lang == 'es' %}en{% else %}es{% endif %}">{{ other_lang }}</a>
+</nav>

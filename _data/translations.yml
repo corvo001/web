@@ -1,0 +1,69 @@
+es:
+  language_name: "Español"
+  skip: "Saltar al contenido"
+  nav:
+    work: "Proyectos"
+    about: "Sobre mí"
+    contact: "Contacto"
+  gate_prompt: "Selecciona un idioma"
+  hero:
+    eyebrow: "Software · Robótica · Automatización industrial"
+    subtitle: "Diseño y desarrollo sistemas técnicos donde el software se encuentra con el mundo físico."
+  work:
+    title: "Proyectos seleccionados"
+    hint: "Desliza para explorar"
+  about:
+    label: "Perfil / 01"
+    title: "Sobre mí"
+    body: |
+      Soy Daniel Cuervo. Integro **software, automatización y experimentación técnica** para convertir ideas en sistemas funcionales.
+
+      Trabajo especialmente cómodo en la intersección entre desarrollo, estructuración de proyectos e I+D aplicada. Me interesa construir herramientas claras, modulares y reproducibles que puedan evolucionar desde una prueba de concepto hasta un sistema real.
+
+      ## Enfoque
+
+      Python y C++ para desarrollo y automatización, entornos reproducibles mediante contenedores y prototipado técnico orientado a problemas reales.
+  contact:
+    label: "Conexión / 02"
+    title: "Contacto"
+    intro: "Disponible para colaboraciones técnicas, proyectos de I+D y conversaciones sobre sistemas que merezca la pena construir."
+  project:
+    gallery: "Galería"
+    repository: "Ver repositorio"
+    status: "Estado"
+  footer: "Portfolio técnico — Daniel Cuervo"
+
+en:
+  language_name: "English"
+  skip: "Skip to content"
+  nav:
+    work: "Work"
+    about: "About"
+    contact: "Contact"
+  gate_prompt: "Select a language"
+  hero:
+    eyebrow: "Software · Robotics · Industrial automation"
+    subtitle: "I design and develop technical systems where software meets the physical world."
+  work:
+    title: "Selected work"
+    hint: "Swipe to explore"
+  about:
+    label: "Profile / 01"
+    title: "About"
+    body: |
+      I’m Daniel Cuervo. I combine **software, automation and technical experimentation** to turn ideas into functional systems.
+
+      I work comfortably where development, project architecture and applied R&D intersect. I’m interested in building clear, modular and reproducible tools that can evolve from a proof of concept into a real system.
+
+      ## Focus
+
+      Python and C++ for development and automation, reproducible container-based environments, and technical prototyping aimed at real problems.
+  contact:
+    label: "Connection / 02"
+    title: "Contact"
+    intro: "Available for technical collaborations, R&D projects and conversations about systems worth building."
+  project:
+    gallery: "Gallery"
+    repository: "View repository"
+    status: "Status"
+  footer: "Technical portfolio — Daniel Cuervo"

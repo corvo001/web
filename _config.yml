@@ -1,7 +1,7 @@
-title: "Portfolio"
+title: "Daniel Cuervo — Technical Portfolio"
 email: "danielcuervor01@gmail.com"
 description: >-
-  Portfolio técnico — integración de software y ciencia.
+  Technical R&D portfolio focused on software, robotics and industrial automation.
 
 baseurl: "" 
 url: "https://corvo001.github.io" 
@@ -10,7 +10,7 @@ repository: "corvo001/corvo001.github.io"
 remote_theme: "mmistakes/minimal-mistakes@4.26.2"
 
 # Minimal Mistakes settings
-minimal_mistakes_skin: "default"
+minimal_mistakes_skin: "dark"
 locale: "es-ES"
 
 # Logo en la barra superior (cambiar ruta según dónde lo guardes)
@@ -61,17 +61,19 @@ sass:
   sass_dir: _sass
   style: compressed
 
-# Asegúrate de incluir tu CSS
-minimal_mistakes_skin: default
-
-
-
 include:
   - _pages
+
+languages:
+  - code: es
+    label: ES
+    name: Español
+  - code: en
+    label: EN
+    name: English
 
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-feed
   - jekyll-include-cache
-

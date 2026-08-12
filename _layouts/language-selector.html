@@ -1,0 +1,18 @@
+---
+layout: portfolio-base
+body_class: language-page
+---
+<main class="language-gate" data-language-gate>
+  <div class="gate-inner">
+    <div class="reactive-mark" data-reactive-mark aria-hidden="true">
+      <img class="reactive-mark__image" src="{{ '/assets/images/logo-white.png' | relative_url }}" alt="">
+      <span class="reactive-mark__pupil"></span>
+    </div>
+    <p class="gate-kicker">Select language / Selecciona idioma</p>
+    <nav class="language-options" aria-label="Language selection / Selección de idioma">
+      <a href="{{ '/es/' | relative_url }}" lang="es" data-language-link>ES</a>
+      <span class="language-divider" aria-hidden="true"></span>
+      <a href="{{ '/en/' | relative_url }}" lang="en" data-language-link>EN</a>
+    </nav>
+  </div>
+</main>

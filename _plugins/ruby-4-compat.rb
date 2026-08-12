@@ -1,0 +1,8 @@
+# Compatibility for Liquid 4 / Jekyll 3 when previewing with Ruby 4.
+unless Object.method_defined?(:tainted?)
+  class Object
+    def tainted?
+      false
+    end
+  end
+end

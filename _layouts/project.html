@@ -1,0 +1,31 @@
+---
+layout: portfolio-base
+---
+{% assign t = site.data.translations[page.lang] %}
+{% assign project_list = site.data.projects | where: 'id', page.project_id %}
+{% assign project = project_list | first %}
+<a class="skip-link" href="#main">{{ t.skip }}</a>
+{% include portfolio-nav.html %}
+<main class="internal-main" id="main">
+  <header class="internal-header">
+    <span class="technical-meta">{{ project.year }} / {{ project.status[page.lang] }}</span>
+    <h1 class="project-display">{{ project.name }}</h1>
+  </header>
+  <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}" alt="{{ project.name }}">
+  <div class="project-facts">
+    <span>{{ t.project.status }}: {{ project.status[page.lang] }}</span>
+    {% for technology in project.technologies %}<span>{{ technology }}</span>{% endfor %}
+  </div>
+  <div class="internal-copy">
+    {{ project.description[page.lang] | markdownify }}
+    {% if project.repository != '' %}
+      <p><a href="{{ project.repository }}">{{ t.project.repository }} ↗</a></p>
+    {% endif %}
+  </div>
+  {% if project.gallery.size > 0 %}
+    <section class="project-gallery" aria-label="{{ t.project.gallery }}">
+      {% for image in project.gallery %}<img src="{{ image | relative_url }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy">{% endfor %}
+    </section>
+  {% endif %}
+</main>
+{% include portfolio-footer.html %}

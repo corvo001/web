@@ -1,0 +1,26 @@
+---
+layout: portfolio-base
+---
+{% assign t = site.data.translations[page.lang] %}
+{% assign section = t[page.section] %}
+<a class="skip-link" href="#main">{{ t.skip }}</a>
+{% include portfolio-nav.html %}
+<main class="internal-main" id="main">
+  <header class="internal-header">
+    <span class="technical-meta">{{ section.label }}</span>
+    <h1>{{ section.title }}</h1>
+  </header>
+  <div class="internal-copy">
+    {% if page.section == 'about' %}
+      {{ section.body | markdownify }}
+    {% else %}
+      <p>{{ section.intro }}</p>
+      <div class="contact-links">
+        <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
+        <p><a href="https://www.linkedin.com/in/danielcuervor/" rel="me">LinkedIn</a></p>
+        <p><a href="https://github.com/corvo001" rel="me">GitHub</a></p>
+      </div>
+    {% endif %}
+  </div>
+</main>
+{% include portfolio-footer.html %}

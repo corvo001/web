@@ -1,0 +1,24 @@
+{% assign t = site.data.translations[page.lang] %}
+<section class="work-section" id="work" aria-labelledby="work-title">
+  <div class="section-heading">
+    <h2 id="work-title">{{ t.work.title }}</h2>
+    <span>{{ t.work.hint }}</span>
+  </div>
+  <div class="project-track">
+    {% for project in site.data.projects %}
+      {% if page.lang == 'es' %}
+        {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
+      {% else %}
+        {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
+      {% endif %}
+      <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}">
+        <img class="project-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy">
+        <div class="project-card__content">
+          <span class="project-card__index">0{{ forloop.index }} / {{ project.year }}</span>
+          <h3 class="project-display">{{ project.name }}</h3>
+          <p>{{ project.summary[page.lang] }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
