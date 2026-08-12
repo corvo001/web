@@ -72,7 +72,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 
 /* Language entrance */
 .language-gate {
-  position: relative; min-height: 100svh; overflow: hidden;
+  position: relative; width: 100%; min-height: 100svh; overflow: hidden;
   display: grid;
   place-items: center;
   padding: 2rem;
@@ -91,7 +91,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .gate-preview__hero i { width: 30rem; max-width: 45vw; height: .5rem; margin: .35rem 0; background: var(--preview-line); }
 .gate-preview__work { padding-top: 3rem; }
 .gate-preview__work div { width: 82%; aspect-ratio: 16/4; margin-top: 1.5rem; border: 1px solid var(--line); background: var(--surface); }
-.gate-inner { position: relative; z-index: 2; width: min(36rem, 92vw); text-align: center; }
+.gate-inner { position: relative; z-index: 2; width: min(36rem, 100%); min-width: 0; text-align: center; }
 .reactive-mark {
   --rx: 0deg; --ry: 0deg; --px: 0px; --py: 0px;
   position: relative;
@@ -121,13 +121,13 @@ code, pre, .technical-meta { font-family: var(--mono); }
   pointer-events: none;
 }
 .language-options {
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 1.5rem;
+  display: grid; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); align-items: end; gap: 1.5rem;
   animation: gate-copy 520ms 260ms cubic-bezier(.22,1,.36,1) both;
 }
 .language-options a {
-  position: relative; display: flex; flex-direction: column; gap: .75rem; min-width: 8rem; padding: .7rem .35rem; color: var(--text); text-decoration: none;
+  position: relative; display: flex; flex-direction: column; gap: .75rem; min-width: 0; width: 100%; padding: .7rem .35rem; color: var(--text); text-decoration: none;
 }
-.language-options a span { color: var(--muted); font: 400 .62rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.language-options a span { color: var(--muted); font: 400 .62rem/1.25 var(--mono); letter-spacing: .1em; text-transform: uppercase; overflow-wrap: anywhere; }
 .language-options a strong { font: 500 1rem/1 var(--mono); letter-spacing: .18em; }
 .language-options a::after {
   content: ""; position: absolute; left: .35rem; right: .5rem; bottom: .3rem;
@@ -289,6 +289,14 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .portfolio-footer--minimal { justify-content: space-between; }
 
 @media (max-width: 700px) {
+  html, body, .language-page { width: 100%; max-width: 100%; overflow-x: hidden; }
+  .language-gate { min-height: 100dvh; padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)); }
+  .gate-inner { width: 100%; }
+  .reactive-mark { width: clamp(12.5rem, 62vw, 17rem); margin-bottom: clamp(2rem, 7vh, 3.5rem); }
+  .language-options { width: 100%; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); gap: clamp(.35rem, 2.5vw, .75rem); }
+  .language-options a { padding-inline: .15rem; }
+  .language-options a span { font-size: clamp(.48rem, 2.15vw, .58rem); letter-spacing: .065em; }
+  .language-options a strong { font-size: .92rem; }
   .portfolio-nav { grid-template-columns: auto 1fr auto; }
   .nav-links { justify-content: center; gap: 1rem; }
   .nav-links a { font-size: .64rem; }
