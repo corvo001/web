@@ -58,7 +58,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 ::selection { color: var(--ink); background: var(--accent); }
 
 .portfolio-shell { width: 100%; max-width: 100vw; min-height: 100vh; overflow-x: clip; }
-.portfolio-shell > .portfolio-main {
+.portfolio-shell > #main.portfolio-main {
   clear: none;
   width: 100%;
   max-width: none;
