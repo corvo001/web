@@ -195,8 +195,12 @@ code, pre, .technical-meta { font-family: var(--mono); }
 }
 .display-name { width: 100%; max-width: none; white-space: nowrap; font-size: clamp(2rem, 5.15vw, 6.65rem); letter-spacing: clamp(.008em, .14vw, .028em); text-align: center; }
 
-.work-section { padding: clamp(4rem, 8vw, 8rem) 0 clamp(5rem, 10vw, 10rem); }
-.section-heading { display: flex; justify-content: space-between; align-items: center; width: min(calc(100vw - (2 * var(--page-pad))), 92rem); margin: 0 auto 2rem; }
+.work-section { overflow: clip; padding: clamp(4rem, 7vw, 7rem) 0 clamp(5rem, 9vw, 9rem); }
+.section-heading {
+  display: flex; justify-content: space-between; align-items: center;
+  width: calc(100% - (2 * var(--page-pad))); max-width: 1500px;
+  margin: 0 auto clamp(1.5rem, 2.5vw, 2.25rem);
+}
 .section-heading h2 { margin: 0; font-size: clamp(1.4rem, 2.3vw, 2.1rem); font-weight: 400; }
 .back-to-hall {
   display: grid; place-items: center; width: 2.75rem; aspect-ratio: 1;
@@ -206,7 +210,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .back-to-hall span { width: .7rem; aspect-ratio: 1; border-top: 1px solid currentColor; border-left: 1px solid currentColor; transform: rotate(45deg) translate(18%,18%); }
 .back-to-hall:hover, .back-to-hall:focus-visible { border-color: var(--accent); background: rgba(130,181,152,.08); transform: translateY(-2px); }
 .project-stage {
-  position: relative; width: min(calc(100vw - (2 * var(--page-pad))), 92rem);
+  position: relative; width: calc(100% - (2 * var(--page-pad))); max-width: 1500px;
   margin-inline: auto; overflow: hidden; background: #070908;
 }
 .project-controls {
@@ -237,7 +241,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 }
 .project-track::-webkit-scrollbar { display: none; }
 .project-card {
-  position: relative; flex: 0 0 100%; aspect-ratio: 16/9;
+  position: relative; flex: 0 0 100%; height: min(72svh, 760px); min-height: 32rem;
   overflow: hidden; border: 1px solid var(--line); scroll-snap-align: start;
   background: var(--surface); color: var(--text); text-decoration: none;
 }
@@ -294,7 +298,8 @@ code, pre, .technical-meta { font-family: var(--mono); }
     padding-top: clamp(7.5rem, 18svh, 10rem);
     padding-bottom: clamp(7rem, 16svh, 9rem);
   }
-  .project-card { flex-basis: 100%; aspect-ratio: 4/5; }
+  .section-heading, .project-stage { width: calc(100% - 2rem); }
+  .project-card { flex-basis: 100%; height: auto; min-height: 0; aspect-ratio: 4/5; }
   .project-card__content { opacity: 1; transform: none; align-items: end; padding-bottom: 2rem; }
   .project-controls { inset-inline: .5rem; }
   .project-control { width: 2.75rem; }
