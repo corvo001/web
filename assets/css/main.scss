@@ -202,7 +202,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 }
 .project-card__media { width: 100%; height: 100%; object-fit: contain; display: block; filter: saturate(.78) contrast(1.04); transition: transform 700ms cubic-bezier(.2,.7,.2,1), filter 420ms ease; }
 .project-card--placeholder .project-card__media { object-fit: contain; padding: 16%; filter: invert(1); opacity: .35; }
-.project-card::before { content: ""; position: absolute; z-index: 1; inset: 0; background: rgba(4,6,5,.48); opacity: 0; transition: opacity 360ms ease; }
+.project-card::before { content: ""; position: absolute; z-index: 1; inset: 0; background: rgba(4,6,5,.28); opacity: 0; transition: opacity 360ms ease; }
 .project-card::after { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(4,6,5,.92)); }
 .project-card__content {
   position: absolute; z-index: 2; inset: 0; display: grid; place-items: center;
@@ -212,7 +212,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .project-card__index { display: block; margin-bottom: .8rem; color: var(--accent); font: .68rem/1 var(--mono); letter-spacing: .12em; }
 .project-card h3 { margin: 0; color: var(--accent); font-size: clamp(1.8rem, 4vw, 4rem); text-align: center; text-shadow: 0 2px 18px rgba(0,0,0,.95); }
 .project-card p { max-width: 34rem; margin: 1rem 0 0; color: #c0c6c0; line-height: 1.5; opacity: 0; transition: opacity 250ms ease; }
-.project-card:hover .project-card__media, .project-card:focus-visible .project-card__media { transform: scale(1.045); filter: blur(6px) brightness(.58) saturate(.72); }
+.project-card:hover .project-card__media, .project-card:focus-visible .project-card__media { transform: scale(1.025); filter: blur(3px) brightness(.72) saturate(.82); }
 .project-card:hover::before, .project-card:focus-visible::before { opacity: 1; }
 .project-card:hover .project-card__content, .project-card:focus-visible .project-card__content { opacity: 1; transform: none; }
 .project-card:hover p, .project-card:focus-visible p { opacity: 1; }
