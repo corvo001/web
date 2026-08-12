@@ -159,7 +159,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .section-heading h2 { margin: 0; font-size: clamp(1.4rem, 2.3vw, 2.1rem); font-weight: 400; }
 .back-to-hall {
   display: grid; place-items: center; width: 2.75rem; aspect-ratio: 1;
-  color: var(--accent); text-decoration: none; border: 1px solid var(--line);
+  color: var(--accent); text-decoration: none; border: 1px solid var(--line); border-radius: 50%;
   transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 .back-to-hall span { width: .7rem; aspect-ratio: 1; border-top: 1px solid currentColor; border-left: 1px solid currentColor; transform: rotate(45deg) translate(18%,18%); }
