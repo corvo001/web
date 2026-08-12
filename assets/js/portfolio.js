@@ -3,6 +3,14 @@
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  const resetNavigationState = () => {
+    document.documentElement.classList.remove('gate-exiting');
+    document.body.classList.remove('gate-exiting', 'page-leaving');
+  };
+
+  window.addEventListener('pageshow', resetNavigationState);
+  resetNavigationState();
+
   if (gate && mark && !reduceMotion.matches) {
     const updateEye = (clientX, clientY) => {
       const rect = mark.getBoundingClientRect();
@@ -39,8 +47,9 @@
         transition.style.setProperty('--pupil-y', `${centerY}px`);
         transition.style.setProperty('--pupil-size', `${size}px`);
         transition.style.setProperty('--pupil-scale', `${(radius * 3.2) / size}`);
+        document.documentElement.appendChild(transition);
       }
-      document.body.classList.add('gate-exiting');
+      document.documentElement.classList.add('gate-exiting');
       window.setTimeout(() => window.location.assign(link.href), 980);
     });
   });
