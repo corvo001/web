@@ -175,10 +175,10 @@ code, pre, .technical-meta { font-family: var(--mono); }
   margin: 0; font-family: var(--display); font-weight: 400; line-height: .9;
   letter-spacing: clamp(.06em, 1.2vw, .14em); text-transform: uppercase;
 }
-.display-name { width: 100%; max-width: none; white-space: nowrap; font-size: clamp(2.5rem, 8.5vw, 10rem); letter-spacing: clamp(.02em, .45vw, .08em); text-align: center; }
+.display-name { width: 100%; max-width: none; white-space: nowrap; font-size: clamp(2.35rem, 7vw, 8.5rem); letter-spacing: clamp(.015em, .3vw, .055em); text-align: center; }
 
 .work-section { padding: clamp(4rem, 8vw, 8rem) 0 clamp(5rem, 10vw, 10rem); }
-.section-heading { display: flex; justify-content: space-between; align-items: center; padding: 0 var(--page-pad); margin-bottom: 2rem; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; width: min(calc(100vw - (2 * var(--page-pad))), 92rem); margin: 0 auto 2rem; }
 .section-heading h2 { margin: 0; font-size: clamp(1.4rem, 2.3vw, 2.1rem); font-weight: 400; }
 .back-to-hall {
   display: grid; place-items: center; width: 2.75rem; aspect-ratio: 1;
@@ -268,7 +268,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   .portfolio-nav { grid-template-columns: auto 1fr auto; }
   .nav-links { justify-content: center; gap: 1rem; }
   .nav-links a { font-size: .64rem; }
-  .display-name { font-size: clamp(2rem, 9vw, 4rem); letter-spacing: .01em; }
+  .display-name { font-size: clamp(1.85rem, 7.8vw, 3.5rem); letter-spacing: 0; }
   .portfolio-hero { min-height: 78svh; }
   .project-card { flex-basis: 100%; aspect-ratio: 4/5; }
   .project-card__content { opacity: 1; transform: none; align-items: end; padding-bottom: 2rem; }

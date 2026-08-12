@@ -4,7 +4,7 @@
   status:
     es: "En desarrollo"
     en: "In development"
-  image: "/assets/images/aiden/aiden-results-graph.jpg"
+  image: "/assets/images/aiden/aiden-cover.jpg"
   technologies: [Python, OSINT, Debian, Termux]
   repository: ""
   summary:
