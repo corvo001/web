@@ -174,8 +174,13 @@ code, pre, .technical-meta { font-family: var(--mono); }
   padding: 1.2rem var(--page-pad); border-bottom: 1px solid var(--line);
   background: linear-gradient(to bottom, var(--nav-wash), transparent);
 }
-.nav-logo { display: flex; align-items: center; width: fit-content; text-decoration: none; }
+.nav-logo { position: relative; display: flex; align-items: center; width: fit-content; text-decoration: none; }
 .nav-logo img { width: 2.25rem; height: 2.25rem; object-fit: contain; }
+.nav-logo::after {
+  content: ""; position: absolute; left: 50%; top: 44.55%;
+  width: .18rem; aspect-ratio: 1; border-radius: 50%;
+  background: var(--accent); transform: translate(-50%, -50%); pointer-events: none;
+}
 .nav-links { display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
 .nav-links a, .language-switch {
   color: var(--muted); font-size: .78rem; font-weight: 500; letter-spacing: .07em;
