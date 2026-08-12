@@ -340,6 +340,11 @@ code, pre, .technical-meta { font-family: var(--mono); }
 
 @media (prefers-color-scheme: light) {
   .reactive-mark__image, .nav-logo img { filter: invert(1); }
-  .reactive-mark__image { filter: invert(1) drop-shadow(0 1rem 2.5rem rgba(30,40,34,.18)); }
+  .language-gate {
+    background: radial-gradient(circle at 50% 44%, rgba(21,25,23,.035), transparent 32%), var(--ink);
+  }
+  .reactive-mark__image { filter: invert(1); }
+  .reactive-mark__pupil { background: var(--text); }
+  .pupil-transition { border-color: var(--text); box-shadow: none; }
   .project-stage, .project-card { background: #101311; }
 }
