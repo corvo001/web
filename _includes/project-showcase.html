@@ -17,6 +17,7 @@
     </div>
     <div class="project-track" data-project-track tabindex="0">
       {% for project in site.data.projects %}
+        {% unless project.hidden %}
         {% if page.lang == 'es' %}
           {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
         {% else %}
@@ -28,6 +29,7 @@
             <h3 class="project-display">{{ project.name }}</h3>
           </div>
         </a>
+        {% endunless %}
       {% endfor %}
     </div>
   </div>

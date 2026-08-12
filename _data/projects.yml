@@ -1,5 +1,6 @@
 - id: aiden
   name: "AIDEN"
+  hidden: true
   year: "2026"
   status:
     es: "En desarrollo"
