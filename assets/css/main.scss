@@ -128,7 +128,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   animation: gate-copy 520ms 260ms cubic-bezier(.22,1,.36,1) both;
 }
 .language-options a {
-  position: relative; display: flex; flex-direction: column; gap: .75rem; min-width: 0; width: 100%; padding: .7rem .35rem; color: var(--text); text-decoration: none;
+  position: relative; display: flex; flex-direction: column; gap: 1.45rem; min-width: 0; width: 100%; padding: .7rem .35rem 1.1rem; color: var(--text); text-decoration: none;
 }
 .language-options a span { color: var(--muted); font: 400 .62rem/1.25 var(--mono); letter-spacing: .1em; text-transform: uppercase; overflow-wrap: anywhere; }
 .language-options a strong {
@@ -345,7 +345,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
   .gate-inner { width: 100%; }
   .reactive-mark { width: clamp(12.5rem, 62vw, 17rem); margin-bottom: clamp(2rem, 7vh, 3.5rem); }
   .language-options { width: 100%; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); gap: clamp(.35rem, 2.5vw, .75rem); }
-  .language-options a { padding-inline: .15rem; }
+  .language-options a { gap: 1.35rem; padding: .7rem .15rem 1rem; }
   .language-options a span { font-size: clamp(.48rem, 2.15vw, .58rem); letter-spacing: .065em; }
   .language-options a strong { font-size: .92rem; }
   .portfolio-nav { grid-template-columns: auto 1fr auto; }
