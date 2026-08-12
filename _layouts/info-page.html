@@ -8,16 +8,15 @@ layout: portfolio-base
 <main class="internal-main" id="main">
   <header class="internal-header">
     <h1>{{ section.title }}</h1>
-    {% if page.section == 'about' %}<p class="internal-subtitle">{{ section.subtitle }}</p>{% endif %}
+    <p class="internal-subtitle">{% if page.section == 'about' %}{{ section.subtitle }}{% else %}{{ section.intro }}{% endif %}</p>
   </header>
   <div class="internal-copy">
     {% if page.section == 'about' %}
       {{ section.body | markdownify }}
     {% else %}
-      <p class="contact-subtitle">{{ section.intro }}</p>
       <div class="contact-links">
         <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
-        <p><a href="tel:+34639218007">(+34) 639 218 007</a></p>
+        <p><a href="tel:+34639218007">639 218 007</a></p>
         <p><a href="https://www.linkedin.com/in/danielcuervor/" rel="me">LinkedIn</a></p>
         <p><a href="https://github.com/corvo001" rel="me">GitHub</a></p>
       </div>
