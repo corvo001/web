@@ -165,8 +165,8 @@ code, pre, .technical-meta { font-family: var(--mono); }
 
 /* Home */
 .portfolio-hero {
-  min-height: min(82rem, 86svh); display: flex; align-items: flex-end;
-  padding: clamp(10rem, 25vh, 18rem) var(--page-pad) clamp(5rem, 11vh, 8rem);
+  min-height: min(82rem, 86svh); display: flex; align-items: center;
+  padding: clamp(7rem, 13vh, 10rem) var(--page-pad) clamp(3rem, 7vh, 5rem);
   border-bottom: 1px solid var(--line);
 }
 .hero-copy { width: 100%; max-width: none; text-align: center; }
@@ -250,6 +250,8 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .internal-main--contact { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .internal-main--contact .internal-header, .internal-main--contact .internal-copy { width: 100%; margin-inline: auto; }
 .internal-main--contact .contact-links { display: flex; flex-direction: column; align-items: center; }
+.internal-main--about { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.internal-main--about .internal-header, .internal-main--about .internal-copy { width: 100%; margin-inline: auto; }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
