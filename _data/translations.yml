@@ -22,12 +22,11 @@ es:
       Trabajo especialmente cómodo en la intersección entre desarrollo, estructuración de proyectos e I+D aplicada. Me interesa construir herramientas claras, modulares y reproducibles que puedan evolucionar desde una prueba de concepto hasta un sistema real.
   contact:
     title: "Contacto"
-    intro: "Disponible para colaboraciones técnicas, proyectos de I+D y conversaciones sobre sistemas que merezca la pena construir."
+    intro: "Disponible cuando me necesites."
   project:
     gallery: "Galería"
     repository: "Ver repositorio"
     status: "Estado"
-  footer: "Portfolio técnico — Daniel Cuervo"
 
 en:
   language_name: "English"
@@ -53,9 +52,8 @@ en:
       I work comfortably where development, project architecture and applied R&D intersect. I’m interested in building clear, modular and reproducible tools that can evolve from a proof of concept into a real system.
   contact:
     title: "Contact"
-    intro: "Available for technical collaborations, R&D projects and conversations about systems worth building."
+    intro: "Available whenever you need."
   project:
     gallery: "Gallery"
     repository: "View repository"
     status: "Status"
-  footer: "Technical portfolio — Daniel Cuervo"

@@ -249,6 +249,10 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .internal-copy { max-width: 52rem; color: var(--copy); font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.8; }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
+.contact-subtitle { margin: 0 0 3rem; color: var(--accent); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 400; }
+.contact-links { font-family: var(--mono); font-size: .88em; }
+.contact-links a { color: var(--text); text-decoration-color: var(--line); transition: color 160ms ease, text-decoration-color 160ms ease; }
+.contact-links a:hover, .contact-links a:focus-visible { color: var(--accent); text-decoration-color: var(--accent); }
 .project-hero-image { width: 100%; max-height: 70vh; object-fit: cover; margin: 0 0 4rem; border: 1px solid var(--line); }
 .project-hero-image--placeholder { height: min(60vh, 40rem); object-fit: contain; padding: 12%; filter: invert(1); opacity: .45; background: var(--surface); }
 .project-facts { display: flex; flex-wrap: wrap; gap: .7rem 1.5rem; padding: 1rem 0; border-block: 1px solid var(--line); color: var(--muted); font: .7rem/1.5 var(--mono); text-transform: uppercase; }
@@ -256,6 +260,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .project-gallery img { width: 100%; height: 100%; object-fit: cover; border: 1px solid var(--line); }
 
 .portfolio-footer { display: flex; justify-content: space-between; gap: 2rem; padding: 2rem var(--page-pad); border-top: 1px solid var(--line); color: var(--muted); font: .68rem/1.5 var(--mono); text-transform: uppercase; }
+.portfolio-footer--minimal { justify-content: flex-end; }
 
 @media (max-width: 700px) {
   .portfolio-nav { grid-template-columns: auto 1fr auto; }
