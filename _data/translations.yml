@@ -10,8 +10,7 @@ es:
     eyebrow: "Software · Robótica · Automatización industrial"
     subtitle: "Diseño y desarrollo sistemas técnicos donde el software se encuentra con el mundo físico."
   work:
-    title: "Proyectos seleccionados"
-    hint: "Desliza para explorar"
+    title: "Proyectos"
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
   about:
@@ -47,8 +46,7 @@ en:
     eyebrow: "Software · Robotics · Industrial automation"
     subtitle: "I design and develop technical systems where software meets the physical world."
   work:
-    title: "Selected work"
-    hint: "Swipe to explore"
+    title: "Projects"
     previous: "Previous project"
     next: "Next project"
   about:

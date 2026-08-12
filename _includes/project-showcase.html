@@ -2,8 +2,9 @@
 <section class="work-section" id="work" aria-labelledby="work-title">
   <div class="section-heading">
     <h2 id="work-title">{{ t.work.title }}</h2>
+  </div>
+  <div class="project-stage">
     <div class="project-controls">
-      <span>{{ t.work.hint }}</span>
       <button class="project-control" type="button" data-project-previous aria-label="{{ t.work.previous }}" disabled>
         <span aria-hidden="true">←</span>
       </button>
@@ -11,22 +12,22 @@
         <span aria-hidden="true">→</span>
       </button>
     </div>
-  </div>
-  <div class="project-track" data-project-track tabindex="0">
-    {% for project in site.data.projects %}
-      {% if page.lang == 'es' %}
-        {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
-      {% else %}
-        {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
-      {% endif %}
-      <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}">
-        <img class="project-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy">
-        <div class="project-card__content">
-          <span class="project-card__index">0{{ forloop.index }} / {{ project.year }}</span>
-          <h3 class="project-display">{{ project.name }}</h3>
-          <p>{{ project.summary[page.lang] }}</p>
-        </div>
-      </a>
-    {% endfor %}
+    <div class="project-track" data-project-track tabindex="0">
+      {% for project in site.data.projects %}
+        {% if page.lang == 'es' %}
+          {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
+        {% else %}
+          {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
+        {% endif %}
+        <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}">
+          <img class="project-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy">
+          <div class="project-card__content">
+            <span class="project-card__index">0{{ forloop.index }} / {{ project.year }}</span>
+            <h3 class="project-display">{{ project.name }}</h3>
+            <p>{{ project.summary[page.lang] }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
