@@ -12,6 +12,8 @@ es:
   work:
     title: "Proyectos seleccionados"
     hint: "Desliza para explorar"
+    previous: "Proyecto anterior"
+    next: "Proyecto siguiente"
   about:
     label: "Perfil / 01"
     title: "Sobre mí"
@@ -47,6 +49,8 @@ en:
   work:
     title: "Selected work"
     hint: "Swipe to explore"
+    previous: "Previous project"
+    next: "Next project"
   about:
     label: "Profile / 01"
     title: "About"

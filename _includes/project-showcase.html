@@ -2,9 +2,17 @@
 <section class="work-section" id="work" aria-labelledby="work-title">
   <div class="section-heading">
     <h2 id="work-title">{{ t.work.title }}</h2>
-    <span>{{ t.work.hint }}</span>
+    <div class="project-controls">
+      <span>{{ t.work.hint }}</span>
+      <button class="project-control" type="button" data-project-previous aria-label="{{ t.work.previous }}" disabled>
+        <span aria-hidden="true">←</span>
+      </button>
+      <button class="project-control" type="button" data-project-next aria-label="{{ t.work.next }}">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
   </div>
-  <div class="project-track">
+  <div class="project-track" data-project-track tabindex="0">
     {% for project in site.data.projects %}
       {% if page.lang == 'es' %}
         {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
