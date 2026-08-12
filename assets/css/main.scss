@@ -289,7 +289,11 @@ code, pre, .technical-meta { font-family: var(--mono); }
   .nav-links { justify-content: center; gap: 1rem; }
   .nav-links a { font-size: .64rem; }
   .display-name { font-size: clamp(1.5rem, 6vw, 2.85rem); letter-spacing: 0; }
-  .portfolio-hero { min-height: 78svh; }
+  .portfolio-hero {
+    min-height: 100svh;
+    padding-top: clamp(7.5rem, 18svh, 10rem);
+    padding-bottom: clamp(7rem, 16svh, 9rem);
+  }
   .project-card { flex-basis: 100%; aspect-ratio: 4/5; }
   .project-card__content { opacity: 1; transform: none; align-items: end; padding-bottom: 2rem; }
   .project-controls { inset-inline: .5rem; }
