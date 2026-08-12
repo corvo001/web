@@ -178,8 +178,8 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .nav-logo img { width: 2.25rem; height: 2.25rem; object-fit: contain; }
 .nav-logo::after {
   content: ""; position: absolute; left: 50%; top: 44.55%;
-  width: .18rem; aspect-ratio: 1; border-radius: 50%;
-  background: var(--accent); transform: translate(-50%, -50%); pointer-events: none;
+  width: .10rem; aspect-ratio: 1; border-radius: 50%;
+  background: var(--text); transform: translate(-50%, -50%); pointer-events: none;
 }
 .nav-links { display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
 .nav-links a, .language-switch {
