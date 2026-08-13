@@ -237,6 +237,9 @@
   };
 
   window.addEventListener('pageshow', (event) => {
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     // Never animate a document frozen by the browser's history cache. Reload it
     // once and let the boot veil keep the transition visually continuous.
     if (gate && event.persisted) {

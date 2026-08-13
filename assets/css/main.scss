@@ -623,6 +623,17 @@ html.project-entry-boot body { opacity: 0; }
   88%, 100% { opacity: 0; transform: translateZ(0) scale(1.08); }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .portfolio-nav .nav-links a:hover,
+  .portfolio-nav .nav-links a:focus,
+  .portfolio-nav .nav-links a:focus-visible,
+  .portfolio-nav .language-switch:hover,
+  .portfolio-nav .language-switch:focus,
+  .portfolio-nav .language-switch:focus-visible {
+    color: var(--muted);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
