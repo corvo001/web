@@ -86,7 +86,7 @@
 
   const writeProjectTransition = (value) => sessionStorage.setItem(projectTransitionKey, JSON.stringify(value));
 
-  const createArchiveTransition = (label) => {
+  const createArchiveTransition = (label, status) => {
     const transition = document.createElement('div');
     transition.className = 'archive-transition';
     transition.setAttribute('aria-hidden', 'true');
@@ -99,19 +99,22 @@
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
       <span class="archive-transition__meta">DC / PRIVATE INVENTORY / 001</span>
       <strong class="archive-transition__title">${label}</strong>
-      <span class="archive-transition__status">ACCESS GRANTED · INDEXING ARTIFACTS</span>`;
+      <span class="archive-transition__status">${status}</span>`;
     document.documentElement.appendChild(transition);
     return transition;
   };
 
   const showArchiveArrival = () => {
-    const label = sessionStorage.getItem(archiveTransitionKey);
-    if (!label || !document.body.classList.contains('work-page') || reduceMotion.matches) {
+    const storedTransition = sessionStorage.getItem(archiveTransitionKey);
+    if (!storedTransition || !document.body.classList.contains('work-page') || reduceMotion.matches) {
       document.documentElement.classList.remove('archive-entry-boot');
       return;
     }
+    let archiveData;
+    try { archiveData = JSON.parse(storedTransition); }
+    catch (error) { archiveData = { label: storedTransition, status: '' }; }
     sessionStorage.removeItem(archiveTransitionKey);
-    const transition = createArchiveTransition(label);
+    const transition = createArchiveTransition(archiveData.label, archiveData.status);
     transition.classList.add('is-arriving');
     document.documentElement.classList.remove('archive-entry-boot');
     window.setTimeout(() => transition.remove(), 1380);
@@ -449,8 +452,9 @@
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
       const label = link.dataset.workLabel || link.textContent.trim();
-      sessionStorage.setItem(archiveTransitionKey, label);
-      const transition = createArchiveTransition(label);
+      const status = link.dataset.workStatus || '';
+      sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, status }));
+      const transition = createArchiveTransition(label, status);
       document.body.classList.add('archive-leaving');
       window.requestAnimationFrame(() => window.requestAnimationFrame(() => transition.classList.add('is-departing')));
       window.setTimeout(() => window.location.assign(target.href), 1720);
@@ -466,7 +470,7 @@
       if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
       event.preventDefault();
       document.body.classList.add('page-leaving');
-      window.setTimeout(() => window.location.assign(target.href), 220);
+      window.setTimeout(() => window.location.assign(target.href), 360);
     });
   });
 
