@@ -19,6 +19,7 @@
   category: "SOFTWARE"
   image: "/assets/images/swarm/DysonSwarm.png"
   video: "/assets/videos/dyson-swarm-preview.webm"
+  preview_video: "/assets/videos/dyson-swarm-loop.webm"
   technologies: [Simulation, Real-time]
   repository: "https://github.com/corvo001/DysonSwarm"
   summary:

@@ -431,9 +431,14 @@
       active = index;
       slides.forEach((slide, slideIndex) => {
         const isActive = slideIndex === active;
+        const video = slide.querySelector('video');
         slide.classList.toggle('is-active', isActive);
         slide.setAttribute('aria-hidden', String(!isActive));
         slide.tabIndex = isActive ? 0 : -1;
+        if (video) {
+          if (isActive) video.play().catch(() => {});
+          else video.pause();
+        }
       });
       if (previous) previous.disabled = historyIndex === 0;
     };
