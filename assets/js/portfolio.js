@@ -195,7 +195,7 @@
         portal.muted = true;
         portal.play().catch(() => {});
       }
-      document.body.appendChild(portal);
+      document.documentElement.appendChild(portal);
       media.style.visibility = 'hidden';
       document.body.classList.add('project-portal-leaving');
       void portal.offsetWidth;
