@@ -11,7 +11,7 @@
   let updateEyeFromPointer = null;
   const eyeShakeDuration = 720;
   const eyeDiveDuration = 1120;
-  const nativeProjectTransitions = 'onpagereveal' in window && CSS.supports('view-transition-name: project-media');
+  const projectTransitionDuration = 1080;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
@@ -68,13 +68,23 @@
 
   const writeProjectTransition = (value) => sessionStorage.setItem(projectTransitionKey, JSON.stringify(value));
 
-  const createProjectPortal = (media, rect) => {
+  const rectData = (rect) => ({
+    left: rect.left,
+    top: rect.top,
+    width: Math.max(rect.width, 1),
+    height: Math.max(rect.height, 1)
+  });
+
+  const validRect = (rect) => rect && [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) && rect.width > 0 && rect.height > 0;
+
+  const createProjectPortal = (media, fromRect, toRect) => {
     const portal = document.createElement('div');
     const backdrop = document.createElement('span');
     const clone = media.cloneNode(true);
-    const scale = Math.max(window.innerWidth / rect.width, window.innerHeight / rect.height) * 1.035;
-    const translateX = (window.innerWidth / 2) - (rect.left + rect.width / 2);
-    const translateY = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+    const translateX = toRect.left - fromRect.left;
+    const translateY = toRect.top - fromRect.top;
+    const scaleX = toRect.width / fromRect.width;
+    const scaleY = toRect.height / fromRect.height;
 
     clone.removeAttribute('loading');
     clone.removeAttribute('controls');
@@ -84,8 +94,9 @@
     portal.className = 'project-portal';
     backdrop.className = 'project-portal-backdrop';
     Object.assign(portal.style, {
-      left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px`,
-      '--portal-x': `${translateX}px`, '--portal-y': `${translateY}px`, '--portal-scale': scale
+      left: `${fromRect.left}px`, top: `${fromRect.top}px`, width: `${fromRect.width}px`, height: `${fromRect.height}px`,
+      '--portal-x': `${translateX}px`, '--portal-y': `${translateY}px`,
+      '--portal-scale-x': scaleX, '--portal-scale-y': scaleY
     });
     portal.appendChild(clone);
     if (clone instanceof HTMLVideoElement) {
@@ -96,63 +107,57 @@
     return { portal, backdrop };
   };
 
-  const animateProjectPortalToElement = async (media, fromFullscreen, onComplete) => {
+  const animateProjectPortalToElement = async (media, fromRect, onComplete) => {
     if (media instanceof HTMLImageElement && media.decode) await media.decode().catch(() => {});
     await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
-    const rect = media.getBoundingClientRect();
-    const { portal, backdrop } = createProjectPortal(media, rect);
-    media.style.visibility = 'hidden';
-
-    if (fromFullscreen) {
-      portal.classList.add('no-transition', 'is-fullscreen');
-      backdrop.classList.add('no-transition', 'is-active');
+    const toRect = rectData(media.getBoundingClientRect());
+    if (!validRect(fromRect) || !validRect(toRect)) {
       document.documentElement.classList.remove('project-entry-boot');
-      void portal.offsetWidth;
-      portal.classList.remove('no-transition');
-      backdrop.classList.remove('no-transition');
-      window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-        portal.classList.remove('is-fullscreen');
-        backdrop.classList.remove('is-active');
-      }));
-    } else {
-      void portal.offsetWidth;
-      window.requestAnimationFrame(() => {
-        portal.classList.add('is-fullscreen');
-        backdrop.classList.add('is-active');
-      });
+      onComplete?.(toRect);
+      return;
     }
+    const { portal, backdrop } = createProjectPortal(media, fromRect, toRect);
+    media.style.visibility = 'hidden';
+    portal.classList.add('no-transition');
+    backdrop.classList.add('no-transition', 'is-active');
+    document.documentElement.classList.remove('project-entry-boot');
+    void portal.offsetWidth;
+    portal.classList.remove('no-transition');
+    backdrop.classList.remove('no-transition');
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      portal.classList.add('is-at-target');
+      backdrop.classList.remove('is-active');
+    }));
 
     window.setTimeout(() => {
       portal.remove();
       backdrop.remove();
       media.style.visibility = '';
-      onComplete?.();
-    }, 980);
+      onComplete?.(toRect);
+    }, projectTransitionDuration + 80);
   };
 
   const showProjectArrival = () => {
     const state = readProjectTransition();
     const hero = document.querySelector('[data-project-hero]');
     const media = hero?.querySelector('[data-project-hero-media]');
-    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media || reduceMotion.matches || nativeProjectTransitions) {
-      if (nativeProjectTransitions && state?.phase === 'enter' && hero?.dataset.projectId === state.id) writeProjectTransition({ id: state.id, phase: 'inside' });
+    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media || reduceMotion.matches || !validRect(state.rect)) {
       document.documentElement.classList.remove('project-entry-boot');
       return;
     }
-    writeProjectTransition({ id: state.id, phase: 'inside' });
-    animateProjectPortalToElement(media, true);
+    writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()) });
+    animateProjectPortalToElement(media, state.rect, (heroRect) => {
+      writeProjectTransition({ id: state.id, phase: 'inside', heroRect });
+    });
   };
 
   const showProjectReturn = () => {
     const state = readProjectTransition();
     const link = state?.phase === 'inside' ? document.querySelector(`[data-project-link][data-project-id="${state.id}"]`) : null;
     const media = link?.querySelector('[data-project-media]');
-    if (nativeProjectTransitions) {
-      if (media) window.setTimeout(() => sessionStorage.removeItem(projectTransitionKey), 1000);
-      return;
-    }
-    if (!media || reduceMotion.matches) return;
-    animateProjectPortalToElement(media, true, () => sessionStorage.removeItem(projectTransitionKey));
+    if (!media || reduceMotion.matches || !validRect(state?.heroRect)) return;
+    link.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
+    animateProjectPortalToElement(media, state.heroRect, () => sessionStorage.removeItem(projectTransitionKey));
   };
 
   const showGateReturn = async () => {
@@ -282,20 +287,10 @@
       const media = link.querySelector('[data-project-media]');
       if (!media) return;
 
-      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter' });
-      if (nativeProjectTransitions) return;
-
       event.preventDefault();
-      const rect = media.getBoundingClientRect();
-      const { portal, backdrop } = createProjectPortal(media, rect);
-      media.style.visibility = 'hidden';
+      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect: rectData(media.getBoundingClientRect()) });
       document.body.classList.add('project-portal-leaving');
-      void portal.offsetWidth;
-      window.requestAnimationFrame(() => {
-        portal.classList.add('is-fullscreen');
-        backdrop.classList.add('is-active');
-      });
-      window.setTimeout(() => window.location.assign(link.href), 920);
+      window.setTimeout(() => window.location.assign(link.href), 120);
     });
   });
 

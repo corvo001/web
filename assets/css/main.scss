@@ -43,11 +43,6 @@
 
 * { box-sizing: border-box; }
 
-@view-transition { navigation: auto; }
-::view-transition-group(*) { animation-duration: 900ms; animation-timing-function: cubic-bezier(.7,0,.22,1); }
-::view-transition-old(root) { animation: project-page-out 620ms cubic-bezier(.4,0,.2,1) both; }
-::view-transition-new(root) { animation: project-page-in 900ms cubic-bezier(.22,1,.36,1) both; }
-
 html { width: 100%; max-width: 100%; overflow-x: clip; background: var(--ink); scroll-behavior: smooth; }
 body {
   width: 100%; max-width: 100%; margin: 0; overflow-x: clip;
@@ -325,8 +320,6 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   to { opacity: 1; transform: none; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(.3rem); filter: blur(2px); } to { opacity: 1; transform: none; filter: blur(0); } }
-@keyframes project-page-out { to { opacity: 0; filter: brightness(.55); } }
-@keyframes project-page-in { from { opacity: 0; filter: brightness(.55); } to { opacity: 1; filter: none; } }
 
 /* Shared navigation */
 .portfolio-nav {
@@ -442,27 +435,27 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 html.project-entry-boot body { opacity: 0; }
 .project-portal-backdrop {
   position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
-  transition: opacity 920ms cubic-bezier(.4,0,.2,1); will-change: opacity;
+  transition: opacity 1080ms cubic-bezier(.4,0,.2,1); will-change: opacity;
 }
 .project-portal-backdrop.is-active { opacity: 1; }
 .project-portal {
   position: fixed; z-index: 200; margin: 0; overflow: hidden; pointer-events: none;
-  transform: translate3d(0,0,0) scale(1); transform-origin: center; contain: strict;
+  transform: translate3d(0,0,0) scale(1); transform-origin: top left; contain: strict;
   box-shadow: 0 0 0 1px var(--line); will-change: transform, filter, border-radius;
-  transition: transform 920ms cubic-bezier(.7,0,.22,1), filter 920ms ease, border-radius 920ms ease, box-shadow 920ms ease;
+  transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease, border-radius 1080ms ease, box-shadow 1080ms ease;
 }
 .project-portal::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
   background: radial-gradient(circle at center, transparent 38%, rgba(2,3,2,.48) 100%);
   transition: opacity 920ms ease;
 }
-.project-portal__media { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.001); transition: transform 920ms cubic-bezier(.7,0,.22,1), filter 920ms ease; }
-.project-portal.is-fullscreen {
-  transform: translate3d(var(--portal-x),var(--portal-y),0) scale(var(--portal-scale));
-  filter: brightness(.62) saturate(.88); border-radius: 1px; box-shadow: none;
+.project-portal__media { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.001); transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease; }
+.project-portal.is-at-target {
+  transform: translate3d(var(--portal-x),var(--portal-y),0) scale(var(--portal-scale-x),var(--portal-scale-y));
+  filter: brightness(.9) saturate(.94); border-radius: 0; box-shadow: none;
 }
-.project-portal.is-fullscreen::after { opacity: 1; }
-.project-portal.is-fullscreen .project-portal__media { transform: scale(1.045); filter: contrast(1.04); }
+.project-portal.is-at-target::after { opacity: .32; }
+.project-portal.is-at-target .project-portal__media { transform: scale(1.012); filter: contrast(1.025); }
 .project-portal.no-transition, .project-portal.no-transition::after, .project-portal.no-transition .project-portal__media, .project-portal-backdrop.no-transition { transition: none !important; }
 .project-portal-leaving .portfolio-nav, .project-portal-leaving .section-heading, .project-portal-leaving .project-controls, .project-portal-leaving .project-card__content { opacity: 0; transition: opacity 180ms ease; }
 

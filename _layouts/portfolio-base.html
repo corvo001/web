@@ -26,7 +26,7 @@
     {% if page.layout == 'project' %}
     <script>
       try {
-        if (!("onpagereveal" in window) && sessionStorage.getItem('portfolio-project-transition')) document.documentElement.classList.add('project-entry-boot');
+        if (sessionStorage.getItem('portfolio-project-transition')) document.documentElement.classList.add('project-entry-boot');
       } catch (error) {}
     </script>
     {% endif %}
