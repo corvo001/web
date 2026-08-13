@@ -24,6 +24,14 @@ layout: portfolio-base
         {% endunless %}
       {% endfor %}
     </div>
+    <div class="hero-project-controls" aria-label="{{ t.work.title }}">
+      <button class="project-control" type="button" data-home-project-previous aria-label="{{ t.work.previous }}" disabled>
+        <span class="project-chevron project-chevron--previous" aria-hidden="true"></span>
+      </button>
+      <button class="project-control" type="button" data-home-project-next aria-label="{{ t.work.next }}">
+        <span class="project-chevron project-chevron--next" aria-hidden="true"></span>
+      </button>
+    </div>
     <div class="hero-copy">
       <p class="hero-eyebrow">{{ t.hero.eyebrow }}</p>
       <h1 class="display-name">Daniel Cuervo</h1>

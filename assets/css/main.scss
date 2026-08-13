@@ -408,6 +408,12 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   color: var(--text); font: 500 .72rem/1 var(--mono); letter-spacing: .2em;
   opacity: 0; transform: translate(-50%,.75rem); transition: opacity 280ms ease, transform 420ms cubic-bezier(.22,1,.36,1);
 }
+.hero-project-controls {
+  position: absolute; z-index: 5; inset: 50% clamp(.75rem, 2vw, 2rem) auto;
+  display: flex; justify-content: space-between; pointer-events: none;
+  transform: translateY(-50%);
+}
+.hero-project-controls .project-control { pointer-events: auto; }
 .hero-project.is-active:hover .hero-project__media,
 .hero-project.is-active:focus-visible .hero-project__media { filter: blur(5px) saturate(.62) brightness(.42); transform: scale(1.045); }
 .hero-project.is-active:hover::after,

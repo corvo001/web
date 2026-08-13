@@ -373,7 +373,11 @@
     if (slides.length < 2) return;
 
     let active = Math.floor(Math.random() * slides.length);
-    let timer = null;
+    let historyIndex = 0;
+    const history = [active];
+    const controls = projects.parentElement?.querySelector('.hero-project-controls');
+    const previous = controls?.querySelector('[data-home-project-previous]');
+    const next = controls?.querySelector('[data-home-project-next]');
     const show = (index) => {
       active = index;
       slides.forEach((slide, slideIndex) => {
@@ -382,27 +386,25 @@
         slide.setAttribute('aria-hidden', String(!isActive));
         slide.tabIndex = isActive ? 0 : -1;
       });
+      if (previous) previous.disabled = historyIndex === 0;
     };
-    const next = () => {
+    const chooseNext = () => {
       const offset = 1 + Math.floor(Math.random() * (slides.length - 1));
-      show((active + offset) % slides.length);
+      const newProject = (active + offset) % slides.length;
+      history.splice(historyIndex + 1);
+      history.push(newProject);
+      historyIndex += 1;
+      show(newProject);
     };
-    const stop = () => {
-      if (timer) window.clearInterval(timer);
-      timer = null;
-    };
-    const start = () => {
-      stop();
-      if (!reduceMotion.matches && !document.hidden) timer = window.setInterval(next, 6200);
+    const choosePrevious = () => {
+      if (historyIndex === 0) return;
+      historyIndex -= 1;
+      show(history[historyIndex]);
     };
 
     show(active);
-    start();
-    projects.addEventListener('pointerenter', stop);
-    projects.addEventListener('pointerleave', start);
-    projects.addEventListener('focusin', stop);
-    projects.addEventListener('focusout', start);
-    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+    previous?.addEventListener('click', choosePrevious);
+    next?.addEventListener('click', chooseNext);
   });
 
   document.querySelectorAll('a[href]').forEach((link) => {
