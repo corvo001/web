@@ -386,6 +386,12 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   font-size: clamp(2rem, 5vw, 6rem); letter-spacing: clamp(.006em, .12vw, .024em);
   text-align: center;
 }
+.home-page { min-height: 100svh; display: flex; flex-direction: column; }
+.home-page .portfolio-main { flex: 1; display: flex; }
+.home-page .portfolio-hero { width: 100%; min-height: 0; border-bottom: 0; }
+.home-page .portfolio-footer { flex: 0 0 auto; }
+.work-main { min-height: 100svh; padding-top: 4.7rem; }
+.work-page .work-section { padding-top: clamp(3rem, 6vw, 6rem); }
 
 .work-section { overflow: clip; padding: clamp(4rem, 7vw, 7rem) 0 clamp(5rem, 9vw, 9rem); }
 .section-heading {
@@ -646,16 +652,6 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-pupil { 0%,72% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
 @keyframes about-result-glow { 0%,74% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
-@keyframes about-resolve-mobile {
-  0%, 48% { opacity: 0; transform: scale(.78); }
-  78%, 93% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.04); }
-}
-@keyframes about-mobile-pan {
-  0%, 10% { transform: translate3d(0,-50%,0); }
-  48%, 92% { transform: translate3d(-39.5%,-50%,0); }
-  100% { transform: translate3d(0,-50%,0); }
-}
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
@@ -711,17 +707,10 @@ html.project-entry-boot body { opacity: 0; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
   .about-process {
-    height: clamp(15rem, 72vw, 18rem);
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
   .about-process__visual {
-    position: relative; top: 50%; width: 165%; max-width: none;
-    animation: about-mobile-pan 6.4s cubic-bezier(.45,0,.22,1) infinite;
-  }
-  .about-process__eye, .about-process__iris, .about-process__identity {
-    stroke-dasharray: none; stroke-dashoffset: 0;
-    transform-box: fill-box; transform-origin: center;
-    animation-name: about-resolve-mobile;
+    width: 100%;
   }
   .portfolio-footer { flex-direction: column; }
 }

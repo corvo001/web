@@ -1,8 +1,10 @@
 {% assign t = site.data.translations[page.lang] %}
 <section class="work-section" id="work" aria-labelledby="work-title">
+  {% unless include.standalone %}
   <a class="back-to-hall" href="#main" aria-label="{{ t.work.back_to_hall }}" data-back-to-hall>
     <span aria-hidden="true"></span>
   </a>
+  {% endunless %}
   <div class="section-heading">
     <h2 id="work-title">{{ t.work.title }}</h2>
   </div>
