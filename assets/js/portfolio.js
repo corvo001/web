@@ -473,6 +473,13 @@
     }));
   });
 
+  if (window.matchMedia('(max-width: 700px) and (hover: none), (max-width: 700px) and (pointer: coarse)').matches && 'IntersectionObserver' in window) {
+    const capsuleObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle('is-proximity-active', entry.isIntersecting));
+    }, { rootMargin: '-31% 0px -31% 0px', threshold: 0.01 });
+    document.querySelectorAll('.project-index-card__visual').forEach((capsule) => capsuleObserver.observe(capsule));
+  }
+
   document.querySelectorAll('[data-work-entry]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
