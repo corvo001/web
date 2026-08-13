@@ -8,6 +8,7 @@
   const archiveTransitionKey = 'portfolio-archive-transition';
   let gateEntrancePlayed = false;
   let eyeTrackingLocked = false;
+  let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
   const eyePrepareDuration = 420;
@@ -70,6 +71,7 @@
   };
 
   const resetNavigationState = () => {
+    navigationInProgress = false;
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
     document.documentElement.classList.remove('archive-entry-boot');
@@ -401,6 +403,10 @@
       if (!media || link.classList.contains('is-arming') || link.classList.contains('is-launching')) return;
 
       event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
+      document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
+      sessionStorage.removeItem(archiveTransitionKey);
       link.classList.add('is-arming');
       const useDisplayFont = await projectDisplayFontReady;
       if (!link.isConnected) return;
@@ -486,6 +492,9 @@
       const target = new URL(link.href, window.location.href);
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
+      document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       const label = link.dataset.workLabel || link.textContent.trim();
       const status = link.dataset.workStatus || '';
       sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, status }));
@@ -504,6 +513,10 @@
       if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;
       if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
       event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
+      document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
+      sessionStorage.removeItem(archiveTransitionKey);
       document.body.classList.add('page-leaving');
       window.setTimeout(() => window.location.assign(target.href), 360);
     });
