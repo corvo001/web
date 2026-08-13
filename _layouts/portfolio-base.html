@@ -18,7 +18,7 @@
     <script>
       try {
         if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
-          document.documentElement.classList.add('gate-return-boot');
+          document.documentElement.classList.add('gate-return-boot', 'gate-return-mode');
         }
       } catch (error) {}
     </script>

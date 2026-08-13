@@ -5,10 +5,15 @@
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   let gateEntrancePlayed = false;
+  let eyeTrackingLocked = false;
+  let lastPointerPosition = null;
+  let updateEyeFromPointer = null;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
     sessionStorage.getItem(eyeSessionKey) === '1';
+
+  eyeTrackingLocked = gateShouldReturn();
 
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
@@ -45,13 +50,21 @@
     if (!gateShouldReturn() || !setPupilTransitionGeometry()) return;
 
     gateEntrancePlayed = true;
+    eyeTrackingLocked = true;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
+    document.documentElement.classList.add('gate-return-mode');
     document.documentElement.classList.remove('gate-exiting', 'gate-return-boot');
     document.documentElement.classList.add('gate-entering');
     window.setTimeout(() => {
       document.documentElement.classList.remove('gate-entering');
       history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+      eyeTrackingLocked = false;
+      if (mark && lastPointerPosition && updateEyeFromPointer) {
+        mark.classList.add('eye-tracking-resuming');
+        updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
+        window.setTimeout(() => mark.classList.remove('eye-tracking-resuming'), 620);
+      }
     }, 1000);
   };
 
@@ -96,7 +109,9 @@
   });
 
   if (gate && mark && !reduceMotion.matches) {
-    const updateEye = (clientX, clientY) => {
+    updateEyeFromPointer = (clientX, clientY) => {
+      lastPointerPosition = { x: clientX, y: clientY };
+      if (eyeTrackingLocked) return;
       const rect = mark.getBoundingClientRect();
       const x = (clientX - (rect.left + rect.width / 2)) / (window.innerWidth / 2);
       const y = (clientY - (rect.top + rect.height / 2)) / (window.innerHeight / 2);
@@ -108,7 +123,7 @@
       mark.style.setProperty('--py', `${limitedY * 6}px`);
     };
 
-    window.addEventListener('pointermove', (event) => updateEye(event.clientX, event.clientY), { passive: true });
+    window.addEventListener('pointermove', (event) => updateEyeFromPointer(event.clientX, event.clientY), { passive: true });
     window.addEventListener('pointerleave', () => {
       ['--rx', '--ry'].forEach((property) => mark.style.setProperty(property, '0deg'));
       ['--px', '--py'].forEach((property) => mark.style.setProperty(property, '0px'));
