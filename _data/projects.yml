@@ -18,6 +18,7 @@
   year: "2025"
   category: "SOFTWARE"
   image: "/assets/images/swarm/DysonSwarm.png"
+  video: "/assets/videos/dyson-swarm-preview.webm"
   technologies: [Simulation, Real-time]
   repository: "https://github.com/corvo001/DysonSwarm"
   summary:
