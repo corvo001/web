@@ -543,16 +543,34 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   filter: saturate(.4) brightness(.5) contrast(1.08); transform: scale(1.12);
   transition: clip-path 820ms cubic-bezier(.16,1,.3,1), transform 950ms cubic-bezier(.16,1,.3,1), filter 620ms ease;
 }
+.project-index-card__lock {
+  position: absolute; z-index: 3; left: 50%; top: 50%; width: 1.8rem; aspect-ratio: 1;
+  border: 1px solid rgba(151,224,181,.9); background: rgba(69,125,92,.32);
+  box-shadow: 0 0 .7rem rgba(130,181,152,.5), inset 0 0 .45rem rgba(151,224,181,.35);
+  transform: translate(-50%,-50%) rotate(45deg); pointer-events: none;
+  animation: holocron-lock-pulse 2.4s ease-in-out infinite;
+  transition: opacity 260ms ease, transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
+}
+.project-index-card__lock::after {
+  content: ""; position: absolute; inset: 34%; background: #a2e0ba;
+  box-shadow: 0 0 .55rem rgba(162,224,186,.9);
+}
 .project-index-card__info { width: 76%; margin-inline: auto; padding-top: 1.5rem; text-align: center; }
 .project-index-card__info span { display: block; margin-bottom: .8rem; color: var(--accent); font: 500 .64rem/1.3 var(--mono); letter-spacing: .14em; }
 .project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.35rem,2.6vw,2.6rem); letter-spacing: .08em; transition: color 180ms ease; }
-.project-index-card:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
+.project-index-card__visual:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
   clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); transform: scale(1.025); filter: saturate(.9) brightness(.78);
 }
-.project-index-card:hover .project-index-card__visual::before, .project-index-card:focus-visible .project-index-card__visual::before { transform: translateX(-58%) skewY(-3deg); filter: brightness(1.25); opacity: .12; }
-.project-index-card:hover .project-index-card__visual::after, .project-index-card:focus-visible .project-index-card__visual::after { transform: translateX(58%) skewY(3deg); filter: brightness(1.25); opacity: .12; }
+.project-index-card__visual:hover::before, .project-index-card:focus-visible .project-index-card__visual::before { transform: translateX(-58%) skewY(-3deg); filter: brightness(1.25); opacity: .12; }
+.project-index-card__visual:hover::after, .project-index-card:focus-visible .project-index-card__visual::after { transform: translateX(58%) skewY(3deg); filter: brightness(1.25); opacity: .12; }
+.project-index-card__visual:hover .project-index-card__lock, .project-index-card:focus-visible .project-index-card__lock { opacity: 0; transform: translate(-50%,-50%) rotate(135deg) scale(.25); animation-play-state: paused; }
 .project-index-card:hover h2, .project-index-card:focus-visible h2 { color: var(--accent); }
 .project-index__empty { margin: 0; padding: 2rem 0; color: var(--muted); font: .75rem/1.5 var(--mono); letter-spacing: .08em; }
+
+@keyframes holocron-lock-pulse {
+  0%, 100% { box-shadow: 0 0 .55rem rgba(130,181,152,.38), inset 0 0 .35rem rgba(151,224,181,.28); }
+  50% { box-shadow: 0 0 1rem rgba(130,181,152,.72), inset 0 0 .65rem rgba(151,224,181,.48); }
+}
 
 .work-section { overflow: clip; padding: clamp(4rem, 7vw, 7rem) 0 clamp(5rem, 9vw, 9rem); }
 .section-heading {

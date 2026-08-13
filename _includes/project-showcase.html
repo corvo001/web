@@ -34,6 +34,7 @@
                 {% else %}
                   <img class="project-index-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
                 {% endif %}
+                <i class="project-index-card__lock" aria-hidden="true"></i>
               </div>
               <div class="project-index-card__info">
                 <span>{{ project.category }} / {{ project.year }}</span>
