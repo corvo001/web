@@ -232,11 +232,9 @@
 
   const showProjectReturn = () => {
     const state = readProjectTransition();
-    const link = state?.phase === 'inside' ? document.querySelector(`[data-project-link][data-project-id="${state.id}"]`) : null;
-    const media = link?.querySelector('[data-project-media]');
-    if (!media || reduceMotion.matches || !validRect(state?.heroRect)) return;
-    link.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
-    animateProjectPortalToElement(media, state.heroRect, () => sessionStorage.removeItem(projectTransitionKey), state.shape === 'diamond' ? 'diamond-target' : '');
+    if (state?.phase === 'inside' && document.body.classList.contains('work-page')) {
+      sessionStorage.removeItem(projectTransitionKey);
+    }
   };
 
   const showGateReturn = async () => {
