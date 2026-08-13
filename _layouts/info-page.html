@@ -8,7 +8,7 @@ layout: portfolio-base
 <main class="internal-main internal-main--{{ page.section }}" id="main">
   <header class="internal-header">
     <h1>{{ section.title }}</h1>
-    <p class="internal-subtitle">{% if page.section == 'about' %}{{ section.subtitle }}{% else %}{{ section.intro }}{% endif %}</p>
+    <p class="internal-subtitle">{% if page.section == 'about' %}<a href="https://www.instagram.com/danicr01/" rel="me">{{ section.subtitle }}</a>{% else %}{{ section.intro }}{% endif %}</p>
   </header>
   <div class="internal-copy">
     {% if page.section == 'about' %}
@@ -17,7 +17,7 @@ layout: portfolio-base
     {% else %}
       <div class="contact-links">
         <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
-        <p><a href="tel:+34639218007">639 218 007</a></p>
+        <p><a href="tel:+34639218007">(+34) 639 218 007</a></p>
         <p><a href="https://www.linkedin.com/in/danielcuervor/" rel="me">LinkedIn</a></p>
       </div>
     {% endif %}
