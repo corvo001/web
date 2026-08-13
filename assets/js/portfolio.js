@@ -368,6 +368,43 @@
     });
   });
 
+  document.querySelectorAll('[data-home-projects]').forEach((projects) => {
+    const slides = [...projects.querySelectorAll('.hero-project')];
+    if (slides.length < 2) return;
+
+    let active = Math.floor(Math.random() * slides.length);
+    let timer = null;
+    const show = (index) => {
+      active = index;
+      slides.forEach((slide, slideIndex) => {
+        const isActive = slideIndex === active;
+        slide.classList.toggle('is-active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+        slide.tabIndex = isActive ? 0 : -1;
+      });
+    };
+    const next = () => {
+      const offset = 1 + Math.floor(Math.random() * (slides.length - 1));
+      show((active + offset) % slides.length);
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+    };
+    const start = () => {
+      stop();
+      if (!reduceMotion.matches && !document.hidden) timer = window.setInterval(next, 6200);
+    };
+
+    show(active);
+    start();
+    projects.addEventListener('pointerenter', stop);
+    projects.addEventListener('pointerleave', start);
+    projects.addEventListener('focusin', stop);
+    projects.addEventListener('focusout', start);
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  });
+
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (link.hasAttribute('data-language-link') || link.hasAttribute('data-project-link') || reduceMotion.matches || event.defaultPrevented) return;

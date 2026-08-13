@@ -8,6 +8,7 @@ es:
   gate_prompt: "Selecciona un idioma"
   hero:
     eyebrow: "Software · Robótica industrial"
+    interest: "¿TE INTERESA?"
   work:
     title: "PROYECTOS"
     previous: "Proyecto anterior"
@@ -38,6 +39,7 @@ en:
   gate_prompt: "Select a language"
   hero:
     eyebrow: "Software · Industrial robotics"
+    interest: "INTERESTED?"
   work:
     title: "PROJECTS"
     previous: "Previous project"

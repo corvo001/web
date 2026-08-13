@@ -6,6 +6,24 @@ layout: portfolio-base
 {% include portfolio-nav.html %}
 <main class="portfolio-main" id="main">
   <section class="portfolio-hero">
+    <div class="hero-projects" data-home-projects aria-label="{{ t.work.title }}">
+      {% assign visible_project_index = 0 %}
+      {% for project in site.data.projects %}
+        {% unless project.hidden %}
+          {% if page.lang == 'es' %}
+            {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
+          {% else %}
+            {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
+          {% endif %}
+          <a class="hero-project{% if visible_project_index == 0 %} is-active{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}"{% unless visible_project_index == 0 %} aria-hidden="true" tabindex="-1"{% endunless %}>
+            <img class="hero-project__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt=""{% if visible_project_index == 0 %} fetchpriority="high"{% else %} loading="lazy"{% endif %} data-project-media>
+            <span class="hero-project__interest">{{ t.hero.interest }}</span>
+            <h3 class="visually-hidden">{{ project.name }}</h3>
+          </a>
+          {% assign visible_project_index = visible_project_index | plus: 1 %}
+        {% endunless %}
+      {% endfor %}
+    </div>
     <div class="hero-copy">
       <p class="hero-eyebrow">{{ t.hero.eyebrow }}</p>
       <h1 class="display-name">Daniel Cuervo</h1>
