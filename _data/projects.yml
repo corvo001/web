@@ -11,15 +11,6 @@
   summary:
     es: "Plataforma modular para investigación OSINT, correlación de identidades y análisis de información pública."
     en: "A modular platform for OSINT research, identity correlation and public-information analysis."
-  description:
-    es: |
-      AIDEN es una plataforma modular de OSINT construida alrededor de herramientas especializadas y orientada a investigar, correlacionar y visualizar información pública.
-
-      Su arquitectura separa el descubrimiento, la extracción, la correlación, la visualización y la generación de informes. El objetivo es integrar distintas fuentes y motores de investigación dentro de un entorno único, reproducible y extensible.
-    en: |
-      AIDEN is a modular OSINT platform built around specialist tools to investigate, correlate and visualise public information.
-
-      Its architecture separates discovery, extraction, correlation, visualisation and report generation. The aim is to integrate multiple sources and research engines in a single reproducible, extensible environment.
   gallery:
     - "/assets/images/aiden/aiden-results-graph.jpg"
     - "/assets/images/aiden/aiden-maigret-terminal.jpg"
@@ -36,15 +27,6 @@
   summary:
     es: "Simulador interactivo de arquitecturas orbitales y captación energética mediante enjambres de satélites."
     en: "An interactive simulator for orbital architectures and energy capture through satellite swarms."
-  description:
-    es: |
-      Dyson Swarm permite diseñar, manipular y visualizar enjambres de satélites orbitando alrededor de una estrella. Explora de forma experimental distintas arquitecturas de colectores solares masivos y su comportamiento orbital.
-
-      La simulación permite ajustar el número, tamaño y ángulo de los satélites, observar métricas de potencia y densidad de cobertura, y capturar configuraciones para análisis comparativo.
-    en: |
-      Dyson Swarm lets users design, manipulate and visualise satellite swarms orbiting a star. It experimentally explores large-scale solar collector architectures and their orbital behaviour.
-
-      The simulation provides control over satellite count, size and orbital angle, displays power and coverage metrics, and captures configurations for comparative analysis.
   gallery:
     - "/assets/images/swarm/DysonSwarm_2.png"
     - "/assets/images/swarm/DysonSwarm_3.png"
@@ -61,15 +43,6 @@
   summary:
     es: "Motor experimental para generar, deformar y analizar geometrías fractales en tiempo real."
     en: "An experimental engine for generating, shaping and analysing fractal geometries in real time."
-  description:
-    es: |
-      UNION combina generación y análisis de formas fractales para explorar geometría compleja y sus posibles aplicaciones científicas, artísticas y tecnológicas.
-
-      Permite mezclar funciones matemáticas, transformaciones y morfología dinámica, manipular parámetros en tiempo real y capturar patrones que puedan reutilizarse en investigación y prototipado visual.
-    en: |
-      UNION combines fractal generation and analysis to explore complex geometry and its potential scientific, artistic and technological applications.
-
-      It blends mathematical functions, transformations and dynamic morphology, supports real-time parameter manipulation, and captures patterns for research and visual prototyping.
   gallery:
     - "/assets/images/union/capture_144410.png"
     - "/assets/images/union/capture_144459.png"

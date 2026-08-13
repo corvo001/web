@@ -53,7 +53,9 @@
 
   const resetNavigationState = () => {
     document.documentElement.classList.remove('gate-exiting', 'gate-entering', 'gate-return-boot');
-    document.body.classList.remove('gate-exiting', 'gate-entering', 'page-leaving');
+    document.body.classList.remove('gate-exiting', 'gate-entering', 'page-leaving', 'project-portal-leaving');
+    document.querySelectorAll('.project-portal').forEach((portal) => portal.remove());
+    document.querySelectorAll('[data-project-media]').forEach((media) => { media.style.visibility = ''; });
   };
 
   const showGateReturn = async () => {
@@ -162,6 +164,37 @@
     });
   });
 
+  document.querySelectorAll('[data-project-link]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+      const media = link.querySelector('[data-project-media]');
+      if (!media) return;
+
+      event.preventDefault();
+      const rect = media.getBoundingClientRect();
+      const portal = media.cloneNode(true);
+      portal.removeAttribute('loading');
+      portal.removeAttribute('data-project-media');
+      portal.className = 'project-portal';
+      Object.assign(portal.style, {
+        left: `${rect.left}px`,
+        top: `${rect.top}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`
+      });
+      if (portal instanceof HTMLVideoElement) {
+        portal.muted = true;
+        portal.play().catch(() => {});
+      }
+      document.body.appendChild(portal);
+      media.style.visibility = 'hidden';
+      document.body.classList.add('project-portal-leaving');
+      void portal.offsetWidth;
+      window.requestAnimationFrame(() => portal.classList.add('is-entering'));
+      window.setTimeout(() => window.location.assign(link.href), 820);
+    });
+  });
+
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (link.hasAttribute('data-language-link') || reduceMotion.matches || event.defaultPrevented) return;
@@ -203,6 +236,32 @@
         inline: 'start'
       });
     };
+
+    previous.addEventListener('click', () => goTo(activeIndex() - 1));
+    next.addEventListener('click', () => goTo(activeIndex() + 1));
+    track.addEventListener('scroll', () => window.requestAnimationFrame(updateControls), { passive: true });
+    window.addEventListener('resize', updateControls, { passive: true });
+    updateControls();
+  });
+
+  document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+    const track = gallery.querySelector('[data-gallery-track]');
+    const previous = gallery.querySelector('[data-gallery-previous]');
+    const next = gallery.querySelector('[data-gallery-next]');
+    const slides = [...gallery.querySelectorAll('.project-gallery__slide')];
+    if (!track || !previous || !next || slides.length < 2) return;
+
+    const activeIndex = () => Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / Math.max(track.clientWidth, 1))));
+    const updateControls = () => {
+      const index = activeIndex();
+      previous.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+    };
+    const goTo = (index) => slides[Math.max(0, Math.min(slides.length - 1, index))].scrollIntoView({
+      behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'start'
+    });
 
     previous.addEventListener('click', () => goTo(activeIndex() - 1));
     next.addEventListener('click', () => goTo(activeIndex() + 1));

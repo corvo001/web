@@ -23,8 +23,12 @@
         {% else %}
           {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
         {% endif %}
-        <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}">
-          <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy">
+        <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link>
+          {% if project.video %}
+            <video class="project-card__media" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media></video>
+          {% else %}
+            <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
+          {% endif %}
           <div class="project-card__content">
             <h3 class="project-display">{{ project.name }}</h3>
           </div>

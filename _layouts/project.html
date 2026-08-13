@@ -6,26 +6,38 @@ layout: portfolio-base
 {% assign project = project_list | first %}
 <a class="skip-link" href="#main">{{ t.skip }}</a>
 {% include portfolio-nav.html %}
-<main class="internal-main" id="main">
+<main class="internal-main project-main" id="main">
   <header class="internal-header">
     <span class="technical-meta">{{ project.year }} / {{ project.status[page.lang] }}</span>
     <h1 class="project-display">{{ project.name }}</h1>
   </header>
-  <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}">
+  <div class="project-hero-media">
+    {% if project.video %}
+      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay controls aria-label="{{ project.name }}"></video>
+    {% else %}
+      <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}">
+    {% endif %}
+  </div>
   <div class="project-facts">
     <span>{{ t.project.status }}: {{ project.status[page.lang] }}</span>
     {% for technology in project.technologies %}<span>{{ technology }}</span>{% endfor %}
   </div>
-  <div class="internal-copy">
-    {{ project.description[page.lang] | markdownify }}
-    {% if project.repository != '' %}
-      <p><a href="{{ project.repository }}">{{ t.project.repository }} ↗</a></p>
-    {% endif %}
+  <div class="internal-copy project-summary">
+    {{ project.summary[page.lang] | markdownify }}
   </div>
   {% if project.gallery.size > 0 %}
-    <section class="project-gallery" aria-label="{{ t.project.gallery }}">
-      {% for image in project.gallery %}<img src="{{ image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy">{% endfor %}
+    <section class="project-gallery" aria-label="{{ t.project.gallery }}" data-gallery>
+      <div class="project-gallery__controls">
+        <button class="project-control" type="button" data-gallery-previous aria-label="{{ t.work.previous }}" disabled><span class="project-chevron project-chevron--previous" aria-hidden="true"></span></button>
+        <button class="project-control" type="button" data-gallery-next aria-label="{{ t.work.next }}"><span class="project-chevron project-chevron--next" aria-hidden="true"></span></button>
+      </div>
+      <div class="project-gallery__track" data-gallery-track tabindex="0">
+        {% for image in project.gallery %}<figure class="project-gallery__slide"><img src="{{ image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy"></figure>{% endfor %}
+      </div>
     </section>
+  {% endif %}
+  {% if project.repository != '' %}
+    <div class="project-repository"><a href="{{ project.repository }}">{{ t.project.repository }} <span aria-hidden="true">↗</span></a></div>
   {% endif %}
 </main>
 {% include portfolio-footer.html %}
