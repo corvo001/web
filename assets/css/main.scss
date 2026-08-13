@@ -213,7 +213,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 @keyframes pupil-emerge {
   0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); }
-  88% { opacity: 1; }
+  99.5% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 @keyframes gate-copy-return {

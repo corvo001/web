@@ -15,6 +15,15 @@
 
   eyeTrackingLocked = gateShouldReturn();
 
+  const waitForGateLayout = async () => {
+    const image = mark?.querySelector('.reactive-mark__image');
+    const waits = [];
+    if (document.fonts?.ready) waits.push(document.fonts.ready);
+    if (image?.decode) waits.push(image.decode().catch(() => {}));
+    await Promise.all(waits);
+    await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+  };
+
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
     const transition = document.querySelector('[data-pupil-transition]');
@@ -45,12 +54,17 @@
     document.body.classList.remove('gate-exiting', 'gate-entering', 'page-leaving');
   };
 
-  const showGateReturn = () => {
+  const showGateReturn = async () => {
     if (!gate || reduceMotion.matches || gateEntrancePlayed) return;
-    if (!gateShouldReturn() || !setPupilTransitionGeometry()) return;
+    if (!gateShouldReturn()) return;
 
     gateEntrancePlayed = true;
     eyeTrackingLocked = true;
+    await waitForGateLayout();
+    if (!setPupilTransitionGeometry()) {
+      gateEntrancePlayed = false;
+      return;
+    }
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
     document.documentElement.classList.add('gate-return-mode');
