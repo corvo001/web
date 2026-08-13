@@ -486,6 +486,12 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
+      if (window.location.pathname.startsWith(target.pathname)) {
+        sessionStorage.removeItem(archiveTransitionKey);
+        document.body.classList.add('page-leaving');
+        window.setTimeout(() => window.location.assign(target.href), 360);
+        return;
+      }
       const label = link.dataset.workLabel || link.textContent.trim();
       const status = link.dataset.workStatus || '';
       sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, status }));
