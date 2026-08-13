@@ -3,77 +3,20 @@ email: "danielcuervor01@gmail.com"
 description: >-
   Technical R&D portfolio focused on software, robotics and industrial automation.
 
-baseurl: "" 
-url: "https://corvo001.github.io" 
+baseurl: ""
+url: "https://corvo001.github.io"
 repository: "corvo001/corvo001.github.io"
-
-remote_theme: "mmistakes/minimal-mistakes@4.26.2"
-
-# Minimal Mistakes settings
-minimal_mistakes_skin: "dark"
 locale: "es-ES"
 
-# Logo en la barra superior (cambiar ruta según dónde lo guardes)
-logo: "/assets/images/logo-white.png?v=2"
-masthead_title: ""     # oculta el texto junto al logo
-
-# Desactivar foto/avatar lateral
-author:
-  name: "Cuervo"
-  avatar: "" # vacío para que no muestre nada
-  bio: "" # sin bio lateral
-  links: 
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/corvo001"
-    - label: "LinkedIn"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/danielcuervor/"
-    - label: "Email"
-      icon: "fas fa-fw fa-envelope"
-      url: "mailto:danielcuervor01@gmail.com"
-
-# Navegación
-collections:
-  posts:
-    output: true
-  pages:
-    output: true
-
-defaults:
-  - scope:
-      path: ""
-      type: pages
-    values:
-      layout: single
-      pagination: false
-      comments: false
-      author_profile: false # avatar desactivado
-  - scope:
-      path: ""
-      type: pages
-    values:
-      layout: single
-      author_profile: false # avatar desactivado
-
-future: true
 sass:
   sass_dir: _sass
   style: compressed
 
-include:
-  - _pages
-
-languages:
-  - code: es
-    label: ES
-    name: Español
-  - code: en
-    label: EN
-    name: English
-
 plugins:
-  - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-include-cache
+
+exclude:
+  - AGENTS.md
+  - Gemfile
+  - Gemfile.lock
+  - README.md

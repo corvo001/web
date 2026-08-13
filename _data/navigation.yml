@@ -1,9 +1,0 @@
-main:
-  - title: ""
-    url: /
-  - title: "PROYECTOS"
-    url: /proyectos/
-  - title: "SOBRE MÍ"
-    url: /sobre-mi/
-  - title: "CONTACTO"
-    url: /contacto/

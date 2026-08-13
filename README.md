@@ -51,6 +51,7 @@ La vista previa estará disponible en `http://127.0.0.1:4000/`.
 _data/       Traducciones y datos de proyectos
 _includes/   Navegación, footer y showcase
 _layouts/    Entrada, portfolio, páginas y proyectos
+_plugins/    Compatibilidad de desarrollo local con Ruby 4
 assets/      Estilos, JavaScript e imágenes
 es/          Rutas españolas
 en/          Rutas inglesas
