@@ -559,6 +559,61 @@ html.project-entry-boot body { opacity: 0; }
 .internal-main--contact .contact-links { display: flex; flex-direction: column; align-items: center; }
 .internal-main--about { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .internal-main--about .internal-header, .internal-main--about .internal-copy { width: 100%; margin-inline: auto; }
+.internal-main--about .internal-copy { max-width: 68rem; }
+.internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
+.about-process {
+  position: relative; width: 100%; margin: clamp(3rem, 7vw, 5.5rem) 0 0;
+  color: var(--accent); border-block: 1px solid var(--line); overflow: hidden;
+}
+.about-process::before, .about-process::after {
+  content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; width: 12%; pointer-events: none;
+}
+.about-process::before { left: 0; background: linear-gradient(90deg, var(--ink), transparent); }
+.about-process::after { right: 0; background: linear-gradient(-90deg, var(--ink), transparent); }
+.about-process__visual { display: block; width: 100%; height: auto; }
+.about-process__grid { color: var(--text); }
+.about-process__route { opacity: .8; }
+.about-process__idea { fill: currentColor; stroke: currentColor; stroke-width: 1; stroke-opacity: .28; }
+.about-process__idea path { fill: none; }
+.about-process__idea > circle:not(.about-process__idea-core) { animation: about-particle 6.4s ease-in-out infinite; }
+.about-process__idea > circle:nth-child(2n) { animation-delay: -1.4s; }
+.about-process__idea > circle:nth-child(3n) { animation-delay: -3.1s; }
+.about-process__idea-core { fill: none; stroke-dasharray: 2 7; animation: about-spin 8s linear infinite; transform-origin: 137px 254px; }
+.about-process__software, .about-process__machine, .about-process__result { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.about-process__bracket { stroke-width: 1; opacity: .72; }
+.about-process__code-line { stroke-dasharray: 96; stroke-dashoffset: 96; animation: about-code 6.4s cubic-bezier(.22,1,.36,1) infinite; }
+.about-process__code-line--two { animation-delay: .13s; }
+.about-process__code-line--three { animation-delay: .26s; }
+.about-process__orbit { stroke-dasharray: 3 8; transform-origin: 514px 255px; animation: about-orbit 6.4s ease-in-out infinite; }
+.about-process__arm, .about-process__grip { stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.about-process__joint { fill: var(--ink); animation: about-joint 6.4s ease-in-out infinite; }
+.about-process__joint--late { animation-delay: .16s; }
+.about-process__eye, .about-process__iris, .about-process__identity { stroke-dasharray: 360; stroke-dashoffset: 360; animation: about-resolve 6.4s cubic-bezier(.22,1,.36,1) infinite; }
+.about-process__iris { animation-delay: .12s; }
+.about-process__identity { animation-delay: .24s; }
+.about-process__pupil { fill: var(--text); stroke: none; animation: about-pupil 6.4s ease-in-out infinite; transform-origin: 752px 260px; }
+.about-process__result-glow { fill: currentColor; stroke: none; opacity: 0; filter: blur(14px); animation: about-result-glow 6.4s ease-out infinite; }
+.about-process__signal, .about-process__signal-glow { fill: currentColor; stroke: none; }
+.about-process__signal-glow { opacity: .48; }
+.about-process__scan { fill: none; stroke: var(--text); stroke-width: 1; opacity: 0; animation: about-scan 6.4s ease-in-out infinite; }
+.about-process__caption {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+@keyframes about-particle { 0%,100% { opacity: .28; transform: translate(0); } 45% { opacity: 1; transform: translate(2px,-4px); } 72% { opacity: .45; transform: translate(-2px,2px); } }
+@keyframes about-spin { to { transform: rotate(360deg); } }
+@keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
+@keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
+@keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
+@keyframes about-resolve { 0%,49% { stroke-dashoffset: 360; opacity: .08; } 70%,90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: -360; opacity: .12; } }
+@keyframes about-pupil { 0%,58% { opacity: 0; transform: scale(.25); } 74%,91% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes about-result-glow { 0%,62% { opacity: 0; transform: scale(.5); } 76% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
+@keyframes about-mobile-pan {
+  0%, 10% { transform: translate3d(0,-50%,0); }
+  78%, 92% { transform: translate3d(-39.5%,-50%,0); }
+  100% { transform: translate3d(0,-50%,0); }
+}
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
@@ -613,6 +668,11 @@ html.project-entry-boot body { opacity: 0; }
   .project-controls { inset-inline: .5rem; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
+  .about-process { height: clamp(15rem, 72vw, 18rem); }
+  .about-process__visual {
+    position: relative; top: 50%; width: 165%; max-width: none;
+    animation: about-mobile-pan 6.4s cubic-bezier(.45,0,.22,1) infinite;
+  }
   .portfolio-footer { flex-direction: column; }
 }
 
@@ -640,6 +700,11 @@ html.project-entry-boot body { opacity: 0; }
   .reactive-mark { transform: none !important; }
   .reactive-mark__pupil { transform: translate(-50%, -50%) !important; }
   .portfolio-shell::before { display: none; }
+  .about-process__signal, .about-process__signal-glow, .about-process__scan, .about-process__result-glow { display: none; }
+  .about-process__code-line, .about-process__eye, .about-process__iris, .about-process__identity { stroke-dashoffset: 0; opacity: 1; }
+  .about-process__orbit { stroke-dashoffset: 0; opacity: .65; }
+  .about-process__pupil { opacity: 1; transform: none; }
+  .about-process__visual { top: auto; width: 100%; animation: none; transform: none; }
 }
 
 @media (prefers-color-scheme: light) {

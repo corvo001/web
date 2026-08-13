@@ -1,0 +1,73 @@
+<figure class="about-process" aria-labelledby="about-process-caption-{{ include.lang }}">
+  <svg class="about-process__visual" viewBox="0 0 900 520" role="img" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="about-route-{{ include.lang }}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="currentColor" stop-opacity=".08"/>
+        <stop offset=".48" stop-color="currentColor" stop-opacity=".72"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity=".16"/>
+      </linearGradient>
+      <radialGradient id="about-core-{{ include.lang }}">
+        <stop offset="0" stop-color="currentColor" stop-opacity=".8"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="about-glow-{{ include.lang }}" x="-300%" y="-300%" width="700%" height="700%">
+        <feGaussianBlur stdDeviation="5"/>
+      </filter>
+      <pattern id="about-grid-{{ include.lang }}" width="32" height="32" patternUnits="userSpaceOnUse">
+        <path d="M32 0H0V32" fill="none" stroke="currentColor" stroke-opacity=".035" stroke-width="1"/>
+      </pattern>
+      <path id="about-path-{{ include.lang }}" d="M74 260 C146 188 214 330 294 260 C368 194 428 326 503 260 C596 169 672 351 826 260"/>
+    </defs>
+
+    <rect class="about-process__grid" x=".5" y=".5" width="899" height="519" rx="2" fill="url(#about-grid-{{ include.lang }})"/>
+    <path class="about-process__route" d="M74 260 C146 188 214 330 294 260 C368 194 428 326 503 260 C596 169 672 351 826 260" fill="none" stroke="url(#about-route-{{ include.lang }})" stroke-width="1"/>
+
+    <g class="about-process__idea">
+      <circle cx="91" cy="225" r="3"/><circle cx="111" cy="196" r="2"/><circle cx="137" cy="218" r="4"/>
+      <circle cx="163" cy="187" r="2"/><circle cx="182" cy="239" r="3"/><circle cx="148" cy="269" r="2"/>
+      <circle cx="105" cy="286" r="2"/><circle cx="129" cy="318" r="3"/><circle cx="172" cy="305" r="2"/>
+      <path d="M91 225l46-7 45 21M105 286l43-17 24 36M111 196l26 22 26-31"/>
+      <circle class="about-process__idea-core" cx="137" cy="254" r="24"/>
+    </g>
+
+    <g class="about-process__software">
+      <path class="about-process__bracket" d="M265 194h-18v132h18M379 194h18v132h-18"/>
+      <path class="about-process__code-line about-process__code-line--one" d="M282 222h66"/>
+      <path class="about-process__code-line about-process__code-line--two" d="M282 250h91"/>
+      <path class="about-process__code-line about-process__code-line--three" d="M282 278h54"/>
+      <circle cx="358" cy="222" r="3"/><circle cx="346" cy="278" r="3"/>
+      <path d="M303 310h56M331 302v16"/>
+    </g>
+
+    <g class="about-process__machine">
+      <ellipse class="about-process__orbit" cx="514" cy="255" rx="88" ry="53" transform="rotate(-18 514 255)"/>
+      <path class="about-process__arm" d="M455 330h64M487 330l-3-49 43-50 47 28"/>
+      <path class="about-process__grip" d="M574 259l20-15M574 259l20 13"/>
+      <circle class="about-process__joint" cx="484" cy="281" r="8"/>
+      <circle class="about-process__joint about-process__joint--late" cx="527" cy="231" r="8"/>
+      <circle cx="574" cy="259" r="5"/>
+      <path d="M465 342h44"/>
+    </g>
+
+    <g class="about-process__result">
+      <path class="about-process__eye" d="M674 260c42-65 114-65 156 0-42 65-114 65-156 0Z"/>
+      <circle class="about-process__iris" cx="752" cy="260" r="37"/>
+      <circle class="about-process__result-glow" cx="752" cy="260" r="42"/>
+      <circle class="about-process__pupil" cx="752" cy="260" r="6"/>
+      <path class="about-process__identity" d="M752 209v-18M721 216l-10-16M783 216l10-16"/>
+    </g>
+
+    <circle class="about-process__signal-glow" r="18" fill="url(#about-core-{{ include.lang }})" filter="url(#about-glow-{{ include.lang }})">
+      <animateMotion dur="6.4s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .22 1;0 0 1 1">
+        <mpath href="#about-path-{{ include.lang }}"/>
+      </animateMotion>
+    </circle>
+    <circle class="about-process__signal" r="4">
+      <animateMotion dur="6.4s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="spline" keySplines="0 0 1 1;.45 0 .22 1;0 0 1 1">
+        <mpath href="#about-path-{{ include.lang }}"/>
+      </animateMotion>
+    </circle>
+    <path class="about-process__scan" d="M68 368H832"/>
+  </svg>
+  <figcaption class="about-process__caption" id="about-process-caption-{{ include.lang }}">{{ include.alt }}</figcaption>
+</figure>

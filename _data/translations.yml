@@ -18,8 +18,7 @@ es:
     subtitle: "@danicr01"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. Exploro ideas, y las hago reales.
-
-      Combino software, robótica y experimentación para construir herramientas útiles, claras y con identidad propia.
+    visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
   contact:
     title: "CONTACTO"
     intro: "DISPONIBLE CUANDO ME NECESITES"
@@ -49,8 +48,7 @@ en:
     subtitle: "@danicr01"
     body: |
       I’m Daniel Cuervo and I work in **technological creativity**. I explore ideas, and make them real.
-
-      I combine software, robotics and experimentation to build useful, clear tools with an identity of their own.
+    visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
   contact:
     title: "CONTACT"
     intro: "AVAILABLE WHENEVER YOU NEED"

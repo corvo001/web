@@ -13,6 +13,7 @@ layout: portfolio-base
   <div class="internal-copy">
     {% if page.section == 'about' %}
       {{ section.body | markdownify }}
+      {% include about-process.html lang=page.lang alt=section.visual_alt %}
     {% else %}
       <div class="contact-links">
         <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
