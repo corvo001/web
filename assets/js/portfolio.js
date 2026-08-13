@@ -70,7 +70,7 @@
   };
 
   const resetNavigationState = () => {
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'gate-return-boot');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
     document.documentElement.classList.remove('archive-entry-boot');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
@@ -248,8 +248,10 @@
   };
 
   const showGateReturn = async () => {
-    if (!gate || reduceMotion.matches || gateEntrancePlayed) return;
-    if (!gateShouldReturn()) return;
+    if (!gate || reduceMotion.matches || gateEntrancePlayed || !gateShouldReturn()) {
+      document.documentElement.classList.remove('gate-return-boot');
+      return;
+    }
 
     gateEntrancePlayed = true;
     eyeTrackingLocked = true;
@@ -297,6 +299,7 @@
     }
     if (gateShouldReturn()) showGateReturn();
     else {
+      document.documentElement.classList.remove('gate-return-boot');
       resetNavigationState();
       showProjectArrival();
       showProjectReturn();

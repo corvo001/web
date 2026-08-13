@@ -4,6 +4,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if active_body_class == 'language-page' %}
+    <style>html.gate-return-boot{background:#020302}html.gate-return-boot body{visibility:hidden}</style>
+    <script>
+      try {
+        if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
+          document.documentElement.classList.add('gate-return-boot', 'gate-return-mode');
+        }
+      } catch (error) {}
+    </script>
+    {% endif %}
     <title>{% if page.title and page.title != site.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description | strip_html | strip_newlines }}">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
@@ -38,15 +48,6 @@
     <link rel="preconnect" href="https://fonts.cdnfonts.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet">
-    {% if active_body_class == 'language-page' %}
-    <script>
-      try {
-        if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
-          document.documentElement.classList.add('gate-return-boot', 'gate-return-mode');
-        }
-      } catch (error) {}
-    </script>
-    {% endif %}
     {% if page.layout == 'project' %}
     <script>
       try {
