@@ -136,11 +136,6 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .reactive-mark::after {
   content: none;
 }
-.reactive-mark__transition-anchor {
-  position: absolute; z-index: 1; left: 50%; top: 44.53125%;
-  width: 7.1289%; aspect-ratio: 1; border-radius: 50%;
-  opacity: 0; transform: translate(-50%, -50%); pointer-events: none;
-}
 .reactive-mark__pupil {
   position: absolute; z-index: 2;
   width: 3.2%; aspect-ratio: 1; border-radius: 50%;
@@ -192,9 +187,9 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .pupil-transition {
   position: fixed; z-index: 100; left: var(--pupil-x,50%); top: var(--pupil-y,50%);
   width: var(--pupil-size,1rem); aspect-ratio: 1; border-radius: 50%;
-  background: radial-gradient(circle, #020302 0 68%, #08100b 82%, #020302 100%);
-  border: 1px solid var(--accent);
-  box-shadow: 0 0 0 calc(var(--pupil-size, 1rem) * .35) rgba(130,181,152,.12);
+  background: #020302;
+  border: 0;
+  box-shadow: none;
   opacity: 0; transform: translate(-50%,-50%) scale(1); pointer-events: none;
   will-change: transform, opacity;
 }
