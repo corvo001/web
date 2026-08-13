@@ -2,17 +2,15 @@
 {% assign home_url = '/' | append: page.lang | append: '/' %}
 {% if page.lang == 'es' %}
   {% assign other_lang = 'EN' %}
-  {% assign other_url = '/en/' %}
   {% assign about_url = '/es/sobre-mi/' %}
   {% assign contact_url = '/es/contacto/' %}
 {% else %}
   {% assign other_lang = 'ES' %}
-  {% assign other_url = '/es/' %}
   {% assign about_url = '/en/about/' %}
   {% assign contact_url = '/en/contact/' %}
 {% endif %}
 <nav class="portfolio-nav" aria-label="Primary">
-  <a class="nav-logo" href="{{ '/' | relative_url }}?v={{ site.time | date: '%s' }}" aria-label="Language selection / Selección de idioma">
+  <a class="nav-logo" href="{{ home_url | relative_url }}?v={{ site.time | date: '%s' }}" aria-label="{% if page.lang == 'es' %}Volver al inicio{% else %}Back to home{% endif %}">
     <img src="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v={{ site.time | date: '%s' }}" alt="">
   </a>
   <div class="nav-links">
@@ -20,5 +18,5 @@
     <a href="{{ about_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.about }}</a>
     <a href="{{ contact_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.contact }}</a>
   </div>
-  <a class="language-switch" href="{{ other_url | relative_url }}?v={{ site.time | date: '%s' }}" hreflang="{% if page.lang == 'es' %}en{% else %}es{% endif %}">{{ other_lang }}</a>
+  <a class="language-switch" href="{{ '/' | relative_url }}?v={{ site.time | date: '%s' }}" aria-label="Language selection / Selección de idioma" data-language-menu>{{ other_lang }}</a>
 </nav>

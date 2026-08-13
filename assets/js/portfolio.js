@@ -206,12 +206,6 @@
   resetNavigationState();
 
   document.querySelectorAll('.nav-logo').forEach((logo) => {
-    logo.addEventListener('click', (event) => {
-      if (!reduceMotion.matches && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-        sessionStorage.setItem(eyeReturnKey, '1');
-      }
-    });
-
     if (reduceMotion.matches) return;
 
     logo.addEventListener('pointermove', (event) => {
@@ -225,6 +219,15 @@
     logo.addEventListener('pointerleave', () => {
       logo.style.setProperty('--nav-pupil-x', '0px');
       logo.style.setProperty('--nav-pupil-y', '0px');
+    });
+  });
+
+  document.querySelectorAll('[data-language-menu]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (!reduceMotion.matches && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+        sessionStorage.setItem(eyeReturnKey, '1');
+        sessionStorage.removeItem(projectTransitionKey);
+      }
     });
   });
 
