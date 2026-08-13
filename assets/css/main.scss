@@ -249,6 +249,16 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   72% { filter: blur(0); }
   100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); }
 }
+@keyframes pupil-dive-desktop {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); background-color: var(--accent); }
+  8% { transform: translate(-50%, -50%) scale(1.12); background-color: var(--accent); }
+  16% { transform: translate(-50%, -50%) scale(1.28); background-color: #020302; }
+  72% { filter: blur(0); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); background-color: #020302; }
+}
+@media (min-width: 701px) {
+  .gate-exiting .pupil-transition { animation-name: pupil-dive-desktop; }
+}
 @keyframes pupil-emerge {
   0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); background-color: #020302; }
   64% { filter: blur(0); }
