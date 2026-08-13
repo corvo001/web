@@ -257,6 +257,21 @@
   });
   resetNavigationState();
 
+  const portfolioNav = document.querySelector('.portfolio-nav');
+  if (portfolioNav) {
+    let lastNavScroll = 0;
+    window.addEventListener('scroll', () => {
+      lastNavScroll = performance.now();
+      portfolioNav.classList.add('nav-hover-locked');
+    }, { passive: true });
+    window.addEventListener('pointermove', () => {
+      if (performance.now() - lastNavScroll > 100) portfolioNav.classList.remove('nav-hover-locked');
+    }, { passive: true });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Tab') portfolioNav.classList.remove('nav-hover-locked');
+    });
+  }
+
   document.querySelectorAll('.nav-logo').forEach((logo) => {
     if (reduceMotion.matches) return;
 

@@ -342,6 +342,8 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   text-decoration: none; text-transform: uppercase; transition: color 160ms ease;
 }
 .nav-links a:hover, .nav-links a:focus-visible, .language-switch:hover { color: var(--text); }
+.nav-hover-locked .nav-links a:hover, .nav-hover-locked .language-switch:hover { color: var(--muted); }
+.nav-hover-locked .nav-links a:focus-visible { color: var(--text); }
 .language-switch { justify-self: end; font-family: var(--mono); }
 
 /* Home */
