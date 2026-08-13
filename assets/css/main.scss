@@ -220,6 +220,9 @@ code, pre, .technical-meta { font-family: var(--mono); }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
 .gate-entering .pupil-transition { animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
 .gate-entering .pupil-transition i { animation: iris-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
+.gate-entering.gate-settling .pupil-transition {
+  animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both, pupil-release-sync 720ms linear both;
+}
 .gate-entering .reactive-mark__image { animation: eye-logo-return 1120ms ease both; }
 .gate-settling .gate-inner { animation: signal-release 720ms linear both; }
 .gate-settling .language-gate::before { animation: signal-scan-release 720ms steps(1,end) both; }
@@ -288,6 +291,16 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   61% { transform: translate3d(.8px,-.25px,0); }
   62% { transform: none; }
   79% { transform: translateX(-.4px); }
+}
+@keyframes pupil-release-sync {
+  0%, 18%, 38%, 60%, 78%, 100% { translate: 0 0; }
+  19% { translate: 2px -.5px; }
+  20% { translate: -2px .5px; }
+  39% { translate: -1.5px 0; }
+  40% { translate: 1px .25px; }
+  61% { translate: .8px -.25px; }
+  62% { translate: 0 0; }
+  79% { translate: -.4px 0; }
 }
 @keyframes eye-logo-depart {
   0%, 14% { opacity: 1; filter: var(--mark-base-filter); }
@@ -597,8 +610,8 @@ html.project-entry-boot body { opacity: 0; }
   animation: about-resolve 6.4s cubic-bezier(.22,1,.36,1) infinite;
 }
 .about-process__eye { --about-draw-length: 400; }
-.about-process__iris { --about-draw-length: 233; animation-delay: .12s; }
-.about-process__identity { --about-draw-length: 60; animation-delay: .24s; }
+.about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
+.about-process__identity { --about-draw-length: 60; animation-name: about-resolve-identity; }
 .about-process__pupil {
   fill: var(--text); stroke: none; transform-box: fill-box; transform-origin: center;
   animation: about-pupil 6.4s ease-in-out infinite;
@@ -616,14 +629,16 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
 @keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
 @keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
-@keyframes about-resolve { 0%,49% { stroke-dashoffset: var(--about-draw-length); opacity: .08; } 70%,90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: .12; } }
-@keyframes about-pupil { 0%,58% { opacity: 0; transform: scale(.25); } 74%,91% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
-@keyframes about-result-glow { 0%,62% { opacity: 0; transform: scale(.5); } 76% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes about-resolve { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-iris { 0%,65% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 81%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-identity { 0%,68% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 84%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-pupil { 0%,76% { opacity: 0; transform: scale(.25); } 85%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes about-result-glow { 0%,78% { opacity: 0; transform: scale(.5); } 86% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 @keyframes about-resolve-mobile {
-  0%, 46% { opacity: 0; transform: scale(.78); }
-  68%, 91% { opacity: 1; transform: scale(1); }
-  100% { opacity: .12; transform: scale(1.04); }
+  0%, 61% { opacity: 0; transform: scale(.78); }
+  80%, 93% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.04); }
 }
 @keyframes about-mobile-pan {
   0%, 10% { transform: translate3d(0,-50%,0); }

@@ -11,6 +11,7 @@
   let updateEyeFromPointer = null;
   const eyeShakeDuration = 720;
   const eyeDiveDuration = 1120;
+  const eyeSettleOverlap = 360;
   const projectDepartureDuration = 1420;
   const projectReturnDuration = 1080;
   const projectDisplayFontReady = document.fonts?.load
@@ -225,8 +226,10 @@
     document.documentElement.classList.remove('gate-exiting', 'gate-return-boot');
     document.documentElement.classList.add('gate-entering');
     window.setTimeout(() => {
-      document.documentElement.classList.remove('gate-entering');
       document.documentElement.classList.add('gate-settling');
+    }, eyeDiveDuration - eyeSettleOverlap);
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('gate-entering');
       history.replaceState({ ...history.state, eyeGateReturn: false }, '');
     }, eyeDiveDuration);
     window.setTimeout(() => {
@@ -240,7 +243,7 @@
       } else {
         mark?.classList.remove('eye-geometry-locked');
       }
-    }, eyeDiveDuration + eyeShakeDuration);
+    }, eyeDiveDuration + eyeShakeDuration - eyeSettleOverlap);
   };
 
   window.addEventListener('pageshow', (event) => {
