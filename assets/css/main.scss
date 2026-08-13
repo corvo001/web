@@ -386,7 +386,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .archive-transition.is-arriving .archive-transition__frame,
 .archive-transition.is-arriving .archive-transition__meta,
 .archive-transition.is-arriving .archive-transition__status { animation: archive-data-out 1320ms ease both; }
-.archive-transition.is-arriving .archive-transition__title { animation: archive-title-out 1320ms ease both; }
+.archive-transition.is-arriving .archive-transition__title { visibility: hidden; animation: none; }
 @keyframes archive-shell-in { 0% { opacity: 0; } 8%,100% { opacity: 1; } }
 @keyframes archive-grid-in { 0%,16% { opacity: 0; transform: perspective(700px) rotateX(58deg) scale(1.8) translateY(35%); } 48%,100% { opacity: .65; transform: perspective(700px) rotateX(58deg) scale(1.05) translateY(2%); } }
 @keyframes archive-scan { 0%,18% { opacity: 0; top: -12%; } 25% { opacity: 1; } 72% { opacity: .7; top: 112%; } 73%,100% { opacity: 0; top: 112%; } }
