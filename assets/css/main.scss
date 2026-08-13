@@ -562,8 +562,8 @@ html.project-entry-boot body { opacity: 0; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  position: relative; width: 100%; margin: clamp(3rem, 7vw, 5.5rem) 0 0;
-  color: var(--accent); border-block: 1px solid var(--line); overflow: hidden;
+  position: relative; width: 100%; margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+  color: var(--accent); border-bottom: 1px solid var(--line); overflow: hidden;
 }
 .about-process::before, .about-process::after {
   content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; width: 12%; pointer-events: none;
