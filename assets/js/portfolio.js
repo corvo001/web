@@ -107,19 +107,8 @@
   };
 
   const showArchiveArrival = () => {
-    const storedTransition = sessionStorage.getItem(archiveTransitionKey);
-    if (!storedTransition || !document.body.classList.contains('work-page') || reduceMotion.matches) {
-      document.documentElement.classList.remove('archive-entry-boot');
-      return;
-    }
-    let archiveData;
-    try { archiveData = JSON.parse(storedTransition); }
-    catch (error) { archiveData = { label: storedTransition, status: '' }; }
     sessionStorage.removeItem(archiveTransitionKey);
-    const transition = createArchiveTransition(archiveData.label, archiveData.status);
-    transition.classList.add('is-arriving');
     document.documentElement.classList.remove('archive-entry-boot');
-    window.setTimeout(() => transition.remove(), 1380);
   };
 
   const rectData = (rect) => ({

@@ -55,13 +55,6 @@
       } catch (error) {}
     </script>
     {% endif %}
-    {% if page.layout == 'work-index' %}
-    <script>
-      try {
-        if (sessionStorage.getItem('portfolio-archive-transition')) document.documentElement.classList.add('archive-entry-boot');
-      } catch (error) {}
-    </script>
-    {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">
