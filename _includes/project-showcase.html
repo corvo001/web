@@ -6,8 +6,12 @@
   <div class="project-index__body">
     <aside class="project-index__filters" aria-label="{{ t.work.filter }}">
       <details class="project-filter" data-project-filter>
-        <summary><span data-project-filter-label>{{ t.work.all }}</span><i aria-hidden="true"></i></summary>
+        <summary aria-label="{{ t.work.filter }}">
+          <span class="visually-hidden">{{ t.work.filter }}</span>
+          <i class="project-filter__icon" aria-hidden="true"><b></b><b></b><b></b></i>
+        </summary>
         <div class="project-filter__menu">
+          <span class="project-filter__current" data-project-filter-label>{{ t.work.all }}</span>
           <button type="button" data-project-filter-value="ALL" aria-pressed="true">{{ t.work.all }}</button>
           <button type="button" data-project-filter-value="SOFTWARE" aria-pressed="false">SOFTWARE</button>
           <button type="button" data-project-filter-value="HARDWARE" aria-pressed="false">HARDWARE</button>
