@@ -669,14 +669,14 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 html.project-entry-boot body { opacity: 0; }
 .project-portal-backdrop {
   position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
-  transition: opacity 1080ms cubic-bezier(.4,0,.2,1); will-change: opacity;
+  transition: opacity 620ms cubic-bezier(.4,0,.2,1); will-change: opacity;
 }
 .project-portal-backdrop.is-active { opacity: 1; }
 .project-portal {
   position: fixed; z-index: 200; margin: 0; overflow: hidden; pointer-events: none;
   transform: translate3d(0,0,0) scale(1); transform-origin: top left; contain: strict;
   box-shadow: 0 0 0 1px var(--line); will-change: transform, filter, border-radius;
-  transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease, border-radius 1080ms ease, box-shadow 1080ms ease, clip-path 1080ms cubic-bezier(.76,0,.2,1);
+  transition: transform 620ms cubic-bezier(.76,0,.2,1), filter 620ms ease, border-radius 620ms ease, box-shadow 620ms ease, clip-path 620ms cubic-bezier(.76,0,.2,1);
 }
 .project-portal--diamond-origin { clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); }
 .project-portal--diamond-origin.is-at-target { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
@@ -687,17 +687,17 @@ html.project-entry-boot body { opacity: 0; }
   background: radial-gradient(circle at center, transparent 38%, rgba(2,3,2,.48) 100%);
   transition: opacity 920ms ease;
 }
-.project-portal__media { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.001); transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease; }
+.project-portal__media { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.001); transition: transform 620ms cubic-bezier(.76,0,.2,1), filter 620ms ease; }
 .project-portal.is-at-target {
   transform: translate3d(var(--portal-x),var(--portal-y),0) scale(var(--portal-scale-x),var(--portal-scale-y));
   filter: brightness(.9) saturate(.94); border-radius: 0; box-shadow: none;
 }
 .project-portal.is-at-target::after { opacity: .32; }
 .project-portal.is-at-target .project-portal__media { transform: scale(1.012); filter: contrast(1.025); }
-.project-portal.is-departing-world { animation: project-world-depart 1420ms cubic-bezier(.58,0,.16,1) both; }
-.project-portal.is-departing-world::after { animation: project-world-vignette 1420ms ease both; }
-.project-portal.is-departing-world .project-portal__media { animation: project-world-media 1420ms cubic-bezier(.58,0,.16,1) both; }
-.project-portal-backdrop.is-departing-world { animation: project-world-backdrop 1420ms ease both; }
+.project-portal.is-departing-world { animation: project-world-depart 1050ms cubic-bezier(.58,0,.16,1) both; }
+.project-portal.is-departing-world::after { animation: project-world-vignette 1050ms ease both; }
+.project-portal.is-departing-world .project-portal__media { animation: project-world-media 1050ms cubic-bezier(.58,0,.16,1) both; }
+.project-portal-backdrop.is-departing-world { animation: project-world-backdrop 1050ms ease both; }
 .project-world-signal {
   position: fixed; z-index: 199; inset: -22%; opacity: 0; pointer-events: none;
   background:
@@ -711,8 +711,8 @@ html.project-entry-boot body { opacity: 0; }
   background: linear-gradient(transparent 48%, rgba(239,242,237,.28) 50%, transparent 52%);
   transform: translateY(-48%);
 }
-.project-world-signal.is-departing { animation: project-world-signal 1420ms cubic-bezier(.6,0,.2,1) both; }
-.project-world-signal.is-departing::after { animation: project-world-scan 1420ms cubic-bezier(.5,0,.3,1) both; }
+.project-world-signal.is-departing { animation: project-world-signal 1050ms cubic-bezier(.6,0,.2,1) both; }
+.project-world-signal.is-departing::after { animation: project-world-scan 1050ms cubic-bezier(.5,0,.3,1) both; }
 .project-world-title {
   position: fixed; z-index: 202; inset: 0; display: grid; place-items: center; margin: 0;
   color: var(--text); font-size: clamp(2rem, 7vw, 7.5rem); font-weight: 400; letter-spacing: .18em;
@@ -721,7 +721,7 @@ html.project-entry-boot body { opacity: 0; }
   font-synthesis: none;
   transform: scale(.92); filter: blur(10px); will-change: opacity, transform, filter, letter-spacing;
 }
-.project-world-title.is-departing { animation: project-world-title 1420ms cubic-bezier(.6,0,.2,1) both; }
+.project-world-title.is-departing { animation: project-world-title 1050ms cubic-bezier(.6,0,.2,1) both; }
 .project-world-title--fallback { font-family: var(--sans); font-weight: 300; }
 .project-portal.no-transition, .project-portal.no-transition::after, .project-portal.no-transition .project-portal__media, .project-portal-backdrop.no-transition { transition: none !important; }
 .project-portal-leaving .portfolio-nav, .project-portal-leaving .section-heading, .project-portal-leaving .project-controls, .project-portal-leaving .project-card__content { opacity: 0; transition: opacity 180ms ease; }

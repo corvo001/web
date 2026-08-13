@@ -15,8 +15,8 @@
   const eyeSettleDuration = 560;
   const eyeDiveDuration = 1120;
   const eyeSettleOverlap = 360;
-  const projectDepartureDuration = 1420;
-  const projectReturnDuration = 1080;
+  const projectDepartureDuration = 1050;
+  const projectReturnDuration = 620;
   const projectDisplayFontReady = document.fonts?.load
     ? document.fonts.load('400 4rem "Dune Rise"', 'DYSON SWARM').then((fonts) => fonts.length > 0).catch(() => false)
     : Promise.resolve(false);
@@ -136,7 +136,7 @@
     const backdrop = document.createElement('span');
     const signal = label ? document.createElement('span') : null;
     const title = label ? document.createElement('strong') : null;
-    const clone = media.cloneNode(true);
+    const clone = media instanceof HTMLVideoElement ? document.createElement('img') : media.cloneNode(true);
     const translateX = toRect.left - fromRect.left;
     const translateY = toRect.top - fromRect.top;
     const scaleX = toRect.width / fromRect.width;
@@ -145,6 +145,7 @@
     const worldX = ((window.innerWidth - (fromRect.width * worldScale)) / 2) - fromRect.left;
     const worldY = ((window.innerHeight - (fromRect.height * worldScale)) / 2) - fromRect.top;
 
+    if (media instanceof HTMLVideoElement) clone.src = media.poster;
     clone.removeAttribute('loading');
     clone.removeAttribute('controls');
     clone.removeAttribute('data-project-media');
