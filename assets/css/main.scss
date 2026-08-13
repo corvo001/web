@@ -492,20 +492,19 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index__header { display: grid; place-items: center; min-height: clamp(9rem,18vw,15rem); text-align: center; }
 .project-index__header h1 { margin: 0; font-size: clamp(3.5rem,11vw,11rem); font-weight: 300; letter-spacing: .035em; line-height: .85; }
 .project-index__body { max-width: 1500px; margin-inline: auto; }
-.project-index__filters { position: fixed; z-index: 28; left: 0; top: 50%; transform: translateY(-50%); }
+.project-index__filters { position: fixed; z-index: 28; left: clamp(.65rem,1.4vw,1.25rem); top: 50%; transform: translateY(-50%); }
 .project-filter { position: relative; }
 .project-filter summary {
-  display: grid; place-items: center; width: 3rem; height: 4rem;
-  color: var(--accent); list-style: none; cursor: pointer; border: 1px solid var(--line); border-left: 0;
+  display: grid; place-items: center; width: 3.25rem; height: 3.25rem;
+  color: var(--accent); list-style: none; cursor: pointer; border: 1px solid var(--line); border-radius: 50%;
   background: var(--ink); background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(10px);
+  box-shadow: 0 0 0 0 rgba(130,181,152,0); transition: border-color 180ms ease, box-shadow 220ms ease, transform 220ms ease;
 }
+.project-filter summary:hover, .project-filter summary:focus-visible { border-color: var(--accent); box-shadow: 0 0 1.25rem rgba(130,181,152,.13); transform: scale(1.04); }
 .project-filter summary::-webkit-details-marker { display: none; }
-.project-filter__icon { display: grid; gap: .3rem; width: .9rem; }
+.project-filter__icon { display: grid; gap: .27rem; width: 1rem; transition: transform 300ms cubic-bezier(.22,1,.36,1); }
 .project-filter__icon b { display: block; width: 100%; height: 1px; background: currentColor; transition: transform 220ms ease, width 220ms ease; }
-.project-filter__icon b:nth-child(2) { width: 65%; }
-.project-filter[open] .project-filter__icon b:first-child { transform: translateY(.4rem) rotate(45deg); }
-.project-filter[open] .project-filter__icon b:nth-child(2) { width: 0; }
-.project-filter[open] .project-filter__icon b:last-child { transform: translateY(-.4rem) rotate(-45deg); }
+.project-filter[open] .project-filter__icon { transform: rotate(90deg); }
 .project-filter__menu {
   position: absolute; left: calc(100% + .6rem); top: 50%; width: 13rem; display: grid;
   padding: 1rem 1.2rem; border: 1px solid var(--line); background: var(--ink); background: color-mix(in srgb, var(--ink) 94%, transparent);
