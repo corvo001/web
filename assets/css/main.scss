@@ -611,7 +611,7 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 @keyframes about-mobile-pan {
   0%, 10% { transform: translate3d(0,-50%,0); }
-  78%, 92% { transform: translate3d(-39.5%,-50%,0); }
+  48%, 92% { transform: translate3d(-39.5%,-50%,0); }
   100% { transform: translate3d(0,-50%,0); }
 }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
