@@ -1,62 +1,39 @@
-# Daniel Cuervo — Technical Portfolio
+<div align="center">
 
-Portfolio técnico personal centrado en software, robótica y automatización industrial.
+<img src="assets/images/logo-original-transparent.png" width="150" alt="Daniel Cuervo logo">
 
-El sitio está construido con Jekyll y se publica mediante GitHub Pages en [corvo001.github.io](https://corvo001.github.io).
+# DANIEL CUERVO
 
-## Idiomas y rutas
+### SOFTWARE · ROBOTICS · INDUSTRIAL AUTOMATION
 
-- `/` — entrada y selector de idioma.
-- `/es/` — portfolio en español.
-- `/en/` — portfolio en inglés.
+Ideas transformed into functional systems through code, experimentation and engineering.
 
-Los textos globales están centralizados en `_data/translations.yml` y los proyectos en `_data/projects.yml`. Las páginas bilingües comparten layouts e includes para evitar duplicar la implementación.
+[**ENTER PORTFOLIO**](https://corvo001.github.io)
 
-## Diseño
+</div>
 
-- Identidad oscura, técnica y minimalista con adaptación automática al tema claro del dispositivo.
-- Dune Rise para el nombre y los títulos de proyecto.
-- IBM Plex Sans para interfaz y contenido.
-- IBM Plex Mono para metadatos técnicos.
-- Showcase horizontal accesible mediante flechas, teclado y gesto táctil.
-- Entrada interactiva con el símbolo del portfolio y transición a través de la pupila.
+---
 
-## Desarrollo local en Fedora
+## SELECTED WORK
 
-Instala Ruby y las herramientas de compilación:
+### DYSON SWARM
 
-```bash
-sudo dnf install ruby ruby-devel rubygem-bundler gcc-c++ make redhat-rpm-config zlib-devel
-bundle install
-```
+Interactive simulation of orbital architectures and energy capture through satellite swarms.
 
-Con Ruby 4, genera el sitio usando el pequeño módulo de compatibilidad incluido:
+### UNION
 
-```bash
-RUBYOPT=-r./_plugins/ruby-4-compat.rb bundle exec jekyll build
-```
+Experimental engine for generating, transforming and analysing fractal geometries in real time.
 
-Para servir la carpeta generada:
+### AIDEN
 
-```bash
-cd _site
-python3 -m http.server 4000 --bind 127.0.0.1
-```
+Modular platform for OSINT research, identity correlation and public-information analysis.
 
-La vista previa estará disponible en `http://127.0.0.1:4000/`.
+---
 
-## Estructura principal
+<div align="center">
 
-```text
-_data/       Traducciones y datos de proyectos
-_includes/   Navegación, footer y showcase
-_layouts/    Entrada, portfolio, páginas y proyectos
-_plugins/    Compatibilidad de desarrollo local con Ruby 4
-assets/      Estilos, JavaScript e imágenes
-es/          Rutas españolas
-en/          Rutas inglesas
-```
+**CREATIVITY, TECHNOLOGY AND SYSTEMS WITH AN IDENTITY OF THEIR OWN.**
 
-## Publicación
+[Portfolio](https://corvo001.github.io) · [GitHub](https://github.com/corvo001) · [LinkedIn](https://www.linkedin.com/in/danielcuervor/)
 
-GitHub Pages compila y publica automáticamente cada cambio enviado a `main`.
+</div>
