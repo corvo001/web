@@ -2,9 +2,7 @@
   name: "AIDEN"
   hidden: true
   year: "2026"
-  status:
-    es: "En desarrollo"
-    en: "In development"
+  category: "SOFTWARE"
   image: "/assets/images/aiden/aiden-cover.jpg"
   technologies: [Python, OSINT]
   repository: ""
@@ -18,9 +16,7 @@
 - id: dyson-swarm
   name: "DYSON SWARM"
   year: "2025"
-  status:
-    es: "Prototipo"
-    en: "Prototype"
+  category: "SOFTWARE"
   image: "/assets/images/swarm/DysonSwarm.png"
   technologies: [Simulation, Real-time]
   repository: "https://github.com/corvo001/DysonSwarm"
@@ -34,9 +30,7 @@
 - id: union
   name: "UNION"
   year: "2025"
-  status:
-    es: "Experimental"
-    en: "Experimental"
+  category: "SOFTWARE"
   image: "/assets/images/union/Imagen-del-proyecto.png"
   technologies: [Fractals, Real-time]
   repository: "https://github.com/corvo001/UNION"

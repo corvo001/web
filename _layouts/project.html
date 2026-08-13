@@ -8,7 +8,7 @@ layout: portfolio-base
 {% include portfolio-nav.html %}
 <main class="internal-main project-main" id="main">
   <header class="internal-header">
-    <span class="technical-meta">{{ project.year }} / {{ project.status[page.lang] }}</span>
+    <span class="technical-meta">{{ project.category }} / {{ project.year }}</span>
     <h1 class="project-display">{{ project.name }}</h1>
   </header>
   <div class="project-hero-media" data-project-hero data-project-id="{{ project.id }}">
@@ -19,7 +19,7 @@ layout: portfolio-base
     {% endif %}
   </div>
   <div class="project-facts">
-    <span>{{ t.project.status }}: {{ project.status[page.lang] }}</span>
+    <span>{{ t.project.category }}: {{ project.category }}</span>
     {% for technology in project.technologies %}<span>{{ technology }}</span>{% endfor %}
   </div>
   <div class="internal-copy project-summary">
