@@ -42,6 +42,12 @@
 }
 
 * { box-sizing: border-box; }
+
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: 900ms; animation-timing-function: cubic-bezier(.7,0,.22,1); }
+::view-transition-old(root) { animation: project-page-out 620ms cubic-bezier(.4,0,.2,1) both; }
+::view-transition-new(root) { animation: project-page-in 900ms cubic-bezier(.22,1,.36,1) both; }
+
 html { width: 100%; max-width: 100%; overflow-x: clip; background: var(--ink); scroll-behavior: smooth; }
 body {
   width: 100%; max-width: 100%; margin: 0; overflow-x: clip;
@@ -319,6 +325,8 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   to { opacity: 1; transform: none; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(.3rem); filter: blur(2px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes project-page-out { to { opacity: 0; filter: brightness(.55); } }
+@keyframes project-page-in { from { opacity: 0; filter: brightness(.55); } to { opacity: 1; filter: none; } }
 
 /* Shared navigation */
 .portfolio-nav {

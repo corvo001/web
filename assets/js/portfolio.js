@@ -11,6 +11,7 @@
   let updateEyeFromPointer = null;
   const eyeShakeDuration = 720;
   const eyeDiveDuration = 1120;
+  const nativeProjectTransitions = 'onpagereveal' in window && CSS.supports('view-transition-name: project-media');
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
@@ -133,7 +134,8 @@
     const state = readProjectTransition();
     const hero = document.querySelector('[data-project-hero]');
     const media = hero?.querySelector('[data-project-hero-media]');
-    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media || reduceMotion.matches) {
+    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media || reduceMotion.matches || nativeProjectTransitions) {
+      if (nativeProjectTransitions && state?.phase === 'enter' && hero?.dataset.projectId === state.id) writeProjectTransition({ id: state.id, phase: 'inside' });
       document.documentElement.classList.remove('project-entry-boot');
       return;
     }
@@ -145,6 +147,10 @@
     const state = readProjectTransition();
     const link = state?.phase === 'inside' ? document.querySelector(`[data-project-link][data-project-id="${state.id}"]`) : null;
     const media = link?.querySelector('[data-project-media]');
+    if (nativeProjectTransitions) {
+      if (media) window.setTimeout(() => sessionStorage.removeItem(projectTransitionKey), 1000);
+      return;
+    }
     if (!media || reduceMotion.matches) return;
     animateProjectPortalToElement(media, true, () => sessionStorage.removeItem(projectTransitionKey));
   };
@@ -276,10 +282,12 @@
       const media = link.querySelector('[data-project-media]');
       if (!media) return;
 
+      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter' });
+      if (nativeProjectTransitions) return;
+
       event.preventDefault();
       const rect = media.getBoundingClientRect();
       const { portal, backdrop } = createProjectPortal(media, rect);
-      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter' });
       media.style.visibility = 'hidden';
       document.body.classList.add('project-portal-leaving');
       void portal.offsetWidth;
@@ -293,7 +301,7 @@
 
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (link.hasAttribute('data-language-link') || reduceMotion.matches || event.defaultPrevented) return;
+      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-project-link') || reduceMotion.matches || event.defaultPrevented) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
       const target = new URL(link.href, window.location.href);
       if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;

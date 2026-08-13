@@ -25,9 +25,9 @@
         {% endif %}
         <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}">
           {% if project.video %}
-            <video class="project-card__media" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media></video>
+            <video class="project-card__media" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media style="view-transition-name: project-{{ project.id }}"></video>
           {% else %}
-            <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
+            <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media style="view-transition-name: project-{{ project.id }}">
           {% endif %}
           <div class="project-card__content">
             <h3 class="project-display">{{ project.name }}</h3>

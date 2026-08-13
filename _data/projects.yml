@@ -6,7 +6,7 @@
     es: "En desarrollo"
     en: "In development"
   image: "/assets/images/aiden/aiden-cover.jpg"
-  technologies: [Python, OSINT, Debian]
+  technologies: [Python, OSINT]
   repository: ""
   summary:
     es: "AIDEN es una plataforma modular de investigación OSINT diseñada para descubrir, correlacionar y organizar información pública procedente de distintas fuentes. Su arquitectura integra herramientas especializadas dentro de un flujo reproducible, facilitando el análisis de identidades, relaciones y resultados sin perder trazabilidad durante la investigación."
@@ -22,7 +22,7 @@
     es: "Prototipo"
     en: "Prototype"
   image: "/assets/images/swarm/DysonSwarm.png"
-  technologies: [Simulation, Real-time, Orbital systems]
+  technologies: [Simulation, Real-time]
   repository: "https://github.com/corvo001/DysonSwarm"
   summary:
     es: "Dyson Swarm es un simulador interactivo para diseñar y explorar enjambres de satélites alrededor de una estrella. Permite modificar su cantidad, escala y distribución orbital en tiempo real, observar métricas de cobertura y captación energética, y comparar diferentes arquitecturas de colectores solares a escala astronómica."
@@ -38,7 +38,7 @@
     es: "Experimental"
     en: "Experimental"
   image: "/assets/images/union/Imagen-del-proyecto.png"
-  technologies: [Fractals, Generative systems, Real-time]
+  technologies: [Fractals, Real-time]
   repository: "https://github.com/corvo001/UNION"
   summary:
     es: "UNION es un motor experimental para generar, transformar y analizar geometrías fractales en tiempo real. Combina funciones matemáticas, deformaciones y morfología dinámica en un entorno manipulable, pensado para descubrir patrones y explorar aplicaciones de la geometría compleja en investigación, arte generativo y prototipado visual."
