@@ -9,7 +9,8 @@
   let eyeTrackingLocked = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
-  const eyeShakeDuration = 720;
+  const eyePrepareDuration = 420;
+  const eyeSettleDuration = 560;
   const eyeDiveDuration = 1120;
   const eyeSettleOverlap = 360;
   const projectDepartureDuration = 1420;
@@ -243,7 +244,7 @@
       } else {
         mark?.classList.remove('eye-geometry-locked');
       }
-    }, eyeDiveDuration + eyeShakeDuration - eyeSettleOverlap);
+    }, eyeDiveDuration + eyeSettleDuration - eyeSettleOverlap);
   };
 
   window.addEventListener('pageshow', (event) => {
@@ -345,8 +346,8 @@
       window.setTimeout(() => {
         document.documentElement.classList.remove('gate-preparing');
         document.documentElement.classList.add('gate-exiting');
-      }, eyeShakeDuration);
-      window.setTimeout(() => window.location.assign(link.href), eyeShakeDuration + eyeDiveDuration);
+      }, eyePrepareDuration);
+      window.setTimeout(() => window.location.assign(link.href), eyePrepareDuration + eyeDiveDuration);
     });
   });
 

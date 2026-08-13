@@ -203,7 +203,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
 .gate-exiting .pupil-transition { animation: pupil-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
 .gate-exiting .pupil-transition i { animation: iris-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
-.gate-preparing .gate-inner { animation: signal-lock 720ms linear both; }
+.gate-preparing .gate-inner { animation: signal-lock 420ms linear both; }
 .gate-exiting .reactive-mark__image { animation: eye-logo-depart 1120ms ease both; }
 .gate-preparing .language-gate::before, .gate-settling .language-gate::before {
   content: ""; position: fixed; z-index: 80; inset: 0; pointer-events: none; opacity: 0;
@@ -215,18 +215,18 @@ code, pre, .technical-meta { font-family: var(--mono); }
   background: linear-gradient(90deg, transparent 10%, rgba(130,181,152,.7) 48%, transparent 90%);
   box-shadow: 0 0 8px rgba(130,181,152,.35); pointer-events: none; opacity: 0;
 }
-.gate-preparing .language-gate::before { animation: signal-scan 720ms steps(1,end) both; }
-.gate-preparing .language-gate::after { animation: signal-line-lock 720ms cubic-bezier(.4,0,.2,1) both; }
+.gate-preparing .language-gate::before { animation: signal-scan 420ms steps(1,end) both; }
+.gate-preparing .language-gate::after { animation: signal-line-lock 420ms cubic-bezier(.4,0,.2,1) both; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
 .gate-entering .pupil-transition { animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
 .gate-entering .pupil-transition i { animation: iris-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
 .gate-entering.gate-settling .pupil-transition {
-  animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both, pupil-release-sync 720ms linear both;
+  animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both, pupil-release-sync 560ms linear both;
 }
 .gate-entering .reactive-mark__image { animation: eye-logo-return 1120ms ease both; }
-.gate-settling .gate-inner { animation: signal-release 720ms linear both; }
-.gate-settling .language-gate::before { animation: signal-scan-release 720ms steps(1,end) both; }
-.gate-settling .language-gate::after { animation: signal-line-release 720ms cubic-bezier(.4,0,.2,1) both; }
+.gate-settling .gate-inner { animation: signal-release 560ms linear both; }
+.gate-settling .language-gate::before { animation: signal-scan-release 560ms steps(1,end) both; }
+.gate-settling .language-gate::after { animation: signal-line-release 560ms cubic-bezier(.4,0,.2,1) both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -629,15 +629,15 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
 @keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
 @keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
-@keyframes about-resolve { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-iris { 0%,65% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 81%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-identity { 0%,68% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 84%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-pupil { 0%,76% { opacity: 0; transform: scale(.25); } 85%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
-@keyframes about-result-glow { 0%,78% { opacity: 0; transform: scale(.5); } 86% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
+@keyframes about-resolve { 0%,45% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 63%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-iris { 0%,50% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 66%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-identity { 0%,54% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 69%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-pupil { 0%,61% { opacity: 0; transform: scale(.25); } 70%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes about-result-glow { 0%,64% { opacity: 0; transform: scale(.5); } 72% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 @keyframes about-resolve-mobile {
-  0%, 61% { opacity: 0; transform: scale(.78); }
-  80%, 93% { opacity: 1; transform: scale(1); }
+  0%, 45% { opacity: 0; transform: scale(.78); }
+  64%, 93% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.04); }
 }
 @keyframes about-mobile-pan {
