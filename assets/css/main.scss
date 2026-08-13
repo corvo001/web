@@ -199,8 +199,10 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .pupil-transition i { display: none; }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
 .gate-exiting .pupil-transition { animation: pupil-dive 980ms cubic-bezier(.65,0,.35,1) forwards; }
+.gate-preparing .gate-inner { animation: eye-tension 560ms cubic-bezier(.4,0,.2,1) both; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
 .gate-entering .pupil-transition { animation: pupil-emerge 980ms cubic-bezier(.65,0,.35,1) both; }
+.gate-settling .gate-inner { animation: eye-release 560ms cubic-bezier(.4,0,.2,1) both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -223,6 +225,22 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); }
   99.5% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes eye-tension {
+  0%, 100% { transform: perspective(800px) translate(0,0) rotate(0); }
+  18% { transform: perspective(800px) translate(-1px,1px) rotate(-.12deg); }
+  36% { transform: perspective(800px) translate(1.5px,-1px) rotate(.14deg); }
+  54% { transform: perspective(800px) translate(-1.5px,-.5px) rotate(-.1deg); }
+  72% { transform: perspective(800px) translate(1px,1px) rotate(.08deg); }
+  88% { transform: perspective(800px) translate(-.5px,0) rotate(-.04deg); }
+}
+@keyframes eye-release {
+  0% { transform: perspective(800px) translate(-1.5px,0) rotate(-.12deg); }
+  22% { transform: perspective(800px) translate(1.5px,1px) rotate(.14deg); }
+  44% { transform: perspective(800px) translate(-1px,-1px) rotate(-.09deg); }
+  66% { transform: perspective(800px) translate(.7px,.5px) rotate(.05deg); }
+  84% { transform: perspective(800px) translate(-.35px,0) rotate(-.02deg); }
+  100% { transform: perspective(800px) translate(0,0) rotate(0); }
 }
 @keyframes gate-copy-return {
   from { opacity: 0; transform: translateY(.25rem); }

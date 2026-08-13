@@ -8,6 +8,8 @@
   let eyeTrackingLocked = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
+  const eyeShakeDuration = 560;
+  const eyeDiveDuration = 980;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
@@ -52,8 +54,8 @@
   };
 
   const resetNavigationState = () => {
-    document.documentElement.classList.remove('gate-exiting', 'gate-entering', 'gate-return-boot');
-    document.body.classList.remove('gate-exiting', 'gate-entering', 'page-leaving', 'project-portal-leaving');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'gate-return-boot');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving');
     document.querySelectorAll('.project-portal').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-media]').forEach((media) => { media.style.visibility = ''; });
   };
@@ -76,7 +78,11 @@
     document.documentElement.classList.add('gate-entering');
     window.setTimeout(() => {
       document.documentElement.classList.remove('gate-entering');
+      document.documentElement.classList.add('gate-settling');
       history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    }, eyeDiveDuration);
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('gate-settling');
       eyeTrackingLocked = false;
       if (mark && lastPointerPosition && updateEyeFromPointer) {
         mark.classList.remove('eye-geometry-locked');
@@ -86,7 +92,7 @@
       } else {
         mark?.classList.remove('eye-geometry-locked');
       }
-    }, 1000);
+    }, eyeDiveDuration + eyeShakeDuration);
   };
 
   window.addEventListener('pageshow', (event) => {
@@ -159,8 +165,12 @@
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       setPupilTransitionGeometry();
-      document.documentElement.classList.add('gate-exiting');
-      window.setTimeout(() => window.location.assign(link.href), 980);
+      document.documentElement.classList.add('gate-preparing');
+      window.setTimeout(() => {
+        document.documentElement.classList.remove('gate-preparing');
+        document.documentElement.classList.add('gate-exiting');
+      }, eyeShakeDuration);
+      window.setTimeout(() => window.location.assign(link.href), eyeShakeDuration + eyeDiveDuration);
     });
   });
 
