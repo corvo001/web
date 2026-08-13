@@ -118,6 +118,14 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .reactive-mark.eye-tracking-resuming {
   transition: transform 560ms cubic-bezier(.22,1,.36,1);
 }
+.reactive-mark.eye-geometry-locked {
+  transform: perspective(800px) rotateX(0deg) rotateY(0deg) !important;
+  transition: none !important;
+}
+.reactive-mark.eye-geometry-locked .reactive-mark__pupil {
+  transform: translate(-50%, -50%) !important;
+  transition: none !important;
+}
 .reactive-mark.eye-tracking-resuming .reactive-mark__pupil {
   transition: transform 560ms cubic-bezier(.22,1,.36,1);
 }

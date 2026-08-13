@@ -32,6 +32,7 @@
 
     // The pupil follows the pointer. Always transition through its real,
     // centered resting position so the circle cannot drift between frames.
+    mark.classList.add('eye-geometry-locked');
     mark.style.setProperty('--rx', '0deg');
     mark.style.setProperty('--ry', '0deg');
     mark.style.setProperty('--px', '0px');
@@ -76,9 +77,12 @@
       history.replaceState({ ...history.state, eyeGateReturn: false }, '');
       eyeTrackingLocked = false;
       if (mark && lastPointerPosition && updateEyeFromPointer) {
+        mark.classList.remove('eye-geometry-locked');
         mark.classList.add('eye-tracking-resuming');
         updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
         window.setTimeout(() => mark.classList.remove('eye-tracking-resuming'), 620);
+      } else {
+        mark?.classList.remove('eye-geometry-locked');
       }
     }, 1000);
   };
@@ -149,6 +153,7 @@
     link.addEventListener('click', (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
+      eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       setPupilTransitionGeometry();
