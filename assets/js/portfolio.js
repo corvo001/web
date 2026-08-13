@@ -129,7 +129,7 @@
 
   const validRect = (rect) => rect && [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) && rect.width > 0 && rect.height > 0;
 
-  const createProjectPortal = (media, fromRect, toRect, label = '', useDisplayFont = true) => {
+  const createProjectPortal = (media, fromRect, toRect, label = '', useDisplayFont = true, shapeMode = '') => {
     const portal = document.createElement('div');
     const backdrop = document.createElement('span');
     const signal = label ? document.createElement('span') : null;
@@ -149,6 +149,7 @@
     clone.removeAttribute('data-project-hero-media');
     clone.className = 'project-portal__media';
     portal.className = 'project-portal';
+    if (shapeMode) portal.classList.add(`project-portal--${shapeMode}`);
     backdrop.className = 'project-portal-backdrop';
     if (signal && title) {
       signal.className = 'project-world-signal';
@@ -171,7 +172,7 @@
     return { portal, backdrop, signal, title };
   };
 
-  const animateProjectPortalToElement = async (media, fromRect, onComplete) => {
+  const animateProjectPortalToElement = async (media, fromRect, onComplete, shapeMode = '') => {
     if (media instanceof HTMLImageElement && media.decode) await media.decode().catch(() => {});
     await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
     const toRect = rectData(media.getBoundingClientRect());
@@ -180,7 +181,7 @@
       onComplete?.(toRect);
       return;
     }
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, toRect);
+    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, toRect, '', true, shapeMode);
     media.style.visibility = 'hidden';
     portal.classList.add('no-transition');
     backdrop.classList.add('no-transition', 'is-active');
@@ -207,7 +208,8 @@
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
     const worldRect = { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label, useDisplayFont);
+    const diamondOrigin = link.classList.contains('project-index-card');
+    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label, useDisplayFont, diamondOrigin ? 'diamond-origin' : '');
     media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
@@ -219,7 +221,7 @@
       title.classList.add('is-departing');
     }));
     window.setTimeout(() => {
-      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect: worldRect, label });
+      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect: worldRect, label, shape: diamondOrigin ? 'diamond' : '' });
       window.location.assign(link.href);
     }, projectDepartureDuration);
   };
@@ -232,10 +234,10 @@
       document.documentElement.classList.remove('project-entry-boot');
       return;
     }
-    writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()) });
+    writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()), shape: state.shape });
     animateProjectPortalToElement(media, state.rect, (heroRect) => {
-      writeProjectTransition({ id: state.id, phase: 'inside', heroRect });
-    });
+      writeProjectTransition({ id: state.id, phase: 'inside', heroRect, shape: state.shape });
+    }, state.shape === 'diamond' ? 'diamond-origin' : '');
   };
 
   const showProjectReturn = () => {
@@ -244,7 +246,7 @@
     const media = link?.querySelector('[data-project-media]');
     if (!media || reduceMotion.matches || !validRect(state?.heroRect)) return;
     link.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
-    animateProjectPortalToElement(media, state.heroRect, () => sessionStorage.removeItem(projectTransitionKey));
+    animateProjectPortalToElement(media, state.heroRect, () => sessionStorage.removeItem(projectTransitionKey), state.shape === 'diamond' ? 'diamond-target' : '');
   };
 
   const showGateReturn = async () => {

@@ -657,8 +657,12 @@ html.project-entry-boot body { opacity: 0; }
   position: fixed; z-index: 200; margin: 0; overflow: hidden; pointer-events: none;
   transform: translate3d(0,0,0) scale(1); transform-origin: top left; contain: strict;
   box-shadow: 0 0 0 1px var(--line); will-change: transform, filter, border-radius;
-  transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease, border-radius 1080ms ease, box-shadow 1080ms ease;
+  transition: transform 1080ms cubic-bezier(.76,0,.2,1), filter 1080ms ease, border-radius 1080ms ease, box-shadow 1080ms ease, clip-path 1080ms cubic-bezier(.76,0,.2,1);
 }
+.project-portal--diamond-origin { clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); }
+.project-portal--diamond-origin.is-at-target { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
+.project-portal--diamond-target { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
+.project-portal--diamond-target.is-at-target { clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); }
 .project-portal::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
   background: radial-gradient(circle at center, transparent 38%, rgba(2,3,2,.48) 100%);
