@@ -519,16 +519,16 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index__grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(4rem,7vw,7rem) clamp(1.25rem,3vw,3rem); }
 .project-index-card {
   --capsule-accent: #8fd2ab; --capsule-glow: rgba(130,181,152,.62); --capsule-core: rgba(162,224,186,.95);
-  --capsule-shell-a: #18231e; --capsule-shell-b: #0b110e; --capsule-shell-c: #26372e;
+  --capsule-shell-a: #171b18; --capsule-shell-b: #0d100e; --capsule-shell-c: #20251f;
   display: block; min-width: 0; color: var(--text); text-decoration: none;
 }
 .project-index-card[data-project-category="HARDWARE"] {
   --capsule-accent: #d6a66f; --capsule-glow: rgba(198,135,71,.68); --capsule-core: rgba(242,184,116,.96);
-  --capsule-shell-a: #2b2118; --capsule-shell-b: #15100b; --capsule-shell-c: #493321;
+  --capsule-shell-a: #1c1a17; --capsule-shell-b: #0f0e0c; --capsule-shell-c: #28241e;
 }
 .project-index-card[data-project-category="WETWARE"] {
   --capsule-accent: #ce7f9c; --capsule-glow: rgba(185,81,122,.68); --capsule-core: rgba(232,140,175,.96);
-  --capsule-shell-a: #2a1821; --capsule-shell-b: #140b10; --capsule-shell-c: #472536;
+  --capsule-shell-a: #1c181a; --capsule-shell-b: #0f0d0e; --capsule-shell-c: #282126;
 }
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
