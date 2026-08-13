@@ -887,4 +887,18 @@ html.project-entry-boot body { opacity: 0; }
   .reactive-mark__pupil { background: var(--text); }
   .pupil-transition { border-color: var(--text); box-shadow: none; }
   .project-stage, .project-card { background: #101311; }
+  .home-page .portfolio-hero {
+    --text: #eff2ed;
+    --muted: #98a099;
+    --accent: #82b598;
+    color: var(--text);
+  }
+  .home-page .portfolio-nav {
+    border-bottom-color: rgba(239,242,237,.14);
+    background: linear-gradient(to bottom, rgba(9,11,10,.88), transparent);
+  }
+  .home-page .nav-logo img { filter: none; }
+  .home-page .nav-links a, .home-page .language-switch { color: #98a099; }
+  .home-page .nav-links a:hover, .home-page .nav-links a:focus-visible, .home-page .language-switch:hover { color: #eff2ed; }
+  .home-page .nav-hover-locked .nav-links a:hover, .home-page .nav-hover-locked .language-switch:hover { color: #98a099; }
 }
