@@ -5,6 +5,7 @@
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   let gateEntrancePlayed = false;
+  let gateEntranceFrame = 0;
 
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
@@ -31,19 +32,33 @@
 
   const showGateReturn = () => {
     if (!gate || reduceMotion.matches || gateEntrancePlayed) return;
-    const shouldReturn = sessionStorage.getItem(eyeReturnKey) === '1' || sessionStorage.getItem(eyeSessionKey) === '1';
+    const shouldReturn = history.state?.eyeGateReturn === true || sessionStorage.getItem(eyeReturnKey) === '1' || sessionStorage.getItem(eyeSessionKey) === '1';
     if (!shouldReturn || !setPupilTransitionGeometry()) return;
 
     gateEntrancePlayed = true;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
-    document.documentElement.classList.add('gate-entering');
-    window.setTimeout(() => document.documentElement.classList.remove('gate-entering'), 1100);
+    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+
+    // A page restored from the back-forward cache keeps the completed entrance
+    // animation. Give the browser a clean frame before starting its reverse.
+    void gate.offsetWidth;
+    gateEntranceFrame = window.requestAnimationFrame(() => {
+      document.documentElement.classList.add('gate-entering');
+      window.setTimeout(() => document.documentElement.classList.remove('gate-entering'), 1100);
+    });
   };
 
   window.addEventListener('pageshow', () => {
     resetNavigationState();
     showGateReturn();
+  });
+  window.addEventListener('popstate', () => {
+    resetNavigationState();
+    showGateReturn();
+  });
+  window.addEventListener('pagehide', () => {
+    if (gate) gateEntrancePlayed = false;
   });
   resetNavigationState();
 
@@ -95,6 +110,7 @@
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       sessionStorage.setItem(eyeSessionKey, '1');
+      history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       setPupilTransitionGeometry();
       document.documentElement.classList.add('gate-exiting');
       window.setTimeout(() => window.location.assign(link.href), 980);
