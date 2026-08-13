@@ -13,6 +13,9 @@
   const eyeDiveDuration = 1120;
   const projectDepartureDuration = 1420;
   const projectReturnDuration = 1080;
+  const projectDisplayFontReady = document.fonts?.load
+    ? document.fonts.load('400 4rem "Dune Rise"', 'DYSON SWARM').then((fonts) => fonts.length > 0).catch(() => false)
+    : Promise.resolve(false);
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
@@ -80,7 +83,7 @@
 
   const validRect = (rect) => rect && [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) && rect.width > 0 && rect.height > 0;
 
-  const createProjectPortal = (media, fromRect, toRect, label = '') => {
+  const createProjectPortal = (media, fromRect, toRect, label = '', useDisplayFont = true) => {
     const portal = document.createElement('div');
     const backdrop = document.createElement('span');
     const signal = label ? document.createElement('span') : null;
@@ -103,7 +106,7 @@
     backdrop.className = 'project-portal-backdrop';
     if (signal && title) {
       signal.className = 'project-world-signal';
-      title.className = 'project-world-title project-display';
+      title.className = `project-world-title${useDisplayFont ? ' project-display' : ' project-world-title--fallback'}`;
       title.textContent = label;
     }
     Object.assign(portal.style, {
@@ -154,11 +157,11 @@
     }, projectReturnDuration + 80);
   };
 
-  const departIntoProject = (link, media, fromRect, label) => {
+  const departIntoProject = (link, media, fromRect, label, useDisplayFont) => {
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
     const worldRect = { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label);
+    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label, useDisplayFont);
     media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
@@ -320,15 +323,19 @@
   });
 
   document.querySelectorAll('[data-project-link]').forEach((link) => {
-    link.addEventListener('click', (event) => {
+    link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       const media = link.querySelector('[data-project-media]');
-      if (!media) return;
+      if (!media || link.classList.contains('is-arming') || link.classList.contains('is-launching')) return;
 
       event.preventDefault();
+      link.classList.add('is-arming');
+      const useDisplayFont = await projectDisplayFontReady;
+      if (!link.isConnected) return;
+      link.classList.remove('is-arming');
       const rect = rectData(media.getBoundingClientRect());
       const label = link.querySelector('h3')?.textContent.trim() || link.dataset.projectId;
-      departIntoProject(link, media, rect, label);
+      departIntoProject(link, media, rect, label, useDisplayFont);
     });
   });
 
