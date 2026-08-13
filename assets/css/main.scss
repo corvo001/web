@@ -562,7 +562,7 @@ html.project-entry-boot body { opacity: 0; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 6px)) 0 0;
+  position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
 .about-process::before, .about-process::after {
@@ -588,10 +588,18 @@ html.project-entry-boot body { opacity: 0; }
 .about-process__arm, .about-process__grip { stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .about-process__joint { fill: var(--ink); animation: about-joint 6.4s ease-in-out infinite; }
 .about-process__joint--late { animation-delay: .16s; }
-.about-process__eye, .about-process__iris, .about-process__identity { stroke-dasharray: 360; stroke-dashoffset: 360; animation: about-resolve 6.4s cubic-bezier(.22,1,.36,1) infinite; }
-.about-process__iris { animation-delay: .12s; }
-.about-process__identity { animation-delay: .24s; }
-.about-process__pupil { fill: var(--text); stroke: none; animation: about-pupil 6.4s ease-in-out infinite; transform-origin: 752px 260px; }
+.about-process__eye, .about-process__iris, .about-process__identity {
+  vector-effect: non-scaling-stroke; stroke-linecap: round;
+  stroke-dasharray: var(--about-draw-length); stroke-dashoffset: var(--about-draw-length);
+  animation: about-resolve 6.4s cubic-bezier(.22,1,.36,1) infinite;
+}
+.about-process__eye { --about-draw-length: 400; }
+.about-process__iris { --about-draw-length: 233; animation-delay: .12s; }
+.about-process__identity { --about-draw-length: 60; animation-delay: .24s; }
+.about-process__pupil {
+  fill: var(--text); stroke: none; transform-box: fill-box; transform-origin: center;
+  animation: about-pupil 6.4s ease-in-out infinite;
+}
 .about-process__result-glow { fill: currentColor; stroke: none; opacity: 0; filter: blur(14px); animation: about-result-glow 6.4s ease-out infinite; }
 .about-process__signal, .about-process__signal-glow { fill: currentColor; stroke: none; }
 .about-process__signal-glow { opacity: .48; }
@@ -605,10 +613,15 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
 @keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
 @keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
-@keyframes about-resolve { 0%,49% { stroke-dashoffset: 360; opacity: .08; } 70%,90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: -360; opacity: .12; } }
+@keyframes about-resolve { 0%,49% { stroke-dashoffset: var(--about-draw-length); opacity: .08; } 70%,90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: .12; } }
 @keyframes about-pupil { 0%,58% { opacity: 0; transform: scale(.25); } 74%,91% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
 @keyframes about-result-glow { 0%,62% { opacity: 0; transform: scale(.5); } 76% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.7); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
+@keyframes about-resolve-mobile {
+  0%, 46% { opacity: 0; transform: scale(.78); }
+  68%, 91% { opacity: 1; transform: scale(1); }
+  100% { opacity: .12; transform: scale(1.04); }
+}
 @keyframes about-mobile-pan {
   0%, 10% { transform: translate3d(0,-50%,0); }
   48%, 92% { transform: translate3d(-39.5%,-50%,0); }
@@ -675,6 +688,11 @@ html.project-entry-boot body { opacity: 0; }
   .about-process__visual {
     position: relative; top: 50%; width: 165%; max-width: none;
     animation: about-mobile-pan 6.4s cubic-bezier(.45,0,.22,1) infinite;
+  }
+  .about-process__eye, .about-process__iris, .about-process__identity {
+    stroke-dasharray: none; stroke-dashoffset: 0;
+    transform-box: fill-box; transform-origin: center;
+    animation-name: about-resolve-mobile;
   }
   .portfolio-footer { flex-direction: column; }
 }
