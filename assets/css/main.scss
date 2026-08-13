@@ -629,15 +629,16 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
 @keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
 @keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
-@keyframes about-resolve { 0%,20% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 52%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-iris { 0%,28% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 57%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-identity { 0%,34% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 62%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-pupil { 0%,46% { opacity: 0; transform: scale(.25); } 62%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
-@keyframes about-result-glow { 0%,52% { opacity: 0; transform: scale(.5); } 66% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
+/* The signal enters the eye section at 48% and reaches its endpoint at 82%. */
+@keyframes about-resolve { 0%,48% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 68%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-iris { 0%,55% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 74%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-identity { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-pupil { 0%,72% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes about-result-glow { 0%,74% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 @keyframes about-resolve-mobile {
-  0%, 20% { opacity: 0; transform: scale(.78); }
-  55%, 93% { opacity: 1; transform: scale(1); }
+  0%, 48% { opacity: 0; transform: scale(.78); }
+  78%, 93% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.04); }
 }
 @keyframes about-mobile-pan {
