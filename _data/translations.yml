@@ -15,7 +15,7 @@ es:
     back_to_hall: "Volver al inicio"
   about:
     title: "SOBRE MÍ"
-    subtitle: "YO"
+    subtitle: "@danicr01"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. Exploro ideas, y las hago reales.
 
@@ -46,7 +46,7 @@ en:
     back_to_hall: "Back to the top"
   about:
     title: "ABOUT"
-    subtitle: "ME"
+    subtitle: "@danicr01"
     body: |
       I’m Daniel Cuervo and I work in **technological creativity**. I explore ideas, and make them real.
 
