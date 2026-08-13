@@ -388,6 +388,26 @@
     updateControls();
   });
 
+  document.querySelectorAll('.work-section').forEach((section) => {
+    const backToHall = section.querySelector('[data-back-to-hall]');
+    if (!backToHall) return;
+    document.documentElement.appendChild(backToHall);
+    let updateQueued = false;
+    const updateBackToHall = () => {
+      const rect = section.getBoundingClientRect();
+      backToHall.classList.toggle('is-visible', rect.top <= window.innerHeight * .2 && rect.bottom > 0);
+      updateQueued = false;
+    };
+    const queueBackToHallUpdate = () => {
+      if (updateQueued) return;
+      updateQueued = true;
+      window.requestAnimationFrame(updateBackToHall);
+    };
+    window.addEventListener('scroll', queueBackToHallUpdate, { passive: true });
+    window.addEventListener('resize', queueBackToHallUpdate, { passive: true });
+    updateBackToHall();
+  });
+
   document.querySelectorAll('[data-gallery]').forEach((gallery) => {
     const track = gallery.querySelector('[data-gallery-track]');
     const previous = gallery.querySelector('[data-gallery-previous]');
