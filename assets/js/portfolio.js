@@ -42,10 +42,11 @@
     mark.style.setProperty('--px', '0px');
     mark.style.setProperty('--py', '0px');
     void pupil.offsetWidth;
-    const rect = pupil.getBoundingClientRect();
-    const size = Math.max(rect.width, 1);
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const markRect = mark.getBoundingClientRect();
+    const size = Math.max(markRect.width * .032, 1);
+    // Exact centre of the transparent pupil aperture in the 1024 × 1024 logo.
+    const centerX = markRect.left + (markRect.width * .5);
+    const centerY = markRect.top + (markRect.height * (456.5 / 1024));
     const radius = Math.hypot(Math.max(centerX, window.innerWidth - centerX), Math.max(centerY, window.innerHeight - centerY));
     transition.style.setProperty('--pupil-x', `${centerX}px`);
     transition.style.setProperty('--pupil-y', `${centerY}px`);
@@ -82,8 +83,8 @@
   const createProjectPortal = (media, fromRect, toRect, label = '') => {
     const portal = document.createElement('div');
     const backdrop = document.createElement('span');
-    const signal = document.createElement('span');
-    const title = document.createElement('strong');
+    const signal = label ? document.createElement('span') : null;
+    const title = label ? document.createElement('strong') : null;
     const clone = media.cloneNode(true);
     const translateX = toRect.left - fromRect.left;
     const translateY = toRect.top - fromRect.top;
@@ -100,9 +101,11 @@
     clone.className = 'project-portal__media';
     portal.className = 'project-portal';
     backdrop.className = 'project-portal-backdrop';
-    signal.className = 'project-world-signal';
-    title.className = 'project-world-title project-display';
-    title.textContent = label;
+    if (signal && title) {
+      signal.className = 'project-world-signal';
+      title.className = 'project-world-title project-display';
+      title.textContent = label;
+    }
     Object.assign(portal.style, {
       left: `${fromRect.left}px`, top: `${fromRect.top}px`, width: `${fromRect.width}px`, height: `${fromRect.height}px`,
       '--portal-x': `${translateX}px`, '--portal-y': `${translateY}px`,
@@ -114,7 +117,8 @@
       clone.muted = true;
       clone.play().catch(() => {});
     }
-    document.documentElement.append(backdrop, signal, portal, title);
+    if (signal && title) document.documentElement.append(backdrop, signal, portal, title);
+    else document.documentElement.append(backdrop, portal);
     return { portal, backdrop, signal, title };
   };
 
@@ -143,14 +147,16 @@
     window.setTimeout(() => {
       portal.remove();
       backdrop.remove();
-      signal.remove();
-      title.remove();
+      signal?.remove();
+      title?.remove();
       media.style.visibility = '';
       onComplete?.(toRect);
     }, projectReturnDuration + 80);
   };
 
   const departIntoProject = (link, media, fromRect, label) => {
+    document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
+    document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
     const worldRect = { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
     const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label);
     media.style.visibility = 'hidden';
