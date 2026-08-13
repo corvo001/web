@@ -831,8 +831,14 @@ html.project-entry-boot body { opacity: 0; }
 .about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
 .about-process__identity { --about-draw-length: 60; animation-name: about-resolve-identity; }
 .about-process__pupil {
-  fill: var(--text); stroke: none; transform-box: fill-box; transform-origin: center;
+  fill: #b7f5cf; stroke: none; transform-box: fill-box; transform-origin: center;
+  filter: drop-shadow(0 0 2px rgba(183,245,207,.9)) drop-shadow(0 0 7px rgba(116,211,153,.48));
   animation: about-pupil 6.4s ease-in-out infinite;
+}
+.about-process__pupil-star {
+  fill: none; stroke: #a9edc4; stroke-width: .8; stroke-linecap: round;
+  transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 4px rgba(143,226,176,.7));
+  animation: about-pupil-star 6.4s cubic-bezier(.37,0,.63,1) infinite;
 }
 .about-process__result-glow { fill: currentColor; stroke: none; opacity: 0; filter: blur(14px); animation: about-result-glow 6.4s ease-out infinite; }
 .about-process__signal, .about-process__signal-glow { fill: currentColor; stroke: none; }
@@ -852,6 +858,7 @@ html.project-entry-boot body { opacity: 0; }
 @keyframes about-resolve-iris { 0%,55% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 74%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
 @keyframes about-resolve-identity { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
 @keyframes about-pupil { 0%,72% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes about-pupil-star { 0%,74% { opacity: 0; transform: scale(.18); } 84% { opacity: .72; transform: scale(.72); } 91% { opacity: .38; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18); } }
 @keyframes about-result-glow { 0%,74% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
@@ -960,6 +967,7 @@ html.project-entry-boot body { opacity: 0; }
   .about-process__code-line, .about-process__eye, .about-process__iris, .about-process__identity { stroke-dashoffset: 0; opacity: 1; }
   .about-process__orbit { stroke-dashoffset: 0; opacity: .65; }
   .about-process__pupil { opacity: 1; transform: none; }
+  .about-process__pupil-star { opacity: .45; transform: none; }
   .about-process__visual { top: auto; width: 100%; animation: none; transform: none; }
 }
 
