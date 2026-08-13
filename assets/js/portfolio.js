@@ -8,8 +8,8 @@
   let eyeTrackingLocked = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
-  const eyeShakeDuration = 560;
-  const eyeDiveDuration = 980;
+  const eyeShakeDuration = 720;
+  const eyeDiveDuration = 1120;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
