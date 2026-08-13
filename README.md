@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/images/logo-readme.svg" width="150" alt="Daniel Cuervo logo">
+<img src="assets/images/logo-readme.png" width="150" alt="Daniel Cuervo logo">
 
 # DANIEL CUERVO
 
