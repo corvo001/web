@@ -517,7 +517,19 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 .project-filter__menu button:hover, .project-filter__menu button:focus-visible, .project-filter__menu button[aria-pressed="true"] { color: var(--text); transform: translateX(.3rem); }
 .project-index__grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(4rem,7vw,7rem) clamp(1.25rem,3vw,3rem); }
-.project-index-card { display: block; min-width: 0; color: var(--text); text-decoration: none; }
+.project-index-card {
+  --capsule-accent: #8fd2ab; --capsule-glow: rgba(130,181,152,.62); --capsule-core: rgba(162,224,186,.95);
+  --capsule-shell-a: #18231e; --capsule-shell-b: #0b110e; --capsule-shell-c: #26372e;
+  display: block; min-width: 0; color: var(--text); text-decoration: none;
+}
+.project-index-card[data-project-category="HARDWARE"] {
+  --capsule-accent: #d6a66f; --capsule-glow: rgba(198,135,71,.68); --capsule-core: rgba(242,184,116,.96);
+  --capsule-shell-a: #2b2118; --capsule-shell-b: #15100b; --capsule-shell-c: #493321;
+}
+.project-index-card[data-project-category="WETWARE"] {
+  --capsule-accent: #ce7f9c; --capsule-glow: rgba(185,81,122,.68); --capsule-core: rgba(232,140,175,.96);
+  --capsule-shell-a: #2a1821; --capsule-shell-b: #140b10; --capsule-shell-c: #472536;
+}
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
   position: relative; isolation: isolate; width: 76%; aspect-ratio: 1; margin-inline: auto; overflow: hidden;
@@ -526,16 +538,16 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index-card__visual::before, .project-index-card__visual::after {
   content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none;
   background:
-    linear-gradient(90deg,transparent 96%,rgba(130,181,152,.5) 100%),
-    linear-gradient(145deg,#171c19 0%,#0c100e 58%,#202722 100%);
+    linear-gradient(90deg,transparent 96%,var(--capsule-glow) 100%),
+    linear-gradient(145deg,var(--capsule-shell-a) 0%,var(--capsule-shell-b) 58%,var(--capsule-shell-c) 100%);
   transition: transform 760ms cubic-bezier(.16,1,.3,1), filter 500ms ease, opacity 380ms ease;
 }
 .project-index-card__visual::before { clip-path: polygon(0 50%,50% 0,50% 100%); transform-origin: left center; }
 .project-index-card__visual::after {
   clip-path: polygon(50% 0,100% 50%,50% 100%); transform-origin: right center;
   background:
-    linear-gradient(270deg,transparent 96%,rgba(130,181,152,.5) 100%),
-    linear-gradient(215deg,#171c19 0%,#0c100e 58%,#202722 100%);
+    linear-gradient(270deg,transparent 96%,var(--capsule-glow) 100%),
+    linear-gradient(215deg,var(--capsule-shell-a) 0%,var(--capsule-shell-b) 58%,var(--capsule-shell-c) 100%);
 }
 .project-index-card__media {
   width: 100%; height: 100%; display: block; object-fit: cover;
@@ -545,18 +557,18 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 .project-index-card__lock {
   position: absolute; z-index: 3; left: 50%; top: 50%; width: 1.8rem; aspect-ratio: 1;
-  border: 1px solid rgba(151,224,181,.9); background: rgba(69,125,92,.32);
-  box-shadow: 0 0 .7rem rgba(130,181,152,.5), inset 0 0 .45rem rgba(151,224,181,.35);
+  border: 1px solid var(--capsule-accent); background: color-mix(in srgb,var(--capsule-accent) 25%,transparent);
+  box-shadow: 0 0 .7rem var(--capsule-glow), inset 0 0 .45rem var(--capsule-glow);
   transform: translate(-50%,-50%) rotate(45deg); pointer-events: none;
   animation: holocron-lock-pulse 2.4s ease-in-out infinite;
   transition: opacity 260ms ease, transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
 }
 .project-index-card__lock::after {
-  content: ""; position: absolute; inset: 34%; background: #a2e0ba;
-  box-shadow: 0 0 .55rem rgba(162,224,186,.9);
+  content: ""; position: absolute; inset: 34%; background: var(--capsule-core);
+  box-shadow: 0 0 .55rem var(--capsule-glow);
 }
 .project-index-card__info { width: 76%; margin-inline: auto; padding-top: 1.5rem; text-align: center; }
-.project-index-card__info span { display: block; margin-bottom: .8rem; color: var(--accent); font: 500 .64rem/1.3 var(--mono); letter-spacing: .14em; }
+.project-index-card__info span { display: block; margin-bottom: .8rem; color: var(--capsule-accent); font: 500 .64rem/1.3 var(--mono); letter-spacing: .14em; }
 .project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.35rem,2.6vw,2.6rem); letter-spacing: .08em; transition: color 180ms ease; }
 .project-index-card__visual:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
   clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); transform: scale(1.025); filter: saturate(.9) brightness(.78);
@@ -564,12 +576,12 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index-card__visual:hover::before, .project-index-card:focus-visible .project-index-card__visual::before { transform: translateX(-58%) skewY(-3deg); filter: brightness(1.25); opacity: .12; }
 .project-index-card__visual:hover::after, .project-index-card:focus-visible .project-index-card__visual::after { transform: translateX(58%) skewY(3deg); filter: brightness(1.25); opacity: .12; }
 .project-index-card__visual:hover .project-index-card__lock, .project-index-card:focus-visible .project-index-card__lock { opacity: 0; transform: translate(-50%,-50%) rotate(135deg) scale(.25); animation-play-state: paused; }
-.project-index-card:hover h2, .project-index-card:focus-visible h2 { color: var(--accent); }
+.project-index-card:hover h2, .project-index-card:focus-visible h2 { color: var(--capsule-accent); }
 .project-index__empty { margin: 0; padding: 2rem 0; color: var(--muted); font: .75rem/1.5 var(--mono); letter-spacing: .08em; }
 
 @keyframes holocron-lock-pulse {
-  0%, 100% { box-shadow: 0 0 .55rem rgba(130,181,152,.38), inset 0 0 .35rem rgba(151,224,181,.28); }
-  50% { box-shadow: 0 0 1rem rgba(130,181,152,.72), inset 0 0 .65rem rgba(151,224,181,.48); }
+  0%, 100% { box-shadow: 0 0 .55rem var(--capsule-glow), inset 0 0 .35rem color-mix(in srgb,var(--capsule-accent) 32%,transparent); }
+  50% { box-shadow: 0 0 1rem var(--capsule-glow), inset 0 0 .65rem color-mix(in srgb,var(--capsule-accent) 52%,transparent); }
 }
 
 .work-section { overflow: clip; padding: clamp(4rem, 7vw, 7rem) 0 clamp(5rem, 9vw, 9rem); }
