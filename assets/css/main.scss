@@ -520,16 +520,37 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index-card { display: block; min-width: 0; color: var(--text); text-decoration: none; }
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
-  position: relative; width: 76%; aspect-ratio: 1; margin-inline: auto; overflow: hidden;
+  position: relative; isolation: isolate; width: 76%; aspect-ratio: 1; margin-inline: auto; overflow: hidden;
   background: #070908; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
 }
-.project-index-card__visual::after { content: ""; position: absolute; inset: 0; background: rgba(4,6,5,.16); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
-.project-index-card__media { width: 100%; height: 100%; display: block; object-fit: cover; filter: saturate(.72) contrast(1.04); transition: transform 650ms cubic-bezier(.2,.7,.2,1), filter 420ms ease; }
+.project-index-card__visual::before, .project-index-card__visual::after {
+  content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg,transparent 96%,rgba(130,181,152,.5) 100%),
+    linear-gradient(145deg,#171c19 0%,#0c100e 58%,#202722 100%);
+  transition: transform 760ms cubic-bezier(.16,1,.3,1), filter 500ms ease, opacity 380ms ease;
+}
+.project-index-card__visual::before { clip-path: polygon(0 50%,50% 0,50% 100%); transform-origin: left center; }
+.project-index-card__visual::after {
+  clip-path: polygon(50% 0,100% 50%,50% 100%); transform-origin: right center;
+  background:
+    linear-gradient(270deg,transparent 96%,rgba(130,181,152,.5) 100%),
+    linear-gradient(215deg,#171c19 0%,#0c100e 58%,#202722 100%);
+}
+.project-index-card__media {
+  width: 100%; height: 100%; display: block; object-fit: cover;
+  clip-path: polygon(50% 43%,57% 50%,50% 57%,43% 50%);
+  filter: saturate(.4) brightness(.5) contrast(1.08); transform: scale(1.12);
+  transition: clip-path 820ms cubic-bezier(.16,1,.3,1), transform 950ms cubic-bezier(.16,1,.3,1), filter 620ms ease;
+}
 .project-index-card__info { width: 76%; margin-inline: auto; padding-top: 1.5rem; text-align: center; }
 .project-index-card__info span { display: block; margin-bottom: .8rem; color: var(--accent); font: 500 .64rem/1.3 var(--mono); letter-spacing: .14em; }
 .project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.35rem,2.6vw,2.6rem); letter-spacing: .08em; transition: color 180ms ease; }
-.project-index-card:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media { transform: scale(1.025); filter: saturate(.9) brightness(.72); }
-.project-index-card:hover .project-index-card__visual::after, .project-index-card:focus-visible .project-index-card__visual::after { opacity: 1; }
+.project-index-card:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
+  clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); transform: scale(1.025); filter: saturate(.9) brightness(.78);
+}
+.project-index-card:hover .project-index-card__visual::before, .project-index-card:focus-visible .project-index-card__visual::before { transform: translateX(-58%) skewY(-3deg); filter: brightness(1.25); opacity: .12; }
+.project-index-card:hover .project-index-card__visual::after, .project-index-card:focus-visible .project-index-card__visual::after { transform: translateX(58%) skewY(3deg); filter: brightness(1.25); opacity: .12; }
 .project-index-card:hover h2, .project-index-card:focus-visible h2 { color: var(--accent); }
 .project-index__empty { margin: 0; padding: 2rem 0; color: var(--muted); font: .75rem/1.5 var(--mono); letter-spacing: .08em; }
 
@@ -865,6 +886,9 @@ html.project-entry-boot body { opacity: 0; }
 
 @media (hover: none), (pointer: coarse) {
   .hero-project.is-active .hero-project__interest { opacity: .72; transform: translate(-50%,0); }
+  .project-index-card__media { clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); transform: scale(1.025); filter: saturate(.82) brightness(.72); }
+  .project-index-card__visual::before { transform: translateX(-48%); opacity: .16; }
+  .project-index-card__visual::after { transform: translateX(48%); opacity: .16; }
 }
 
 @keyframes project-world-title-mobile {
