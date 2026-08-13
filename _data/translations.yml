@@ -16,6 +16,9 @@ es:
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
     back_to_hall: "Volver al inicio"
+    filter: "Filtrar proyectos"
+    all: "TODOS"
+    empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
     subtitle: "@danicr01"
@@ -49,6 +52,9 @@ en:
     previous: "Previous project"
     next: "Next project"
     back_to_hall: "Back to the top"
+    filter: "Filter projects"
+    all: "ALL"
+    empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
     subtitle: "@danicr01"

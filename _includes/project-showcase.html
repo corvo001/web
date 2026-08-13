@@ -1,42 +1,45 @@
 {% assign t = site.data.translations[page.lang] %}
-<section class="work-section" id="work" aria-labelledby="work-title">
-  {% unless include.standalone %}
-  <a class="back-to-hall" href="#main" aria-label="{{ t.work.back_to_hall }}" data-back-to-hall>
-    <span aria-hidden="true"></span>
-  </a>
-  {% endunless %}
-  <div class="section-heading">
-    <h2 id="work-title">{{ t.work.title }}</h2>
-  </div>
-  <div class="project-stage">
-    <div class="project-controls">
-      <button class="project-control" type="button" data-project-previous aria-label="{{ t.work.previous }}" disabled>
-        <span class="project-chevron project-chevron--previous" aria-hidden="true"></span>
-      </button>
-      <button class="project-control" type="button" data-project-next aria-label="{{ t.work.next }}">
-        <span class="project-chevron project-chevron--next" aria-hidden="true"></span>
-      </button>
-    </div>
-    <div class="project-track" data-project-track tabindex="0">
-      {% for project in site.data.projects %}
-        {% unless project.hidden %}
-        {% if page.lang == 'es' %}
-          {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
-        {% else %}
-          {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
-        {% endif %}
-        <a class="project-card{% if project.placeholder %} project-card--placeholder{% endif %}" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}">
-          {% if project.video %}
-            <video class="project-card__media" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media></video>
-          {% else %}
-            <img class="project-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
-          {% endif %}
-          <div class="project-card__content">
-            <h3 class="project-display">{{ project.name }}</h3>
-          </div>
-        </a>
-        {% endunless %}
-      {% endfor %}
+<section class="project-index" aria-labelledby="work-title">
+  <header class="project-index__header">
+    <h1 id="work-title">{{ t.work.title }}</h1>
+  </header>
+  <div class="project-index__body">
+    <aside class="project-index__filters" aria-label="{{ t.work.filter }}">
+      <details class="project-filter" data-project-filter>
+        <summary><span data-project-filter-label>{{ t.work.all }}</span><i aria-hidden="true"></i></summary>
+        <div class="project-filter__menu">
+          <button type="button" data-project-filter-value="ALL" aria-pressed="true">{{ t.work.all }}</button>
+          <button type="button" data-project-filter-value="SOFTWARE" aria-pressed="false">SOFTWARE</button>
+          <button type="button" data-project-filter-value="HARDWARE" aria-pressed="false">HARDWARE</button>
+        </div>
+      </details>
+    </aside>
+    <div class="project-index__collection">
+      <div class="project-index__grid" data-project-index-grid>
+        {% for project in site.data.projects %}
+          {% unless project.hidden %}
+            {% if page.lang == 'es' %}
+              {% assign project_url = '/es/proyectos/' | append: project.id | append: '/' %}
+            {% else %}
+              {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
+            {% endif %}
+            <a class="project-index-card" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}">
+              <div class="project-index-card__visual">
+                {% if project.video %}
+                  <video class="project-index-card__media" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media></video>
+                {% else %}
+                  <img class="project-index-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
+                {% endif %}
+              </div>
+              <div class="project-index-card__info">
+                <span>{{ project.category }} / {{ project.year }}</span>
+                <h2 class="project-display">{{ project.name }}</h2>
+              </div>
+            </a>
+          {% endunless %}
+        {% endfor %}
+      </div>
+      <p class="project-index__empty" data-project-index-empty hidden>{{ t.work.empty }}</p>
     </div>
   </div>
 </section>

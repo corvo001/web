@@ -448,6 +448,29 @@
     next?.addEventListener('click', chooseNext);
   });
 
+  document.querySelectorAll('[data-project-filter]').forEach((filter) => {
+    const grid = filter.closest('.project-index__body')?.querySelector('[data-project-index-grid]');
+    const empty = filter.closest('.project-index__body')?.querySelector('[data-project-index-empty]');
+    const label = filter.querySelector('[data-project-filter-label]');
+    const buttons = [...filter.querySelectorAll('[data-project-filter-value]')];
+    const cards = [...(grid?.querySelectorAll('[data-project-category]') || [])];
+    if (!grid || !label || !buttons.length) return;
+
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const category = button.dataset.projectFilterValue;
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const visible = category === 'ALL' || card.dataset.projectCategory === category;
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+      buttons.forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
+      label.textContent = button.textContent.trim();
+      if (empty) empty.hidden = visibleCount > 0;
+      filter.open = false;
+    }));
+  });
+
   document.querySelectorAll('[data-work-entry]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;

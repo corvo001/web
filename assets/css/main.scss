@@ -484,7 +484,38 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .home-page .portfolio-hero { width: 100%; min-height: 0; border-bottom: 0; }
 .home-page .portfolio-footer { flex: 0 0 auto; }
 .work-main { min-height: 100svh; padding-top: 4.7rem; }
-.work-page .work-section { padding-top: clamp(3rem, 6vw, 6rem); }
+.project-index { padding: clamp(4.5rem,10vw,9rem) var(--page-pad) clamp(6rem,10vw,10rem); }
+.project-index__header { display: grid; place-items: center; min-height: clamp(13rem,30vw,27rem); text-align: center; }
+.project-index__header h1 { margin: 0; font-size: clamp(3.5rem,11vw,11rem); font-weight: 300; letter-spacing: .035em; line-height: .85; }
+.project-index__body { display: grid; grid-template-columns: minmax(9rem,13rem) minmax(0,1fr); gap: clamp(2rem,5vw,6rem); max-width: 1500px; margin-inline: auto; }
+.project-index__filters { position: relative; z-index: 8; }
+.project-filter { position: sticky; top: 6.5rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.project-filter summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0;
+  color: var(--accent); font: 500 .7rem/1 var(--mono); letter-spacing: .14em; list-style: none; cursor: pointer;
+}
+.project-filter summary::-webkit-details-marker { display: none; }
+.project-filter summary i { width: .5rem; aspect-ratio: 1; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg) translateY(-20%); transition: transform 200ms ease; }
+.project-filter[open] summary i { transform: rotate(225deg) translate(-15%,-15%); }
+.project-filter__menu { display: grid; padding: 0 0 .65rem; }
+.project-filter__menu button {
+  padding: .72rem 0; border: 0; background: transparent; color: var(--muted); font: 500 .68rem/1 var(--mono);
+  letter-spacing: .12em; text-align: left; cursor: pointer; transition: color 160ms ease, transform 180ms ease;
+}
+.project-filter__menu button:hover, .project-filter__menu button:focus-visible, .project-filter__menu button[aria-pressed="true"] { color: var(--text); transform: translateX(.3rem); }
+.project-index__grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(2.25rem,5vw,5.5rem) clamp(1.25rem,3vw,3rem); }
+.project-index-card { display: block; min-width: 0; color: var(--text); text-decoration: none; }
+.project-index-card[hidden] { display: none; }
+.project-index-card__visual { position: relative; aspect-ratio: 4/3; overflow: hidden; border: 1px solid var(--line); background: #070908; }
+.project-index-card__visual::after { content: ""; position: absolute; inset: 0; background: rgba(4,6,5,.08); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
+.project-index-card__media { width: 100%; height: 100%; display: block; object-fit: cover; filter: saturate(.72) contrast(1.04); transition: transform 650ms cubic-bezier(.2,.7,.2,1), filter 420ms ease; }
+.project-index-card__info { padding-top: 1.15rem; }
+.project-index-card__info span { display: block; margin-bottom: .8rem; color: var(--accent); font: 500 .64rem/1.3 var(--mono); letter-spacing: .14em; }
+.project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.35rem,2.6vw,2.6rem); letter-spacing: .08em; transition: color 180ms ease; }
+.project-index-card:hover .project-index-card__media, .project-index-card:focus-visible .project-index-card__media { transform: scale(1.025); filter: saturate(.9) brightness(.72); }
+.project-index-card:hover .project-index-card__visual::after, .project-index-card:focus-visible .project-index-card__visual::after { opacity: 1; }
+.project-index-card:hover h2, .project-index-card:focus-visible h2 { color: var(--accent); }
+.project-index__empty { margin: 0; padding: 2rem 0; color: var(--muted); font: .75rem/1.5 var(--mono); letter-spacing: .08em; }
 
 .work-section { overflow: clip; padding: clamp(4rem, 7vw, 7rem) 0 clamp(5rem, 9vw, 9rem); }
 .section-heading {
@@ -789,6 +820,12 @@ html.project-entry-boot body { opacity: 0; }
     padding-top: clamp(7.5rem, 18svh, 10rem);
     padding-bottom: clamp(7rem, 16svh, 9rem);
   }
+  .project-index { padding: 7rem 1rem 5rem; }
+  .project-index__header { min-height: 11rem; }
+  .project-index__header h1 { font-size: clamp(2.6rem,14vw,4.4rem); }
+  .project-index__body { grid-template-columns: 1fr; gap: 2.25rem; }
+  .project-filter { position: relative; top: auto; }
+  .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
   .section-heading, .project-stage { width: calc(100% - 2rem); }
   .project-card { flex-basis: 100%; height: auto; min-height: 0; aspect-ratio: 4/5; }
   .project-card__content { opacity: 1; transform: none; align-items: end; padding-bottom: 2rem; }
