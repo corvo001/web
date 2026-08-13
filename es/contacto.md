@@ -2,6 +2,6 @@
 layout: info-page
 lang: es
 section: contact
-title: "Contacto"
+title: "CONTACTO"
 permalink: /es/contacto/
 ---

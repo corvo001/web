@@ -2,6 +2,6 @@
 layout: info-page
 lang: en
 section: about
-title: "About"
+title: "ABOUT"
 permalink: /en/about/
 ---

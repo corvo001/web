@@ -2,26 +2,26 @@ es:
   language_name: "Español"
   skip: "Saltar al contenido"
   nav:
-    work: "Proyectos"
-    about: "Sobre mí"
-    contact: "Contacto"
+    work: "PROYECTOS"
+    about: "SOBRE MÍ"
+    contact: "CONTACTO"
   gate_prompt: "Selecciona un idioma"
   hero:
     eyebrow: "Software · Robótica industrial"
   work:
-    title: "Proyectos"
+    title: "PROYECTOS"
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
     back_to_hall: "Volver al inicio"
   about:
-    title: "Sobre mí"
+    title: "SOBRE MÍ"
     subtitle: "YO"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. Exploro ideas, y las hago reales.
 
       Combino software, robótica y experimentación para construir herramientas útiles, claras y con identidad propia.
   contact:
-    title: "Contacto"
+    title: "CONTACTO"
     intro: "DISPONIBLE CUANDO ME NECESITES"
   project:
     gallery: "Galería"
@@ -33,26 +33,26 @@ en:
   language_name: "English"
   skip: "Skip to content"
   nav:
-    work: "Work"
-    about: "About"
-    contact: "Contact"
+    work: "WORK"
+    about: "ABOUT"
+    contact: "CONTACT"
   gate_prompt: "Select a language"
   hero:
     eyebrow: "Software · Industrial robotics"
   work:
-    title: "Projects"
+    title: "PROJECTS"
     previous: "Previous project"
     next: "Next project"
     back_to_hall: "Back to the top"
   about:
-    title: "About"
+    title: "ABOUT"
     subtitle: "ME"
     body: |
       I’m Daniel Cuervo and I work in **technological creativity**. I explore ideas, and make them real.
 
       I combine software, robotics and experimentation to build useful, clear tools with an identity of their own.
   contact:
-    title: "Contact"
+    title: "CONTACT"
     intro: "AVAILABLE WHENEVER YOU NEED"
   project:
     gallery: "Gallery"

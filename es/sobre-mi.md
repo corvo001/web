@@ -2,6 +2,6 @@
 layout: info-page
 lang: es
 section: about
-title: "Sobre mí"
+title: "SOBRE MÍ"
 permalink: /es/sobre-mi/
 ---
