@@ -14,6 +14,15 @@
     <link rel="preconnect" href="https://fonts.cdnfonts.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet">
+    {% if page.body_class == 'language-page' %}
+    <script>
+      try {
+        if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
+          document.documentElement.classList.add('gate-return-boot');
+        }
+      } catch (error) {}
+    </script>
+    {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body class="portfolio-shell{% if page.body_class %} {{ page.body_class }}{% endif %}">

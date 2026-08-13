@@ -5,7 +5,6 @@
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   let gateEntrancePlayed = false;
-  let gateEntranceFrame = 0;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
@@ -16,6 +15,13 @@
     const transition = document.querySelector('[data-pupil-transition]');
     if (!pupil || !transition) return false;
 
+    // The pupil follows the pointer. Always transition through its real,
+    // centered resting position so the circle cannot drift between frames.
+    mark.style.setProperty('--rx', '0deg');
+    mark.style.setProperty('--ry', '0deg');
+    mark.style.setProperty('--px', '0px');
+    mark.style.setProperty('--py', '0px');
+    void pupil.offsetWidth;
     const rect = pupil.getBoundingClientRect();
     const size = Math.max(rect.width, 1);
     const centerX = rect.left + rect.width / 2;
@@ -30,8 +36,8 @@
   };
 
   const resetNavigationState = () => {
-    document.documentElement.classList.remove('gate-exiting', 'gate-entering', 'gate-return-ready');
-    document.body.classList.remove('gate-exiting', 'gate-entering', 'gate-return-ready', 'page-leaving');
+    document.documentElement.classList.remove('gate-exiting', 'gate-entering', 'gate-return-boot');
+    document.body.classList.remove('gate-exiting', 'gate-entering', 'page-leaving');
   };
 
   const showGateReturn = () => {
@@ -41,36 +47,28 @@
     gateEntrancePlayed = true;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
-
-    // Browsers can restore the last rendered frame from their back-forward
-    // cache. Stabilize that frame first, then animate from the exact same state.
-    document.documentElement.classList.remove('gate-exiting', 'gate-entering');
-    document.documentElement.classList.add('gate-return-ready');
-    void gate.offsetWidth;
-    gateEntranceFrame = window.requestAnimationFrame(() => {
-      document.documentElement.classList.remove('gate-return-ready');
-      document.documentElement.classList.add('gate-entering');
-      window.setTimeout(() => {
-        document.documentElement.classList.remove('gate-entering');
-        history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-      }, 1100);
-    });
+    document.documentElement.classList.remove('gate-exiting', 'gate-return-boot');
+    document.documentElement.classList.add('gate-entering');
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('gate-entering');
+      history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    }, 1000);
   };
 
-  window.addEventListener('pageshow', () => {
+  window.addEventListener('pageshow', (event) => {
+    // Never animate a document frozen by the browser's history cache. Reload it
+    // once and let the boot veil keep the transition visually continuous.
+    if (gate && event.persisted) {
+      sessionStorage.setItem(eyeReturnKey, '1');
+      window.location.reload();
+      return;
+    }
     if (gateShouldReturn()) showGateReturn();
     else resetNavigationState();
   });
   window.addEventListener('pagehide', () => {
-    if (!gate) return;
+    if (gate && !reduceMotion.matches && gateShouldReturn()) document.documentElement.classList.add('gate-return-boot');
     gateEntrancePlayed = false;
-    if (!reduceMotion.matches && gateShouldReturn()) {
-      setPupilTransitionGeometry();
-      document.documentElement.classList.remove('gate-exiting', 'gate-entering');
-      document.documentElement.classList.add('gate-return-ready');
-    } else {
-      resetNavigationState();
-    }
   });
   resetNavigationState();
 
