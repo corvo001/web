@@ -11,7 +11,7 @@
   let updateEyeFromPointer = null;
   const eyeShakeDuration = 720;
   const eyeDiveDuration = 1120;
-  const projectEntryDuration = 1780;
+  const projectDepartureDuration = 1420;
   const projectReturnDuration = 1080;
 
   const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
@@ -118,7 +118,7 @@
     return { portal, backdrop, signal, title };
   };
 
-  const animateProjectPortalToElement = async (media, fromRect, onComplete, options = {}) => {
+  const animateProjectPortalToElement = async (media, fromRect, onComplete) => {
     if (media instanceof HTMLImageElement && media.decode) await media.decode().catch(() => {});
     await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
     const toRect = rectData(media.getBoundingClientRect());
@@ -127,8 +127,7 @@
       onComplete?.(toRect);
       return;
     }
-    const cinematic = options.cinematic === true;
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, toRect, options.label);
+    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, toRect);
     media.style.visibility = 'hidden';
     portal.classList.add('no-transition');
     backdrop.classList.add('no-transition', 'is-active');
@@ -137,15 +136,8 @@
     portal.classList.remove('no-transition');
     backdrop.classList.remove('no-transition');
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-      if (cinematic) {
-        portal.classList.add('is-entering-world');
-        backdrop.classList.add('is-entering-world');
-        signal.classList.add('is-active');
-        title.classList.add('is-active');
-      } else {
-        portal.classList.add('is-at-target');
-        backdrop.classList.remove('is-active');
-      }
+      portal.classList.add('is-at-target');
+      backdrop.classList.remove('is-active');
     }));
 
     window.setTimeout(() => {
@@ -155,7 +147,26 @@
       title.remove();
       media.style.visibility = '';
       onComplete?.(toRect);
-    }, (cinematic ? projectEntryDuration : projectReturnDuration) + 80);
+    }, projectReturnDuration + 80);
+  };
+
+  const departIntoProject = (link, media, fromRect, label) => {
+    const worldRect = { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label);
+    media.style.visibility = 'hidden';
+    link.classList.add('is-launching');
+    document.body.classList.add('project-portal-leaving');
+    void portal.offsetWidth;
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      portal.classList.add('is-departing-world');
+      backdrop.classList.add('is-departing-world');
+      signal.classList.add('is-departing');
+      title.classList.add('is-departing');
+    }));
+    window.setTimeout(() => {
+      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect: worldRect, label });
+      window.location.assign(link.href);
+    }, projectDepartureDuration);
   };
 
   const showProjectArrival = () => {
@@ -169,7 +180,7 @@
     writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()) });
     animateProjectPortalToElement(media, state.rect, (heroRect) => {
       writeProjectTransition({ id: state.id, phase: 'inside', heroRect });
-    }, { cinematic: true, label: state.label });
+    });
   };
 
   const showProjectReturn = () => {
@@ -311,10 +322,7 @@
       event.preventDefault();
       const rect = rectData(media.getBoundingClientRect());
       const label = link.querySelector('h3')?.textContent.trim() || link.dataset.projectId;
-      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect, label });
-      link.classList.add('is-launching');
-      document.body.classList.add('project-portal-leaving');
-      window.setTimeout(() => window.location.assign(link.href), 240);
+      departIntoProject(link, media, rect, label);
     });
   });
 
