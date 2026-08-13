@@ -246,10 +246,10 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 @keyframes pupil-emerge {
   0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); }
-  68% { filter: blur(0); }
-  82% { transform: translate(-50%, -50%) scale(.94); }
-  91% { transform: translate(-50%, -50%) scale(1.1); }
-  99.5% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  64% { filter: blur(0); }
+  76% { transform: translate(-50%, -50%) scale(.94); }
+  84% { transform: translate(-50%, -50%) scale(1.08); }
+  91%, 97% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 @keyframes iris-dive {
@@ -260,10 +260,10 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   100% { opacity: 0; transform: scale(2.4); }
 }
 @keyframes iris-emerge {
-  0%, 58% { opacity: 0; transform: scale(2.2); }
-  76% { opacity: .28; transform: scale(1.2); }
-  90% { opacity: .9; transform: scale(.9); }
-  100% { opacity: 0; transform: scale(1); }
+  0%, 54% { opacity: 0; transform: scale(2.2); }
+  70% { opacity: .28; transform: scale(1.2); }
+  80% { opacity: .82; transform: scale(.9); }
+  88%, 100% { opacity: 0; transform: scale(1); }
 }
 @keyframes signal-lock {
   0%, 13%, 29%, 47%, 68%, 84%, 100% { transform: translate(0,0); clip-path: inset(0); }
