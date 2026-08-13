@@ -48,13 +48,6 @@
     <link rel="preconnect" href="https://fonts.cdnfonts.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet">
-    {% if page.layout == 'project' %}
-    <script>
-      try {
-        if (sessionStorage.getItem('portfolio-project-transition')) document.documentElement.classList.add('project-entry-boot');
-      } catch (error) {}
-    </script>
-    {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">

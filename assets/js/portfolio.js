@@ -227,9 +227,7 @@
       return;
     }
     writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()), shape: state.shape });
-    animateProjectPortalToElement(media, state.rect, (heroRect) => {
-      writeProjectTransition({ id: state.id, phase: 'inside', heroRect, shape: state.shape });
-    }, state.shape === 'diamond' ? 'diamond-origin' : '');
+    document.documentElement.classList.remove('project-entry-boot');
   };
 
   const showProjectReturn = () => {
