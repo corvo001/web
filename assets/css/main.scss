@@ -178,6 +178,11 @@ code, pre, .technical-meta { font-family: var(--mono); }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
 .gate-exiting .gate-preview { filter: blur(16px) brightness(.62); transform: scale(1.16); transition: filter 850ms ease, transform 980ms cubic-bezier(.65,0,.35,1); }
 .gate-exiting .pupil-transition { animation: pupil-dive 980ms cubic-bezier(.65,0,.35,1) forwards; }
+.gate-entering .gate-inner { animation: gate-eye-return 980ms cubic-bezier(.65,0,.35,1) both; }
+.gate-entering .reactive-mark { animation: mark-eye-return 980ms cubic-bezier(.65,0,.35,1) both; }
+.gate-entering .language-options { animation: gate-copy-return 720ms 280ms cubic-bezier(.22,1,.36,1) both; }
+.gate-entering .gate-preview { animation: preview-eye-return 980ms cubic-bezier(.65,0,.35,1) both; }
+.gate-entering .pupil-transition { animation: pupil-emerge 980ms cubic-bezier(.65,0,.35,1) both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -195,6 +200,24 @@ code, pre, .technical-meta { font-family: var(--mono); }
   0% { opacity: 0; transform: translate(-50%, -50%) scale(.55); }
   7% { opacity: 1; }
   100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); }
+}
+@keyframes pupil-emerge {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); }
+  88% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(.55); }
+}
+@keyframes gate-eye-return { from { transform: scale(1.28); } to { transform: none; } }
+@keyframes mark-eye-return {
+  from { transform: perspective(800px) scale(1.35); filter: blur(.5px); }
+  to { transform: perspective(800px) scale(1); filter: blur(0); }
+}
+@keyframes gate-copy-return {
+  from { opacity: 0; transform: translateY(.25rem); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes preview-eye-return {
+  from { filter: blur(16px) brightness(.62); transform: scale(1.16); }
+  to { filter: blur(12px); transform: scale(1.035); }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(.3rem); filter: blur(2px); } to { opacity: 1; transform: none; filter: blur(0); } }
 
