@@ -16,7 +16,7 @@
     <img src="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" alt="">
   </a>
   <div class="nav-links">
-    <a href="{{ work_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.work }}</a>
+    <a href="{{ work_url | relative_url }}?v={{ site.time | date: '%s' }}" data-work-entry data-work-label="{{ t.work.archive }}">{{ t.nav.work }}</a>
     <a href="{{ about_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.about }}</a>
     <a href="{{ contact_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.contact }}</a>
   </div>

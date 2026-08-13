@@ -5,6 +5,7 @@
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   const projectTransitionKey = 'portfolio-project-transition';
+  const archiveTransitionKey = 'portfolio-archive-transition';
   let gateEntrancePlayed = false;
   let eyeTrackingLocked = false;
   let lastPointerPosition = null;
@@ -70,7 +71,9 @@
 
   const resetNavigationState = () => {
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'gate-return-boot');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
+    document.documentElement.classList.remove('archive-entry-boot');
+    document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
@@ -82,6 +85,37 @@
   };
 
   const writeProjectTransition = (value) => sessionStorage.setItem(projectTransitionKey, JSON.stringify(value));
+
+  const createArchiveTransition = (label) => {
+    const transition = document.createElement('div');
+    transition.className = 'archive-transition';
+    transition.setAttribute('aria-hidden', 'true');
+    transition.innerHTML = `
+      <span class="archive-transition__grid"></span>
+      <span class="archive-transition__scan"></span>
+      <span class="archive-transition__frame archive-transition__frame--outer"></span>
+      <span class="archive-transition__frame archive-transition__frame--inner"></span>
+      <span class="archive-transition__shutter archive-transition__shutter--left"></span>
+      <span class="archive-transition__shutter archive-transition__shutter--right"></span>
+      <span class="archive-transition__meta">DC / PRIVATE INVENTORY / 001</span>
+      <strong class="archive-transition__title">${label}</strong>
+      <span class="archive-transition__status">ACCESS GRANTED · INDEXING ARTIFACTS</span>`;
+    document.documentElement.appendChild(transition);
+    return transition;
+  };
+
+  const showArchiveArrival = () => {
+    const label = sessionStorage.getItem(archiveTransitionKey);
+    if (!label || !document.body.classList.contains('work-page') || reduceMotion.matches) {
+      document.documentElement.classList.remove('archive-entry-boot');
+      return;
+    }
+    sessionStorage.removeItem(archiveTransitionKey);
+    const transition = createArchiveTransition(label);
+    transition.classList.add('is-arriving');
+    document.documentElement.classList.remove('archive-entry-boot');
+    window.setTimeout(() => transition.remove(), 1380);
+  };
 
   const rectData = (rect) => ({
     left: rect.left,
@@ -263,6 +297,7 @@
       resetNavigationState();
       showProjectArrival();
       showProjectReturn();
+      showArchiveArrival();
     }
   });
   window.addEventListener('pagehide', () => {
@@ -407,16 +442,31 @@
     next?.addEventListener('click', chooseNext);
   });
 
+  document.querySelectorAll('[data-work-entry]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+      const target = new URL(link.href, window.location.href);
+      if (target.pathname === window.location.pathname) return;
+      event.preventDefault();
+      const label = link.dataset.workLabel || link.textContent.trim();
+      sessionStorage.setItem(archiveTransitionKey, label);
+      const transition = createArchiveTransition(label);
+      document.body.classList.add('archive-leaving');
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => transition.classList.add('is-departing')));
+      window.setTimeout(() => window.location.assign(target.href), 1720);
+    });
+  });
+
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-project-link') || reduceMotion.matches || event.defaultPrevented) return;
+      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || reduceMotion.matches || event.defaultPrevented) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
       const target = new URL(link.href, window.location.href);
       if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;
       if (target.pathname === window.location.pathname && target.search === window.location.search && target.hash) return;
       event.preventDefault();
       document.body.classList.add('page-leaving');
-      window.setTimeout(() => window.location.assign(target.href), 320);
+      window.setTimeout(() => window.location.assign(target.href), 220);
     });
   });
 

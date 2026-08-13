@@ -11,6 +11,7 @@ es:
     interest: "¿TE INTERESA?"
   work:
     title: "PROYECTOS"
+    archive: "INVENTARIO DE PROYECTOS"
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
     back_to_hall: "Volver al inicio"
@@ -42,6 +43,7 @@ en:
     interest: "INTERESTED?"
   work:
     title: "PROJECTS"
+    archive: "PROJECT INVENTORY"
     previous: "Previous project"
     next: "Next project"
     back_to_hall: "Back to the top"
