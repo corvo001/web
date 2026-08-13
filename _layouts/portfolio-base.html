@@ -23,6 +23,13 @@
       } catch (error) {}
     </script>
     {% endif %}
+    {% if page.layout == 'project' %}
+    <script>
+      try {
+        if (sessionStorage.getItem('portfolio-project-transition')) document.documentElement.classList.add('project-entry-boot');
+      } catch (error) {}
+    </script>
+    {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body class="portfolio-shell{% if page.body_class %} {{ page.body_class }}{% endif %}">

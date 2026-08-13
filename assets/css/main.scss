@@ -431,12 +431,31 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-card:hover::before, .project-card:focus-visible::before { opacity: 1; }
 .project-card:hover .project-card__content, .project-card:focus-visible .project-card__content { opacity: 1; transform: none; }
 .project-card:hover p, .project-card:focus-visible p { opacity: 1; }
-.project-portal {
-  position: fixed; z-index: 200; margin: 0; object-fit: cover; pointer-events: none;
-  transform-origin: center; will-change: left, top, width, height, filter;
-  transition: left 820ms cubic-bezier(.65,0,.35,1), top 820ms cubic-bezier(.65,0,.35,1), width 820ms cubic-bezier(.65,0,.35,1), height 820ms cubic-bezier(.65,0,.35,1), filter 820ms ease;
+html.project-entry-boot body { opacity: 0; }
+.project-portal-backdrop {
+  position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
+  transition: opacity 920ms cubic-bezier(.4,0,.2,1); will-change: opacity;
 }
-.project-portal.is-entering { left: 0 !important; top: 0 !important; width: 100vw !important; height: 100vh !important; filter: brightness(.55) saturate(.9); }
+.project-portal-backdrop.is-active { opacity: 1; }
+.project-portal {
+  position: fixed; z-index: 200; margin: 0; overflow: hidden; pointer-events: none;
+  transform: translate3d(0,0,0) scale(1); transform-origin: center; contain: strict;
+  box-shadow: 0 0 0 1px var(--line); will-change: transform, filter, border-radius;
+  transition: transform 920ms cubic-bezier(.7,0,.22,1), filter 920ms ease, border-radius 920ms ease, box-shadow 920ms ease;
+}
+.project-portal::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at center, transparent 38%, rgba(2,3,2,.48) 100%);
+  transition: opacity 920ms ease;
+}
+.project-portal__media { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.001); transition: transform 920ms cubic-bezier(.7,0,.22,1), filter 920ms ease; }
+.project-portal.is-fullscreen {
+  transform: translate3d(var(--portal-x),var(--portal-y),0) scale(var(--portal-scale));
+  filter: brightness(.62) saturate(.88); border-radius: 1px; box-shadow: none;
+}
+.project-portal.is-fullscreen::after { opacity: 1; }
+.project-portal.is-fullscreen .project-portal__media { transform: scale(1.045); filter: contrast(1.04); }
+.project-portal.no-transition, .project-portal.no-transition::after, .project-portal.no-transition .project-portal__media, .project-portal-backdrop.no-transition { transition: none !important; }
 .project-portal-leaving .portfolio-nav, .project-portal-leaving .section-heading, .project-portal-leaving .project-controls, .project-portal-leaving .project-card__content { opacity: 0; transition: opacity 180ms ease; }
 
 /* Internal portfolio pages */

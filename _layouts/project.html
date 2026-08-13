@@ -11,11 +11,11 @@ layout: portfolio-base
     <span class="technical-meta">{{ project.year }} / {{ project.status[page.lang] }}</span>
     <h1 class="project-display">{{ project.name }}</h1>
   </header>
-  <div class="project-hero-media">
+  <div class="project-hero-media" data-project-hero data-project-id="{{ project.id }}">
     {% if project.video %}
-      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay controls aria-label="{{ project.name }}"></video>
+      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay controls aria-label="{{ project.name }}" data-project-hero-media></video>
     {% else %}
-      <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}">
+      <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}" data-project-hero-media>
     {% endif %}
   </div>
   <div class="project-facts">
