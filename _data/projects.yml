@@ -6,11 +6,11 @@
     es: "En desarrollo"
     en: "In development"
   image: "/assets/images/aiden/aiden-cover.jpg"
-  technologies: [Python, OSINT, Debian, Termux]
+  technologies: [Python, OSINT, Debian]
   repository: ""
   summary:
-    es: "Plataforma modular para investigación OSINT, correlación de identidades y análisis de información pública."
-    en: "A modular platform for OSINT research, identity correlation and public-information analysis."
+    es: "AIDEN es una plataforma modular de investigación OSINT diseñada para descubrir, correlacionar y organizar información pública procedente de distintas fuentes. Su arquitectura integra herramientas especializadas dentro de un flujo reproducible, facilitando el análisis de identidades, relaciones y resultados sin perder trazabilidad durante la investigación."
+    en: "AIDEN is a modular OSINT research platform designed to discover, correlate and organise public information from multiple sources. Its architecture brings specialist tools into one reproducible workflow, making it easier to analyse identities, relationships and results while preserving traceability throughout an investigation."
   gallery:
     - "/assets/images/aiden/aiden-results-graph.jpg"
     - "/assets/images/aiden/aiden-maigret-terminal.jpg"
@@ -22,11 +22,11 @@
     es: "Prototipo"
     en: "Prototype"
   image: "/assets/images/swarm/DysonSwarm.png"
-  technologies: [Simulation, Real-time, Visualisation]
+  technologies: [Simulation, Real-time, Orbital systems]
   repository: "https://github.com/corvo001/DysonSwarm"
   summary:
-    es: "Simulador interactivo de arquitecturas orbitales y captación energética mediante enjambres de satélites."
-    en: "An interactive simulator for orbital architectures and energy capture through satellite swarms."
+    es: "Dyson Swarm es un simulador interactivo para diseñar y explorar enjambres de satélites alrededor de una estrella. Permite modificar su cantidad, escala y distribución orbital en tiempo real, observar métricas de cobertura y captación energética, y comparar diferentes arquitecturas de colectores solares a escala astronómica."
+    en: "Dyson Swarm is an interactive simulator for designing and exploring satellite swarms around a star. It allows their quantity, scale and orbital distribution to be adjusted in real time, exposes coverage and energy-capture metrics, and supports comparison between different astronomical-scale solar collector architectures."
   gallery:
     - "/assets/images/swarm/DysonSwarm_2.png"
     - "/assets/images/swarm/DysonSwarm_3.png"
@@ -41,8 +41,8 @@
   technologies: [Fractals, Generative systems, Real-time]
   repository: "https://github.com/corvo001/UNION"
   summary:
-    es: "Motor experimental para generar, deformar y analizar geometrías fractales en tiempo real."
-    en: "An experimental engine for generating, shaping and analysing fractal geometries in real time."
+    es: "UNION es un motor experimental para generar, transformar y analizar geometrías fractales en tiempo real. Combina funciones matemáticas, deformaciones y morfología dinámica en un entorno manipulable, pensado para descubrir patrones y explorar aplicaciones de la geometría compleja en investigación, arte generativo y prototipado visual."
+    en: "UNION is an experimental engine for generating, transforming and analysing fractal geometries in real time. It combines mathematical functions, deformation and dynamic morphology in a manipulable environment built to uncover patterns and explore complex geometry across research, generative art and visual prototyping."
   gallery:
     - "/assets/images/union/capture_144410.png"
     - "/assets/images/union/capture_144459.png"
