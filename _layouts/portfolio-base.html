@@ -1,3 +1,4 @@
+{% assign active_body_class = page.body_class | default: layout.body_class %}
 <!doctype html>
 <html lang="{{ page.lang | default: 'es' }}">
   <head>
@@ -27,6 +28,9 @@
     <link rel="icon" href="{{ '/assets/images/favicon-v2.ico' | relative_url }}" sizes="any">
     <link rel="icon" href="{{ '/assets/images/favicon-v2.png' | relative_url }}" type="image/png" sizes="512x512">
     <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v2.png' | relative_url }}" sizes="180x180">
+    {% if active_body_class == 'language-page' %}
+    <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
+    {% endif %}
     <meta name="theme-color" content="#090b0a" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +38,7 @@
     <link rel="preconnect" href="https://fonts.cdnfonts.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet">
-    {% if page.body_class == 'language-page' %}
+    {% if active_body_class == 'language-page' %}
     <script>
       try {
         if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
@@ -52,7 +56,7 @@
     {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
-  <body class="portfolio-shell{% if page.body_class %} {{ page.body_class }}{% endif %}">
+  <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">
     {{ content }}
     <script src="{{ '/assets/js/portfolio.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
   </body>

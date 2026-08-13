@@ -26,7 +26,14 @@
   const waitForGateLayout = async () => {
     const image = mark?.querySelector('.reactive-mark__image');
     const waits = [];
-    if (document.fonts?.ready) waits.push(document.fonts.ready);
+    // External font hosts must never hold the eye behind the return veil.
+    // The short ceiling still lets cached fonts settle before geometry is read.
+    if (document.fonts?.ready) {
+      waits.push(Promise.race([
+        document.fonts.ready,
+        new Promise((resolve) => window.setTimeout(resolve, 120))
+      ]));
+    }
     if (image?.decode) waits.push(image.decode().catch(() => {}));
     await Promise.all(waits);
     await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
