@@ -571,6 +571,9 @@ html.project-entry-boot body { opacity: 0; }
 .about-process::before { left: 0; background: linear-gradient(90deg, var(--ink), transparent); }
 .about-process::after { right: 0; background: linear-gradient(-90deg, var(--ink), transparent); }
 .about-process__visual { display: block; width: 100%; height: auto; }
+@media (min-width: 701px) {
+  .about-process__visual { transform: translateY(-140px); margin-bottom: -140px; }
+}
 .about-process__grid { color: var(--text); }
 .about-process__route { opacity: .8; }
 .about-process__idea { fill: currentColor; stroke: currentColor; stroke-width: 1; stroke-opacity: .28; }
