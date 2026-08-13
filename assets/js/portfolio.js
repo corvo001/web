@@ -26,8 +26,9 @@
 
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
+    const anchor = mark?.querySelector('.reactive-mark__transition-anchor');
     const transition = document.querySelector('[data-pupil-transition]');
-    if (!pupil || !transition) return false;
+    if (!pupil || !anchor || !transition) return false;
 
     // The pupil follows the pointer. Always transition through its real,
     // centered resting position so the circle cannot drift between frames.
@@ -35,8 +36,8 @@
     mark.style.setProperty('--ry', '0deg');
     mark.style.setProperty('--px', '0px');
     mark.style.setProperty('--py', '0px');
-    void pupil.offsetWidth;
-    const rect = pupil.getBoundingClientRect();
+    void anchor.offsetWidth;
+    const rect = anchor.getBoundingClientRect();
     const size = Math.max(rect.width, 1);
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
