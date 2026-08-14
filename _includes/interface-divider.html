@@ -1,0 +1,19 @@
+<svg class="interface-divider interface-divider--{{ include.position }}" viewBox="0 0 1440 22" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="interface-signal-{{ include.position }}" x1="0" y1="0" x2="1" y2="0">
+      <stop class="interface-divider__stop interface-divider__stop--edge" offset="0"/>
+      <stop class="interface-divider__stop interface-divider__stop--quiet" offset=".22"/>
+      <stop class="interface-divider__stop interface-divider__stop--active" offset=".5"/>
+      <stop class="interface-divider__stop interface-divider__stop--quiet" offset=".78"/>
+      <stop class="interface-divider__stop interface-divider__stop--edge" offset="1"/>
+    </linearGradient>
+    <path id="interface-path-{{ include.position }}" d="M0 11H330C390 11 404 6 450 6s64 10 110 10 64-7 110-7c22 0 30-6 50-6s28 16 48 16 28-7 50-7c46 0 64-6 110-6s64 10 110 10 60-5 120-5h282"/>
+  </defs>
+  <use class="interface-divider__line" href="#interface-path-{{ include.position }}"/>
+  <use class="interface-divider__signal" href="#interface-path-{{ include.position }}" stroke="url(#interface-signal-{{ include.position }})"/>
+  <path class="interface-divider__cursor" d="M0-2.5V2.5">
+    <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto">
+      <mpath href="#interface-path-{{ include.position }}"/>
+    </animateMotion>
+  </path>
+</svg>

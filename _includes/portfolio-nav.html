@@ -21,4 +21,5 @@
     <a href="{{ contact_url | relative_url }}?v={{ site.time | date: '%s' }}">{{ t.nav.contact }}</a>
   </div>
   <a class="language-switch" href="{{ '/' | relative_url }}?v={{ site.time | date: '%s' }}" aria-label="Language selection / Selección de idioma" data-language-menu>{{ other_lang }}</a>
+  {% include interface-divider.html position='nav' %}
 </nav>

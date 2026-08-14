@@ -13,7 +13,17 @@ layout: portfolio-base
   </header>
   <div class="project-hero-media" data-project-hero data-project-id="{{ project.id }}">
     {% if project.video %}
-      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay controls aria-label="{{ project.name }}" data-project-hero-media></video>
+      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="auto" controls aria-label="{{ project.name }}" data-project-hero-media></video>
+      <div class="project-video-controls" data-project-video-controls hidden>
+        <button class="project-video-toggle" type="button" aria-label="{{ t.project.pause }}" data-project-video-toggle data-label-play="{{ t.project.play }}" data-label-pause="{{ t.project.pause }}">
+          <span class="project-video-toggle__icon" aria-hidden="true"></span>
+        </button>
+        <input class="project-video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="{{ t.project.progress }}" data-project-video-progress>
+        <output class="project-video-time" aria-live="off"><span data-project-video-current>0:00</span><span aria-hidden="true"> / </span><span data-project-video-duration>0:00</span></output>
+        <button class="project-video-fullscreen" type="button" aria-label="{{ t.project.fullscreen }}" data-project-video-fullscreen>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7V3.5H7M13 3.5h3.5V7M16.5 13v3.5H13M7 16.5H3.5V13"/></svg>
+        </button>
+      </div>
     {% else %}
       <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}" data-project-hero-media>
     {% endif %}

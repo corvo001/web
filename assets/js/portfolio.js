@@ -6,42 +6,31 @@
   const eyeReturnKey = 'portfolio-eye-return';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
-  let gateEntrancePlayed = false;
   let eyeTrackingLocked = false;
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
   const eyePrepareDuration = 420;
-  const eyeSettleDuration = 560;
   const eyeDiveDuration = 1120;
-  const eyeSettleOverlap = 360;
-  const projectDepartureDuration = 1050;
-  const projectReturnDuration = 620;
-  const projectDisplayFontReady = document.fonts?.load
-    ? document.fonts.load('400 4rem "Dune Rise"', 'DYSON SWARM').then((fonts) => fonts.length > 0).catch(() => false)
-    : Promise.resolve(false);
+  const eyeCodeDuration = 1640;
+  const projectDepartureDuration = 900;
+  const archiveDepartureDuration = 1280;
+  const archiveArrivalDuration = 900;
+  const pageDepartureDuration = 280;
+  let projectDisplayFontAvailable = false;
 
-  const gateShouldReturn = () => history.state?.eyeGateReturn === true ||
+  if (document.fonts?.load) {
+    document.fonts.load('400 4rem "Dune Rise"', 'DYSON SWARM')
+      .then((fonts) => { projectDisplayFontAvailable = fonts.length > 0; })
+      .catch(() => {});
+  }
+
+  const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+  const gateHasReturnState = () => history.state?.eyeGateReturn === true ||
     sessionStorage.getItem(eyeReturnKey) === '1' ||
     sessionStorage.getItem(eyeSessionKey) === '1';
 
-  eyeTrackingLocked = gateShouldReturn();
-
-  const waitForGateLayout = async () => {
-    const image = mark?.querySelector('.reactive-mark__image');
-    const waits = [];
-    // External font hosts must never hold the eye behind the return veil.
-    // The short ceiling still lets cached fonts settle before geometry is read.
-    if (document.fonts?.ready) {
-      waits.push(Promise.race([
-        document.fonts.ready,
-        new Promise((resolve) => window.setTimeout(resolve, 120))
-      ]));
-    }
-    if (image?.decode) waits.push(image.decode().catch(() => {}));
-    await Promise.all(waits);
-    await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
-  };
+  eyeTrackingLocked = gate && document.documentElement.classList.contains('gate-natural-entry');
 
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
@@ -70,11 +59,32 @@
     return true;
   };
 
+  const nextPaint = () => new Promise((resolve) => {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
+  });
+
+  const waitForMotion = (element, eventName, duration, propertyName = '') => new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      element?.removeEventListener(eventName, onEnd);
+      resolve();
+    };
+    const onEnd = (event) => {
+      if (event.target !== element) return;
+      if (propertyName && event.propertyName !== propertyName && event.animationName !== propertyName) return;
+      finish();
+    };
+    const timeout = window.setTimeout(finish, duration + 180);
+    element?.addEventListener(eventName, onEnd);
+  });
+
   const resetNavigationState = () => {
     navigationInProgress = false;
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
-    document.documentElement.classList.remove('archive-entry-boot');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -106,199 +116,205 @@
     return transition;
   };
 
-  const showArchiveArrival = () => {
+  const showArchiveArrival = async () => {
+    let state = null;
+    try { state = JSON.parse(sessionStorage.getItem(archiveTransitionKey) || 'null'); }
+    catch (error) { state = null; }
     sessionStorage.removeItem(archiveTransitionKey);
+
+    if (!state || !document.body.classList.contains('work-page') || reduceMotion.matches) {
+      document.documentElement.classList.remove('archive-entry-boot');
+      return;
+    }
+
+    const transition = createArchiveTransition(state.label || '', state.status || '');
+    transition.classList.add('is-arriving');
     document.documentElement.classList.remove('archive-entry-boot');
+    await waitForMotion(transition, 'animationend', archiveArrivalDuration, 'archive-shell-out');
+    transition.remove();
   };
 
-  const rectData = (rect) => ({
-    left: rect.left,
-    top: rect.top,
-    width: Math.max(rect.width, 1),
-    height: Math.max(rect.height, 1)
-  });
-
-  const validRect = (rect) => rect && [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) && rect.width > 0 && rect.height > 0;
-
-  const createProjectPortal = (media, fromRect, toRect, label = '', useDisplayFont = true, shapeMode = '') => {
-    const portal = document.createElement('div');
+  const createProjectDeparture = (label = '', useDisplayFont = true) => {
     const backdrop = document.createElement('span');
-    const signal = label ? document.createElement('span') : null;
     const title = label ? document.createElement('strong') : null;
-    const clone = media instanceof HTMLVideoElement ? document.createElement('img') : media.cloneNode(true);
-    const translateX = toRect.left - fromRect.left;
-    const translateY = toRect.top - fromRect.top;
-    const scaleX = toRect.width / fromRect.width;
-    const scaleY = toRect.height / fromRect.height;
-    const worldScale = Math.max(window.innerWidth / fromRect.width, window.innerHeight / fromRect.height) * 1.12;
-    const worldX = ((window.innerWidth - (fromRect.width * worldScale)) / 2) - fromRect.left;
-    const worldY = ((window.innerHeight - (fromRect.height * worldScale)) / 2) - fromRect.top;
-
-    if (media instanceof HTMLVideoElement) clone.src = media.poster;
-    clone.removeAttribute('loading');
-    clone.removeAttribute('controls');
-    clone.removeAttribute('data-project-media');
-    clone.removeAttribute('data-project-hero-media');
-    clone.className = 'project-portal__media';
-    portal.className = 'project-portal';
-    if (shapeMode) portal.classList.add(`project-portal--${shapeMode}`);
     backdrop.className = 'project-portal-backdrop';
-    if (signal && title) {
-      signal.className = 'project-world-signal';
+    if (title) {
       title.className = `project-world-title${useDisplayFont ? ' project-display' : ' project-world-title--fallback'}`;
       title.textContent = label;
     }
-    Object.assign(portal.style, {
-      left: `${fromRect.left}px`, top: `${fromRect.top}px`, width: `${fromRect.width}px`, height: `${fromRect.height}px`,
-      '--portal-x': `${translateX}px`, '--portal-y': `${translateY}px`,
-      '--portal-scale-x': scaleX, '--portal-scale-y': scaleY,
-      '--portal-world-x': `${worldX}px`, '--portal-world-y': `${worldY}px`, '--portal-world-scale': worldScale
-    });
-    portal.appendChild(clone);
-    if (clone instanceof HTMLVideoElement) {
-      clone.muted = true;
-      clone.play().catch(() => {});
-    }
-    if (signal && title) document.documentElement.append(backdrop, signal, portal, title);
-    else document.documentElement.append(backdrop, portal);
-    return { portal, backdrop, signal, title };
+    if (title) document.documentElement.append(backdrop, title);
+    else document.documentElement.append(backdrop);
+    return { backdrop, title };
   };
 
-  const animateProjectPortalToElement = async (media, fromRect, onComplete, shapeMode = '') => {
-    if (media instanceof HTMLImageElement && media.decode) await media.decode().catch(() => {});
-    await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
-    const toRect = rectData(media.getBoundingClientRect());
-    if (!validRect(fromRect) || !validRect(toRect)) {
-      document.documentElement.classList.remove('project-entry-boot');
-      onComplete?.(toRect);
-      return;
-    }
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, toRect, '', true, shapeMode);
-    media.style.visibility = 'hidden';
-    portal.classList.add('no-transition');
-    backdrop.classList.add('no-transition', 'is-active');
-    document.documentElement.classList.remove('project-entry-boot');
-    void portal.offsetWidth;
-    portal.classList.remove('no-transition');
-    backdrop.classList.remove('no-transition');
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-      portal.classList.add('is-at-target');
-      backdrop.classList.remove('is-active');
-    }));
-
-    window.setTimeout(() => {
-      portal.remove();
-      backdrop.remove();
-      signal?.remove();
-      title?.remove();
-      media.style.visibility = '';
-      onComplete?.(toRect);
-    }, projectReturnDuration + 80);
-  };
-
-  const departIntoProject = (link, media, fromRect, label, useDisplayFont) => {
+  const departIntoProject = async (link, media, label, useDisplayFont) => {
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
-    const worldRect = { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-    const diamondOrigin = link.classList.contains('project-index-card');
-    const { portal, backdrop, signal, title } = createProjectPortal(media, fromRect, worldRect, label, useDisplayFont, diamondOrigin ? 'diamond-origin' : '');
+    const { backdrop, title } = createProjectDeparture(label, useDisplayFont);
     media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
-    void portal.offsetWidth;
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-      portal.classList.add('is-departing-world');
-      backdrop.classList.add('is-departing-world');
-      signal.classList.add('is-departing');
-      title.classList.add('is-departing');
-    }));
-    window.setTimeout(() => {
-      writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', rect: worldRect, label, shape: diamondOrigin ? 'diamond' : '' });
-      window.location.assign(link.href);
-    }, projectDepartureDuration);
+    void backdrop.offsetWidth;
+    await nextPaint();
+    backdrop.classList.add('is-departing-world');
+    title?.classList.add('is-departing');
+    await waitForMotion(backdrop, 'animationend', projectDepartureDuration, 'project-world-backdrop');
+    writeProjectTransition({
+      id: link.dataset.projectId,
+      phase: 'enter',
+      originUrl: window.location.href,
+      label
+    });
+    window.location.assign(link.href);
   };
 
-  const showProjectArrival = () => {
+  const showProjectArrival = async () => {
     const state = readProjectTransition();
     const hero = document.querySelector('[data-project-hero]');
     const media = hero?.querySelector('[data-project-hero-media]');
-    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media || reduceMotion.matches || !validRect(state.rect)) {
+    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media) {
+      document.documentElement.classList.remove('project-entry-boot');
+      if (state?.phase === 'enter') sessionStorage.removeItem(projectTransitionKey);
+      return;
+    }
+    if (reduceMotion.matches) {
+      writeProjectTransition({ ...state, phase: 'inside' });
       document.documentElement.classList.remove('project-entry-boot');
       return;
     }
-    writeProjectTransition({ id: state.id, phase: 'inside', heroRect: rectData(media.getBoundingClientRect()), shape: state.shape });
+    writeProjectTransition({ ...state, phase: 'inside' });
     document.documentElement.classList.remove('project-entry-boot');
   };
 
-  const showProjectReturn = () => {
-    const state = readProjectTransition();
-    if (state?.phase === 'inside' && document.body.classList.contains('work-page')) {
-      sessionStorage.removeItem(projectTransitionKey);
-    }
+  const projectVideos = [...document.querySelectorAll('video[data-project-hero-media]')];
+  const playProjectVideo = (video) => {
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    const playAttempt = video.play();
+    if (playAttempt?.catch) playAttempt.catch(() => {});
+  };
+  const resumeProjectVideos = () => projectVideos.forEach(playProjectVideo);
+
+  projectVideos.forEach((video) => {
+    video.addEventListener('loadeddata', () => playProjectVideo(video), { once: true });
+    video.addEventListener('canplay', () => playProjectVideo(video), { once: true });
+  });
+
+  const formatVideoTime = (seconds) => {
+    if (!Number.isFinite(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
   };
 
-  const showGateReturn = async () => {
-    if (!gate || reduceMotion.matches || gateEntrancePlayed || !gateShouldReturn()) {
-      document.documentElement.classList.remove('gate-return-boot');
-      return;
-    }
+  document.querySelectorAll('[data-project-video-controls]').forEach((controls) => {
+    const frame = controls.closest('[data-project-hero]');
+    const video = frame?.querySelector('video[data-project-hero-media]');
+    const toggle = controls.querySelector('[data-project-video-toggle]');
+    const progress = controls.querySelector('[data-project-video-progress]');
+    const current = controls.querySelector('[data-project-video-current]');
+    const duration = controls.querySelector('[data-project-video-duration]');
+    const fullscreen = controls.querySelector('[data-project-video-fullscreen]');
+    if (!video || !toggle || !progress || !current || !duration || !fullscreen) return;
 
-    gateEntrancePlayed = true;
-    eyeTrackingLocked = true;
-    await waitForGateLayout();
-    if (!setPupilTransitionGeometry()) {
-      gateEntrancePlayed = false;
-      return;
-    }
+    video.controls = false;
+    controls.hidden = false;
+
+    const updatePlaybackState = () => {
+      const isPlaying = !video.paused && !video.ended;
+      toggle.dataset.state = isPlaying ? 'playing' : 'paused';
+      toggle.setAttribute('aria-label', isPlaying ? toggle.dataset.labelPause : toggle.dataset.labelPlay);
+    };
+    const updateTimeline = () => {
+      const ratio = video.duration ? Math.min(video.currentTime / video.duration, 1) : 0;
+      progress.value = String(Math.round(ratio * 1000));
+      progress.style.setProperty('--video-progress', `${ratio * 100}%`);
+      current.textContent = formatVideoTime(video.currentTime);
+      duration.textContent = formatVideoTime(video.duration);
+    };
+
+    toggle.addEventListener('click', () => {
+      if (video.paused) playProjectVideo(video);
+      else video.pause();
+    });
+    progress.addEventListener('input', () => {
+      if (video.duration) video.currentTime = (Number(progress.value) / 1000) * video.duration;
+    });
+    fullscreen.addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen?.();
+      else if (frame.requestFullscreen) frame.requestFullscreen();
+      else video.webkitEnterFullscreen?.();
+    });
+    video.addEventListener('play', updatePlaybackState);
+    video.addEventListener('pause', updatePlaybackState);
+    video.addEventListener('timeupdate', updateTimeline);
+    video.addEventListener('durationchange', updateTimeline);
+    updatePlaybackState();
+    updateTimeline();
+  });
+
+  const showProjectReturn = () => {
+    const state = readProjectTransition();
+    if (state?.phase !== 'inside' || (!document.body.classList.contains('work-page') && !document.body.classList.contains('home-page'))) return;
+    sessionStorage.removeItem(projectTransitionKey);
+  };
+
+  const showResolvedGate = () => {
+    if (!gate) return;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
-    document.documentElement.classList.add('gate-return-mode');
-    document.documentElement.classList.remove('gate-exiting', 'gate-return-boot');
-    document.documentElement.classList.add('gate-entering');
+    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    document.documentElement.classList.remove('gate-natural-entry', 'gate-return-boot', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
+    document.documentElement.classList.add('gate-entrance-skip');
+    eyeTrackingLocked = false;
+    mark?.classList.remove('eye-geometry-locked');
+  };
+
+  const showNaturalGateEntrance = () => {
+    if (!gate) return;
+    sessionStorage.removeItem(eyeReturnKey);
+    sessionStorage.removeItem(eyeSessionKey);
+    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    if (reduceMotion.matches) {
+      showResolvedGate();
+      return;
+    }
+    eyeTrackingLocked = true;
     window.setTimeout(() => {
-      document.documentElement.classList.add('gate-settling');
-    }, eyeDiveDuration - eyeSettleOverlap);
-    window.setTimeout(() => {
-      document.documentElement.classList.remove('gate-entering');
-      history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    }, eyeDiveDuration);
-    window.setTimeout(() => {
-      document.documentElement.classList.remove('gate-settling');
       eyeTrackingLocked = false;
-      if (mark && lastPointerPosition && updateEyeFromPointer) {
-        mark.classList.remove('eye-geometry-locked');
-        mark.classList.add('eye-tracking-resuming');
-        updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
-        window.setTimeout(() => mark.classList.remove('eye-tracking-resuming'), 620);
-      } else {
-        mark?.classList.remove('eye-geometry-locked');
-      }
-    }, eyeDiveDuration + eyeSettleDuration - eyeSettleOverlap);
+      if (lastPointerPosition && updateEyeFromPointer) updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
+    }, eyeCodeDuration);
   };
 
   window.addEventListener('pageshow', (event) => {
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches && document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    // Never animate a document frozen by the browser's history cache. Reload it
-    // once and let the boot veil keep the transition visually continuous.
-    if (gate && event.persisted) {
-      sessionStorage.setItem(eyeReturnKey, '1');
-      window.location.reload();
-      return;
-    }
-    if (gateShouldReturn()) showGateReturn();
-    else {
-      document.documentElement.classList.remove('gate-return-boot');
+    if (gate) {
+      const skipEntrance = event.persisted || (navigationType !== 'reload' && gateHasReturnState());
+      if (skipEntrance) showResolvedGate();
+      else showNaturalGateEntrance();
+    } else {
+      const projectState = readProjectTransition();
+      if (projectState?.phase === 'enter' && document.querySelector('[data-project-hero]')) {
+        document.documentElement.classList.add('project-entry-boot');
+      }
+      if (sessionStorage.getItem(archiveTransitionKey) && document.body.classList.contains('work-page')) {
+        document.documentElement.classList.add('archive-entry-boot');
+      }
       resetNavigationState();
       showProjectArrival();
+      resumeProjectVideos();
       showProjectReturn();
       showArchiveArrival();
     }
   });
-  window.addEventListener('pagehide', () => {
-    if (gate && !reduceMotion.matches && gateShouldReturn()) document.documentElement.classList.add('gate-return-boot');
-    gateEntrancePlayed = false;
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) resumeProjectVideos();
   });
   resetNavigationState();
 
@@ -393,13 +409,12 @@
       navigationInProgress = true;
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
-      link.classList.add('is-arming');
-      const useDisplayFont = await projectDisplayFontReady;
-      if (!link.isConnected) return;
-      link.classList.remove('is-arming');
-      const rect = rectData(media.getBoundingClientRect());
+      const useDisplayFont = projectDisplayFontAvailable;
       const label = link.querySelector('h3')?.textContent.trim() || link.dataset.projectId;
-      departIntoProject(link, media, rect, label, useDisplayFont);
+      departIntoProject(link, media, label, useDisplayFont).catch(() => {
+        writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', label });
+        window.location.assign(link.href);
+      });
     });
   });
 
@@ -489,7 +504,7 @@
       if (window.location.pathname.startsWith(target.pathname)) {
         sessionStorage.removeItem(archiveTransitionKey);
         document.body.classList.add('page-leaving');
-        window.setTimeout(() => window.location.assign(target.href), 360);
+        window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
         return;
       }
       const label = link.dataset.workLabel || link.textContent.trim();
@@ -497,8 +512,9 @@
       sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, status }));
       const transition = createArchiveTransition(label, status);
       document.body.classList.add('archive-leaving');
-      window.requestAnimationFrame(() => window.requestAnimationFrame(() => transition.classList.add('is-departing')));
-      window.setTimeout(() => window.location.assign(target.href), 1720);
+      nextPaint().then(() => transition.classList.add('is-departing'));
+      waitForMotion(transition, 'animationend', archiveDepartureDuration, 'archive-shell-in')
+        .then(() => window.location.assign(target.href));
     });
   });
 
@@ -514,8 +530,9 @@
       navigationInProgress = true;
       document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
+      if (!/^\/(?:es|en)\/$/.test(target.pathname)) sessionStorage.removeItem(projectTransitionKey);
       document.body.classList.add('page-leaving');
-      window.setTimeout(() => window.location.assign(target.href), 360);
+      window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
     });
   });
 

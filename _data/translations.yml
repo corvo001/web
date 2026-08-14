@@ -32,6 +32,10 @@ es:
     gallery: "Galería"
     repository: "Ver repositorio"
     category: "Categoría"
+    play: "Reproducir vídeo"
+    pause: "Pausar vídeo"
+    progress: "Progreso del vídeo"
+    fullscreen: "Ver a pantalla completa"
   footer: "Portfolio técnico"
 
 en:
@@ -68,4 +72,8 @@ en:
     gallery: "Gallery"
     repository: "View repository"
     category: "Category"
+    play: "Play video"
+    pause: "Pause video"
+    progress: "Video progress"
+    fullscreen: "View fullscreen"
   footer: "Technical portfolio"

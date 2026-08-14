@@ -5,12 +5,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if active_body_class == 'language-page' %}
-    <style>html.gate-return-boot{background:#020302}html.gate-return-boot body{visibility:hidden}</style>
     <script>
       try {
-        if (history.state?.eyeGateReturn === true || sessionStorage.getItem('portfolio-eye-return') === '1' || sessionStorage.getItem('portfolio-eye-entered') === '1') {
-          document.documentElement.classList.add('gate-return-boot', 'gate-return-mode');
+        const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+        const returningFromPortfolio = navigationType !== 'reload' && (
+          history.state?.eyeGateReturn === true ||
+          sessionStorage.getItem('portfolio-eye-return') === '1' ||
+          sessionStorage.getItem('portfolio-eye-entered') === '1'
+        );
+        document.documentElement.classList.add(returningFromPortfolio ? 'gate-entrance-skip' : 'gate-natural-entry');
+      } catch (error) {
+        document.documentElement.classList.add('gate-natural-entry');
+      }
+    </script>
+    {% endif %}
+    {% if page.layout == 'project' or active_body_class == 'work-page' %}
+    <script>
+      try {
+        const projectTransition = JSON.parse(sessionStorage.getItem('portfolio-project-transition') || 'null');
+        if ('{{ page.layout }}' === 'project' && projectTransition?.phase === 'enter') {
+          document.documentElement.classList.add('project-entry-boot');
         }
+        if ('{{ active_body_class }}' === 'work-page' && sessionStorage.getItem('portfolio-archive-transition')) {
+          document.documentElement.classList.add('archive-entry-boot');
+        }
+        window.setTimeout(() => document.documentElement.classList.remove('project-entry-boot', 'archive-entry-boot'), 2400);
       } catch (error) {}
     </script>
     {% endif %}
