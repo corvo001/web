@@ -480,11 +480,11 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .interface-divider__signal { stroke-width: 1; }
 .interface-divider__stop { stop-color: var(--divider-accent); }
 .interface-divider__stop--edge { stop-opacity: 0; }
-.interface-divider__stop--quiet { stop-opacity: .08; }
-.interface-divider__stop--active { stop-opacity: .48; }
+.interface-divider__stop--quiet { stop-opacity: .05; }
+.interface-divider__stop--active { stop-opacity: .26; }
 .interface-divider__cursor {
-  stroke: currentColor; stroke-width: 1; stroke-linecap: round; opacity: .62;
-  filter: drop-shadow(0 0 3px rgba(130,181,152,.42));
+  stroke: currentColor; stroke-width: 1; stroke-linecap: round; opacity: .38;
+  filter: drop-shadow(0 0 2px rgba(130,181,152,.2));
 }
 .nav-logo {
   --nav-pupil-x: 0px; --nav-pupil-y: 0px;
@@ -539,25 +539,25 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .hero-project::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse at center, rgba(4,6,5,.02) 0 34%, rgba(4,6,5,.12) 67%, rgba(4,6,5,.3) 100%),
-    linear-gradient(180deg, rgba(4,6,5,.28), transparent 34% 64%, rgba(4,6,5,.4));
+    radial-gradient(ellipse at center, rgba(4,6,5,.1) 0 34%, rgba(4,6,5,.2) 67%, rgba(4,6,5,.36) 100%),
+    linear-gradient(180deg, rgba(4,6,5,.36), rgba(4,6,5,.08) 34% 64%, rgba(4,6,5,.48));
   transition: background 500ms ease;
 }
 .hero-project__media {
   width: 100%; height: 100%; display: block; object-fit: cover;
-  filter: saturate(.9) brightness(.9) contrast(1.16); transform: scale(1.008);
+  filter: saturate(.72) brightness(.76) contrast(1.1); transform: scale(1.008);
   transition: filter 600ms ease, transform 1200ms cubic-bezier(.2,.7,.2,1);
 }
 /* The Dyson footage is mastered almost entirely in the lowest luminance band.
    Lift its black point independently so its particle structure survives the
    homepage treatment without overexposing the brighter project previews. */
 .hero-project[data-project-id="dyson-swarm"] .hero-project__media {
-  filter: saturate(.82) brightness(1.72) contrast(.88);
+  filter: saturate(.68) brightness(1.34) contrast(.94);
 }
 .hero-project[data-project-id="dyson-swarm"]::after {
   background:
-    radial-gradient(ellipse at center, transparent 0 42%, rgba(4,6,5,.08) 72%, rgba(4,6,5,.2) 100%),
-    linear-gradient(180deg, rgba(4,6,5,.14), transparent 32% 68%, rgba(4,6,5,.26));
+    radial-gradient(ellipse at center, rgba(4,6,5,.06) 0 42%, rgba(4,6,5,.14) 72%, rgba(4,6,5,.28) 100%),
+    linear-gradient(180deg, rgba(4,6,5,.24), rgba(4,6,5,.04) 32% 68%, rgba(4,6,5,.36));
 }
 .hero-project__interest {
   position: absolute; z-index: 2; left: 50%; top: calc(50% + clamp(4.5rem, 9vw, 8rem));
@@ -571,22 +571,22 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 .hero-project-controls .project-control { pointer-events: auto; }
 .hero-project.is-active:hover .hero-project__media,
-.hero-project.is-active:focus-visible .hero-project__media { filter: saturate(.96) brightness(.82) contrast(1.18); transform: scale(1.008); }
+.hero-project.is-active:focus-visible .hero-project__media { filter: saturate(.78) brightness(.7) contrast(1.12); transform: scale(1.008); }
 .hero-project[data-project-id="dyson-swarm"].is-active:hover .hero-project__media,
 .hero-project[data-project-id="dyson-swarm"].is-active:focus-visible .hero-project__media {
-  filter: saturate(.9) brightness(1.58) contrast(.92);
+  filter: saturate(.72) brightness(1.24) contrast(.96);
 }
 .hero-project.is-active:hover::after,
 .hero-project.is-active:focus-visible::after {
   background:
-    radial-gradient(ellipse at center, rgba(4,6,5,.08) 0 38%, rgba(4,6,5,.18) 72%, rgba(4,6,5,.34) 100%),
-    linear-gradient(180deg, rgba(4,6,5,.22), transparent 36% 62%, rgba(4,6,5,.36));
+    radial-gradient(ellipse at center, rgba(4,6,5,.14) 0 38%, rgba(4,6,5,.24) 72%, rgba(4,6,5,.4) 100%),
+    linear-gradient(180deg, rgba(4,6,5,.32), rgba(4,6,5,.1) 36% 62%, rgba(4,6,5,.44));
 }
 .hero-project[data-project-id="dyson-swarm"].is-active:hover::after,
 .hero-project[data-project-id="dyson-swarm"].is-active:focus-visible::after {
   background:
-    radial-gradient(ellipse at center, rgba(4,6,5,.02) 0 44%, rgba(4,6,5,.1) 74%, rgba(4,6,5,.22) 100%),
-    linear-gradient(180deg, rgba(4,6,5,.12), transparent 34% 66%, rgba(4,6,5,.24));
+    radial-gradient(ellipse at center, rgba(4,6,5,.1) 0 44%, rgba(4,6,5,.18) 74%, rgba(4,6,5,.3) 100%),
+    linear-gradient(180deg, rgba(4,6,5,.22), rgba(4,6,5,.06) 34% 66%, rgba(4,6,5,.34));
 }
 .hero-project.is-active:hover .hero-project__interest,
 .hero-project.is-active:focus-visible .hero-project__interest { opacity: 1; transform: translate(-50%,0); }
@@ -863,6 +863,7 @@ html.project-entry-boot body { opacity: 0; animation: none; }
 .project-main .internal-header {
   width: 100%; max-width: none; margin-inline: auto; text-align: center;
 }
+.project-main .internal-header h1 { margin-top: clamp(1.6rem, 2.5vw, 2.35rem); }
 .internal-subtitle { margin: .65rem 0 0; color: var(--accent); font: 500 .72rem/1.35 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
 .internal-copy { max-width: 52rem; color: var(--copy); font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.8; }
 .internal-main--contact { display: flex; flex-direction: column; align-items: center; text-align: center; }
