@@ -123,9 +123,9 @@ html.page-transition-boot .portfolio-shell.page-arriving {
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
 html.eye-hall-entry-boot { background: #000; overflow: hidden; }
 html.eye-hall-entry-boot body {
-  opacity: .04; animation: none; overflow: hidden;
+  opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); animation: none; overflow: hidden;
   clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%)));
-  will-change: clip-path, opacity;
+  will-change: clip-path, opacity, filter;
 }
 html.eye-hall-entry-boot.eye-hall-entering body {
   animation: hall-eye-reveal 920ms cubic-bezier(.25,.28,.55,1) both;
@@ -147,7 +147,7 @@ html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
   pointer-events: none; overflow: hidden;
   animation: hall-eye-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
-  will-change: clip-path, opacity;
+  will-change: clip-path, opacity, filter;
 }
 html.eye-gate-leaving::after {
   width: calc(var(--hall-eye-cover-radius,100vmax) * 2);
@@ -321,6 +321,10 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .gate-exiting .pupil-transition i { animation: pupil-edge-dive 920ms cubic-bezier(.45,0,.75,.72) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
+html.gate-return-mode.gate-entering .gate-inner {
+  animation: gate-return-focus 920ms cubic-bezier(.25,.28,.55,1) both;
+  will-change: filter, opacity;
+}
 .gate-entering .pupil-transition { animation: pupil-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
 .gate-entering .pupil-transition i { animation: pupil-edge-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
 .gate-entering .reactive-mark__image { animation: eye-logo-return 920ms ease both; }
@@ -426,11 +430,17 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   from { opacity: 0; transform: translateY(.25rem); }
   to { opacity: 1; transform: none; }
 }
+@keyframes gate-return-focus {
+  0% { opacity: .18; filter: blur(10px); }
+  45% { opacity: .7; filter: blur(6px); }
+  72% { opacity: 1; filter: blur(2px); }
+  100% { opacity: 1; filter: blur(0); }
+}
 @keyframes hall-eye-reveal {
-  0% { opacity: .04; clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-  18% { opacity: .28; }
-  52% { opacity: .82; }
-  100% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+  0% { opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+  18% { opacity: .28; filter: blur(7.5px) saturate(.82) brightness(.8); }
+  52% { opacity: .82; filter: blur(2.5px) saturate(.94) brightness(.94); }
+  100% { opacity: 1; filter: blur(0) saturate(1) brightness(1); clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
 }
 @keyframes hall-eye-edge {
   0% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
@@ -439,10 +449,10 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   100% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
 }
 @keyframes hall-eye-collapse {
-  0% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-  48% { opacity: .82; }
-  82% { opacity: .28; }
-  100% { opacity: .04; clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+  0% { opacity: 1; filter: blur(0) saturate(1) brightness(1); clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+  48% { opacity: .82; filter: blur(2.5px) saturate(.94) brightness(.94); }
+  82% { opacity: .28; filter: blur(7.5px) saturate(.82) brightness(.8); }
+  100% { opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
 }
 @keyframes hall-eye-edge-collapse {
   0% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
