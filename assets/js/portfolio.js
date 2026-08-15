@@ -222,21 +222,48 @@
   };
 
   const projectVideos = [...document.querySelectorAll('video[data-project-hero-media]')];
+  const projectVideoRetryTimers = new WeakMap();
+  const clearProjectVideoRetries = (video) => {
+    (projectVideoRetryTimers.get(video) || []).forEach((timer) => window.clearTimeout(timer));
+    projectVideoRetryTimers.delete(video);
+  };
   const playProjectVideo = (video) => {
+    if (video.dataset.userPaused === 'true') return;
     video.muted = true;
     video.defaultMuted = true;
+    video.autoplay = true;
     video.loop = true;
     video.playsInline = true;
     video.setAttribute('muted', '');
+    video.setAttribute('autoplay', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'auto');
+    if (video.ended && Number.isFinite(video.duration)) video.currentTime = 0;
     const playAttempt = video.play();
     if (playAttempt?.catch) playAttempt.catch(() => {});
   };
-  const resumeProjectVideos = () => projectVideos.forEach(playProjectVideo);
+  const primeProjectVideo = (video) => {
+    clearProjectVideoRetries(video);
+    playProjectVideo(video);
+    const timers = [90, 320, 900, 1800].map((delay) => window.setTimeout(() => {
+      if (!document.hidden && video.paused && video.dataset.userPaused !== 'true') playProjectVideo(video);
+    }, delay));
+    projectVideoRetryTimers.set(video, timers);
+  };
+  const resumeProjectVideos = () => projectVideos.forEach(primeProjectVideo);
 
   projectVideos.forEach((video) => {
-    video.addEventListener('loadeddata', () => playProjectVideo(video), { once: true });
-    video.addEventListener('canplay', () => playProjectVideo(video), { once: true });
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach((eventName) => {
+      video.addEventListener(eventName, () => playProjectVideo(video));
+    });
+    video.addEventListener('playing', () => clearProjectVideoRetries(video));
+    video.addEventListener('pause', () => {
+      if (document.hidden || video.dataset.userPaused === 'true') return;
+      window.setTimeout(() => {
+        if (video.paused && video.dataset.userPaused !== 'true') primeProjectVideo(video);
+      }, 120);
+    });
+    primeProjectVideo(video);
   });
 
   const formatVideoTime = (seconds) => {
@@ -272,8 +299,14 @@
     };
 
     toggle.addEventListener('click', () => {
-      if (video.paused) playProjectVideo(video);
-      else video.pause();
+      if (video.paused) {
+        video.dataset.userPaused = 'false';
+        primeProjectVideo(video);
+      } else {
+        video.dataset.userPaused = 'true';
+        clearProjectVideoRetries(video);
+        video.pause();
+      }
     });
     progress.addEventListener('input', () => {
       if (video.duration) video.currentTime = (Number(progress.value) / 1000) * video.duration;
