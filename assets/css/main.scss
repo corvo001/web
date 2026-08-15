@@ -1014,7 +1014,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  --about-cycle: 9.6s;
+  --about-cycle: 9s;
   position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
@@ -1052,6 +1052,9 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 }
 .about-process__eye { --about-draw-length: 400; }
 .about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
+.about-process__mobile-shape { display: none; }
+.about-process__eye--mobile { --about-draw-length: 280; }
+.about-process__iris--mobile { --about-draw-length: 180; }
 .about-process__identity { --about-draw-length: 60; animation-name: about-resolve-identity; }
 .about-process__pupil {
   fill: #8fc5a4; stroke: none; transform-box: fill-box; transform-origin: center;
@@ -1247,6 +1250,8 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
     width: 100%;
     shape-rendering: geometricPrecision;
   }
+  .about-process__desktop-shape { display: none; }
+  .about-process__mobile-shape { display: inline; }
   .portfolio-footer { flex-direction: column; }
 }
 
