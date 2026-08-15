@@ -203,14 +203,14 @@
     transition.remove();
   };
 
-  const createProjectDeparture = (label = '', useDisplayFont = true) => {
+  const createProjectDeparture = (label = '', useDisplayFont = true, launchedFromHall = false) => {
     const backdrop = document.createElement('span');
     const signal = document.createElement('span');
     const title = label ? document.createElement('strong') : null;
     backdrop.className = 'project-portal-backdrop';
     signal.className = 'project-world-signal';
     if (title) {
-      title.className = `project-world-title${useDisplayFont ? ' project-display' : ' project-world-title--fallback'}`;
+      title.className = `project-world-title${useDisplayFont ? ' project-display' : ' project-world-title--fallback'}${launchedFromHall ? ' project-world-title--hall' : ''}`;
       title.setAttribute('aria-hidden', 'true');
       title.style.setProperty('--letter-count', label.length);
       [...label].forEach((character, index) => {
@@ -227,10 +227,10 @@
     return { backdrop, signal, title };
   };
 
-  const departIntoProject = async (link, media, label, useDisplayFont) => {
+  const departIntoProject = async (link, media, label, useDisplayFont, launchedFromHall) => {
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
-    const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
+    const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont, launchedFromHall);
     media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
@@ -588,10 +588,10 @@
       warmProjectVideo(link);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
-      document.documentElement.classList.toggle('project-launch-from-hall', Boolean(link.closest('[data-home-projects]')));
+      const launchedFromHall = Boolean(link.closest('[data-home-projects]'));
       const useDisplayFont = projectDisplayFontAvailable;
-      const label = link.querySelector('h3')?.textContent.trim() || link.dataset.projectId;
-      departIntoProject(link, media, label, useDisplayFont).catch(() => {
+      const label = link.querySelector('h2, h3')?.textContent.trim() || link.dataset.projectId;
+      departIntoProject(link, media, label, useDisplayFont, launchedFromHall).catch(() => {
         writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', label });
         window.location.assign(link.href);
       });
