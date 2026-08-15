@@ -534,6 +534,14 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
     0 0 1.1em rgba(0,0,0,.62);
 }
 .hero-projects { position: absolute; z-index: 1; inset: 0; background: #070908; }
+.hero-projects::after {
+  content: ""; position: absolute; z-index: 4; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom, #070908 0, rgba(7,9,8,.96) .45rem, rgba(7,9,8,.55) 2.2rem, transparent clamp(4.5rem,8vh,7rem)),
+    linear-gradient(to top, #070908 0, rgba(7,9,8,.9) .55rem, rgba(7,9,8,.46) 2.4rem, transparent clamp(4rem,7vh,6.5rem)),
+    linear-gradient(to right, rgba(7,9,8,.94) 0, rgba(7,9,8,.42) 1.5rem, transparent clamp(3rem,6vw,6rem)),
+    linear-gradient(to left, rgba(7,9,8,.94) 0, rgba(7,9,8,.42) 1.5rem, transparent clamp(3rem,6vw,6rem));
+}
 .hero-project {
   position: absolute; inset: 0; display: block; overflow: hidden;
   color: var(--text); text-decoration: none; opacity: 0; visibility: hidden; pointer-events: none;
