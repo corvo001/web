@@ -21,6 +21,7 @@
   let updateEyeFromPointer = null;
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 920;
+  const eyeWarmupWindow = 360;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -163,6 +164,14 @@
     warmedNavigationPages.set(target, warmup);
     return warmup;
   };
+
+  // Fill the cache as soon as the user commits to the navigation, without
+  // stretching the visible transition if the network is slow. The warmup
+  // continues after this deadline and overlaps the eye motion.
+  const warmNavigationWithin = (link, duration = eyeWarmupWindow) => Promise.race([
+    warmNavigationPage(link),
+    new Promise((resolve) => window.setTimeout(() => resolve(false), duration))
+  ]);
 
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
@@ -329,7 +338,9 @@
     }
     const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
     if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
-    if (activeHallMedia) await waitForRenderableMedia(activeHallMedia);
+    // The poster is already renderable. Waiting for a decoded video frame here
+    // stopped the eye exactly at the page boundary and exposed the load.
+    if (activeHallMedia) waitForRenderableMedia(activeHallMedia).catch(() => {});
     document.documentElement.classList.add('eye-hall-entering');
     await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-reveal');
     document.body.classList.add('page-arrival-complete');
@@ -809,6 +820,11 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationWithin(link, 240);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -838,11 +854,6 @@
         window.location.assign(link.href);
         return;
       }
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
-      await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       document.documentElement.classList.add('eye-gate-leaving');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
       window.location.assign(link.href);
@@ -882,6 +893,7 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       eyeTrackingLocked = true;
+      const hallWarmup = warmNavigationWithin(link);
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       const eyeGeometry = setPupilTransitionGeometry();
@@ -896,17 +908,15 @@
         startedAt: Date.now()
       }));
       document.documentElement.classList.add('gate-preparing');
-      await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
+      await Promise.all([
+        waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor'),
+        hallWarmup
+      ]);
       document.documentElement.classList.remove('gate-preparing');
       if (supportsCrossDocumentViewTransitions) {
         window.location.assign(link.href);
         return;
       }
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
-      await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);

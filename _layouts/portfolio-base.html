@@ -47,12 +47,30 @@
           }
 
           const state = enteringHall ? hallState : gateState;
-          const centerX = Number(state.x) || (window.innerWidth / 2);
-          const centerY = Number(state.y) || (window.innerHeight / 2);
-          const coverRadius = Math.max(Number(state.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1);
+          let centerX = Number(state.x) || (window.innerWidth / 2);
+          let centerY = Number(state.y) || (window.innerHeight / 2);
+          let pupilRadius = Math.max(Number(state.radius) || 3, 1);
+          let coverRadius = Math.max(Number(state.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1);
+
+          // On return, collapse the hall into the real pupil rendered by the
+          // destination page. The previous approximation ended several pixels
+          // away and produced a visible snap on the final frame.
+          if (returningToGate) {
+            const mark = document.querySelector('[data-reactive-mark]');
+            if (mark) {
+              const markRect = mark.getBoundingClientRect();
+              centerX = markRect.left + (markRect.width * .5);
+              centerY = markRect.top + (markRect.height * (456.5 / 1024));
+              pupilRadius = Math.max((markRect.width * .032) / 2, 1);
+              coverRadius = Math.hypot(
+                Math.max(centerX, window.innerWidth - centerX),
+                Math.max(centerY, window.innerHeight - centerY)
+              ) + 2;
+            }
+          }
           root.style.setProperty('--eye-vt-x', `${centerX}px`);
           root.style.setProperty('--eye-vt-y', `${centerY}px`);
-          root.style.setProperty('--eye-vt-radius', `${Math.max(Number(state.radius) || 3, 1)}px`);
+          root.style.setProperty('--eye-vt-radius', `${pupilRadius}px`);
           root.style.setProperty('--eye-vt-cover', `${coverRadius}px`);
 
           if (enteringHall) {

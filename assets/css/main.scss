@@ -144,23 +144,24 @@ html.eye-mpa-returning::view-transition-old(root),
 html.eye-mpa-returning::view-transition-new(root) {
   width: 100%; height: 100%;
   mix-blend-mode: normal;
+  transform: translateZ(0); backface-visibility: hidden;
   animation: none;
 }
 html.eye-mpa-entering::view-transition-old(root) {
   z-index: 1;
-  animation: eye-mpa-gate-dim 820ms cubic-bezier(.22,1,.36,1) both;
+  animation: eye-mpa-gate-dim 920ms cubic-bezier(.4,0,.2,1) both;
 }
 html.eye-mpa-entering::view-transition-new(root) {
   z-index: 2;
-  animation: eye-mpa-reveal 820ms cubic-bezier(.22,1,.36,1) both;
+  animation: eye-mpa-reveal 920ms cubic-bezier(.4,0,.2,1) both;
 }
 html.eye-mpa-returning::view-transition-new(root) {
   z-index: 1;
-  animation: eye-mpa-gate-light 820ms cubic-bezier(.4,0,.2,1) both;
+  animation: eye-mpa-gate-light 920ms cubic-bezier(.4,0,.2,1) both;
 }
 html.eye-mpa-returning::view-transition-old(root) {
   z-index: 2;
-  animation: eye-mpa-collapse 820ms cubic-bezier(.4,0,.2,1) both;
+  animation: eye-mpa-collapse 920ms cubic-bezier(.4,0,.2,1) both;
 }
 html.eye-hall-entry-boot { background: #000; overflow: hidden; }
 html.eye-hall-entry-boot body {
@@ -511,10 +512,12 @@ html.gate-return-mode.gate-entering .gate-inner {
 }
 @keyframes eye-mpa-reveal {
   0% {
-    opacity: 1;
+    opacity: .18;
     clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
     filter: drop-shadow(0 0 10px rgba(135,201,162,.82));
   }
+  42% { opacity: .62; }
+  72% { opacity: .9; }
   100% {
     opacity: 1;
     clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
@@ -527,18 +530,24 @@ html.gate-return-mode.gate-entering .gate-inner {
     clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
     filter: drop-shadow(0 0 0 transparent);
   }
+  28% { opacity: .9; }
+  58% { opacity: .62; }
   100% {
-    opacity: 1;
+    opacity: .18;
     clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
     filter: drop-shadow(0 0 10px rgba(135,201,162,.82));
   }
 }
 @keyframes eye-mpa-gate-dim {
   0% { opacity: 1; }
-  100% { opacity: .28; }
+  35% { opacity: .82; }
+  75% { opacity: .36; }
+  100% { opacity: .18; }
 }
 @keyframes eye-mpa-gate-light {
-  0% { opacity: .28; }
+  0% { opacity: .18; }
+  25% { opacity: .36; }
+  65% { opacity: .82; }
   100% { opacity: 1; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
