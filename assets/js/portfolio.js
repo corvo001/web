@@ -590,6 +590,7 @@
 
     let active = Math.floor(Math.random() * slides.length);
     let historyIndex = 0;
+    let scrollSoftenTimer = 0;
     const history = [active];
     const controls = projects.parentElement?.querySelector('.hero-project-controls');
     const previous = controls?.querySelector('[data-home-project-previous]');
@@ -625,10 +626,19 @@
       historyIndex -= 1;
       show(history[historyIndex]);
     };
+    const softenDuringScroll = () => {
+      projects.classList.add('is-scroll-softened');
+      window.clearTimeout(scrollSoftenTimer);
+      scrollSoftenTimer = window.setTimeout(() => {
+        projects.classList.remove('is-scroll-softened');
+      }, 280);
+    };
 
     show(active);
     previous?.addEventListener('click', choosePrevious);
     next?.addEventListener('click', chooseNext);
+    projects.addEventListener('wheel', softenDuringScroll, { passive: true });
+    projects.addEventListener('touchmove', softenDuringScroll, { passive: true });
   });
 
   document.querySelectorAll('[data-project-filter]').forEach((filter) => {
