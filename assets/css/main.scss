@@ -160,11 +160,12 @@ html.eye-gate-leaving::after {
   height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
   animation: hall-eye-edge-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
 }
-html.eye-page-loading,
-html.eye-page-loading body { cursor: progress; }
-html.eye-page-loading [data-language-link],
-html.eye-page-loading [data-language-menu] { pointer-events: none; }
-html.eye-page-loading .is-eye-loading { color: var(--accent) !important; opacity: .72; }
+html.navigation-loading,
+html.navigation-loading body { cursor: progress; }
+html.navigation-loading [data-language-link],
+html.navigation-loading [data-language-menu],
+html.navigation-loading [data-work-entry] { pointer-events: none; }
+html.navigation-loading .is-navigation-loading { color: var(--accent) !important; opacity: .72; }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
 .skip-link {
@@ -506,6 +507,7 @@ html.gate-return-mode.gate-entering .gate-inner {
   box-shadow: 0 0 2.8rem rgba(130,181,152,.055);
   will-change: transform, opacity, filter;
 }
+.archive-transition__handoff { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .archive-transition__shutter {
   position: absolute; z-index: 2; top: 0; bottom: 0; width: 58%;
   background: var(--archive-shutter); filter: drop-shadow(0 0 .3rem var(--archive-frame));
@@ -538,6 +540,7 @@ html.gate-return-mode.gate-entering .gate-inner {
 .archive-transition.is-cycling .archive-transition__shutter--left { animation: archive-cycle-shutter-left 1600ms var(--archive-cycle-delay,0ms) cubic-bezier(.7,0,.24,1) both; }
 .archive-transition.is-cycling .archive-transition__shutter--right { animation: archive-cycle-shutter-right 1600ms var(--archive-cycle-delay,0ms) cubic-bezier(.7,0,.24,1) both; }
 .archive-transition.is-cycling .archive-transition__aperture { animation: archive-cycle-aperture 1600ms var(--archive-cycle-delay,0ms) cubic-bezier(.16,1,.3,1) both; }
+.archive-transition.is-cycling .archive-transition__handoff { animation: archive-cycle-handoff 880ms linear both; }
 .archive-transition.is-cycling .archive-transition__title { animation: archive-cycle-title 1600ms var(--archive-cycle-delay,0ms) cubic-bezier(.2,.7,.2,1) both; }
 .archive-transition.is-cycling .archive-transition__meta,
 .archive-transition.is-cycling .archive-transition__status { animation: archive-cycle-data 1600ms var(--archive-cycle-delay,0ms) ease both; }
@@ -591,6 +594,7 @@ html.gate-return-mode.gate-entering .gate-inner {
   30%,42% { opacity: 1; letter-spacing: .18em; }
   50%,100% { opacity: 0; letter-spacing: .26em; }
 }
+@keyframes archive-cycle-handoff { from, to { opacity: 0; } }
 
 /* Shared navigation */
 .portfolio-nav {

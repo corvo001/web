@@ -13,6 +13,7 @@
   let gateReturnPlaying = false;
   let gateInitialStateHandled = false;
   let hallEyeArrivalPlaying = false;
+  let archiveArrivalPlaying = false;
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
@@ -26,7 +27,7 @@
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
-  const warmedEyePages = new Map();
+  const warmedNavigationPages = new Map();
 
   const consumeResponse = async (response) => {
     const reader = response.body?.getReader();
@@ -37,7 +38,7 @@
     while (!(await reader.read()).done) { /* Fill the HTTP cache before the handoff. */ }
   };
 
-  const collectEyePageResources = (html, target) => {
+  const collectNavigationResources = (html, target) => {
     const targetDocument = new DOMParser().parseFromString(html, 'text/html');
     const resources = new Set();
     const add = (value) => {
@@ -49,7 +50,7 @@
     targetDocument.querySelectorAll('link[rel="stylesheet"][href], link[rel="preload"][href]').forEach((element) => add(element.getAttribute('href')));
     targetDocument.querySelectorAll('script[src]').forEach((element) => add(element.getAttribute('src')));
     targetDocument.querySelectorAll('.nav-logo img[src], .reactive-mark__image[src]').forEach((element) => add(element.getAttribute('src')));
-    const activeMedia = targetDocument.querySelector('.hero-project.is-active [data-project-media]');
+    const activeMedia = targetDocument.querySelector('.hero-project.is-active [data-project-media], .project-index-card [data-project-media]');
     if (activeMedia) {
       add(activeMedia.getAttribute('src'));
       add(activeMedia.getAttribute('data-src'));
@@ -58,10 +59,10 @@
     return [...resources];
   };
 
-  const warmEyePage = (link) => {
+  const warmNavigationPage = (link) => {
     const target = link?.href;
     if (!target) return Promise.resolve(false);
-    const activeWarmup = warmedEyePages.get(target);
+    const activeWarmup = warmedNavigationPages.get(target);
     if (activeWarmup) return activeWarmup;
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 8000);
@@ -69,7 +70,7 @@
       .then(async (response) => {
         if (!response.ok) throw new Error(`Page preload failed: ${response.status}`);
         const html = await response.text();
-        const resources = collectEyePageResources(html, target);
+        const resources = collectNavigationResources(html, target);
         await Promise.allSettled(resources.map(async (resource) => {
           const assetResponse = await fetch(resource, { cache: 'force-cache', priority: 'high', signal: controller.signal });
           if (!assetResponse.ok) throw new Error(`Asset preload failed: ${assetResponse.status}`);
@@ -78,11 +79,11 @@
         return true;
       })
       .catch(() => {
-        warmedEyePages.delete(target);
+        warmedNavigationPages.delete(target);
         return false;
       })
       .finally(() => window.clearTimeout(timeout));
-    warmedEyePages.set(target, warmup);
+    warmedNavigationPages.set(target, warmup);
     return warmup;
   };
 
@@ -202,7 +203,7 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'eye-page-loading');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'navigation-loading');
     if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
       ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
@@ -212,7 +213,7 @@
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
-    document.querySelectorAll('.is-eye-loading').forEach((link) => link.classList.remove('is-eye-loading'));
+    document.querySelectorAll('.is-navigation-loading').forEach((link) => link.classList.remove('is-navigation-loading'));
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
   };
 
@@ -269,6 +270,7 @@
       <span class="archive-transition__frame archive-transition__frame--outer"></span>
       <span class="archive-transition__frame archive-transition__frame--inner"></span>
       <span class="archive-transition__aperture"></span>
+      <span class="archive-transition__handoff"></span>
       <span class="archive-transition__shutter archive-transition__shutter--left"></span>
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
       <span class="archive-transition__meta">CORVO 001</span>
@@ -279,28 +281,36 @@
   };
 
   const showArchiveArrival = async () => {
+    if (archiveArrivalPlaying) return;
     let state = null;
     try { state = JSON.parse(sessionStorage.getItem(archiveTransitionKey) || 'null'); }
     catch (error) { state = null; }
     sessionStorage.removeItem(archiveTransitionKey);
+    const isExpectedArchive = state?.path === window.location.pathname;
+    const isRecentArchive = Date.now() - Number(state?.startedAt || 0) < 8000;
 
-    if (!state || !document.body.classList.contains('work-page') || reduceMotion.matches) {
+    if (!isExpectedArchive || !isRecentArchive || !document.body.classList.contains('work-page') || reduceMotion.matches) {
       document.documentElement.classList.remove('archive-entry-boot');
       return;
     }
 
+    archiveArrivalPlaying = true;
     // Resume from the exact closed-shutter handoff frame. Page-load time must
     // never advance the visual timeline or the second half visibly skips.
     const transition = createArchiveTransition(state.label || '');
-    transition.style.setProperty('--archive-cycle-delay', (-archiveHandoffDuration) + 'ms');
-    transition.classList.add('is-cycling');
-    document.body.classList.add('archive-arriving');
-    await nextPaint();
-    document.documentElement.classList.remove('archive-entry-boot');
-    await waitForMotion(transition, 'animationend', archiveCycleDuration - archiveHandoffDuration, 'archive-cycle-shell');
-    document.body.classList.add('page-arrival-complete');
-    document.body.classList.remove('archive-arriving');
-    transition.remove();
+    try {
+      transition.style.setProperty('--archive-cycle-delay', (-archiveHandoffDuration) + 'ms');
+      transition.classList.add('is-cycling');
+      document.body.classList.add('archive-arriving');
+      await nextPaint();
+      document.documentElement.classList.remove('archive-entry-boot');
+      await waitForMotion(transition, 'animationend', archiveCycleDuration - archiveHandoffDuration, 'archive-cycle-shell');
+      document.body.classList.add('page-arrival-complete');
+    } finally {
+      document.body.classList.remove('archive-arriving');
+      transition.remove();
+      archiveArrivalPlaying = false;
+    }
   };
 
   const createProjectDeparture = (label = '', useDisplayFont = true) => {
@@ -652,11 +662,11 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-eye-loading');
-      document.documentElement.classList.add('eye-page-loading');
-      await warmEyePage(link);
-      link.classList.remove('is-eye-loading');
-      document.documentElement.classList.remove('eye-page-loading');
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -716,11 +726,11 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-eye-loading');
-      document.documentElement.classList.add('eye-page-loading');
-      await warmEyePage(link);
-      link.classList.remove('is-eye-loading');
-      document.documentElement.classList.remove('eye-page-loading');
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
@@ -1021,39 +1031,38 @@
 
   document.querySelectorAll('[data-work-entry]').forEach((link) => {
     const target = new URL(link.href, window.location.href);
-    if (target.pathname !== window.location.pathname) {
-      let archiveWarmed = false;
-      const warmArchive = () => {
-        if (archiveWarmed) return;
-        archiveWarmed = true;
-        fetch(target.href, { cache: 'force-cache', priority: 'low' }).catch(() => { archiveWarmed = false; });
-      };
-      if ('requestIdleCallback' in window) window.requestIdleCallback(warmArchive, { timeout: 1400 });
-      else window.setTimeout(warmArchive, 500);
-      link.addEventListener('pointerenter', warmArchive, { once: true, passive: true });
-      link.addEventListener('focus', warmArchive, { once: true, passive: true });
-    }
-    link.addEventListener('click', (event) => {
+    link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       if (window.location.pathname.startsWith(target.pathname)) {
         sessionStorage.removeItem(archiveTransitionKey);
         document.body.classList.add('page-leaving');
-        window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
+        await waitForMotion(document.body, 'animationend', pageDepartureDuration, 'page-transition-out');
+        window.location.assign(target.href);
         return;
       }
       const label = link.dataset.workLabel || link.textContent.trim();
       const transition = createArchiveTransition(label);
+      const handoff = transition.querySelector('.archive-transition__handoff');
       document.body.classList.add('archive-leaving');
-      nextPaint().then(() => {
-        sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label }));
-        transition.classList.add('is-cycling');
-        window.setTimeout(() => window.location.assign(target.href), archiveHandoffDuration);
-      });
+      await nextPaint();
+      sessionStorage.setItem(archiveTransitionKey, JSON.stringify({
+        label,
+        path: target.pathname,
+        startedAt: Date.now()
+      }));
+      transition.classList.add('is-cycling');
+      await waitForMotion(handoff, 'animationend', archiveHandoffDuration, 'archive-cycle-handoff');
+      window.location.assign(target.href);
     });
   });
 

@@ -88,8 +88,13 @@
         if ('{{ page.layout }}' === 'project' && projectTransition?.phase === 'enter') {
           document.documentElement.classList.add('project-entry-boot');
         }
-        if ('{{ active_body_class }}' === 'work-page' && sessionStorage.getItem('portfolio-archive-transition')) {
+        const archiveTransition = JSON.parse(sessionStorage.getItem('portfolio-archive-transition') || 'null');
+        const isExpectedArchive = archiveTransition?.path === window.location.pathname;
+        const isRecentArchive = Date.now() - Number(archiveTransition?.startedAt || 0) < 8000;
+        if ('{{ active_body_class }}' === 'work-page' && isExpectedArchive && isRecentArchive) {
           document.documentElement.classList.add('archive-entry-boot');
+        } else if (archiveTransition) {
+          sessionStorage.removeItem('portfolio-archive-transition');
         }
         window.setTimeout(() => document.documentElement.classList.remove('project-entry-boot', 'archive-entry-boot'), 2400);
       } catch (error) {}
