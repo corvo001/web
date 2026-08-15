@@ -12,6 +12,7 @@
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
+  const eyePrepareDuration = 420;
   const eyeDiveDuration = 1120;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
@@ -532,6 +533,9 @@
         window.location.assign(link.href);
         return;
       }
+      document.documentElement.classList.add('gate-preparing');
+      await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
+      document.documentElement.classList.remove('gate-preparing');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);

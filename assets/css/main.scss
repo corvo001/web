@@ -177,6 +177,14 @@ html.gate-natural-entry .reactive-mark__image { animation: eye-code-resolve 1640
 .reactive-mark::after {
   content: none;
 }
+.gate-preparing .gate-inner { animation: eye-entry-tremor 420ms ease-out both; }
+.gate-preparing .reactive-mark::after {
+  content: ""; position: absolute; z-index: 4; left: 10%; right: 10%; top: 20%; height: 1px;
+  background: linear-gradient(90deg,transparent,rgba(143,207,170,.95) 24% 76%,transparent);
+  box-shadow: 0 0 6px rgba(143,207,170,.72), 0 0 14px rgba(130,181,152,.34);
+  opacity: 0; pointer-events: none; animation: eye-entry-scan 420ms cubic-bezier(.4,0,.2,1) both;
+}
+.gate-preparing .language-options { opacity: .62; transition: opacity 300ms ease; }
 .reactive-mark__pupil {
   position: absolute; z-index: 2;
   width: 3.2%; aspect-ratio: 1; border-radius: 50%;
@@ -239,9 +247,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .pupil-transition i {
   position: absolute; left: var(--pupil-x,50%); top: var(--pupil-y,50%);
   display: block; width: calc(var(--pupil-radius, .5rem) * 2); height: calc(var(--pupil-radius, .5rem) * 2);
-  border: 2px solid #8fc5a4; border-radius: 50%; opacity: 0; pointer-events: none;
+  border: 3px solid #91cfaa; border-radius: 50%; opacity: 0; pointer-events: none;
   transform: translate(-50%,-50%); background: transparent;
-  box-shadow: 0 0 7px rgba(143,197,164,.9), 0 0 16px rgba(130,181,152,.42), inset 0 0 4px rgba(143,197,164,.42);
+  box-shadow:
+    0 0 9px 1px rgba(145,207,170,.94), 0 0 24px 4px rgba(130,181,152,.48),
+    inset 0 0 10px 2px rgba(145,207,170,.62), inset 0 0 28px 5px rgba(130,181,152,.24);
   will-change: width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
@@ -258,6 +268,19 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   to { opacity: 1; transform: perspective(800px) scale(1); filter: blur(0); }
 }
 @keyframes gate-copy { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes eye-entry-tremor {
+  0%,100% { transform: translate3d(0,0,0); }
+  24% { transform: translate3d(-.7px,.2px,0); }
+  43% { transform: translate3d(.9px,-.3px,0); }
+  62% { transform: translate3d(-.45px,.15px,0); }
+  81% { transform: translate3d(.2px,0,0); }
+}
+@keyframes eye-entry-scan {
+  0% { top: 20%; opacity: 0; transform: scaleX(.35); }
+  18% { opacity: .9; }
+  76% { opacity: .68; transform: scaleX(1); }
+  100% { top: 70%; opacity: 0; transform: scaleX(.72); }
+}
 @keyframes eye-code-lock {
   0% { opacity: 0; transform: translate3d(var(--code-x),.35rem,0); filter: blur(2px); }
   18% { opacity: .2; }
