@@ -1,4 +1,7 @@
 {% assign active_body_class = page.body_class | default: layout.body_class %}
+{% if page.layout == 'info-page' and page.section %}
+  {% assign active_body_class = 'info-page info-' | append: page.section | append: '-page' %}
+{% endif %}
 <!doctype html>
 <html lang="{{ page.lang | default: 'es' }}">
   <head>
