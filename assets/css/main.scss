@@ -1040,7 +1040,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .about-process__joint { fill: var(--ink); animation: about-joint var(--about-cycle) ease-in-out infinite; }
 .about-process__joint--late { animation-delay: .2s; }
 .about-process__eye, .about-process__iris, .about-process__identity {
-  vector-effect: non-scaling-stroke; stroke-linecap: round;
+  vector-effect: none; stroke-width: 1.16; stroke-linecap: round;
   stroke-dasharray: var(--about-draw-length); stroke-dashoffset: var(--about-draw-length);
   animation: about-resolve var(--about-cycle) cubic-bezier(.22,1,.36,1) infinite;
 }
@@ -1260,7 +1260,6 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   .about-process__visual {
     width: 100%;
   }
-  .about-process__eye, .about-process__iris, .about-process__identity { vector-effect: none; stroke-width: 1.16; }
   .portfolio-footer { flex-direction: column; }
 }
 
