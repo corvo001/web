@@ -14,7 +14,7 @@
   const eyePrepareDuration = 420;
   const eyeDiveDuration = 1120;
   const eyeCodeDuration = 1640;
-  const projectDepartureDuration = 900;
+  const projectDepartureDuration = 1280;
   const archiveDepartureDuration = 1280;
   const archiveArrivalDuration = 900;
   const pageDepartureDuration = 280;
@@ -159,27 +159,39 @@
 
   const createProjectDeparture = (label = '', useDisplayFont = true) => {
     const backdrop = document.createElement('span');
+    const signal = document.createElement('span');
     const title = label ? document.createElement('strong') : null;
     backdrop.className = 'project-portal-backdrop';
+    signal.className = 'project-world-signal';
     if (title) {
       title.className = `project-world-title${useDisplayFont ? ' project-display' : ' project-world-title--fallback'}`;
-      title.textContent = label;
+      title.setAttribute('aria-hidden', 'true');
+      title.style.setProperty('--letter-count', label.length);
+      [...label].forEach((character, index) => {
+        const letter = document.createElement('span');
+        letter.className = 'project-world-title__letter';
+        letter.style.setProperty('--letter-index', index);
+        letter.style.setProperty('--letter-direction', index % 2 ? 1 : -1);
+        letter.textContent = character === ' ' ? '\u00a0' : character;
+        title.appendChild(letter);
+      });
     }
-    if (title) document.documentElement.append(backdrop, title);
-    else document.documentElement.append(backdrop);
-    return { backdrop, title };
+    if (title) document.documentElement.append(backdrop, signal, title);
+    else document.documentElement.append(backdrop, signal);
+    return { backdrop, signal, title };
   };
 
   const departIntoProject = async (link, media, label, useDisplayFont) => {
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
-    const { backdrop, title } = createProjectDeparture(label, useDisplayFont);
+    const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
     media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
     void backdrop.offsetWidth;
     await nextPaint();
     backdrop.classList.add('is-departing-world');
+    signal.classList.add('is-departing');
     title?.classList.add('is-departing');
     await waitForMotion(backdrop, 'animationend', projectDepartureDuration, 'project-world-backdrop');
     writeProjectTransition({
