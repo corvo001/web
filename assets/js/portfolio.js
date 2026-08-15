@@ -115,6 +115,7 @@
     if (!document.documentElement.classList.contains('page-transition-boot')) return;
     sessionStorage.removeItem(pageTransitionKey);
     if (reduceMotion.matches) {
+      document.body.classList.add('page-arrival-complete');
       document.documentElement.classList.remove('page-transition-boot');
       return;
     }
@@ -122,6 +123,7 @@
     await nextPaint();
     document.documentElement.classList.remove('page-transition-boot');
     await waitForMotion(document.body, 'animationend', 680, 'page-transition-in');
+    document.body.classList.add('page-arrival-complete');
     document.body.classList.remove('page-arriving');
   };
 

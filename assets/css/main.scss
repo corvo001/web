@@ -86,6 +86,7 @@ code, pre, .technical-meta { font-family: var(--mono); }
 html.page-transition-boot .portfolio-shell.page-arriving {
   opacity: 0; transform: translateY(9px) scale(.997); animation: none;
 }
+.portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
 .skip-link {
