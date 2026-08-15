@@ -129,25 +129,36 @@ html.page-transition-boot .portfolio-shell.page-arriving {
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
 html.eye-hall-entry-boot { background: #000; overflow: hidden; }
 html.eye-hall-entry-boot body {
-  opacity: 0; animation: none; overflow: hidden;
-  clip-path: circle(var(--hall-eye-radius,.5rem) at var(--hall-eye-x,50%) var(--hall-eye-y,50%));
-  transform: scale(1.045); transform-origin: var(--hall-eye-x,50%) var(--hall-eye-y,50%);
-  will-change: clip-path, opacity, transform;
+  opacity: .04; animation: none; overflow: hidden;
+  clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%)));
+  will-change: clip-path, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering body {
-  animation: hall-eye-reveal 1180ms cubic-bezier(.68,0,.18,1) both;
+  animation: hall-eye-reveal 1040ms cubic-bezier(0,.55,.2,1) both;
 }
-html.eye-hall-entry-boot::after {
+html.eye-hall-entry-boot::after,
+html.eye-gate-leaving::after {
   content: ""; position: fixed; z-index: 1200;
   left: var(--hall-eye-x,50%); top: var(--hall-eye-y,50%);
-  width: calc(var(--hall-eye-radius,.5rem) * 2); height: calc(var(--hall-eye-radius,.5rem) * 2);
+  width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2);
   border: clamp(4px,.48vw,7px) solid #78ad8d; border-radius: 50%; opacity: 0;
   transform: translate(-50%,-50%); pointer-events: none;
   box-shadow: 0 0 1px rgba(205,239,217,.72), 0 0 14px rgba(137,202,163,.76), 0 0 34px rgba(91,154,118,.42), inset 0 0 13px rgba(174,223,193,.62);
   will-change: width, height, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering::after {
-  animation: hall-eye-edge 1180ms cubic-bezier(.68,0,.18,1) both;
+  animation: hall-eye-edge 1040ms cubic-bezier(0,.55,.2,1) both;
+}
+html.eye-gate-leaving { background: #000; overflow: hidden; }
+html.eye-gate-leaving body {
+  pointer-events: none; overflow: hidden;
+  animation: hall-eye-collapse 1040ms cubic-bezier(.55,0,1,.45) both;
+  will-change: clip-path, opacity;
+}
+html.eye-gate-leaving::after {
+  width: calc(var(--hall-eye-cover-radius,100vmax) * 2);
+  height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
+  animation: hall-eye-edge-collapse 1040ms cubic-bezier(.55,0,1,.45) both;
 }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
@@ -319,16 +330,16 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
     inset 0 0 0 1px rgba(34,61,45,.78),
     inset 0 0 11px 3px rgba(166,218,187,.66),
     inset 0 0 30px 8px rgba(93,151,119,.3);
-  will-change: width, height, opacity;
+  will-change: left, top, width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
-.gate-exiting .pupil-transition { animation: pupil-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
-.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
+.gate-exiting .pupil-transition { animation: pupil-dive 1040ms cubic-bezier(.55,0,1,.45) forwards; }
+.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1040ms cubic-bezier(.55,0,1,.45) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
-.gate-entering .pupil-transition { animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
-.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
-.gate-entering .reactive-mark__image { animation: eye-logo-return 1120ms ease both; }
+.gate-entering .pupil-transition { animation: pupil-emerge 1040ms cubic-bezier(0,.55,.2,1) both; }
+.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1040ms cubic-bezier(0,.55,.2,1) both; }
+.gate-entering .reactive-mark__image { animation: eye-logo-return 1040ms ease both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -388,13 +399,13 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   }
   100% {
     opacity: 1;
-    clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
+    clip-path: circle(var(--pupil-handoff-radius,52vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
 }
 @keyframes pupil-emerge {
   0% {
     opacity: 1;
-    clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
+    clip-path: circle(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) at var(--pupil-start-x,var(--pupil-x,50%)) var(--pupil-start-y,var(--pupil-y,50%)));
   }
   99% {
     opacity: 1;
@@ -407,13 +418,21 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 @keyframes pupil-edge-dive {
   0% { width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1; }
-  72% { opacity: .88; }
-  100% { width: calc(var(--pupil-cover-radius,100vmax) * 2); height: calc(var(--pupil-cover-radius,100vmax) * 2); opacity: 0; }
+  72% { opacity: .94; }
+  100% { width: calc(var(--pupil-handoff-radius,52vmax) * 2); height: calc(var(--pupil-handoff-radius,52vmax) * 2); opacity: .96; }
 }
 @keyframes pupil-edge-emerge {
-  0% { width: calc(var(--pupil-cover-radius,100vmax) * 2); height: calc(var(--pupil-cover-radius,100vmax) * 2); opacity: 0; }
+  0% {
+    left: var(--pupil-start-x,var(--pupil-x,50%)); top: var(--pupil-start-y,var(--pupil-y,50%));
+    width: calc(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) * 2);
+    height: calc(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) * 2);
+    opacity: var(--pupil-start-edge-opacity,0);
+  }
   28% { opacity: .88; }
-  100% { width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1; }
+  100% {
+    left: var(--pupil-x,50%); top: var(--pupil-y,50%);
+    width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1;
+  }
 }
 @keyframes eye-logo-return {
   0%, 70% { opacity: 0; filter: var(--mark-base-filter); }
@@ -424,16 +443,28 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   to { opacity: 1; transform: none; }
 }
 @keyframes hall-eye-reveal {
-  0% { opacity: .04; clip-path: circle(var(--hall-eye-radius,.5rem) at var(--hall-eye-x,50%) var(--hall-eye-y,50%)); transform: scale(1.045); }
+  0% { opacity: .04; clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
   18% { opacity: .28; }
-  52% { opacity: .82; transform: scale(1.014); }
-  100% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-y,50%)); transform: scale(1); }
+  52% { opacity: .82; }
+  100% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
 }
 @keyframes hall-eye-edge {
-  0% { width: calc(var(--hall-eye-radius,.5rem) * 2); height: calc(var(--hall-eye-radius,.5rem) * 2); opacity: .96; }
+  0% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
   52% { opacity: .72; }
   82% { opacity: .24; }
   100% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
+}
+@keyframes hall-eye-collapse {
+  0% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+  48% { opacity: .82; }
+  82% { opacity: .28; }
+  100% { opacity: .04; clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
+}
+@keyframes hall-eye-edge-collapse {
+  0% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
+  18% { opacity: .24; }
+  48% { opacity: .72; }
+  100% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes page-transition-out {

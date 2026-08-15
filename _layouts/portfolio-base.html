@@ -32,8 +32,11 @@
           const rootStyle = document.documentElement.style;
           rootStyle.setProperty('--hall-eye-x', `${Number(eyeHallTransition.x) || (window.innerWidth / 2)}px`);
           rootStyle.setProperty('--hall-eye-y', `${Number(eyeHallTransition.y) || (window.innerHeight / 2)}px`);
-          rootStyle.setProperty('--hall-eye-radius', `${Math.max(Number(eyeHallTransition.radius) || 1, 1)}px`);
-          rootStyle.setProperty('--hall-eye-cover-radius', `${Math.max(Number(eyeHallTransition.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1)}px`);
+          rootStyle.setProperty('--hall-eye-body-y', `${Number(eyeHallTransition.y) || (window.innerHeight / 2)}px`);
+          const coverRadius = Math.max(Number(eyeHallTransition.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1);
+          const handoffRadius = Math.max(Number(eyeHallTransition.handoffRadius) || (coverRadius * .52), 1);
+          rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
+          rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
           document.documentElement.classList.add('eye-hall-entry-boot');
           window.setTimeout(() => {
             if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
@@ -54,10 +57,14 @@
     <script>
       try {
         const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+        const eyeGateTransition = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
+        const hasRecentGateTransition = eyeGateTransition?.path === window.location.pathname &&
+          Date.now() - Number(eyeGateTransition?.startedAt || 0) < 8000;
         const returningFromPortfolio = navigationType !== 'reload' && (
           history.state?.eyeGateReturn === true ||
           sessionStorage.getItem('portfolio-eye-return') === '1' ||
-          sessionStorage.getItem('portfolio-eye-entered') === '1'
+          sessionStorage.getItem('portfolio-eye-entered') === '1' ||
+          hasRecentGateTransition
         );
         if (returningFromPortfolio) {
           document.documentElement.classList.add('gate-entrance-skip', 'gate-return-pending');

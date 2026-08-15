@@ -5,6 +5,7 @@
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   const eyeHallTransitionKey = 'portfolio-eye-hall-transition';
+  const eyeGateTransitionKey = 'portfolio-eye-gate-transition';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
@@ -14,7 +15,7 @@
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
   const eyePrepareDuration = 420;
-  const eyeDiveDuration = 1120;
+  const eyeDiveDuration = 1040;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -79,12 +80,29 @@
     const centerX = markRect.left + (markRect.width * .5);
     const centerY = markRect.top + (markRect.height * (456.5 / 1024));
     const radius = Math.hypot(Math.max(centerX, window.innerWidth - centerX), Math.max(centerY, window.innerHeight - centerY));
+    const coverRadius = radius + 2;
+    const handoffRadius = Math.max((size / 2) + 1, coverRadius * .52);
     transition.style.setProperty('--pupil-x', `${centerX}px`);
     transition.style.setProperty('--pupil-y', `${centerY}px`);
     transition.style.setProperty('--pupil-radius', `${size / 2}px`);
-    transition.style.setProperty('--pupil-cover-radius', `${radius + 2}px`);
+    transition.style.setProperty('--pupil-cover-radius', `${coverRadius}px`);
+    transition.style.setProperty('--pupil-handoff-radius', `${handoffRadius}px`);
+    ['--pupil-start-x', '--pupil-start-y', '--pupil-start-radius', '--pupil-start-edge-opacity'].forEach((property) => {
+      transition.style.removeProperty(property);
+    });
     document.documentElement.appendChild(transition);
-    return { x: centerX, y: centerY, radius: size / 2, coverRadius: radius + 2 };
+    return { x: centerX, y: centerY, radius: size / 2, coverRadius, handoffRadius };
+  };
+
+  const readEyeGateTransition = () => {
+    try {
+      const state = JSON.parse(sessionStorage.getItem(eyeGateTransitionKey) || 'null');
+      const isExpectedGate = state?.path === window.location.pathname;
+      const isRecent = Date.now() - Number(state?.startedAt || 0) < 8000;
+      return isExpectedGate && isRecent ? state : null;
+    } catch (error) {
+      return null;
+    }
   };
 
   const nextPaint = () => new Promise((resolve) => {
@@ -130,7 +148,12 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving');
+    if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
+      ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
+        document.documentElement.style.removeProperty(property);
+      });
+    }
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
@@ -164,10 +187,10 @@
     }
     await nextPaint();
     document.documentElement.classList.add('eye-hall-entering');
-    await waitForMotion(document.body, 'animationend', 1180, 'hall-eye-reveal');
+    await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-reveal');
     document.body.classList.add('page-arrival-complete');
     document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
-    ['--hall-eye-x', '--hall-eye-y', '--hall-eye-radius', '--hall-eye-cover-radius'].forEach((property) => {
+    ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
       document.documentElement.style.removeProperty(property);
     });
   };
@@ -414,6 +437,7 @@
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
     sessionStorage.removeItem(eyeHallTransitionKey);
+    sessionStorage.removeItem(eyeGateTransitionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
     document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
@@ -443,11 +467,20 @@
       return;
     }
 
+    const gateTransition = readEyeGateTransition();
+    const transition = document.querySelector('[data-pupil-transition]');
+    if (gateTransition && transition) {
+      transition.style.setProperty('--pupil-start-x', `${Number(gateTransition.x) || (window.innerWidth / 2)}px`);
+      transition.style.setProperty('--pupil-start-y', `${Number(gateTransition.y) || (window.innerHeight / 2)}px`);
+      transition.style.setProperty('--pupil-start-radius', `${Math.max(Number(gateTransition.handoffRadius) || 1, 1)}px`);
+      transition.style.setProperty('--pupil-start-edge-opacity', '.96');
+    }
+
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
+    sessionStorage.removeItem(eyeGateTransitionKey);
     document.documentElement.classList.remove('gate-natural-entry', 'gate-entrance-skip', 'gate-return-pending', 'gate-preparing', 'gate-exiting');
     document.documentElement.classList.add('gate-return-mode', 'gate-entering');
-    const transition = document.querySelector('[data-pupil-transition]');
     await waitForMotion(transition, 'animationend', eyeDiveDuration, 'pupil-emerge');
 
     document.documentElement.classList.remove('gate-entering', 'gate-return-mode');
@@ -470,6 +503,7 @@
     navigationInProgress = false;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
+    sessionStorage.removeItem(eyeGateTransitionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
     document.documentElement.classList.remove('gate-return-pending', 'gate-return-mode', 'gate-entrance-skip', 'gate-preparing', 'gate-exiting', 'gate-entering');
     document.documentElement.classList.add('gate-natural-entry');
@@ -550,12 +584,39 @@
   });
 
   document.querySelectorAll('[data-language-menu]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      if (!reduceMotion.matches && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-        sessionStorage.setItem(eyeReturnKey, '1');
-        sessionStorage.removeItem(pageTransitionKey);
-        sessionStorage.removeItem(projectTransitionKey);
-      }
+    link.addEventListener('click', async (event) => {
+      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+      event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
+      sessionStorage.setItem(eyeReturnKey, '1');
+      sessionStorage.removeItem(pageTransitionKey);
+      sessionStorage.removeItem(projectTransitionKey);
+
+      const centerX = window.innerWidth / 2;
+      const centerY = (window.innerHeight / 2) - Math.min(76, window.innerHeight * .08);
+      const coverRadius = Math.hypot(
+        Math.max(centerX, window.innerWidth - centerX),
+        Math.max(centerY, window.innerHeight - centerY)
+      ) + 2;
+      const handoffRadius = Math.max(coverRadius * .52, 1);
+      sessionStorage.setItem(eyeGateTransitionKey, JSON.stringify({
+        x: centerX,
+        y: centerY,
+        coverRadius,
+        handoffRadius,
+        path: new URL(link.href, window.location.href).pathname,
+        startedAt: Date.now()
+      }));
+      const rootStyle = document.documentElement.style;
+      rootStyle.setProperty('--hall-eye-x', `${centerX}px`);
+      rootStyle.setProperty('--hall-eye-y', `${centerY}px`);
+      rootStyle.setProperty('--hall-eye-body-y', `${window.scrollY + centerY}px`);
+      rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
+      rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
+      document.documentElement.classList.add('eye-gate-leaving');
+      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
+      window.location.assign(link.href);
     });
   });
 
