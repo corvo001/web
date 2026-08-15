@@ -1024,7 +1024,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  --about-cycle: 9s;
+  --about-cycle: 8.75s;
   position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
