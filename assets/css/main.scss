@@ -696,11 +696,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .display-name {
   width: 100%; max-width: 100%; white-space: nowrap;
   font-size: clamp(2rem, 5vw, 6rem); letter-spacing: clamp(.006em, .12vw, .024em);
-  text-align: center;
-  text-shadow:
-    0 0 .08em rgba(2,3,2,.94),
-    0 .06em .42em rgba(0,0,0,.84),
-    0 0 1.1em rgba(0,0,0,.62);
+  text-align: center; text-shadow: none;
 }
 .hero-projects { position: absolute; z-index: 1; inset: 0; background: #070908; }
 .hero-projects::after {
