@@ -1494,9 +1494,9 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
   .project-index__filters {
-    position: sticky; left: auto; top: calc(50svh - 2.625rem); bottom: auto;
-    width: 4rem; height: 5.25rem; margin: 0 0 -5.25rem;
-    transform: none; backface-visibility: visible; will-change: auto;
+    position: fixed; left: max(1rem,env(safe-area-inset-left)); top: calc(50svh - 2.625rem); bottom: auto;
+    width: 4rem; height: 5.25rem; margin: 0;
+    transform: translateZ(0); backface-visibility: hidden; will-change: auto;
   }
 
   .project-filter summary { width: 4rem; height: 5.25rem; }
