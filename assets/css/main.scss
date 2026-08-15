@@ -1536,7 +1536,9 @@ body.info-page > #main.internal-main {
 }
 body.home-page > #main.portfolio-main { display: flex; }
 .home-page .portfolio-hero {
-  --hall-copy-lift: clamp(.65rem,1.6dvh,1rem);
+  /* Compensate for the unequal visual weight of the fixed nav and footer.
+     A viewport-relative lift keeps the same optical centre on desktop and mobile. */
+  --hall-copy-lift: clamp(1.35rem,3.6dvh,2.15rem);
   display: grid; place-items: center;
   height: 100%; padding: 0 var(--page-pad);
 }
