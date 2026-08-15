@@ -1094,6 +1094,10 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 @keyframes about-resolve-iris { 0%,69% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 81%,96% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
 @keyframes about-resolve-identity { 0%,72% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 83%,96% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
 @keyframes about-pupil { 0%,84.5% { opacity: 0; transform: scale(.25); } 89%,96% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
+@keyframes about-resolve-mobile { 0%,66.5% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 83%,97% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-iris-mobile { 0%,70% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 87%,97% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-identity-mobile { 0%,74% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 89.5%,97% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-pupil-mobile { 0%,88.5% { opacity: 0; transform: scale(.25); } 93%,97% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
 @keyframes about-result-glow { 0%,84.5% { opacity: 0; transform: scale(.5); } 88% { opacity: .16; transform: scale(.9); } 92% { opacity: .07; transform: scale(1.08); } 96%,100% { opacity: 0; transform: scale(1.2); } }
 @keyframes about-signal { 0%,5% { opacity: 0; } 8%,78% { opacity: 1; } 82.5%,100% { opacity: 0; } }
 @keyframes about-signal-glow { 0%,5% { opacity: 0; } 8%,76% { opacity: .48; } 82%,100% { opacity: 0; } }
@@ -1278,6 +1282,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
       linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
   }
   .about-process {
+    --about-cycle: 8s;
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
   .about-process__visual {
@@ -1286,6 +1291,10 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   }
   .about-process__desktop-shape { display: none; }
   .about-process__mobile-shape { display: inline; }
+  .about-process__eye--mobile { animation-name: about-resolve-mobile; }
+  .about-process__iris--mobile { animation-name: about-resolve-iris-mobile; }
+  .about-process__identity { animation-name: about-resolve-identity-mobile; }
+  .about-process__pupil { animation-name: about-pupil-mobile; }
   .portfolio-footer { flex-direction: column; }
 }
 
