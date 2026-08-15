@@ -1541,6 +1541,8 @@ body.home-page > #main.portfolio-main { display: flex; }
   /* Compensate for the unequal visual weight of the fixed nav and footer.
      A viewport-relative lift keeps the same optical centre on desktop and mobile. */
   --hall-copy-lift: clamp(1.35rem,3.6dvh,2.15rem);
+  --hall-interest-lift: clamp(.45rem,1.1dvh,.7rem);
+  --hall-control-lift: clamp(1.15rem,2.5dvh,1.55rem);
   display: grid; place-items: center;
   height: 100%; padding: 0 var(--page-pad);
 }
@@ -1548,7 +1550,10 @@ body.home-page > #main.portfolio-main { display: flex; }
   transform: translateY(calc(-1 * var(--hall-copy-lift)));
 }
 .home-page .hero-project__interest {
-  top: calc(50% + clamp(4.5rem,9vw,8rem) - var(--hall-copy-lift));
+  top: calc(50% + clamp(4.5rem,9vw,8rem) - var(--hall-copy-lift) - var(--hall-interest-lift));
+}
+.home-page .hero-project-controls {
+  transform: translateY(calc(-50% - var(--hall-control-lift)));
 }
 .home-page .hero-projects { inset: 0; }
 .info-page .internal-main {
