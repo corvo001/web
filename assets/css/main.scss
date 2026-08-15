@@ -1002,7 +1002,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  --about-cycle: 6.4s;
+  --about-cycle: 8.2s;
   position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
@@ -1027,12 +1027,12 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .about-process__result { animation: about-stage-result var(--about-cycle) ease-in-out infinite; }
 .about-process__bracket { stroke-width: 1; opacity: .72; }
 .about-process__code-line { stroke-dasharray: 96; stroke-dashoffset: 96; animation: about-code var(--about-cycle) cubic-bezier(.22,1,.36,1) infinite; }
-.about-process__code-line--two { animation-delay: .13s; }
-.about-process__code-line--three { animation-delay: .26s; }
+.about-process__code-line--two { animation-delay: .17s; }
+.about-process__code-line--three { animation-delay: .33s; }
 .about-process__orbit { stroke-dasharray: 3 8; transform-origin: 514px 255px; animation: about-orbit var(--about-cycle) ease-in-out infinite; }
 .about-process__arm, .about-process__grip { stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .about-process__joint { fill: var(--ink); animation: about-joint var(--about-cycle) ease-in-out infinite; }
-.about-process__joint--late { animation-delay: .16s; }
+.about-process__joint--late { animation-delay: .2s; }
 .about-process__eye, .about-process__iris, .about-process__identity {
   vector-effect: non-scaling-stroke; stroke-linecap: round;
   stroke-dasharray: var(--about-draw-length); stroke-dashoffset: var(--about-draw-length);
