@@ -1509,8 +1509,9 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
 /* Hall, about and contact share one framed single-screen interface stage. */
 body.home-page,
 body.info-page {
-  --interface-frame-inline: clamp(.45rem,1vw,.85rem);
-  --interface-frame-gap: clamp(.45rem,1.2dvh,.7rem);
+  --interface-frame-inline: clamp(1rem,2.25vw,1.9rem);
+  --interface-frame-gap: clamp(.45rem,.9dvh,.6rem);
+  --interface-footer-size: clamp(3.5rem,6.2dvh,4rem);
   position: fixed; inset: 0;
   display: flex; flex-direction: column;
   width: 100%; height: 100dvh; min-height: 100dvh; max-height: 100dvh;
@@ -1572,13 +1573,26 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .info-contact-page .contact-links p { margin: 0; }
 .home-page .portfolio-footer,
-.info-page .portfolio-footer { flex: 0 0 auto; }
+.info-page .portfolio-footer {
+  flex: 0 0 var(--interface-footer-size);
+  height: var(--interface-footer-size); min-height: var(--interface-footer-size);
+  flex-direction: row; align-items: center;
+  gap: 1rem; padding: 0 var(--page-pad);
+  font-size: clamp(.54rem,min(.72vw,1.05dvh),.64rem);
+}
 
 @media (max-width: 700px) {
   body.home-page,
   body.info-page {
-    --interface-frame-inline: .4rem;
+    --interface-frame-inline: clamp(.65rem,3vw,.85rem);
     --interface-frame-gap: .45rem;
+    --interface-footer-size: clamp(4.25rem,9.5dvh,5rem);
+  }
+  .home-page .portfolio-footer,
+  .info-page .portfolio-footer {
+    justify-content: space-between;
+    gap: .75rem; padding-inline: 1rem;
+    font-size: .5rem;
   }
   .info-page .internal-main {
     padding: clamp(.45rem,1.35dvh,.75rem) 1rem;
@@ -1613,7 +1627,6 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-page .internal-copy { font-size: clamp(.76rem,min(1.35vw,1.8dvh),.95rem); line-height: 1.4; }
   .info-about-page .about-process,
   .info-about-page .about-process__visual { max-height: 27dvh; }
-  .info-page .portfolio-footer { padding-block: .35rem; }
 }
 
 @media (hover: none), (pointer: coarse) {
