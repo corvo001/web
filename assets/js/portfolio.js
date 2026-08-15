@@ -644,6 +644,37 @@
     const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     let lastCapsulePointer = null;
     let capsulePointerFrame = 0;
+    const distanceToSegment = (point, start, end) => {
+      const segmentX = end.x - start.x;
+      const segmentY = end.y - start.y;
+      const lengthSquared = (segmentX * segmentX) + (segmentY * segmentY);
+      if (!lengthSquared) return Math.hypot(point.x - start.x, point.y - start.y);
+      const projection = Math.max(0, Math.min(1,
+        (((point.x - start.x) * segmentX) + ((point.y - start.y) * segmentY)) / lengthSquared
+      ));
+      return Math.hypot(
+        point.x - (start.x + (projection * segmentX)),
+        point.y - (start.y + (projection * segmentY))
+      );
+    };
+    const distanceToDiamond = (rect, point) => {
+      const centerX = rect.left + (rect.width / 2);
+      const centerY = rect.top + (rect.height / 2);
+      const halfWidth = rect.width / 2;
+      const halfHeight = rect.height / 2;
+      const normalizedDistance = (Math.abs(point.x - centerX) / halfWidth)
+        + (Math.abs(point.y - centerY) / halfHeight);
+      if (normalizedDistance <= 1) return 0;
+      const vertices = [
+        { x: centerX, y: rect.top },
+        { x: rect.right, y: centerY },
+        { x: centerX, y: rect.bottom },
+        { x: rect.left, y: centerY }
+      ];
+      return Math.min(...vertices.map((vertex, index) =>
+        distanceToSegment(point, vertex, vertices[(index + 1) % vertices.length])
+      ));
+    };
     const updateCapsule = (capsule) => {
       const state = capsuleStates.get(capsule);
       const card = capsule.closest('.project-index-card');
@@ -665,10 +696,10 @@
         const card = capsule.closest('.project-index-card');
         if (!state || !card || card.hidden) return;
         const rect = capsule.getBoundingClientRect();
-        const activationRange = Math.min(140, Math.max(78, rect.width * .24));
-        const distanceX = Math.max(rect.left - lastCapsulePointer.x, 0, lastCapsulePointer.x - rect.right);
-        const distanceY = Math.max(rect.top - lastCapsulePointer.y, 0, lastCapsulePointer.y - rect.bottom);
-        const pointerNear = Math.hypot(distanceX, distanceY) <= activationRange;
+        const activationRange = Math.min(52, Math.max(28, rect.width * .1));
+        const releaseRange = activationRange + 14;
+        const pointerDistance = distanceToDiamond(rect, lastCapsulePointer);
+        const pointerNear = pointerDistance <= (state.pointerNear ? releaseRange : activationRange);
         if (pointerNear === state.pointerNear) return;
         state.pointerNear = pointerNear;
         updateCapsule(capsule);
