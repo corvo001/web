@@ -85,8 +85,12 @@
     <script>
       try {
         const projectTransition = JSON.parse(sessionStorage.getItem('portfolio-project-transition') || 'null');
-        if ('{{ page.layout }}' === 'project' && projectTransition?.phase === 'enter') {
+        const isExpectedProject = projectTransition?.path === window.location.pathname;
+        const isRecentProject = Date.now() - Number(projectTransition?.startedAt || 0) < 8000;
+        if ('{{ page.layout }}' === 'project' && projectTransition?.phase === 'enter' && isExpectedProject && isRecentProject) {
           document.documentElement.classList.add('project-entry-boot');
+        } else if (projectTransition?.phase === 'enter') {
+          sessionStorage.removeItem('portfolio-project-transition');
         }
         const archiveTransition = JSON.parse(sessionStorage.getItem('portfolio-archive-transition') || 'null');
         const isExpectedArchive = archiveTransition?.path === window.location.pathname;
@@ -96,7 +100,7 @@
         } else if (archiveTransition) {
           sessionStorage.removeItem('portfolio-archive-transition');
         }
-        window.setTimeout(() => document.documentElement.classList.remove('project-entry-boot', 'archive-entry-boot'), 2400);
+        window.setTimeout(() => document.documentElement.classList.remove('project-entry-boot', 'archive-entry-boot'), 8000);
       } catch (error) {}
     </script>
     {% endif %}

@@ -14,6 +14,7 @@
   let gateInitialStateHandled = false;
   let hallEyeArrivalPlaying = false;
   let archiveArrivalPlaying = false;
+  let projectArrivalPlaying = false;
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
@@ -26,7 +27,7 @@
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
-  const warmedProjectVideos = new Set();
+  const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
 
   const consumeResponse = async (response) => {
@@ -50,7 +51,9 @@
     targetDocument.querySelectorAll('link[rel="stylesheet"][href], link[rel="preload"][href]').forEach((element) => add(element.getAttribute('href')));
     targetDocument.querySelectorAll('script[src]').forEach((element) => add(element.getAttribute('src')));
     targetDocument.querySelectorAll('.nav-logo img[src], .reactive-mark__image[src]').forEach((element) => add(element.getAttribute('src')));
-    const activeMedia = targetDocument.querySelector('.hero-project.is-active [data-project-media], .project-index-card [data-project-media]');
+    const activeMedia = targetDocument.querySelector(
+      '[data-project-hero-media], .hero-project.is-active [data-project-media], .project-index-card [data-project-media]'
+    );
     if (activeMedia) {
       add(activeMedia.getAttribute('src'));
       add(activeMedia.getAttribute('data-src'));
@@ -98,16 +101,24 @@
 
   const warmProjectVideo = (link) => {
     const source = link?.dataset.projectVideo;
-    if (!source || warmedProjectVideos.has(source)) return;
-    warmedProjectVideos.add(source);
-    fetch(source, { cache: 'force-cache', priority: 'high' })
+    if (!source) return Promise.resolve(false);
+    const activeWarmup = warmedProjectVideos.get(source);
+    if (activeWarmup) return activeWarmup;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
+    const warmup = fetch(source, { cache: 'force-cache', priority: 'high', signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(`Video preload failed: ${response.status}`);
-        const reader = response.body?.getReader();
-        if (!reader) return;
-        while (!(await reader.read()).done) { /* Populate HTTP cache without retaining a full Blob. */ }
+        await consumeResponse(response);
+        return true;
       })
-      .catch(() => warmedProjectVideos.delete(source));
+      .catch(() => {
+        warmedProjectVideos.delete(source);
+        return false;
+      })
+      .finally(() => window.clearTimeout(timeout));
+    warmedProjectVideos.set(source, warmup);
+    return warmup;
   };
 
   if (document.fonts?.load) {
@@ -214,7 +225,6 @@
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
     document.querySelectorAll('.is-navigation-loading').forEach((link) => link.classList.remove('is-navigation-loading'));
-    document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
   };
 
   const showPageArrival = async () => {
@@ -342,9 +352,7 @@
 
   const departIntoProject = async (link, media, label, useDisplayFont) => {
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
-    document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
     const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
-    media.style.visibility = 'hidden';
     link.classList.add('is-launching');
     document.body.classList.add('project-portal-leaving');
     void backdrop.offsetWidth;
@@ -357,33 +365,82 @@
       id: link.dataset.projectId,
       phase: 'enter',
       originUrl: window.location.href,
+      path: new URL(link.href, window.location.href).pathname,
+      startedAt: Date.now(),
       label
     });
     window.location.assign(link.href);
   };
 
+  const waitForRenderableMedia = async (media) => {
+    if (media instanceof HTMLVideoElement) {
+      media.muted = true;
+      media.defaultMuted = true;
+      media.playsInline = true;
+      media.preload = 'auto';
+      const playAttempt = media.play();
+      if (playAttempt?.catch) playAttempt.catch(() => {});
+      if (media.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+        await new Promise((resolve) => {
+          let settled = false;
+          const finish = () => {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timeout);
+            media.removeEventListener('loadeddata', finish);
+            media.removeEventListener('error', finish);
+            resolve();
+          };
+          const timeout = window.setTimeout(finish, 1800);
+          media.addEventListener('loadeddata', finish, { once: true });
+          media.addEventListener('error', finish, { once: true });
+        });
+      }
+      if (media.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && media.requestVideoFrameCallback) {
+        await Promise.race([
+          new Promise((resolve) => media.requestVideoFrameCallback(resolve)),
+          new Promise((resolve) => window.setTimeout(resolve, 500))
+        ]);
+      }
+    } else if (media instanceof HTMLImageElement && !media.complete) {
+      await Promise.race([
+        media.decode?.().catch(() => {}) || Promise.resolve(),
+        new Promise((resolve) => window.setTimeout(resolve, 1200))
+      ]);
+    }
+    await nextPaint();
+  };
+
   const showProjectArrival = async () => {
+    if (projectArrivalPlaying) return;
     const state = readProjectTransition();
     const hero = document.querySelector('[data-project-hero]');
     const media = hero?.querySelector('[data-project-hero-media]');
-    if (!state || state.phase !== 'enter' || hero?.dataset.projectId !== state.id || !media) {
+    const isExpectedProject = state?.path === window.location.pathname;
+    const isRecentProject = Date.now() - Number(state?.startedAt || 0) < 8000;
+    if (!state || state.phase !== 'enter' || !isExpectedProject || !isRecentProject || hero?.dataset.projectId !== state.id || !media) {
       document.documentElement.classList.remove('project-entry-boot');
       if (state?.phase === 'enter') sessionStorage.removeItem(projectTransitionKey);
       return;
     }
-    if (reduceMotion.matches) {
+    projectArrivalPlaying = true;
+    try {
+      await waitForRenderableMedia(media);
       writeProjectTransition({ ...state, phase: 'inside' });
-      document.body.classList.add('page-arrival-complete');
+      if (reduceMotion.matches) {
+        document.body.classList.add('page-arrival-complete');
+        document.documentElement.classList.remove('project-entry-boot');
+        return;
+      }
+      document.documentElement.classList.add('project-entry-arriving');
+      await nextPaint();
       document.documentElement.classList.remove('project-entry-boot');
-      return;
+      await waitForMotion(document.documentElement, 'animationend', projectArrivalDuration, 'project-world-reveal');
+      document.body.classList.add('page-arrival-complete');
+    } finally {
+      document.documentElement.classList.remove('project-entry-arriving');
+      projectArrivalPlaying = false;
     }
-    writeProjectTransition({ ...state, phase: 'inside' });
-    document.documentElement.classList.add('project-entry-arriving');
-    await nextPaint();
-    document.documentElement.classList.remove('project-entry-boot');
-    await waitForMotion(document.documentElement, 'animationend', projectArrivalDuration, 'project-world-reveal');
-    document.body.classList.add('page-arrival-complete');
-    document.documentElement.classList.remove('project-entry-arriving');
   };
 
   const projectVideos = [...document.querySelectorAll('video[data-project-hero-media]')];
@@ -758,9 +815,13 @@
   });
 
   document.querySelectorAll('[data-project-link]').forEach((link) => {
-    link.addEventListener('pointerenter', () => warmProjectVideo(link), { passive: true });
-    link.addEventListener('focus', () => warmProjectVideo(link), { passive: true });
-    link.addEventListener('touchstart', () => warmProjectVideo(link), { passive: true, once: true });
+    const warmProjectDestination = () => {
+      warmProjectVideo(link);
+      warmNavigationPage(link);
+    };
+    link.addEventListener('pointerenter', warmProjectDestination, { passive: true });
+    link.addEventListener('focus', warmProjectDestination, { passive: true });
+    link.addEventListener('touchstart', warmProjectDestination, { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       const media = link.querySelector('[data-project-media]');
@@ -769,13 +830,23 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      warmProjectVideo(link);
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       const useDisplayFont = projectDisplayFontAvailable;
       const label = link.querySelector('h2, h3')?.textContent.trim() || link.dataset.projectId;
       departIntoProject(link, media, label, useDisplayFont).catch(() => {
-        writeProjectTransition({ id: link.dataset.projectId, phase: 'enter', label });
+        writeProjectTransition({
+          id: link.dataset.projectId,
+          phase: 'enter',
+          label,
+          path: new URL(link.href, window.location.href).pathname,
+          startedAt: Date.now()
+        });
         window.location.assign(link.href);
       });
     });
@@ -1070,7 +1141,7 @@
   });
 
   document.querySelectorAll('a[href]').forEach((link) => {
-    link.addEventListener('click', (event) => {
+    link.addEventListener('click', async (event) => {
       if (link.hasAttribute('data-language-link') || link.hasAttribute('data-language-menu') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || reduceMotion.matches || event.defaultPrevented) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
       const target = new URL(link.href, window.location.href);
@@ -1079,12 +1150,18 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       if (!/^\/(?:es|en)\/$/.test(target.pathname)) sessionStorage.removeItem(projectTransitionKey);
       sessionStorage.setItem(pageTransitionKey, JSON.stringify({ path: target.pathname, startedAt: Date.now() }));
       document.body.classList.add('page-leaving');
-      window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
+      await waitForMotion(document.body, 'animationend', pageDepartureDuration, 'page-transition-out');
+      window.location.assign(target.href);
     });
   });
 

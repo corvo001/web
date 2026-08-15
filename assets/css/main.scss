@@ -70,6 +70,8 @@
 
 * { box-sizing: border-box; }
 
+a, button, input, summary { -webkit-tap-highlight-color: transparent; }
+
 html { width: 100%; max-width: 100%; overflow-x: clip; background: var(--ink); scroll-behavior: smooth; }
 body {
   width: 100%; max-width: 100%; margin: 0; overflow-x: clip;
@@ -164,7 +166,9 @@ html.navigation-loading,
 html.navigation-loading body { cursor: progress; }
 html.navigation-loading [data-language-link],
 html.navigation-loading [data-language-menu],
-html.navigation-loading [data-work-entry] { pointer-events: none; }
+html.navigation-loading [data-work-entry],
+html.navigation-loading [data-project-link],
+html.navigation-loading .is-navigation-loading { pointer-events: none; }
 html.navigation-loading .is-navigation-loading { color: var(--accent) !important; opacity: .72; }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
@@ -486,6 +490,7 @@ html.gate-return-mode.gate-entering .gate-inner {
 .archive-transition {
   position: fixed; z-index: 500; inset: 0; overflow: hidden; pointer-events: none;
   background: var(--archive-base); color: var(--accent); opacity: 0;
+  isolation: isolate; contain: layout paint style; transform: translateZ(0);
 }
 .archive-transition__grid {
   position: absolute; inset: -20%; opacity: 0;
@@ -1032,12 +1037,14 @@ html.project-entry-arriving body { opacity: 1; animation: none; }
 html.project-entry-boot::after,
 html.project-entry-arriving::after {
   content: ""; position: fixed; z-index: 1000; inset: 0; background: #020302; opacity: 1; pointer-events: none;
+  transform: translateZ(0); backface-visibility: hidden;
 }
 html.project-entry-arriving::after { animation: project-world-reveal 620ms cubic-bezier(.22,1,.36,1) both; }
 html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .project-portal-backdrop {
   position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
   transition: opacity 700ms cubic-bezier(.4,0,.2,1); will-change: opacity;
+  isolation: isolate; transform: translateZ(0); backface-visibility: hidden;
 }
 .project-portal-backdrop.is-departing-world { animation: project-world-backdrop 1280ms ease both; }
 .project-world-signal {
@@ -1046,7 +1053,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
     repeating-radial-gradient(circle at center, transparent 0 6.5%, rgba(130,181,152,.1) 6.65%, transparent 6.85% 13%),
     linear-gradient(90deg, transparent 49.94%, rgba(239,242,237,.18) 50%, transparent 50.06%),
     linear-gradient(transparent 49.94%, rgba(239,242,237,.18) 50%, transparent 50.06%);
-  mix-blend-mode: screen; transform: scale(.72); will-change: opacity, transform;
+  mix-blend-mode: normal; transform: scale(.72); will-change: opacity, transform;
 }
 .project-world-signal::after {
   content: ""; position: absolute; inset: 0;
@@ -1258,7 +1265,8 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
 }
 .project-hero-image {
   width: 100%; height: 100%; object-fit: cover; display: block;
-  accent-color: var(--accent);
+  background: #020302; accent-color: var(--accent);
+  backface-visibility: hidden; transform: translateZ(0);
 }
 .project-hero-image::-webkit-media-controls-timeline,
 .project-hero-image::-webkit-media-controls-volume-slider {
