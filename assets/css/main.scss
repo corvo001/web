@@ -1014,7 +1014,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  --about-cycle: 8.2s;
+  --about-cycle: 9.6s;
   position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
@@ -1077,19 +1077,14 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 @keyframes about-code { 0%,25% { stroke-dashoffset: 96; opacity: .12; } 32%,43% { stroke-dashoffset: 0; opacity: 1; } 49%,100% { stroke-dashoffset: -96; opacity: .12; } }
 @keyframes about-orbit { 0%,43% { stroke-dashoffset: 55; opacity: .15; transform: rotate(-18deg) scale(.96); } 49%,63% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 70%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
 @keyframes about-joint { 0%,43%,70%,100% { stroke: currentColor; opacity: .3; } 49%,63% { stroke: var(--text); opacity: 1; } }
-@keyframes about-resolve { 0%,67.5% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 76%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-resolve-iris { 0%,68% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-resolve-identity { 0%,71% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 80%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-pupil { 0%,77% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
-@keyframes about-result-glow { 0%,77% { opacity: 0; transform: scale(.5); } 80% { opacity: .16; transform: scale(.9); } 84% { opacity: .07; transform: scale(1.08); } 88%,100% { opacity: 0; transform: scale(1.2); } }
-@keyframes about-signal { 0%,5% { opacity: 0; } 8%,78% { opacity: 1; } 84%,100% { opacity: 0; } }
-@keyframes about-signal-glow { 0%,5% { opacity: 0; } 8%,76% { opacity: .48; } 83%,100% { opacity: 0; } }
+@keyframes about-resolve { 0%,67.5% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,96% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-iris { 0%,69% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 81%,96% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-identity { 0%,72% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 83%,96% { stroke-dashoffset: 0; opacity: 1; } 99.5%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-pupil { 0%,84.5% { opacity: 0; transform: scale(.25); } 89%,96% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
+@keyframes about-result-glow { 0%,84.5% { opacity: 0; transform: scale(.5); } 88% { opacity: .16; transform: scale(.9); } 92% { opacity: .07; transform: scale(1.08); } 96%,100% { opacity: 0; transform: scale(1.2); } }
+@keyframes about-signal { 0%,5% { opacity: 0; } 8%,78% { opacity: 1; } 82.5%,100% { opacity: 0; } }
+@keyframes about-signal-glow { 0%,5% { opacity: 0; } 8%,76% { opacity: .48; } 82%,100% { opacity: 0; } }
 @keyframes about-scan { 0%,67.5% { opacity: 0; transform: translateY(-86px); } 73% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
-@keyframes about-mobile-pan {
-  0%,10% { transform: translate3d(0,-50%,0); }
-  68%,94% { transform: translate3d(-39.5%,-50%,0); }
-  100% { transform: translate3d(0,-50%,0); }
-}
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
@@ -1210,12 +1205,10 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
   .about-process {
-    height: clamp(15rem,72vw,18rem);
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
   .about-process__visual {
-    position: relative; top: 50%; width: 165%; max-width: none;
-    animation: about-mobile-pan var(--about-cycle) cubic-bezier(.45,0,.22,1) infinite;
+    width: 100%;
     shape-rendering: geometricPrecision;
   }
   .portfolio-footer { flex-direction: column; }
