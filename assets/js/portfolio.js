@@ -26,19 +26,31 @@
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
-  const warmedEyePages = new Set();
+  const warmedEyePages = new Map();
 
   const warmEyePage = (link) => {
     const target = link?.href;
-    if (!target || warmedEyePages.has(target)) return;
-    warmedEyePages.add(target);
-    fetch(target, { cache: 'force-cache', priority: 'high' })
+    if (!target) return Promise.resolve(false);
+    const activeWarmup = warmedEyePages.get(target);
+    if (activeWarmup) return activeWarmup;
+    const warmup = fetch(target, { cache: 'force-cache', priority: 'high' })
       .then((response) => {
         if (!response.ok) throw new Error(`Page preload failed: ${response.status}`);
         return response.text();
       })
-      .catch(() => warmedEyePages.delete(target));
+      .then(() => true)
+      .catch(() => {
+        warmedEyePages.delete(target);
+        return false;
+      });
+    warmedEyePages.set(target, warmup);
+    return warmup;
   };
+
+  const finishEyePageWarmup = (warmup) => Promise.race([
+    warmup || Promise.resolve(false),
+    new Promise((resolve) => window.setTimeout(() => resolve(false), 500))
+  ]);
 
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
@@ -608,7 +620,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      warmEyePage(link);
+      const eyePageWarmup = warmEyePage(link);
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -636,6 +648,7 @@
       rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
       document.documentElement.classList.add('eye-gate-leaving');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
+      await finishEyePageWarmup(eyePageWarmup);
       window.location.assign(link.href);
     });
   });
@@ -671,13 +684,14 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      warmEyePage(link);
+      const eyePageWarmup = warmEyePage(link);
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       const eyeGeometry = setPupilTransitionGeometry();
       if (!eyeGeometry) {
         sessionStorage.removeItem(eyeHallTransitionKey);
+        await finishEyePageWarmup(eyePageWarmup);
         window.location.assign(link.href);
         return;
       }
@@ -691,6 +705,7 @@
       document.documentElement.classList.remove('gate-preparing');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
+      await finishEyePageWarmup(eyePageWarmup);
       window.location.assign(link.href);
     });
   });
