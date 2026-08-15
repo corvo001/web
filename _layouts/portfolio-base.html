@@ -34,7 +34,7 @@
 
           if (enteringHall) {
             root.classList.remove('eye-hall-entry-boot', 'eye-hall-entering', 'page-transition-boot');
-            root.classList.add('eye-mpa-entering');
+            root.classList.add('eye-mpa-entering', 'eye-media-held');
             document.body?.classList.add('page-arrival-complete');
             sessionStorage.removeItem('portfolio-eye-hall-transition');
           } else {
@@ -47,8 +47,9 @@
           }
 
           event.viewTransition.finished.finally(() => {
-            root.classList.remove('eye-mpa-entering', 'eye-mpa-returning');
+            root.classList.remove('eye-mpa-entering', 'eye-mpa-returning', 'eye-media-held');
             ['--eye-vt-x', '--eye-vt-y', '--eye-vt-radius', '--eye-vt-cover'].forEach((property) => root.style.removeProperty(property));
+            if (enteringHall) window.dispatchEvent(new Event('portfolio-eye-transition-finished'));
           });
         } catch (error) {
           event.viewTransition.skipTransition();
@@ -182,6 +183,15 @@
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
     {% endif %}
+    {% if active_body_class == 'home-page' %}
+      {% for project in site.data.projects %}
+        {% unless project.hidden %}
+          <link rel="preload" href="{{ project.image | relative_url }}" as="image" fetchpriority="high">
+          {% if project.preview_video %}<link rel="preload" href="{{ project.preview_video | relative_url }}" as="video" type="video/webm" fetchpriority="high">{% endif %}
+          {% break %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
     {% if page.layout == 'project' %}
       {% assign preload_project_list = site.data.projects | where: 'id', page.project_id %}
       {% assign preload_project = preload_project_list | first %}
@@ -190,6 +200,7 @@
     <meta name="theme-color" content="#090b0a" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
     <link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ '/assets/fonts/ibm-plex-mono-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/dune-rise.woff' | relative_url }}" as="font" type="font/woff" crossorigin>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>

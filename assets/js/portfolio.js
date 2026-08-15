@@ -550,6 +550,7 @@
     projectVideoRetryTimers.set(video, timers);
   };
   const resumeProjectVideos = () => {
+    if (document.documentElement.classList.contains('eye-media-held')) return;
     projectVideos.forEach(primeProjectVideo);
     document.querySelectorAll('.hero-project.is-active video[data-project-media]').forEach((video) => {
       ensureVideoSource(video);
@@ -761,9 +762,10 @@
   });
   window.addEventListener('focus', resumeProjectVideos);
   window.addEventListener('online', resumeProjectVideos);
+  window.addEventListener('portfolio-eye-transition-finished', resumeProjectVideos);
   resetNavigationState();
-  if (document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
-  if (gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
+  if (!supportsCrossDocumentViewTransitions && document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
+  if (!supportsCrossDocumentViewTransitions && gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {

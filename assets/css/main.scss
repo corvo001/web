@@ -504,34 +504,34 @@ html.gate-return-mode.gate-entering .gate-inner {
 }
 @keyframes eye-mpa-reveal {
   0% {
-    opacity: .08;
+    opacity: 1;
     clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
-    filter: blur(7px) drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
+    filter: drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
   }
-  42% {
-    opacity: .72;
-    filter: blur(2px) drop-shadow(0 0 8px rgba(135,201,162,.7));
+  68% {
+    opacity: 1;
+    filter: drop-shadow(0 0 7px rgba(135,201,162,.62));
   }
   100% {
     opacity: 1;
     clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
-    filter: blur(0) drop-shadow(0 0 0 transparent);
+    filter: drop-shadow(0 0 0 transparent);
   }
 }
 @keyframes eye-mpa-collapse {
   0% {
     opacity: 1;
     clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
-    filter: blur(0) drop-shadow(0 0 0 transparent);
+    filter: drop-shadow(0 0 0 transparent);
   }
-  58% {
-    opacity: .76;
-    filter: blur(2px) drop-shadow(0 0 8px rgba(135,201,162,.7));
+  32% {
+    opacity: 1;
+    filter: drop-shadow(0 0 7px rgba(135,201,162,.62));
   }
   100% {
-    opacity: 0;
+    opacity: 1;
     clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
-    filter: blur(7px) drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
+    filter: drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
   }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

@@ -18,9 +18,9 @@ layout: portfolio-base
           <a class="hero-project{% if visible_project_index == 0 %} is-active{% endif %}" href="{{ project_url | relative_url }}" data-project-link data-project-id="{{ project.id }}"{% if project.video %} data-project-video="{{ project.video | relative_url }}"{% endif %}{% unless visible_project_index == 0 %} aria-hidden="true" tabindex="-1"{% endunless %}>
             {% if project.preview_video %}
               {% if visible_project_index == 0 %}
-                <video class="hero-project__media" src="{{ project.preview_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="auto" data-project-media></video>
+                <video class="hero-project__media" src="{{ project.preview_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="auto" data-project-media></video>
               {% else %}
-                <video class="hero-project__media" data-src="{{ project.preview_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="none" data-project-media></video>
+                <video class="hero-project__media" data-src="{{ project.preview_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="none" data-project-media></video>
               {% endif %}
             {% else %}
               <img class="hero-project__media" src="{{ project.image | relative_url }}" alt=""{% if visible_project_index == 0 %} fetchpriority="high"{% else %} loading="lazy"{% endif %} data-project-media>
