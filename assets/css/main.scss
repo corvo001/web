@@ -996,13 +996,14 @@ html.project-entry-boot body { opacity: 0; animation: none; }
 }
 .about-process__grid { color: var(--text); }
 .about-process__route { opacity: .8; }
-.about-process__idea { fill: currentColor; stroke: currentColor; stroke-width: 1; stroke-opacity: .28; }
+.about-process__idea { fill: currentColor; stroke: currentColor; stroke-width: 1; stroke-opacity: .28; animation: about-stage-idea 6.4s ease-in-out infinite; }
 .about-process__idea path { fill: none; }
 .about-process__idea > circle:not(.about-process__idea-core) { animation: about-particle 6.4s ease-in-out infinite; }
-.about-process__idea > circle:nth-child(2n) { animation-delay: -1.4s; }
-.about-process__idea > circle:nth-child(3n) { animation-delay: -3.1s; }
-.about-process__idea-core { fill: none; stroke-dasharray: 2 7; animation: about-spin 8s linear infinite; transform-origin: 137px 254px; }
+.about-process__idea-core { fill: none; stroke-dasharray: 2 7; animation: about-spin 6.4s ease-in-out infinite; transform-origin: 137px 254px; }
 .about-process__software, .about-process__machine, .about-process__result { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.about-process__software { animation: about-stage-software 6.4s ease-in-out infinite; }
+.about-process__machine { animation: about-stage-machine 6.4s ease-in-out infinite; }
+.about-process__result { animation: about-stage-result 6.4s ease-in-out infinite; }
 .about-process__bracket { stroke-width: 1; opacity: .72; }
 .about-process__code-line { stroke-dasharray: 96; stroke-dashoffset: 96; animation: about-code 6.4s cubic-bezier(.22,1,.36,1) infinite; }
 .about-process__code-line--two { animation-delay: .13s; }
@@ -1032,18 +1033,23 @@ html.project-entry-boot body { opacity: 0; animation: none; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
-@keyframes about-particle { 0%,100% { opacity: .28; transform: translate(0); } 45% { opacity: 1; transform: translate(2px,-4px); } 72% { opacity: .45; transform: translate(-2px,2px); } }
-@keyframes about-spin { to { transform: rotate(360deg); } }
-@keyframes about-code { 0%,18% { stroke-dashoffset: 96; opacity: .12; } 35%,70% { stroke-dashoffset: 0; opacity: 1; } 88%,100% { stroke-dashoffset: -96; opacity: .12; } }
-@keyframes about-orbit { 0%,24% { stroke-dashoffset: 55; opacity: .15; } 45%,72% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 88%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
-@keyframes about-joint { 0%,34%,100% { stroke: currentColor; opacity: .3; } 48%,70% { stroke: var(--text); opacity: 1; } }
-/* The signal enters the eye section at 48% and reaches its endpoint at 82%. */
-@keyframes about-resolve { 0%,48% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 68%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-iris { 0%,55% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 74%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-resolve-identity { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
-@keyframes about-pupil { 0%,72% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
-@keyframes about-result-glow { 0%,74% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
-@keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
+/* One 6.4 s timeline: the travelling signal powers each module as it reaches it. */
+@keyframes about-stage-idea { 0%,9.5%,100% { opacity: .24; } 12%,22% { opacity: 1; } 30% { opacity: .3; } }
+@keyframes about-stage-software { 0%,25%,100% { opacity: .2; } 28%,41% { opacity: 1; } 49% { opacity: .3; } }
+@keyframes about-stage-machine { 0%,43%,100% { opacity: .2; } 46%,62% { opacity: 1; } 70% { opacity: .3; } }
+@keyframes about-stage-result { 0%,67.5%,100% { opacity: .16; } 70%,94% { opacity: 1; } }
+@keyframes about-particle { 0%,9.5%,30%,100% { opacity: .22; transform: translate(0); } 13% { opacity: 1; transform: translate(2px,-4px); } 21% { opacity: .7; transform: translate(-2px,2px); } }
+@keyframes about-spin { 0%,9.5% { transform: rotate(0); opacity: .25; } 12% { opacity: 1; } 25% { transform: rotate(230deg); opacity: 1; } 31%,100% { transform: rotate(250deg); opacity: .25; } }
+@keyframes about-code { 0%,25% { stroke-dashoffset: 96; opacity: .12; } 32%,43% { stroke-dashoffset: 0; opacity: 1; } 49%,100% { stroke-dashoffset: -96; opacity: .12; } }
+@keyframes about-orbit { 0%,43% { stroke-dashoffset: 55; opacity: .15; transform: rotate(-18deg) scale(.96); } 49%,63% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 70%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
+@keyframes about-joint { 0%,43%,70%,100% { stroke: currentColor; opacity: .3; } 49%,63% { stroke: var(--text); opacity: 1; } }
+/* The signal enters the eye section at 67.5% and reaches the pupil at 82%. */
+@keyframes about-resolve { 0%,67.5% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 76%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-iris { 0%,68% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-resolve-identity { 0%,71% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 80%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
+@keyframes about-pupil { 0%,77% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
+@keyframes about-result-glow { 0%,78% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
+@keyframes about-scan { 0%,67.5% { opacity: 0; transform: translateY(-86px); } 73% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
@@ -1229,6 +1235,7 @@ html.project-entry-boot body { opacity: 0; animation: none; }
   .reactive-mark__pupil { transform: translate(-50%, -50%) !important; }
   .portfolio-shell::before { display: none; }
   .about-process__signal, .about-process__signal-glow, .about-process__scan, .about-process__result-glow { display: none; }
+  .about-process__idea, .about-process__software, .about-process__machine, .about-process__result { opacity: 1; animation: none; }
   .about-process__code-line, .about-process__eye, .about-process__iris, .about-process__identity { stroke-dashoffset: 0; opacity: 1; }
   .about-process__orbit { stroke-dashoffset: 0; opacity: .65; }
   .about-process__pupil { opacity: 1; transform: none; }
