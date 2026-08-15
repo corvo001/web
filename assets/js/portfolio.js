@@ -17,8 +17,8 @@
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
-  const archiveDepartureDuration = 1280;
-  const archiveArrivalDuration = 900;
+  const archiveDepartureDuration = 1120;
+  const archiveArrivalDuration = 720;
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
 
@@ -106,7 +106,7 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -166,9 +166,14 @@
     }
 
     const transition = createArchiveTransition(state.label || '');
-    transition.classList.add('is-arriving');
+    transition.classList.add('is-arrival-ready');
+    document.body.classList.add('archive-arriving');
+    await nextPaint();
     document.documentElement.classList.remove('archive-entry-boot');
+    transition.classList.add('is-arriving');
     await waitForMotion(transition, 'animationend', archiveArrivalDuration, 'archive-shell-out');
+    document.body.classList.add('page-arrival-complete');
+    document.body.classList.remove('archive-arriving');
     transition.remove();
   };
 
