@@ -430,10 +430,11 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .archive-transition__frame--inner { inset: 17%; border-color: var(--archive-frame-inner); }
 .archive-transition__aperture {
   position: absolute; z-index: 3; left: 50%; top: 50%; width: 14vmax; aspect-ratio: 1;
-  border: 1px solid var(--archive-frame); opacity: 0; pointer-events: none;
-  transform: translate(-50%,-50%) rotate(45deg) scale(.34);
-  box-shadow: 0 0 1.2rem rgba(130,181,152,.08), inset 0 0 1.2rem rgba(130,181,152,.05);
-  will-change: transform, opacity;
+  border: 0; opacity: 0; pointer-events: none;
+  background: radial-gradient(circle,rgba(130,181,152,.15) 0,rgba(130,181,152,.055) 32%,transparent 72%);
+  transform: translate(-50%,-50%) scale(.34); filter: blur(7px);
+  box-shadow: 0 0 2.8rem rgba(130,181,152,.055);
+  will-change: transform, opacity, filter;
 }
 .archive-transition__shutter {
   position: absolute; z-index: 2; top: 0; bottom: 0; width: 58%;
@@ -504,11 +505,11 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   96%,100% { transform: translateX(102%); }
 }
 @keyframes archive-cycle-aperture {
-  0%,55% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
-  58% { opacity: .58; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
-  68% { opacity: 1; transform: translate(-50%,-50%) rotate(45deg) scale(.62); }
-  90% { opacity: .72; transform: translate(-50%,-50%) rotate(45deg) scale(7.4); }
-  100% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(8.6); }
+  0%,55% { opacity: 0; transform: translate(-50%,-50%) scale(.34); filter: blur(9px); }
+  60% { opacity: .22; transform: translate(-50%,-50%) scale(.4); filter: blur(8px); }
+  70% { opacity: .48; transform: translate(-50%,-50%) scale(.78); filter: blur(6px); }
+  91% { opacity: .24; transform: translate(-50%,-50%) scale(7.8); filter: blur(12px); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(9.2); filter: blur(16px); }
 }
 @keyframes archive-cycle-title {
   0%,14% { opacity: 0; transform: scale(.72); }
