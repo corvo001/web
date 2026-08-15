@@ -5,6 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
+      window.addEventListener('pageswap', (event) => {
+        if (!event.viewTransition) return;
+        try {
+          const destinationUrl = event.activation?.entry?.url;
+          const destinationPath = destinationUrl ? new URL(destinationUrl).pathname : null;
+          const now = Date.now();
+          const hallState = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
+          const gateState = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
+          const isCurrentEyeNavigation = (state) => state &&
+            now - Number(state.startedAt || 0) < 8000 &&
+            (!destinationPath || state.path === destinationPath);
+
+          if (!isCurrentEyeNavigation(hallState) && !isCurrentEyeNavigation(gateState)) {
+            event.viewTransition.skipTransition();
+          }
+        } catch (error) {
+          event.viewTransition.skipTransition();
+        }
+      });
+
       window.addEventListener('pagereveal', (event) => {
         if (!event.viewTransition) return;
         try {
