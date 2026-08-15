@@ -802,7 +802,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   color: var(--accent); list-style: none; cursor: pointer; overflow: hidden;
   border: 1px solid color-mix(in srgb,var(--accent) 26%,var(--line));
   background: linear-gradient(180deg,color-mix(in srgb,var(--surface) 97%,var(--ink)),var(--ink));
-  clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% calc(100% - var(--filter-cut)),calc(100% - var(--filter-cut)) 100%,0 100%);
+  clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% 100%,0 100%);
   box-shadow: inset 0 0 1.6rem rgba(130,181,152,.035);
   -webkit-backdrop-filter: none; backdrop-filter: none; transition: color 220ms ease, border-color 220ms ease, transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
 }
@@ -1383,10 +1383,7 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
     transform: none; backface-visibility: visible; will-change: auto;
   }
 
-  .project-filter summary {
-    width: 3.65rem; height: 4.55rem;
-    clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% 100%,0 100%);
-  }
+  .project-filter summary { width: 3.65rem; height: 4.55rem; }
   .project-filter__menu { left: 0; top: auto; bottom: calc(100% + .75rem); width: min(18rem,calc(100vw - 2rem)); transform: none; transform-origin: left bottom; }
   .project-filter__connector { left: 1.7rem; top: auto; bottom: -.76rem; width: 1px; height: .76rem; background: linear-gradient(transparent,var(--accent)); }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
