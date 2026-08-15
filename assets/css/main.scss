@@ -1574,7 +1574,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   flex: 0 1 auto;
   display: grid; place-items: center;
   width: min(100%,68rem); max-height: min(43dvh,29rem);
-  margin: clamp(.15rem,1dvh,.6rem) auto 0;
+  margin: clamp(1rem,2.6dvh,1.65rem) auto 0;
 }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: min(43dvh,29rem);
@@ -1632,7 +1632,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   }
   .info-about-page .about-process {
     width: 100%; max-height: min(30dvh,15.5rem);
-    margin-top: clamp(.1rem,.65dvh,.35rem);
+    margin-top: clamp(.7rem,1.8dvh,1rem);
   }
   .info-about-page .about-process__visual { max-height: min(30dvh,15.5rem); }
 }
