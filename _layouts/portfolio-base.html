@@ -186,6 +186,15 @@
     </script>
     {% endif %}
     {% if page.layout == 'project' or active_body_class == 'work-page' %}
+    <style>
+      html.project-entry-boot{background:#020302;color-scheme:dark;overflow:hidden}
+      html.project-entry-boot body,html.archive-entry-boot body{opacity:0;animation:none}
+      html.archive-entry-boot{--archive-critical-shutter:#070908;--archive-critical-edge:#111714;--archive-critical-glow:rgba(130,181,152,.34);background:var(--archive-critical-shutter);color-scheme:dark;overflow:hidden}
+      html.archive-entry-boot::before,html.archive-entry-boot::after{content:"";position:fixed;z-index:1000;top:0;bottom:0;width:58%;pointer-events:none;filter:drop-shadow(0 0 .3rem var(--archive-critical-glow));backface-visibility:hidden}
+      html.archive-entry-boot::before{left:0;clip-path:polygon(0 0,86.2% 0,100% 50%,86.2% 100%,0 100%);background:linear-gradient(90deg,var(--archive-critical-shutter) 0 76%,var(--archive-critical-edge) 100%)}
+      html.archive-entry-boot::after{right:0;clip-path:polygon(13.8% 0,100% 0,100% 100%,13.8% 100%,0 50%);background:linear-gradient(-90deg,var(--archive-critical-shutter) 0 76%,var(--archive-critical-edge) 100%)}
+      @media(prefers-color-scheme:light){html.archive-entry-boot{--archive-critical-shutter:#e1e5de;--archive-critical-edge:#d4dcd3;--archive-critical-glow:rgba(63,119,88,.38);color-scheme:light}}
+    </style>
     <script>
       try {
         const projectTransition = JSON.parse(sessionStorage.getItem('portfolio-project-transition') || 'null');
