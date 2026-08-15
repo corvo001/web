@@ -1119,18 +1119,16 @@ html.project-entry-boot body { opacity: 0; animation: none; }
     width: 100%;
     shape-rendering: geometricPrecision;
   }
-  /* Keep the resolved eye legible and structurally consistent with desktop. */
+  /* Preserve the desktop eye geometry; mobile only receives a softer glow. */
   .about-process__result {
-    stroke-width: 1.2;
-    transform-box: view-box;
-    transform-origin: 752px 260px;
-    transform: scale(1.22);
+    stroke-width: 1.4;
+    transform: none;
   }
-  .about-process__eye, .about-process__iris { stroke-width: 1.25; }
-  .about-process__result-glow { filter: blur(10px); }
+  .about-process__eye, .about-process__iris { stroke-width: 1.4; }
+  .about-process__result-glow { filter: blur(8px); }
   .about-process__pupil {
     fill: #8fc5a4;
-    filter: drop-shadow(0 0 2px rgba(143,197,164,.42));
+    filter: drop-shadow(0 0 1.5px rgba(143,197,164,.38)) drop-shadow(0 0 4px rgba(130,181,152,.14));
   }
   .portfolio-footer { flex-direction: column; }
 }
