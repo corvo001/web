@@ -27,7 +27,7 @@
             {% else %}
               {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
             {% endif %}
-            <a class="project-index-card" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}">
+            <a class="project-index-card" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}"{% if project.video %} data-project-video="{{ project.video | relative_url }}"{% endif %}>
               <div class="project-index-card__visual">
                 {% assign card_video = project.preview_video | default: project.video %}
                 {% if card_video %}

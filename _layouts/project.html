@@ -13,7 +13,7 @@ layout: portfolio-base
   </header>
   <div class="project-hero-media" data-project-hero data-project-id="{{ project.id }}">
     {% if project.video %}
-      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="auto" controls aria-label="{{ project.name }}" data-project-hero-media></video>
+      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="auto" fetchpriority="high" controls aria-label="{{ project.name }}" data-project-hero-media></video>
       <div class="project-video-controls" data-project-video-controls hidden>
         <button class="project-video-toggle" type="button" aria-label="{{ t.project.pause }}" data-project-video-toggle data-label-play="{{ t.project.play }}" data-label-pause="{{ t.project.pause }}">
           <span class="project-video-toggle__icon" aria-hidden="true"></span>

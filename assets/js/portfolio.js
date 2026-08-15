@@ -21,6 +21,19 @@
   const archiveArrivalDuration = 720;
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
+  const warmedProjectVideos = new Set();
+
+  const warmProjectVideo = (link) => {
+    const source = link?.dataset.projectVideo;
+    if (!source || warmedProjectVideos.has(source)) return;
+    warmedProjectVideos.add(source);
+    fetch(source, { cache: 'force-cache', priority: 'high' })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Video preload failed: ${response.status}`);
+        return response.blob();
+      })
+      .catch(() => warmedProjectVideos.delete(source));
+  };
 
   if (document.fonts?.load) {
     document.fonts.load('400 4rem "Dune Rise"', 'DYSON SWARM')
@@ -548,6 +561,9 @@
   });
 
   document.querySelectorAll('[data-project-link]').forEach((link) => {
+    link.addEventListener('pointerenter', () => warmProjectVideo(link), { passive: true });
+    link.addEventListener('focus', () => warmProjectVideo(link), { passive: true });
+    link.addEventListener('touchstart', () => warmProjectVideo(link), { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       const media = link.querySelector('[data-project-media]');
@@ -556,6 +572,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      warmProjectVideo(link);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       const useDisplayFont = projectDisplayFontAvailable;
@@ -586,7 +603,10 @@
         slide.setAttribute('aria-hidden', String(!isActive));
         slide.tabIndex = isActive ? 0 : -1;
         if (video) {
-          if (isActive) video.play().catch(() => {});
+          if (isActive) {
+            warmProjectVideo(slide);
+            video.play().catch(() => {});
+          }
           else video.pause();
         }
       });
@@ -683,6 +703,7 @@
       const proximityActive = desktopPointer.matches ? state.pointerNear : state.near;
       const active = !document.hidden && !card.hidden && !reduceMotion.matches && (proximityActive || state.hovered || state.focused);
       capsule.classList.toggle('is-proximity-active', active);
+      if (active) warmProjectVideo(card);
       if (!video) return;
       if (active) video.play().catch(() => {});
       else video.pause();

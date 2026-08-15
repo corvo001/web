@@ -87,6 +87,11 @@
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
     {% endif %}
+    {% if page.layout == 'project' %}
+      {% assign preload_project_list = site.data.projects | where: 'id', page.project_id %}
+      {% assign preload_project = preload_project_list | first %}
+      {% if preload_project.video %}<link rel="preload" href="{{ preload_project.video | relative_url }}" as="video" type="video/webm" fetchpriority="high">{% endif %}
+    {% endif %}
     <meta name="theme-color" content="#090b0a" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
