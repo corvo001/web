@@ -50,32 +50,20 @@
     </g>
 
     <g class="about-process__result">
-      <path class="about-process__eye about-process__desktop-shape" d="M674 260c42-65 114-65 156 0-42 65-114 65-156 0Z"/>
-      <circle class="about-process__iris about-process__desktop-shape" cx="752" cy="260" r="37"/>
-      <path class="about-process__eye about-process__eye--mobile about-process__mobile-shape" d="M674 260C710 197 793 196 830 260C797 307 731 331 695 293"/>
-      <path class="about-process__iris about-process__iris--mobile about-process__mobile-shape" d="M789 260A37 37 0 1 1 752 223"/>
+      <path class="about-process__eye" d="M674 260c42-65 114-65 156 0-42 65-114 65-156 0Z"/>
+      <circle class="about-process__iris" cx="752" cy="260" r="37"/>
       <circle class="about-process__result-glow" cx="752" cy="260" r="42"/>
       <circle class="about-process__pupil" cx="752" cy="260" r="6"/>
       <path class="about-process__identity" d="M752 209v-18M721 216l-10-16M783 216l10-16"/>
     </g>
 
-    <circle class="about-process__signal-glow about-process__desktop-shape" r="18" fill="url(#about-core-{{ include.lang }})" filter="url(#about-glow-{{ include.lang }})">
+    <circle class="about-process__signal-glow" r="18" fill="url(#about-core-{{ include.lang }})" filter="url(#about-glow-{{ include.lang }})">
       <animateMotion dur="7.75s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="linear">
         <mpath href="#about-path-{{ include.lang }}"/>
       </animateMotion>
     </circle>
-    <circle class="about-process__signal about-process__desktop-shape" r="4">
+    <circle class="about-process__signal" r="4">
       <animateMotion dur="7.75s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="linear">
-        <mpath href="#about-path-{{ include.lang }}"/>
-      </animateMotion>
-    </circle>
-    <circle class="about-process__signal-glow about-process__mobile-shape" r="18" fill="url(#about-core-{{ include.lang }})" filter="url(#about-glow-{{ include.lang }})">
-      <animateMotion dur="8s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="linear">
-        <mpath href="#about-path-{{ include.lang }}"/>
-      </animateMotion>
-    </circle>
-    <circle class="about-process__signal about-process__mobile-shape" r="4">
-      <animateMotion dur="8s" repeatCount="indefinite" keyTimes="0;.08;.82;1" keyPoints="0;0;1;1" calcMode="linear">
         <mpath href="#about-path-{{ include.lang }}"/>
       </animateMotion>
     </circle>
