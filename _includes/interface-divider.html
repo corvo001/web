@@ -13,10 +13,6 @@
   </defs>
   <use class="interface-divider__line" href="#interface-path-{{ include.position }}"/>
   <use class="interface-divider__signal" href="#interface-path-{{ include.position }}" stroke="url(#interface-signal-{{ include.position }})"/>
-  <use class="interface-divider__pulse" href="#interface-path-{{ include.position }}">
-    <animate attributeName="opacity" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.18;.34;.44;.5;.56;.66;.82;1" values="0;0;.015;.16;.62;.16;.015;0;0"/>
-    <animate attributeName="stroke-dashoffset" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" from="110" to="-1330"/>
-  </use>
   <path class="interface-divider__cursor-glow" d="M0-3.5V3.5">
     <animate attributeName="opacity" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.18;.34;.44;.5;.56;.66;.82;1" values="0;0;.02;.18;.72;.18;.02;0;0"/>
     <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto">
