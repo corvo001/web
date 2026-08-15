@@ -23,14 +23,24 @@
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
 
+  const ensureVideoSource = (video) => {
+    const source = video?.dataset.src;
+    if (!source || video.getAttribute('src')) return;
+    video.src = source;
+    video.removeAttribute('data-src');
+    video.load();
+  };
+
   const warmProjectVideo = (link) => {
     const source = link?.dataset.projectVideo;
     if (!source || warmedProjectVideos.has(source)) return;
     warmedProjectVideos.add(source);
     fetch(source, { cache: 'force-cache', priority: 'high' })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) throw new Error(`Video preload failed: ${response.status}`);
-        return response.blob();
+        const reader = response.body?.getReader();
+        if (!reader) return;
+        while (!(await reader.read()).done) { /* Populate HTTP cache without retaining a full Blob. */ }
       })
       .catch(() => warmedProjectVideos.delete(source));
   };
@@ -121,7 +131,7 @@
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
-    document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
+    document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
   };
@@ -158,6 +168,7 @@
       <span class="archive-transition__scan"></span>
       <span class="archive-transition__frame archive-transition__frame--outer"></span>
       <span class="archive-transition__frame archive-transition__frame--inner"></span>
+      <span class="archive-transition__aperture"></span>
       <span class="archive-transition__shutter archive-transition__shutter--left"></span>
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
       <span class="archive-transition__meta">CORVO 001</span>
@@ -215,7 +226,7 @@
   };
 
   const departIntoProject = async (link, media, label, useDisplayFont) => {
-    document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
+    document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((element) => { element.style.visibility = ''; });
     const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
     media.style.visibility = 'hidden';
@@ -567,7 +578,7 @@
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       const media = link.querySelector('[data-project-media]');
-      if (!media || link.classList.contains('is-arming') || link.classList.contains('is-launching')) return;
+      if (!media || link.classList.contains('is-launching')) return;
 
       event.preventDefault();
       if (navigationInProgress) return;
@@ -605,7 +616,7 @@
         slide.tabIndex = isActive ? 0 : -1;
         if (video) {
           if (isActive) {
-            warmProjectVideo(slide);
+            ensureVideoSource(video);
             video.play().catch(() => {});
           }
           else video.pause();
@@ -715,7 +726,10 @@
       capsule.classList.toggle('is-proximity-active', active);
       if (active) warmProjectVideo(card);
       if (!video) return;
-      if (active) video.play().catch(() => {});
+      if (active) {
+        ensureVideoSource(video);
+        video.play().catch(() => {});
+      }
       else video.pause();
     };
 
@@ -804,7 +818,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
+      document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       if (window.location.pathname.startsWith(target.pathname)) {
         sessionStorage.removeItem(archiveTransitionKey);
         document.body.classList.add('page-leaving');
@@ -831,69 +845,13 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
+      document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       if (!/^\/(?:es|en)\/$/.test(target.pathname)) sessionStorage.removeItem(projectTransitionKey);
       sessionStorage.setItem(pageTransitionKey, JSON.stringify({ path: target.pathname, startedAt: Date.now() }));
       document.body.classList.add('page-leaving');
       window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
     });
-  });
-
-  document.querySelectorAll('[data-project-track]').forEach((track) => {
-    const section = track.closest('.work-section');
-    const previous = section?.querySelector('[data-project-previous]');
-    const next = section?.querySelector('[data-project-next]');
-    const cards = [...track.querySelectorAll('.project-card')];
-    if (!previous || !next || cards.length < 2) return;
-
-    const activeIndex = () => {
-      const trackLeft = track.getBoundingClientRect().left;
-      return cards.reduce((closest, card, index) => {
-        const distance = Math.abs(card.getBoundingClientRect().left - trackLeft);
-        return distance < closest.distance ? { index, distance } : closest;
-      }, { index: 0, distance: Infinity }).index;
-    };
-
-    const updateControls = () => {
-      const index = activeIndex();
-      previous.disabled = index === 0;
-      next.disabled = index === cards.length - 1;
-    };
-
-    const goTo = (index) => {
-      cards[Math.max(0, Math.min(cards.length - 1, index))].scrollIntoView({
-        behavior: reduceMotion.matches ? 'auto' : 'smooth',
-        block: 'nearest',
-        inline: 'start'
-      });
-    };
-
-    previous.addEventListener('click', () => goTo(activeIndex() - 1));
-    next.addEventListener('click', () => goTo(activeIndex() + 1));
-    track.addEventListener('scroll', () => window.requestAnimationFrame(updateControls), { passive: true });
-    window.addEventListener('resize', updateControls, { passive: true });
-    updateControls();
-  });
-
-  document.querySelectorAll('.work-section').forEach((section) => {
-    const backToHall = section.querySelector('[data-back-to-hall]');
-    if (!backToHall) return;
-    document.documentElement.appendChild(backToHall);
-    let updateQueued = false;
-    const updateBackToHall = () => {
-      const rect = section.getBoundingClientRect();
-      backToHall.classList.toggle('is-visible', rect.top <= window.innerHeight * .2 && rect.bottom > 0);
-      updateQueued = false;
-    };
-    const queueBackToHallUpdate = () => {
-      if (updateQueued) return;
-      updateQueued = true;
-      window.requestAnimationFrame(updateBackToHall);
-    };
-    window.addEventListener('scroll', queueBackToHallUpdate, { passive: true });
-    window.addEventListener('resize', queueBackToHallUpdate, { passive: true });
-    updateBackToHall();
   });
 
   document.querySelectorAll('[data-gallery]').forEach((gallery) => {

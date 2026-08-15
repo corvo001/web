@@ -12,7 +12,6 @@ es:
   work:
     title: "PROYECTOS"
     archive: "BIENVENIDO"
-    archive_status: "ACCESO AUTORIZADO · PREPARANDO INVENTARIO"
     previous: "Proyecto anterior"
     next: "Proyecto siguiente"
     back_to_hall: "Volver al inicio"
@@ -52,7 +51,6 @@ en:
   work:
     title: "PROJECTS"
     archive: "WELCOME"
-    archive_status: "ACCESS GRANTED · PREPARING INVENTORY"
     previous: "Previous project"
     next: "Next project"
     back_to_hall: "Back to the top"

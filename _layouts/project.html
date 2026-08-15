@@ -25,7 +25,7 @@ layout: portfolio-base
         </button>
       </div>
     {% else %}
-      <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }}" data-project-hero-media>
+      <img class="project-hero-image{% if project.placeholder %} project-hero-image--placeholder{% endif %}" src="{{ project.image | relative_url }}" alt="{{ project.name }}" data-project-hero-media>
     {% endif %}
   </div>
   <div class="project-facts">
@@ -42,7 +42,7 @@ layout: portfolio-base
         <button class="project-control" type="button" data-gallery-next aria-label="{{ t.work.next }}"><span class="project-chevron project-chevron--next" aria-hidden="true"></span></button>
       </div>
       <div class="project-gallery__track" data-gallery-track tabindex="0">
-        {% for image in project.gallery %}<figure class="project-gallery__slide"><img src="{{ image | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy"></figure>{% endfor %}
+        {% for image in project.gallery %}<figure class="project-gallery__slide"><img src="{{ image | relative_url }}" alt="{{ project.name }} — {{ t.project.gallery }} {{ forloop.index }}" loading="lazy"></figure>{% endfor %}
       </div>
     </section>
   {% endif %}

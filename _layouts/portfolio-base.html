@@ -94,11 +94,8 @@
     {% endif %}
     <meta name="theme-color" content="#090b0a" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.cdnfonts.com">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/dune-rise" rel="stylesheet">
+    <link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ '/assets/fonts/dune-rise.woff' | relative_url }}" as="font" type="font/woff" crossorigin>
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">

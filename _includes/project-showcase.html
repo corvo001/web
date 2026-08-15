@@ -27,13 +27,13 @@
             {% else %}
               {% assign project_url = '/en/work/' | append: project.id | append: '/' %}
             {% endif %}
-            <a class="project-index-card" href="{{ project_url | relative_url }}?v={{ site.time | date: '%s' }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}"{% if project.video %} data-project-video="{{ project.video | relative_url }}"{% endif %}>
+            <a class="project-index-card" href="{{ project_url | relative_url }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}"{% if project.video %} data-project-video="{{ project.video | relative_url }}"{% endif %}>
               <div class="project-index-card__visual">
                 {% assign card_video = project.preview_video | default: project.video %}
                 {% if card_video %}
-                  <video class="project-index-card__media" src="{{ card_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="metadata" data-project-media></video>
+                  <video class="project-index-card__media" data-src="{{ card_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="none" data-project-media></video>
                 {% else %}
-                  <img class="project-index-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
+                  <img class="project-index-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy" data-project-media>
                 {% endif %}
                 <svg class="project-index-card__frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
                   <path class="project-index-card__frame-outer" d="M50 .65 99.35 50 50 99.35.65 50Z"/>
