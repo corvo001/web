@@ -121,7 +121,7 @@
 
   const writeProjectTransition = (value) => sessionStorage.setItem(projectTransitionKey, JSON.stringify(value));
 
-  const createArchiveTransition = (label, status) => {
+  const createArchiveTransition = (label) => {
     const transition = document.createElement('div');
     transition.className = 'archive-transition';
     transition.setAttribute('aria-hidden', 'true');
@@ -132,9 +132,9 @@
       <span class="archive-transition__frame archive-transition__frame--inner"></span>
       <span class="archive-transition__shutter archive-transition__shutter--left"></span>
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
-      <span class="archive-transition__meta">DC / PRIVATE INVENTORY / 001</span>
+      <span class="archive-transition__meta">CORVO 001</span>
       <strong class="archive-transition__title">${label}</strong>
-      <span class="archive-transition__status">${status}</span>`;
+      <span class="archive-transition__status">ACCESO AUTORIZADO</span>`;
     document.documentElement.appendChild(transition);
     return transition;
   };
@@ -150,7 +150,7 @@
       return;
     }
 
-    const transition = createArchiveTransition(state.label || '', state.status || '');
+    const transition = createArchiveTransition(state.label || '');
     transition.classList.add('is-arriving');
     document.documentElement.classList.remove('archive-entry-boot');
     await waitForMotion(transition, 'animationend', archiveArrivalDuration, 'archive-shell-out');
@@ -626,9 +626,8 @@
         return;
       }
       const label = link.dataset.workLabel || link.textContent.trim();
-      const status = link.dataset.workStatus || '';
-      sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, status }));
-      const transition = createArchiveTransition(label, status);
+      sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label }));
+      const transition = createArchiveTransition(label);
       document.body.classList.add('archive-leaving');
       nextPaint().then(() => transition.classList.add('is-departing'));
       waitForMotion(transition, 'animationend', archiveDepartureDuration, 'archive-shell-in')
