@@ -723,7 +723,8 @@
     const slides = [...projects.querySelectorAll('.hero-project')];
     if (slides.length < 2) return;
 
-    let active = Math.floor(Math.random() * slides.length);
+    const coverIndex = slides.findIndex((slide) => slide.dataset.projectId === 'dyson-swarm');
+    let active = coverIndex >= 0 ? coverIndex : 0;
     let historyIndex = 0;
     let scrollSoftenTimer = 0;
     const history = [active];
