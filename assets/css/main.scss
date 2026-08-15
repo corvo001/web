@@ -1343,7 +1343,12 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
   .project-index { padding: 7rem 1rem 5rem; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
-  .project-index__filters { left: 1rem; top: 50%; bottom: auto; }
+  .project-index__filters {
+    position: sticky; left: auto; top: calc(50svh - 2.275rem); bottom: auto;
+    width: 3.65rem; height: 4.55rem; margin: 0 0 -4.55rem;
+    transform: none; backface-visibility: visible; will-change: auto;
+  }
+
   .project-filter summary {
     width: 3.65rem; height: 4.55rem;
     clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% 100%,0 100%);
