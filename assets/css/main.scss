@@ -55,8 +55,14 @@ body {
 }
 .language-page { animation: none; }
 .portfolio-shell.archive-arriving { animation: none; }
+html.archive-entry-boot { background: #070908; }
+html.archive-entry-boot body { animation: none; }
 html.archive-entry-boot::after {
-  content: ""; position: fixed; z-index: 1000; inset: 0; background: #020302; pointer-events: none;
+  content: ""; position: fixed; z-index: 1000; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg,
+    #070908 0 calc(50% - .5px),
+    var(--accent) calc(50% - .5px) calc(50% + .5px),
+    #070908 calc(50% + .5px) 100%);
 }
 html.gate-entrance-skip .reactive-mark,
 html.gate-entrance-skip .language-options { animation: none; }
