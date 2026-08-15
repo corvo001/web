@@ -261,6 +261,9 @@
   const writeProjectTransition = (value) => sessionStorage.setItem(projectTransitionKey, JSON.stringify(value));
 
   const createArchiveTransition = (label) => {
+    const authorizedLabel = document.documentElement.lang === 'en'
+      ? 'ACCESS AUTHORIZED'
+      : 'ACCESO AUTORIZADO';
     const transition = document.createElement('div');
     transition.className = 'archive-transition';
     transition.setAttribute('aria-hidden', 'true');
@@ -275,7 +278,7 @@
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
       <span class="archive-transition__meta">CORVO 001</span>
       <strong class="archive-transition__title">${label}</strong>
-      <span class="archive-transition__status">ACCESO AUTORIZADO</span>`;
+      <span class="archive-transition__status">${authorizedLabel}</span>`;
     document.documentElement.appendChild(transition);
     return transition;
   };
