@@ -754,12 +754,13 @@ html.gate-return-mode.gate-entering .gate-inner {
    Lift its black point independently so its particle structure survives the
    homepage treatment without overexposing the brighter project previews. */
 .hero-project[data-project-id="dyson-swarm"] .hero-project__media {
-  filter: saturate(.78) brightness(1.22) contrast(1.12);
+  filter: saturate(.88) brightness(1.3) contrast(1.2);
+  transform: scale(1.003);
 }
 .hero-project[data-project-id="dyson-swarm"]::after {
   background:
-    radial-gradient(ellipse at center, rgba(4,6,5,.06) 0 42%, rgba(4,6,5,.14) 72%, rgba(4,6,5,.28) 100%),
-    linear-gradient(180deg, rgba(4,6,5,.24), rgba(4,6,5,.04) 32% 68%, rgba(4,6,5,.36));
+    radial-gradient(ellipse at center, rgba(4,6,5,.03) 0 42%, rgba(4,6,5,.1) 72%, rgba(4,6,5,.24) 100%),
+    linear-gradient(180deg, rgba(4,6,5,.2), rgba(4,6,5,.02) 32% 68%, rgba(4,6,5,.31));
 }
 .hero-project__interest {
   position: absolute; z-index: 2; left: 50%; top: calc(50% + clamp(4.5rem, 9vw, 8rem));
