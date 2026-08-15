@@ -1527,14 +1527,19 @@ body.info-page > #main.internal-main {
   background: var(--ink);
 }
 body.home-page > #main.portfolio-main { display: flex; }
-.home-page .portfolio-hero { height: 100%; }
+.home-page .portfolio-hero {
+  display: grid; place-items: center;
+  height: 100%; padding: 0 var(--page-pad);
+}
 .home-page .hero-projects { inset: 0; }
 .info-page .internal-main {
-  justify-content: center;
+  display: grid; grid-template-rows: auto auto;
+  align-content: center; justify-items: center;
   padding: clamp(.65rem,2dvh,1.25rem) var(--page-pad);
 }
 .info-page .internal-header {
   flex: 0 0 auto;
+  width: 100%; margin-inline: auto;
   margin-bottom: clamp(.65rem,2dvh,1.35rem);
 }
 .info-page .internal-header h1 {
@@ -1547,12 +1552,12 @@ body.home-page > #main.portfolio-main { display: flex; }
   font-size: clamp(.58rem,min(.72rem,1.35dvh),.72rem);
 }
 .info-page .internal-copy {
-  flex: 0 1 auto; min-height: 0;
+  flex: 0 1 auto; min-height: 0; width: 100%; margin-inline: auto;
   font-size: clamp(.88rem,min(1.4vw,2dvh),1.2rem);
   line-height: 1.55;
 }
 .info-about-page .internal-copy {
-  display: flex; flex-direction: column;
+  display: grid; justify-items: center;
 }
 .info-about-page .internal-copy > p {
   flex: 0 0 auto;
@@ -1566,7 +1571,6 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: min(43dvh,29rem);
-  margin-bottom: 0; transform: none;
 }
 .info-contact-page .contact-links {
   gap: clamp(.35rem,1.2dvh,.75rem);
