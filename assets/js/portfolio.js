@@ -12,7 +12,6 @@
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
-  const eyePrepareDuration = 420;
   const eyeDiveDuration = 1120;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
@@ -56,9 +55,6 @@
     transition.style.setProperty('--pupil-x', `${centerX}px`);
     transition.style.setProperty('--pupil-y', `${centerY}px`);
     transition.style.setProperty('--pupil-radius', `${size / 2}px`);
-    transition.style.setProperty('--pupil-radius-small', `${size * .47}px`);
-    transition.style.setProperty('--pupil-radius-large', `${size * .54}px`);
-    transition.style.setProperty('--pupil-radius-pulse', `${size * .6}px`);
     transition.style.setProperty('--pupil-cover-radius', `${radius + 2}px`);
     document.documentElement.appendChild(transition);
     return true;
@@ -523,9 +519,6 @@
         window.location.assign(link.href);
         return;
       }
-      document.documentElement.classList.add('gate-preparing');
-      await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'signal-lock');
-      document.documentElement.classList.remove('gate-preparing');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);

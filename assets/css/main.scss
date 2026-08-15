@@ -228,13 +228,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 
 .pupil-transition {
   position: fixed; z-index: 100; inset: 0;
-  background:
-    radial-gradient(circle at var(--pupil-x,50%) var(--pupil-y,50%),
-      #000 0,
-      #010302 15%,
-      #06100b 34%,
-      #020503 58%,
-      #000 100%);
+  background: #000;
   opacity: 0; pointer-events: none;
   clip-path: circle(0 at var(--pupil-x,50%) var(--pupil-y,50%));
   will-change: clip-path, opacity;
@@ -242,46 +236,19 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .pupil-transition i {
   position: absolute; left: var(--pupil-x,50%); top: var(--pupil-y,50%);
-  display: block; width: calc(var(--pupil-radius, .5rem) * 7.5); aspect-ratio: 1;
-  border-radius: 50%; opacity: 0; pointer-events: none;
-  transform: translate(-50%,-50%) scale(.76);
-  background:
-    repeating-conic-gradient(from 7deg,
-      rgba(181,218,196,.72) 0deg 1.2deg,
-      rgba(78,132,101,.18) 1.2deg 4.5deg,
-      rgba(7,18,12,.82) 4.5deg 7deg),
-    radial-gradient(circle,
-      transparent 0 14%,
-      rgba(5,14,9,.98) 15% 23%,
-      rgba(117,165,136,.88) 25% 31%,
-      rgba(38,82,57,.96) 46%,
-      rgba(6,17,11,.98) 67%,
-      transparent 69%);
-  box-shadow:
-    0 0 calc(var(--pupil-radius, .5rem) * 1.4) rgba(143,197,164,.55),
-    inset 0 0 calc(var(--pupil-radius, .5rem) * 1.7) rgba(0,0,0,.82);
-  will-change: transform, opacity, filter;
-}
-.pupil-transition i::before,
-.pupil-transition i::after {
-  content: ""; position: absolute; border-radius: 50%; pointer-events: none;
-}
-.pupil-transition i::before {
-  inset: 11%; border: 1px solid rgba(170,211,187,.62);
-  box-shadow: 0 0 calc(var(--pupil-radius, .5rem) * .9) rgba(130,181,152,.38), inset 0 0 calc(var(--pupil-radius, .5rem) * .7) rgba(130,181,152,.24);
-}
-.pupil-transition i::after {
-  inset: 38%; background: #000;
-  box-shadow: 0 0 calc(var(--pupil-radius, .5rem) * .85) calc(var(--pupil-radius, .5rem) * .28) rgba(0,0,0,.95);
+  display: block; width: calc(var(--pupil-radius, .5rem) * 2); height: calc(var(--pupil-radius, .5rem) * 2);
+  border: 1px solid rgba(143,197,164,.92); border-radius: 50%; opacity: 0; pointer-events: none;
+  transform: translate(-50%,-50%); background: transparent;
+  box-shadow: 0 0 5px rgba(130,181,152,.78), inset 0 0 3px rgba(130,181,152,.34);
+  will-change: width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
 .gate-exiting .pupil-transition { animation: pupil-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
-.gate-exiting .pupil-transition i { animation: pupil-iris-dive 1120ms cubic-bezier(.62,0,.18,1) forwards; }
-.gate-preparing .gate-inner { animation: signal-lock 420ms linear both; }
+.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
 .gate-entering .pupil-transition { animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
-.gate-entering .pupil-transition i { animation: pupil-iris-emerge 1120ms cubic-bezier(.62,0,.18,1) both; }
+.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
 .gate-entering .reactive-mark__image { animation: eye-logo-return 1120ms ease both; }
 
 @keyframes mark-arrival {
@@ -327,9 +294,6 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
     opacity: 1;
     clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
-  14% {
-    clip-path: circle(var(--pupil-radius-pulse,.6rem) at var(--pupil-x,50%) var(--pupil-y,50%));
-  }
   100% {
     opacity: 1;
     clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
@@ -340,14 +304,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
     opacity: 1;
     clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
-  76% {
-    opacity: 1;
-    clip-path: circle(var(--pupil-radius-small,.47rem) at var(--pupil-x,50%) var(--pupil-y,50%));
-  }
-  86% {
-    clip-path: circle(var(--pupil-radius-large,.54rem) at var(--pupil-x,50%) var(--pupil-y,50%));
-  }
-  96% {
+  99% {
     opacity: 1;
     clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
@@ -356,31 +313,15 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
     clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
 }
-@keyframes pupil-iris-dive {
-  0% { opacity: .88; transform: translate(-50%,-50%) scale(.76); filter: blur(0); }
-  14% { opacity: 1; transform: translate(-50%,-50%) scale(.9); }
-  54% { opacity: .92; transform: translate(-50%,-50%) scale(9); filter: blur(.2px); }
-  82% { opacity: .2; }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(30); filter: blur(2px); }
+@keyframes pupil-edge-dive {
+  0% { width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1; }
+  72% { opacity: .72; }
+  100% { width: calc(var(--pupil-cover-radius,100vmax) * 2); height: calc(var(--pupil-cover-radius,100vmax) * 2); opacity: 0; }
 }
-@keyframes pupil-iris-emerge {
-  0% { opacity: 0; transform: translate(-50%,-50%) scale(30); filter: blur(2px); }
-  18% { opacity: .18; }
-  52% { opacity: .9; transform: translate(-50%,-50%) scale(9); filter: blur(.2px); }
-  82% { opacity: 1; transform: translate(-50%,-50%) scale(.9); filter: blur(0); }
-  100% { opacity: .88; transform: translate(-50%,-50%) scale(.76); filter: blur(0); }
-}
-@keyframes signal-lock {
-  0%, 13%, 29%, 47%, 68%, 84%, 100% { transform: translate3d(0,0,0); }
-  14% { transform: translate3d(-2px,.5px,0); }
-  15% { transform: translate3d(3px,-.5px,0); }
-  30% { transform: translate3d(1px,0,0); }
-  31% { transform: translate3d(-2px,.5px,0); }
-  48% { transform: translate3d(2px,-.5px,0); }
-  49% { transform: translate3d(-1px,0,0); }
-  69% { transform: translate3d(-1.5px,.25px,0); }
-  70% { transform: translate3d(1px,0,0); }
-  85% { transform: translateX(.6px); }
+@keyframes pupil-edge-emerge {
+  0% { width: calc(var(--pupil-cover-radius,100vmax) * 2); height: calc(var(--pupil-cover-radius,100vmax) * 2); opacity: 0; }
+  28% { opacity: .72; }
+  100% { width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1; }
 }
 @keyframes eye-logo-return {
   0%, 70% { opacity: 0; filter: var(--mark-base-filter); }
