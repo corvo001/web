@@ -1069,7 +1069,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   font: 500 clamp(.48rem,.8vw,.66rem)/1 var(--mono); letter-spacing: .22em;
   text-shadow: 0 0 .75rem rgba(130,181,152,.35); transform: translateX(-50%); opacity: 0;
 }
-.project-world-title::before { content: "PROJECTO"; top: calc(50% - clamp(3.3rem,8vw,8rem)); }
+.project-world-title::before { content: "PROYECTO"; top: calc(50% - clamp(3.3rem,8vw,8rem)); }
 .project-world-title::after { content: "INICIALIZANDO"; bottom: calc(50% - clamp(3.3rem,8vw,8rem)); }
 html[lang="en"] .project-world-title::before { content: "PROJECT"; }
 html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
