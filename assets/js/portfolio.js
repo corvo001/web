@@ -325,6 +325,8 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
+    gateReturnPlaying = false;
+    hallEyeArrivalPlaying = false;
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'eye-handoff-frozen', 'navigation-loading');
     releaseEyeHandoffSource();
     if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
@@ -772,6 +774,10 @@
       document.activeElement.blur();
     }
     if (gate) {
+      // A frozen source document can be restored from the back-forward cache.
+      // Release that captured frame before consuming the fresh return state,
+      // otherwise every language handoff after the first remains paused.
+      if (event.persisted) resetNavigationState();
       if (document.documentElement.classList.contains('eye-mpa-returning')) {
         gateInitialStateHandled = true;
         return;
@@ -797,6 +803,11 @@
       showProjectReturn();
       showArchiveArrival();
     }
+  });
+  window.addEventListener('pagehide', (event) => {
+    // Store only stable documents in the back-forward cache. Transition data
+    // remains in sessionStorage, while the frozen visual state is discarded.
+    if (event.persisted) resetNavigationState();
   });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) resumeProjectVideos();
