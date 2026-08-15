@@ -1464,13 +1464,12 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
   .project-hero-media {
-    width: calc(100% + (2 * var(--page-pad)));
-    margin-inline: calc(-1 * var(--page-pad));
+    width: 100vw; max-width: none;
+    margin-inline: calc(50% - 50vw);
+    box-shadow: none;
   }
   .project-hero-media::after {
-    background:
-      linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 78%, rgba(4,6,5,.3) 88%, var(--ink) 100%),
-      linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
+    background: linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 78%, rgba(4,6,5,.3) 88%, var(--ink) 100%);
   }
   .project-gallery {
     width: calc(100% + (2 * var(--page-pad)));
