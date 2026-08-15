@@ -37,7 +37,7 @@
           const handoffRadius = Math.max(Number(eyeHallTransition.handoffRadius) || (coverRadius * .52), 1);
           rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
           rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
-          document.documentElement.classList.add('eye-hall-entry-boot');
+          document.documentElement.classList.add('eye-hall-entry-boot', 'eye-hall-entering');
           window.setTimeout(() => {
             if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
             document.body?.classList.add('page-arrival-complete');
@@ -122,6 +122,10 @@
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
     <link rel="preload" href="{{ '/assets/videos/dyson-swarm-loop.webm' | relative_url }}" as="video" type="video/webm" fetchpriority="high">
+    <link rel="prefetch" href="{{ '/es/' | relative_url }}" as="document">
+    <link rel="prefetch" href="{{ '/en/' | relative_url }}" as="document">
+    {% else %}
+    <link rel="prefetch" href="{{ '/' | relative_url }}" as="document">
     {% endif %}
     {% if page.layout == 'project' %}
       {% assign preload_project_list = site.data.projects | where: 'id', page.project_id %}

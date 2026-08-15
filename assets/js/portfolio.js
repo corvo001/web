@@ -11,6 +11,8 @@
   const pageTransitionKey = 'portfolio-page-transition';
   let eyeTrackingLocked = false;
   let gateReturnPlaying = false;
+  let gateInitialStateHandled = false;
+  let hallEyeArrivalPlaying = false;
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
@@ -24,6 +26,19 @@
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
+  const warmedEyePages = new Set();
+
+  const warmEyePage = (link) => {
+    const target = link?.href;
+    if (!target || warmedEyePages.has(target)) return;
+    warmedEyePages.add(target);
+    fetch(target, { cache: 'force-cache', priority: 'high' })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Page preload failed: ${response.status}`);
+        return response.text();
+      })
+      .catch(() => warmedEyePages.delete(target));
+  };
 
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
@@ -110,18 +125,11 @@
   });
 
   const waitForGateLayout = async () => {
-    const image = mark?.querySelector('.reactive-mark__image');
     const waits = [];
     if (document.fonts?.ready) {
       waits.push(Promise.race([
         document.fonts.ready,
-        new Promise((resolve) => window.setTimeout(resolve, 120))
-      ]));
-    }
-    if (image?.decode) {
-      waits.push(Promise.race([
-        image.decode().catch(() => {}),
-        new Promise((resolve) => window.setTimeout(resolve, 240))
+        new Promise((resolve) => window.setTimeout(resolve, 90))
       ]));
     }
     await Promise.all(waits);
@@ -178,14 +186,15 @@
   };
 
   const showHallEyeArrival = async () => {
-    if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
+    if (hallEyeArrivalPlaying || !document.documentElement.classList.contains('eye-hall-entry-boot')) return;
+    hallEyeArrivalPlaying = true;
     sessionStorage.removeItem(eyeHallTransitionKey);
     if (reduceMotion.matches) {
       document.body.classList.add('page-arrival-complete');
       document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
+      hallEyeArrivalPlaying = false;
       return;
     }
-    await nextPaint();
     document.documentElement.classList.add('eye-hall-entering');
     await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-reveal');
     document.body.classList.add('page-arrival-complete');
@@ -193,6 +202,7 @@
     ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
       document.documentElement.style.removeProperty(property);
     });
+    hallEyeArrivalPlaying = false;
   };
 
   const readProjectTransition = () => {
@@ -455,6 +465,7 @@
     }
 
     gateReturnPlaying = true;
+    gateInitialStateHandled = true;
     sessionStorage.removeItem(pageTransitionKey);
     document.documentElement.classList.remove('page-transition-boot');
     navigationInProgress = false;
@@ -499,6 +510,7 @@
 
   const showNaturalGateEntrance = () => {
     if (!gate) return;
+    gateInitialStateHandled = true;
     gateReturnPlaying = false;
     navigationInProgress = false;
     sessionStorage.removeItem(eyeReturnKey);
@@ -524,6 +536,8 @@
       document.activeElement.blur();
     }
     if (gate) {
+      if (gateInitialStateHandled && !event.persisted) return;
+      if (event.persisted) gateInitialStateHandled = false;
       const shouldAnimateReturn = gateHasReturnState() && (event.persisted || navigationType !== 'reload');
       if (shouldAnimateReturn) showGateReturn();
       else showNaturalGateEntrance();
@@ -550,6 +564,8 @@
   window.addEventListener('focus', resumeProjectVideos);
   window.addEventListener('online', resumeProjectVideos);
   resetNavigationState();
+  if (document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
+  if (gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {
@@ -584,11 +600,15 @@
   });
 
   document.querySelectorAll('[data-language-menu]').forEach((link) => {
+    link.addEventListener('pointerenter', () => warmEyePage(link), { passive: true, once: true });
+    link.addEventListener('focus', () => warmEyePage(link), { passive: true, once: true });
+    link.addEventListener('touchstart', () => warmEyePage(link), { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      warmEyePage(link);
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -643,11 +663,15 @@
   }
 
   document.querySelectorAll('[data-language-link]').forEach((link) => {
+    link.addEventListener('pointerenter', () => warmEyePage(link), { passive: true, once: true });
+    link.addEventListener('focus', () => warmEyePage(link), { passive: true, once: true });
+    link.addEventListener('touchstart', () => warmEyePage(link), { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      warmEyePage(link);
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');

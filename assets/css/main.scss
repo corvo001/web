@@ -31,9 +31,6 @@
   --line: rgba(239, 242, 237, 0.14);
   --accent: #82b598;
   --nav-wash: rgba(9,11,10,.78);
-  --preview-text: rgba(239,242,237,.5);
-  --preview-line: rgba(239,242,237,.35);
-  --preview-veil: rgba(9,11,10,.34);
   --copy: #c3c9c3;
   --archive-base: #020302;
   --archive-shutter: #070908;
@@ -59,9 +56,6 @@
     --line: rgba(21,25,23,.16);
     --accent: #3f7758;
     --nav-wash: rgba(243,244,239,.9);
-    --preview-text: rgba(21,25,23,.46);
-    --preview-line: rgba(21,25,23,.26);
-    --preview-veil: rgba(243,244,239,.38);
     --copy: #424a45;
     --archive-base: #f3f4ef;
     --archive-shutter: #e1e5de;
@@ -134,7 +128,7 @@ html.eye-hall-entry-boot body {
   will-change: clip-path, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering body {
-  animation: hall-eye-reveal 1040ms cubic-bezier(0,.55,.2,1) both;
+  animation: hall-eye-reveal 1040ms cubic-bezier(.25,.28,.55,1) both;
 }
 html.eye-hall-entry-boot::after,
 html.eye-gate-leaving::after {
@@ -147,18 +141,18 @@ html.eye-gate-leaving::after {
   will-change: width, height, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering::after {
-  animation: hall-eye-edge 1040ms cubic-bezier(0,.55,.2,1) both;
+  animation: hall-eye-edge 1040ms cubic-bezier(.25,.28,.55,1) both;
 }
 html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
   pointer-events: none; overflow: hidden;
-  animation: hall-eye-collapse 1040ms cubic-bezier(.55,0,1,.45) both;
+  animation: hall-eye-collapse 1040ms cubic-bezier(.45,0,.75,.72) both;
   will-change: clip-path, opacity;
 }
 html.eye-gate-leaving::after {
   width: calc(var(--hall-eye-cover-radius,100vmax) * 2);
   height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
-  animation: hall-eye-edge-collapse 1040ms cubic-bezier(.55,0,1,.45) both;
+  animation: hall-eye-edge-collapse 1040ms cubic-bezier(.45,0,.75,.72) both;
 }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
@@ -177,16 +171,6 @@ html.eye-gate-leaving::after {
   background: var(--ink);
   isolation: isolate;
 }
-.gate-preview { position: absolute; inset: -4%; z-index: -1; padding: 5rem 7vw; color: var(--preview-text); background: var(--ink); filter: blur(12px); opacity: .42; transform: scale(1.035); pointer-events: none; }
-.gate-preview::after { content: ""; position: absolute; inset: 0; background: var(--preview-veil); }
-.gate-preview__nav { display: flex; justify-content: flex-end; gap: 3rem; height: 4rem; border-bottom: 1px solid var(--line); }
-.gate-preview__nav span { width: 5rem; height: .4rem; margin-top: 1rem; background: currentColor; }
-.gate-preview__hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 48vh; border-bottom: 1px solid var(--line); }
-.gate-preview__hero small, .gate-preview__work small { color: var(--accent); font: .7rem var(--mono); text-transform: uppercase; }
-.gate-preview__hero strong { margin: 1rem 0 2rem; font: 400 clamp(5rem,12vw,11rem)/.85 var(--display); letter-spacing: .1em; text-transform: uppercase; }
-.gate-preview__hero i { width: 30rem; max-width: 45vw; height: .5rem; margin: .35rem 0; background: var(--preview-line); }
-.gate-preview__work { padding-top: 3rem; }
-.gate-preview__work div { width: 82%; aspect-ratio: 16/4; margin-top: 1.5rem; border: 1px solid var(--line); background: var(--surface); }
 .gate-inner { position: relative; z-index: 2; width: min(36rem, 100%); min-width: 0; text-align: center; }
 .reactive-mark {
   --rx: 0deg; --ry: 0deg; --px: 0px; --py: 0px;
@@ -333,12 +317,12 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   will-change: left, top, width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
-.gate-exiting .pupil-transition { animation: pupil-dive 1040ms cubic-bezier(.55,0,1,.45) forwards; }
-.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1040ms cubic-bezier(.55,0,1,.45) forwards; }
+.gate-exiting .pupil-transition { animation: pupil-dive 1040ms cubic-bezier(.45,0,.75,.72) forwards; }
+.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1040ms cubic-bezier(.45,0,.75,.72) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
-.gate-entering .pupil-transition { animation: pupil-emerge 1040ms cubic-bezier(0,.55,.2,1) both; }
-.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1040ms cubic-bezier(0,.55,.2,1) both; }
+.gate-entering .pupil-transition { animation: pupil-emerge 1040ms cubic-bezier(.25,.28,.55,1) both; }
+.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1040ms cubic-bezier(.25,.28,.55,1) both; }
 .gate-entering .reactive-mark__image { animation: eye-logo-return 1040ms ease both; }
 
 @keyframes mark-arrival {
