@@ -176,7 +176,7 @@ html.gate-natural-entry .reactive-mark__image { animation: eye-code-resolve 1640
   transition: transform 90ms cubic-bezier(.22,1,.36,1);
   pointer-events: none;
 }
-html.gate-natural-entry .reactive-mark__pupil { animation: eye-code-pupil 1640ms cubic-bezier(.22,1,.36,1) both; }
+html.gate-natural-entry .reactive-mark__pupil { animation: eye-code-pupil 1640ms cubic-bezier(.22,1,.36,1) backwards; }
 .language-options {
   display: grid; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); align-items: end; gap: 1.5rem;
   animation: none;
@@ -219,46 +219,19 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .language-divider { width: 1px; height: 1.25rem; background: var(--line); }
 
 .pupil-transition {
-  position: fixed; z-index: 100; left: var(--pupil-x,50%); top: var(--pupil-y,50%);
-  width: var(--pupil-size,1rem); aspect-ratio: 1; border-radius: 50%;
-  background: #020302;
-  border: 0;
-  box-shadow: none;
-  opacity: 0; transform: translate(-50%,-50%) scale(1); pointer-events: none;
-  will-change: transform, opacity;
+  position: fixed; z-index: 100; inset: 0;
+  background: #020302; opacity: 0; pointer-events: none;
+  clip-path: circle(0 at var(--pupil-x,50%) var(--pupil-y,50%));
+  will-change: clip-path, opacity;
 }
-.pupil-transition i {
-  position: absolute; inset: -42%; display: block; border-radius: 50%;
-  border: 1px solid rgba(130,181,152,.72); opacity: 0;
-  box-shadow: inset 0 0 0 1px rgba(130,181,152,.12), 0 0 12px rgba(130,181,152,.18);
-}
+.pupil-transition i { display: none; }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
 .gate-exiting .pupil-transition { animation: pupil-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
-.gate-exiting .pupil-transition i { animation: iris-dive 1120ms cubic-bezier(.7,0,.25,1) forwards; }
 .gate-preparing .gate-inner { animation: signal-lock 420ms linear both; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
-.gate-preparing .language-gate::before, .gate-settling .language-gate::before {
-  content: ""; position: fixed; z-index: 80; inset: 0; pointer-events: none; opacity: 0;
-  background: repeating-linear-gradient(to bottom, transparent 0 5px, rgba(130,181,152,.045) 6px, transparent 7px);
-  mix-blend-mode: screen;
-}
-.gate-preparing .language-gate::after, .gate-settling .language-gate::after {
-  content: ""; position: fixed; z-index: 81; left: 0; right: 0; height: 1px; top: 44.5%;
-  background: linear-gradient(90deg, transparent 10%, rgba(130,181,152,.7) 48%, transparent 90%);
-  box-shadow: 0 0 8px rgba(130,181,152,.35); pointer-events: none; opacity: 0;
-}
-.gate-preparing .language-gate::before { animation: signal-scan 420ms steps(1,end) both; }
-.gate-preparing .language-gate::after { animation: signal-line-lock 420ms cubic-bezier(.4,0,.2,1) both; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
 .gate-entering .pupil-transition { animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
-.gate-entering .pupil-transition i { animation: iris-emerge 1120ms cubic-bezier(.7,0,.25,1) both; }
-.gate-entering.gate-settling .pupil-transition {
-  animation: pupil-emerge 1120ms cubic-bezier(.7,0,.25,1) both, pupil-release-sync 560ms linear both;
-}
 .gate-entering .reactive-mark__image { animation: eye-logo-return 1120ms ease both; }
-.gate-settling .gate-inner { animation: signal-release 560ms linear both; }
-.gate-settling .language-gate::before { animation: signal-scan-release 560ms steps(1,end) both; }
-.gate-settling .language-gate::after { animation: signal-line-release 560ms cubic-bezier(.4,0,.2,1) both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -299,44 +272,41 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   to { transform: rotate(665deg) translateY(-1.8rem); }
 }
 @keyframes pupil-dive {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(.82); filter: blur(0); background-color: var(--accent); }
-  6% { opacity: 1; }
-  16% { transform: translate(-50%, -50%) scale(1.12); background-color: var(--accent); }
-  28% { transform: translate(-50%, -50%) scale(.96); background-color: var(--accent); }
-  44% { transform: translate(-50%, -50%) scale(1.45); background-color: #020302; }
-  72% { filter: blur(0); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); }
-}
-@keyframes pupil-dive-desktop {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); background-color: var(--accent); }
-  8% { transform: translate(-50%, -50%) scale(1.12); background-color: var(--accent); }
-  16% { transform: translate(-50%, -50%) scale(1.28); background-color: #020302; }
-  72% { filter: blur(0); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); background-color: #020302; }
-}
-@media (min-width: 701px) {
-  .gate-exiting .pupil-transition { animation-name: pupil-dive-desktop; }
+  0% {
+    opacity: 1; background-color: var(--accent);
+    clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  14% {
+    background-color: var(--accent);
+    clip-path: circle(var(--pupil-radius-pulse,.6rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  24% { background-color: #020302; }
+  100% {
+    opacity: 1; background-color: #020302;
+    clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
 }
 @keyframes pupil-emerge {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(var(--pupil-scale,190)); filter: blur(.35px); background-color: #020302; }
-  64% { filter: blur(0); }
-  76% { transform: translate(-50%, -50%) scale(.94); background-color: #020302; }
-  84% { transform: translate(-50%, -50%) scale(1.08); background-color: var(--accent); }
-  91%, 97% { opacity: 1; transform: translate(-50%, -50%) scale(1); background-color: var(--accent); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); background-color: var(--accent); }
-}
-@keyframes iris-dive {
-  0%, 8% { opacity: 0; transform: scale(1.28); }
-  18% { opacity: .9; transform: scale(.92); }
-  34% { opacity: .45; transform: scale(1.18); }
-  62% { opacity: .2; }
-  100% { opacity: 0; transform: scale(2.4); }
-}
-@keyframes iris-emerge {
-  0%, 54% { opacity: 0; transform: scale(2.2); }
-  70% { opacity: .28; transform: scale(1.2); }
-  80% { opacity: .82; transform: scale(.9); }
-  88%, 100% { opacity: 0; transform: scale(1); }
+  0% {
+    opacity: 1; background-color: #020302;
+    clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  76% {
+    opacity: 1; background-color: #020302;
+    clip-path: circle(var(--pupil-radius-small,.47rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  86% {
+    background-color: var(--accent);
+    clip-path: circle(var(--pupil-radius-large,.54rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  96% {
+    opacity: 1; background-color: var(--accent);
+    clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
+  100% {
+    opacity: 0; background-color: var(--accent);
+    clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
+  }
 }
 @keyframes signal-lock {
   0%, 13%, 29%, 47%, 68%, 84%, 100% { transform: translate3d(0,0,0); }
@@ -350,43 +320,9 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   70% { transform: translate3d(1px,0,0); }
   85% { transform: translateX(.6px); }
 }
-@keyframes signal-release {
-  0%, 18%, 38%, 60%, 78%, 100% { transform: translate3d(0,0,0); }
-  19% { transform: translate3d(2px,-.5px,0); }
-  20% { transform: translate3d(-2px,.5px,0); }
-  39% { transform: translate3d(-1.5px,0,0); }
-  40% { transform: translate3d(1px,.25px,0); }
-  61% { transform: translate3d(.8px,-.25px,0); }
-  62% { transform: none; }
-  79% { transform: translateX(-.4px); }
-}
-@keyframes pupil-release-sync {
-  0%, 18%, 38%, 60%, 78%, 100% { translate: 0 0; }
-  19% { translate: 2px -.5px; }
-  20% { translate: -2px .5px; }
-  39% { translate: -1.5px 0; }
-  40% { translate: 1px .25px; }
-  61% { translate: .8px -.25px; }
-  62% { translate: 0 0; }
-  79% { translate: -.4px 0; }
-}
 @keyframes eye-logo-return {
   0%, 70% { opacity: 0; filter: var(--mark-base-filter); }
   86%, 100% { opacity: 1; filter: var(--mark-base-filter); }
-}
-@keyframes signal-scan { 0%,12%,16%,31%,35%,50%,54%,70%,74%,100% { opacity: 0; } 13%,15%,32%,34%,51%,53%,71%,73% { opacity: 1; } }
-@keyframes signal-scan-release { 0%,18%,22%,40%,44%,62%,66%,100% { opacity: 0; } 19%,21%,41%,43%,63%,65% { opacity: .8; } }
-@keyframes signal-line-lock {
-  0% { opacity: 0; transform: translateY(-24vh) scaleX(.2); }
-  18% { opacity: .7; }
-  70% { opacity: .3; transform: translateY(9vh) scaleX(.8); }
-  100% { opacity: 0; transform: translateY(0) scaleX(.05); }
-}
-@keyframes signal-line-release {
-  0% { opacity: 0; transform: translateY(8vh) scaleX(.05); }
-  20% { opacity: .55; }
-  76% { opacity: .25; transform: translateY(-16vh) scaleX(.7); }
-  100% { opacity: 0; transform: translateY(-22vh) scaleX(.1); }
 }
 @keyframes gate-copy-return {
   from { opacity: 0; transform: translateY(.25rem); }
@@ -593,6 +529,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .home-page { min-height: 100svh; display: flex; flex-direction: column; }
 .home-page .portfolio-main { flex: 1; display: flex; }
 .home-page .portfolio-hero { width: 100%; min-height: 0; border-bottom: 0; }
+.home-page .hero-projects { top: 4.7rem; }
 .home-page .portfolio-footer { flex: 0 0 auto; }
 .work-main { min-height: 100svh; padding-top: 4.7rem; }
 .project-index { padding: clamp(2rem,4vw,4rem) var(--page-pad) clamp(6rem,10vw,10rem); }

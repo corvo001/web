@@ -7,6 +7,7 @@
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   let eyeTrackingLocked = false;
+  let gateReturnPlaying = false;
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
@@ -53,8 +54,11 @@
     const radius = Math.hypot(Math.max(centerX, window.innerWidth - centerX), Math.max(centerY, window.innerHeight - centerY));
     transition.style.setProperty('--pupil-x', `${centerX}px`);
     transition.style.setProperty('--pupil-y', `${centerY}px`);
-    transition.style.setProperty('--pupil-size', `${size}px`);
-    transition.style.setProperty('--pupil-scale', `${(radius * 3.2) / size}`);
+    transition.style.setProperty('--pupil-radius', `${size / 2}px`);
+    transition.style.setProperty('--pupil-radius-small', `${size * .47}px`);
+    transition.style.setProperty('--pupil-radius-large', `${size * .54}px`);
+    transition.style.setProperty('--pupil-radius-pulse', `${size * .6}px`);
+    transition.style.setProperty('--pupil-cover-radius', `${radius + 2}px`);
     document.documentElement.appendChild(transition);
     return true;
   };
@@ -62,6 +66,25 @@
   const nextPaint = () => new Promise((resolve) => {
     window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
   });
+
+  const waitForGateLayout = async () => {
+    const image = mark?.querySelector('.reactive-mark__image');
+    const waits = [];
+    if (document.fonts?.ready) {
+      waits.push(Promise.race([
+        document.fonts.ready,
+        new Promise((resolve) => window.setTimeout(resolve, 120))
+      ]));
+    }
+    if (image?.decode) {
+      waits.push(Promise.race([
+        image.decode().catch(() => {}),
+        new Promise((resolve) => window.setTimeout(resolve, 240))
+      ]));
+    }
+    await Promise.all(waits);
+    await nextPaint();
+  };
 
   const waitForMotion = (element, eventName, duration, propertyName = '') => new Promise((resolve) => {
     let settled = false;
@@ -83,8 +106,8 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -267,18 +290,63 @@
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    document.documentElement.classList.remove('gate-natural-entry', 'gate-return-boot', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'gate-settling');
+    document.documentElement.classList.remove('gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
+    gateReturnPlaying = false;
+    navigationInProgress = false;
     mark?.classList.remove('eye-geometry-locked');
+  };
+
+  const showGateReturn = async () => {
+    if (!gate || reduceMotion.matches || gateReturnPlaying || !gateHasReturnState()) {
+      if (reduceMotion.matches) showResolvedGate();
+      return;
+    }
+
+    gateReturnPlaying = true;
+    navigationInProgress = false;
+    eyeTrackingLocked = true;
+    document.documentElement.classList.add('gate-return-pending');
+    await waitForGateLayout();
+    if (!setPupilTransitionGeometry()) {
+      gateReturnPlaying = false;
+      showResolvedGate();
+      return;
+    }
+
+    sessionStorage.removeItem(eyeReturnKey);
+    sessionStorage.removeItem(eyeSessionKey);
+    document.documentElement.classList.remove('gate-natural-entry', 'gate-entrance-skip', 'gate-return-pending', 'gate-preparing', 'gate-exiting');
+    document.documentElement.classList.add('gate-return-mode', 'gate-entering');
+    const transition = document.querySelector('[data-pupil-transition]');
+    await waitForMotion(transition, 'animationend', eyeDiveDuration, 'pupil-emerge');
+
+    document.documentElement.classList.remove('gate-entering', 'gate-return-mode');
+    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    eyeTrackingLocked = false;
+    gateReturnPlaying = false;
+    if (mark && lastPointerPosition && updateEyeFromPointer) {
+      mark.classList.remove('eye-geometry-locked');
+      mark.classList.add('eye-tracking-resuming');
+      updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
+      window.setTimeout(() => mark.classList.remove('eye-tracking-resuming'), 620);
+    } else {
+      mark?.classList.remove('eye-geometry-locked');
+    }
   };
 
   const showNaturalGateEntrance = () => {
     if (!gate) return;
+    gateReturnPlaying = false;
+    navigationInProgress = false;
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
+    document.documentElement.classList.remove('gate-return-pending', 'gate-return-mode', 'gate-entrance-skip', 'gate-preparing', 'gate-exiting', 'gate-entering');
+    document.documentElement.classList.add('gate-natural-entry');
+    mark?.classList.remove('eye-geometry-locked');
     if (reduceMotion.matches) {
       showResolvedGate();
       return;
@@ -295,8 +363,8 @@
       document.activeElement.blur();
     }
     if (gate) {
-      const skipEntrance = event.persisted || (navigationType !== 'reload' && gateHasReturnState());
-      if (skipEntrance) showResolvedGate();
+      const shouldAnimateReturn = gateHasReturnState() && (event.persisted || navigationType !== 'reload');
+      if (shouldAnimateReturn) showGateReturn();
       else showNaturalGateEntrance();
     } else {
       const projectState = readProjectTransition();
@@ -382,19 +450,24 @@
   }
 
   document.querySelectorAll('[data-language-link]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    link.addEventListener('click', async (event) => {
+      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
-      setPupilTransitionGeometry();
+      if (!setPupilTransitionGeometry()) {
+        window.location.assign(link.href);
+        return;
+      }
       document.documentElement.classList.add('gate-preparing');
-      window.setTimeout(() => {
-        document.documentElement.classList.remove('gate-preparing');
-        document.documentElement.classList.add('gate-exiting');
-      }, eyePrepareDuration);
-      window.setTimeout(() => window.location.assign(link.href), eyePrepareDuration + eyeDiveDuration);
+      await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'signal-lock');
+      document.documentElement.classList.remove('gate-preparing');
+      document.documentElement.classList.add('gate-exiting');
+      await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
+      window.location.assign(link.href);
     });
   });
 

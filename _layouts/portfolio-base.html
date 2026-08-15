@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if active_body_class == 'language-page' %}
+    <style>html.gate-return-pending{background:#020302;color-scheme:dark}html.gate-return-pending body{visibility:hidden}</style>
     <script>
       try {
         const navigationType = performance.getEntriesByType('navigation')[0]?.type;
@@ -13,7 +14,16 @@
           sessionStorage.getItem('portfolio-eye-return') === '1' ||
           sessionStorage.getItem('portfolio-eye-entered') === '1'
         );
-        document.documentElement.classList.add(returningFromPortfolio ? 'gate-entrance-skip' : 'gate-natural-entry');
+        if (returningFromPortfolio) {
+          document.documentElement.classList.add('gate-entrance-skip', 'gate-return-pending');
+          window.setTimeout(() => {
+            if (!document.documentElement.classList.contains('gate-return-pending')) return;
+            document.documentElement.classList.remove('gate-return-pending');
+            document.documentElement.classList.add('gate-entrance-skip');
+          }, 2600);
+        } else {
+          document.documentElement.classList.add('gate-natural-entry');
+        }
       } catch (error) {
         document.documentElement.classList.add('gate-natural-entry');
       }
