@@ -868,7 +868,7 @@ html.gate-return-mode.gate-entering .gate-inner {
 }
 .project-filter__trigger-label {
   max-width: 100%; align-self: center; overflow: hidden; color: color-mix(in srgb,var(--muted) 88%,var(--accent)); font: 500 .44rem/1 var(--mono);
-  letter-spacing: .16em; text-indent: .16em; text-overflow: clip; white-space: nowrap;
+  letter-spacing: .16em; text-indent: .16em; text-overflow: clip; white-space: nowrap; transform: translateY(.18rem);
 }
 .project-filter__menu {
   position: absolute; left: calc(100% + .65rem); top: 50%; width: 9.4rem;
