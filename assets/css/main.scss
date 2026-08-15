@@ -84,7 +84,7 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
-  animation: page-arrival 620ms cubic-bezier(.22,1,.36,1) both;
+  animation: page-arrival 620ms cubic-bezier(.22,1,.36,1) backwards;
 }
 .language-page { animation: none; }
 .portfolio-shell.archive-arriving { animation: none; }
@@ -1347,10 +1347,15 @@ html.project-launch-from-hall[lang="en"] .project-world-title::after { content: 
   .project-index { padding: 7rem 1rem 5rem; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
-  .project-index__filters { left: 1rem; top: 50%; bottom: auto; transform: translateY(-50%); }
+  .project-index__filters {
+    left: 1rem; top: 50%; bottom: auto; transform: translate3d(0,-50%,0);
+    backface-visibility: hidden; will-change: transform;
+  }
   .project-filter summary {
     width: 3.65rem; height: 4.55rem;
     clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% 100%,0 100%);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    background: linear-gradient(180deg,color-mix(in srgb,var(--surface) 97%,var(--ink)),var(--ink));
   }
   .project-filter__menu { left: 0; top: auto; bottom: calc(100% + .75rem); width: min(18rem,calc(100vw - 2rem)); transform: none; transform-origin: left bottom; }
   .project-filter__connector { left: 1.7rem; top: auto; bottom: -.76rem; width: 1px; height: .76rem; background: linear-gradient(transparent,var(--accent)); }
