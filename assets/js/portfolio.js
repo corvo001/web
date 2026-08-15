@@ -680,6 +680,7 @@
       const currentLabel = button.textContent.trim();
       label.textContent = currentLabel;
       if (triggerLabel) triggerLabel.textContent = currentLabel;
+      filter.dataset.projectFilterCurrent = category;
       if (empty) empty.hidden = visibleCount > 0;
       filter.open = false;
     };
