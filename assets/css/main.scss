@@ -84,12 +84,18 @@ body {
 .portfolio-shell.archive-arriving { animation: none; }
 html.archive-entry-boot { background: var(--archive-shutter); }
 html.archive-entry-boot body { animation: none; }
+html.archive-entry-boot::before,
 html.archive-entry-boot::after {
-  content: ""; position: fixed; z-index: 1000; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg,
-    var(--archive-shutter) 0 calc(50% - .5px),
-    var(--accent) calc(50% - .5px) calc(50% + .5px),
-    var(--archive-shutter) calc(50% + .5px) 100%);
+  content: ""; position: fixed; z-index: 1000; top: 0; bottom: 0; width: 58%; pointer-events: none;
+  filter: drop-shadow(0 0 .3rem var(--archive-frame)); backface-visibility: hidden;
+}
+html.archive-entry-boot::before {
+  left: 0; clip-path: polygon(0 0,86.2% 0,100% 50%,86.2% 100%,0 100%);
+  background: linear-gradient(90deg,var(--archive-shutter) 0 76%,color-mix(in srgb,var(--archive-shutter) 92%,var(--accent)) 100%);
+}
+html.archive-entry-boot::after {
+  right: 0; clip-path: polygon(13.8% 0,100% 0,100% 100%,13.8% 100%,0 50%);
+  background: linear-gradient(-90deg,var(--archive-shutter) 0 76%,color-mix(in srgb,var(--archive-shutter) 92%,var(--accent)) 100%);
 }
 html.gate-entrance-skip .reactive-mark,
 html.gate-entrance-skip .language-options { animation: none; }
