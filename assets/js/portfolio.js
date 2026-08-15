@@ -16,8 +16,8 @@
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
-  const eyePrepareDuration = 420;
-  const eyeDiveDuration = 1040;
+  const eyePrepareDuration = 360;
+  const eyeDiveDuration = 920;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;

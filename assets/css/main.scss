@@ -128,7 +128,7 @@ html.eye-hall-entry-boot body {
   will-change: clip-path, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering body {
-  animation: hall-eye-reveal 1040ms cubic-bezier(.25,.28,.55,1) both;
+  animation: hall-eye-reveal 920ms cubic-bezier(.25,.28,.55,1) both;
 }
 html.eye-hall-entry-boot::after,
 html.eye-gate-leaving::after {
@@ -141,18 +141,18 @@ html.eye-gate-leaving::after {
   will-change: width, height, opacity;
 }
 html.eye-hall-entry-boot.eye-hall-entering::after {
-  animation: hall-eye-edge 1040ms cubic-bezier(.25,.28,.55,1) both;
+  animation: hall-eye-edge 920ms cubic-bezier(.25,.28,.55,1) both;
 }
 html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
   pointer-events: none; overflow: hidden;
-  animation: hall-eye-collapse 1040ms cubic-bezier(.45,0,.75,.72) both;
+  animation: hall-eye-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
   will-change: clip-path, opacity;
 }
 html.eye-gate-leaving::after {
   width: calc(var(--hall-eye-cover-radius,100vmax) * 2);
   height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
-  animation: hall-eye-edge-collapse 1040ms cubic-bezier(.45,0,.75,.72) both;
+  animation: hall-eye-edge-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
 }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
@@ -234,12 +234,12 @@ html.gate-natural-entry .reactive-mark__image { animation: eye-code-resolve 1640
 .reactive-mark::after {
   content: none;
 }
-.gate-preparing .gate-inner { animation: eye-entry-tremor 420ms ease-out both; }
+.gate-preparing .gate-inner { animation: eye-entry-tremor 360ms ease-out both; }
 .gate-preparing .reactive-mark::after {
   content: ""; position: absolute; z-index: 4; left: 10%; right: 10%; top: 20%; height: 1px;
   background: linear-gradient(90deg,transparent,rgba(143,207,170,.95) 24% 76%,transparent);
   box-shadow: 0 0 6px rgba(143,207,170,.72), 0 0 14px rgba(130,181,152,.34);
-  opacity: 0; pointer-events: none; animation: eye-entry-scan 420ms cubic-bezier(.4,0,.2,1) both;
+  opacity: 0; pointer-events: none; animation: eye-entry-scan 360ms cubic-bezier(.4,0,.2,1) both;
 }
 .gate-preparing .language-options { opacity: .62; transition: opacity 300ms ease; }
 .reactive-mark__pupil {
@@ -317,13 +317,13 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   will-change: left, top, width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
-.gate-exiting .pupil-transition { animation: pupil-dive 1040ms cubic-bezier(.45,0,.75,.72) forwards; }
-.gate-exiting .pupil-transition i { animation: pupil-edge-dive 1040ms cubic-bezier(.45,0,.75,.72) forwards; }
+.gate-exiting .pupil-transition { animation: pupil-dive 920ms cubic-bezier(.45,0,.75,.72) forwards; }
+.gate-exiting .pupil-transition i { animation: pupil-edge-dive 920ms cubic-bezier(.45,0,.75,.72) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
 html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
-.gate-entering .pupil-transition { animation: pupil-emerge 1040ms cubic-bezier(.25,.28,.55,1) both; }
-.gate-entering .pupil-transition i { animation: pupil-edge-emerge 1040ms cubic-bezier(.25,.28,.55,1) both; }
-.gate-entering .reactive-mark__image { animation: eye-logo-return 1040ms ease both; }
+.gate-entering .pupil-transition { animation: pupil-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
+.gate-entering .pupil-transition i { animation: pupil-edge-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
+.gate-entering .reactive-mark__image { animation: eye-logo-return 920ms ease both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
