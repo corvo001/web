@@ -194,6 +194,14 @@ html.eye-handoff-frozen body *::after {
   animation-play-state: paused !important;
   transition: none !important;
 }
+html.eye-handoff-frozen.gate-exiting .language-options {
+  opacity: 1;
+  transform: none;
+}
+html.eye-handoff-frozen.gate-exiting .pupil-transition,
+html.eye-handoff-frozen.gate-exiting .pupil-transition i {
+  animation-play-state: running !important;
+}
 html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
   pointer-events: none; overflow: hidden;

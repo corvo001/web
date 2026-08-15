@@ -935,11 +935,12 @@
         path: new URL(link.href, window.location.href).pathname
       };
       document.documentElement.classList.add('gate-preparing');
-      await Promise.all([
-        waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor'),
-        hallWarmup
-      ]);
+      await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
       document.documentElement.classList.remove('gate-preparing');
+      // Once the scan has resolved, hold that exact gate frame while the hall
+      // finishes priming. Only the pupil overlay is allowed to move afterward.
+      freezeEyeHandoffSource();
+      await hallWarmup;
       // Timestamp the handoff only once every destination resource is ready;
       // slow networks must not make the destination reject a now-stale state.
       sessionStorage.setItem(eyeHallTransitionKey, JSON.stringify({
