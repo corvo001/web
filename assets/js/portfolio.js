@@ -2,7 +2,6 @@
   const gate = document.querySelector('[data-language-gate]');
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const supportsCrossDocumentViewTransitions = 'onpagereveal' in window;
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   const eyeHallTransitionKey = 'portfolio-eye-hall-transition';
@@ -252,15 +251,6 @@
       return isExpectedGate && isRecent ? state : null;
     } catch (error) {
       return null;
-    }
-  };
-
-  const hasManualEyeTransition = (key) => {
-    try {
-      const state = JSON.parse(sessionStorage.getItem(key) || 'null');
-      return state?.mode === 'manual' && Date.now() - Number(state.startedAt || 0) < 8000;
-    } catch (error) {
-      return false;
     }
   };
 
@@ -616,7 +606,7 @@
     projectVideoRetryTimers.set(video, timers);
   };
   const resumeProjectVideos = () => {
-    if (document.documentElement.classList.contains('eye-media-held') || document.documentElement.classList.contains('navigation-source-frozen')) return;
+    if (document.documentElement.classList.contains('navigation-source-frozen')) return;
     projectVideos.forEach(primeProjectVideo);
     document.querySelectorAll('.hero-project.is-active video[data-project-media]').forEach((video) => {
       ensureVideoSource(video);
@@ -801,10 +791,6 @@
       // Release that captured frame before consuming the fresh return state,
       // otherwise every language handoff after the first remains paused.
       if (event.persisted) resetNavigationState();
-      if (document.documentElement.classList.contains('eye-mpa-returning')) {
-        gateInitialStateHandled = true;
-        return;
-      }
       if (gateInitialStateHandled && !event.persisted) return;
       if (event.persisted) gateInitialStateHandled = false;
       const shouldAnimateReturn = gateHasReturnState() && (event.persisted || navigationType !== 'reload');
@@ -837,10 +823,9 @@
   });
   window.addEventListener('focus', resumeProjectVideos);
   window.addEventListener('online', resumeProjectVideos);
-  window.addEventListener('portfolio-eye-transition-finished', resumeProjectVideos);
   resetNavigationState();
-  if ((!supportsCrossDocumentViewTransitions || hasManualEyeTransition(eyeHallTransitionKey)) && document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
-  if ((!supportsCrossDocumentViewTransitions || hasManualEyeTransition(eyeGateTransitionKey)) && gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
+  if (document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
+  if (gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {
