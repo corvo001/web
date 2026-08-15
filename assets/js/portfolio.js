@@ -15,6 +15,7 @@
   const eyeDiveDuration = 1120;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
+  const projectArrivalDuration = 620;
   const archiveDepartureDuration = 1280;
   const archiveArrivalDuration = 900;
   const pageDepartureDuration = 460;
@@ -227,11 +228,17 @@
     }
     if (reduceMotion.matches) {
       writeProjectTransition({ ...state, phase: 'inside' });
+      document.body.classList.add('page-arrival-complete');
       document.documentElement.classList.remove('project-entry-boot');
       return;
     }
     writeProjectTransition({ ...state, phase: 'inside' });
+    document.documentElement.classList.add('project-entry-arriving');
+    await nextPaint();
     document.documentElement.classList.remove('project-entry-boot');
+    await waitForMotion(document.documentElement, 'animationend', projectArrivalDuration, 'project-world-reveal');
+    document.body.classList.add('page-arrival-complete');
+    document.documentElement.classList.remove('project-entry-arriving');
   };
 
   const projectVideos = [...document.querySelectorAll('video[data-project-hero-media]')];

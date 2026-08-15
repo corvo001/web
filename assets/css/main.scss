@@ -826,7 +826,14 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   transition: none !important;
   animation: none !important;
 }
-html.project-entry-boot body { opacity: 0; animation: none; }
+html.project-entry-boot body,
+html.project-entry-arriving body { opacity: 1; animation: none; }
+html.project-entry-boot::after,
+html.project-entry-arriving::after {
+  content: ""; position: fixed; z-index: 1000; inset: 0; background: #020302; opacity: 1; pointer-events: none;
+}
+html.project-entry-arriving::after { animation: project-world-reveal 620ms cubic-bezier(.22,1,.36,1) both; }
+html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .project-portal-backdrop {
   position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
   transition: opacity 700ms cubic-bezier(.4,0,.2,1); will-change: opacity;
@@ -897,6 +904,10 @@ html.project-entry-boot body { opacity: 0; animation: none; }
   48% { opacity: .18; }
   78% { opacity: .72; }
   100% { opacity: 1; }
+}
+@keyframes project-world-reveal {
+  0%, 10% { opacity: 1; }
+  100% { opacity: 0; }
 }
 @keyframes project-world-signal {
   0%, 16% { opacity: 0; transform: scale(.72); }
