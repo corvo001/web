@@ -26,6 +26,7 @@
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
     if (!source || video.getAttribute('src')) return;
+    video.preload = 'auto';
     video.src = source;
     video.removeAttribute('data-src');
     video.load();
@@ -297,12 +298,18 @@
   const primeProjectVideo = (video) => {
     clearProjectVideoRetries(video);
     playProjectVideo(video);
-    const timers = [90, 320, 900, 1800].map((delay) => window.setTimeout(() => {
+    const timers = [90, 320, 900, 1800, 3600, 6000].map((delay) => window.setTimeout(() => {
       if (!document.hidden && video.paused && video.dataset.userPaused !== 'true') playProjectVideo(video);
     }, delay));
     projectVideoRetryTimers.set(video, timers);
   };
-  const resumeProjectVideos = () => projectVideos.forEach(primeProjectVideo);
+  const resumeProjectVideos = () => {
+    projectVideos.forEach(primeProjectVideo);
+    document.querySelectorAll('.hero-project.is-active video[data-project-media]').forEach((video) => {
+      ensureVideoSource(video);
+      primeProjectVideo(video);
+    });
+  };
 
   projectVideos.forEach((video) => {
     ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach((eventName) => {
@@ -485,6 +492,8 @@
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) resumeProjectVideos();
   });
+  window.addEventListener('focus', resumeProjectVideos);
+  window.addEventListener('online', resumeProjectVideos);
   resetNavigationState();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
@@ -608,6 +617,25 @@
     const controls = projects.parentElement?.querySelector('.hero-project-controls');
     const previous = controls?.querySelector('[data-home-project-previous]');
     const next = controls?.querySelector('[data-home-project-next]');
+
+    slides.forEach((slide) => {
+      const video = slide.querySelector('video[data-project-media]');
+      if (!video) return;
+      const recoverPlayback = () => {
+        if (!document.hidden && slide.classList.contains('is-active')) playProjectVideo(video);
+      };
+      ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach((eventName) => {
+        video.addEventListener(eventName, recoverPlayback);
+      });
+      video.addEventListener('playing', () => clearProjectVideoRetries(video));
+      video.addEventListener('pause', () => {
+        if (document.hidden || !slide.classList.contains('is-active')) return;
+        window.setTimeout(() => {
+          if (video.paused && slide.classList.contains('is-active')) primeProjectVideo(video);
+        }, 120);
+      });
+    });
+
     const show = (index) => {
       active = index;
       slides.forEach((slide, slideIndex) => {
@@ -619,9 +647,11 @@
         if (video) {
           if (isActive) {
             ensureVideoSource(video);
-            video.play().catch(() => {});
+            primeProjectVideo(video);
+          } else {
+            clearProjectVideoRetries(video);
+            video.pause();
           }
-          else video.pause();
         }
       });
       if (previous) previous.disabled = historyIndex === 0;
