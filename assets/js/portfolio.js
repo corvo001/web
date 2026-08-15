@@ -586,6 +586,7 @@
       warmProjectVideo(link);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
+      document.documentElement.classList.toggle('project-launch-from-hall', Boolean(link.closest('[data-home-projects]')));
       const useDisplayFont = projectDisplayFontAvailable;
       const label = link.querySelector('h3')?.textContent.trim() || link.dataset.projectId;
       departIntoProject(link, media, label, useDisplayFont).catch(() => {

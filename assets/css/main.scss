@@ -918,6 +918,11 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 }
 .project-world-title::before { content: "PROJECT // SIGNAL ACQUIRED"; top: calc(50% - clamp(3.3rem,8vw,8rem)); }
 .project-world-title::after { content: "INITIALIZING"; bottom: calc(50% - clamp(3.3rem,8vw,8rem)); }
+html.project-launch-from-hall .project-world-title::before { content: "PROJECTO"; }
+html.project-launch-from-hall .project-world-title::after { content: "INICIALIZANDO"; }
+html.project-launch-from-hall[lang="en"] .project-world-title::before { content: "PROJECT"; }
+html.project-launch-from-hall[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
+html.project-launch-from-hall .project-world-title__letter { display: none; }
 .project-world-title.is-departing { animation: project-world-title 1280ms cubic-bezier(.6,0,.2,1) both; }
 .project-world-title.is-departing::before { animation: project-world-meta 1280ms 40ms ease both; }
 .project-world-title.is-departing::after { animation: project-world-meta 1280ms 110ms ease both reverse; }
