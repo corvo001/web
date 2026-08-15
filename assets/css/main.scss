@@ -759,7 +759,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-index__body { max-width: 1500px; margin-inline: auto; }
 .project-index__filters {
   position: fixed; z-index: 28; left: clamp(.85rem,1.6vw,1.5rem); top: 50%;
-  transform: translateY(-50%);
+  transform: translate3d(0,-50%,0); backface-visibility: hidden; will-change: transform;
 }
 .project-filter { position: relative; --filter-cut: .7rem; }
 .project-filter summary {
@@ -767,11 +767,10 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   width: 3.65rem; height: 4.55rem; padding: .5rem .35rem;
   color: var(--accent); list-style: none; cursor: pointer; overflow: hidden;
   border: 1px solid color-mix(in srgb,var(--accent) 26%,var(--line));
-  background:
-    linear-gradient(180deg,color-mix(in srgb,var(--surface) 88%,transparent),color-mix(in srgb,var(--ink) 96%,transparent));
+  background: linear-gradient(180deg,color-mix(in srgb,var(--surface) 97%,var(--ink)),var(--ink));
   clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% calc(100% - var(--filter-cut)),calc(100% - var(--filter-cut)) 100%,0 100%);
   box-shadow: inset 0 0 1.6rem rgba(130,181,152,.035);
-  backdrop-filter: blur(14px); transition: color 220ms ease, border-color 220ms ease, transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
+  -webkit-backdrop-filter: none; backdrop-filter: none; transition: color 220ms ease, border-color 220ms ease, transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
 }
 .project-filter summary::before,
 .project-filter summary::after {
@@ -829,11 +828,10 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   position: absolute; left: calc(100% + 1.05rem); top: 50%; width: clamp(11.5rem,15vw,13rem);
   padding: .55rem .8rem; overflow: hidden;
   border: 1px solid color-mix(in srgb,var(--accent) 28%,var(--line));
-  background:
-    linear-gradient(145deg,color-mix(in srgb,var(--surface) 94%,transparent),color-mix(in srgb,var(--ink) 98%,transparent));
+  background: linear-gradient(145deg,color-mix(in srgb,var(--surface) 97%,var(--ink)),color-mix(in srgb,var(--ink) 99%,var(--surface)));
   clip-path: polygon(0 0,calc(100% - var(--filter-cut)) 0,100% var(--filter-cut),100% 100%,var(--filter-cut) 100%,0 calc(100% - var(--filter-cut)));
   box-shadow: 0 1.4rem 3.5rem rgba(0,0,0,.32), inset 0 0 2rem rgba(130,181,152,.025);
-  backdrop-filter: blur(18px); transform: translateY(-50%); transform-origin: left center;
+  -webkit-backdrop-filter: none; backdrop-filter: none; transform: translateY(-50%); transform-origin: left center;
   animation: project-filter-panel-in 380ms cubic-bezier(.16,1,.3,1) both;
 }
 .project-filter__menu::after {
@@ -1347,15 +1345,10 @@ html.project-launch-from-hall[lang="en"] .project-world-title::after { content: 
   .project-index { padding: 7rem 1rem 5rem; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
-  .project-index__filters {
-    left: 1rem; top: 50%; bottom: auto; transform: translate3d(0,-50%,0);
-    backface-visibility: hidden; will-change: transform;
-  }
+  .project-index__filters { left: 1rem; top: 50%; bottom: auto; }
   .project-filter summary {
     width: 3.65rem; height: 4.55rem;
     clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% 100%,0 100%);
-    -webkit-backdrop-filter: none; backdrop-filter: none;
-    background: linear-gradient(180deg,color-mix(in srgb,var(--surface) 97%,var(--ink)),var(--ink));
   }
   .project-filter__menu { left: 0; top: auto; bottom: calc(100% + .75rem); width: min(18rem,calc(100vw - 2rem)); transform: none; transform-origin: left bottom; }
   .project-filter__connector { left: 1.7rem; top: auto; bottom: -.76rem; width: 1px; height: .76rem; background: linear-gradient(transparent,var(--accent)); }
