@@ -6,6 +6,7 @@
   const eyeReturnKey = 'portfolio-eye-return';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
+  const pageTransitionKey = 'portfolio-page-transition';
   let eyeTrackingLocked = false;
   let gateReturnPlaying = false;
   let navigationInProgress = false;
@@ -17,7 +18,7 @@
   const projectDepartureDuration = 1280;
   const archiveDepartureDuration = 1280;
   const archiveArrivalDuration = 900;
-  const pageDepartureDuration = 280;
+  const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
 
   if (document.fonts?.load) {
@@ -107,11 +108,25 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'project-portal-leaving', 'archive-leaving');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
+  };
+
+  const showPageArrival = async () => {
+    if (!document.documentElement.classList.contains('page-transition-boot')) return;
+    sessionStorage.removeItem(pageTransitionKey);
+    if (reduceMotion.matches) {
+      document.documentElement.classList.remove('page-transition-boot');
+      return;
+    }
+    document.body.classList.add('page-arriving');
+    await nextPaint();
+    document.documentElement.classList.remove('page-transition-boot');
+    await waitForMotion(document.body, 'animationend', 680, 'page-transition-in');
+    document.body.classList.remove('page-arriving');
   };
 
   const readProjectTransition = () => {
@@ -420,6 +435,7 @@
         document.documentElement.classList.add('archive-entry-boot');
       }
       resetNavigationState();
+      showPageArrival();
       showProjectArrival();
       resumeProjectVideos();
       showProjectReturn();
@@ -648,6 +664,7 @@
       document.querySelectorAll('.archive-transition, .project-portal, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       if (!/^\/(?:es|en)\/$/.test(target.pathname)) sessionStorage.removeItem(projectTransitionKey);
+      sessionStorage.setItem(pageTransitionKey, JSON.stringify({ path: target.pathname, startedAt: Date.now() }));
       document.body.classList.add('page-leaving');
       window.setTimeout(() => window.location.assign(target.href), pageDepartureDuration);
     });

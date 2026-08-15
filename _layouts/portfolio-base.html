@@ -4,6 +4,21 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>html.page-transition-boot{background:#090b0a}html.page-transition-boot body{opacity:0;animation:none}@media(prefers-color-scheme:light){html.page-transition-boot{background:#f3f4ef}}</style>
+    <script>
+      try {
+        const pageTransition = JSON.parse(sessionStorage.getItem('portfolio-page-transition') || 'null');
+        const isExpectedPage = pageTransition?.path === window.location.pathname;
+        const isRecentTransition = Date.now() - Number(pageTransition?.startedAt || 0) < 8000;
+        if (isExpectedPage && isRecentTransition) {
+          document.documentElement.classList.add('page-transition-boot');
+        } else {
+          sessionStorage.removeItem('portfolio-page-transition');
+        }
+      } catch (error) {
+        sessionStorage.removeItem('portfolio-page-transition');
+      }
+    </script>
     {% if active_body_class == 'language-page' %}
     <style>html.gate-return-pending{background:#020302;color-scheme:dark}html.gate-return-pending body{visibility:hidden}</style>
     <script>
