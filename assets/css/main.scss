@@ -185,22 +185,35 @@ html.eye-gate-leaving::after {
 html.eye-hall-entry-boot.eye-hall-entering::after {
   animation: hall-eye-edge 920ms cubic-bezier(.25,.28,.55,1) both;
 }
-/* Capture the hall as a still frame before returning to the language gate.
-   The body and the pupil edge remain free to perform the handoff itself. */
-html.eye-handoff-frozen body { pointer-events: none; }
-html.eye-handoff-frozen body *,
-html.eye-handoff-frozen body *::before,
-html.eye-handoff-frozen body *::after {
+/* Capture the current document as a still frame before any navigation.
+   The body and purpose-built overlays remain free to perform their handoff. */
+html.navigation-source-frozen body { pointer-events: none; }
+html.navigation-source-frozen body *,
+html.navigation-source-frozen body *::before,
+html.navigation-source-frozen body *::after {
   animation-play-state: paused !important;
   transition: none !important;
 }
-html.eye-handoff-frozen.gate-exiting .language-options {
+html.navigation-source-frozen.gate-exiting .language-options {
   opacity: 1;
   transform: none;
 }
-html.eye-handoff-frozen.gate-exiting .pupil-transition,
-html.eye-handoff-frozen.gate-exiting .pupil-transition i {
+html.navigation-source-frozen.gate-exiting .pupil-transition,
+html.navigation-source-frozen.gate-exiting .pupil-transition i {
   animation-play-state: running !important;
+}
+html.navigation-source-frozen .project-portal-leaving [data-project-media] {
+  visibility: var(--navigation-frozen-visibility,visible) !important;
+  transform: var(--navigation-frozen-transform,none) !important;
+}
+html.navigation-source-frozen .project-portal-leaving .portfolio-nav,
+html.navigation-source-frozen .project-portal-leaving .portfolio-footer,
+html.navigation-source-frozen .project-portal-leaving .hero-copy,
+html.navigation-source-frozen .project-portal-leaving .hero-project-controls,
+html.navigation-source-frozen .project-portal-leaving .hero-project__interest,
+html.navigation-source-frozen .project-portal-leaving .project-index-card__info {
+  opacity: var(--navigation-frozen-opacity,1) !important;
+  visibility: var(--navigation-frozen-visibility,visible) !important;
 }
 html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
@@ -213,14 +226,6 @@ html.eye-gate-leaving::after {
   height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
   animation: hall-eye-edge-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
 }
-html.navigation-loading,
-html.navigation-loading body { cursor: progress; }
-html.navigation-loading [data-language-link],
-html.navigation-loading [data-language-menu],
-html.navigation-loading [data-work-entry],
-html.navigation-loading [data-project-link],
-html.navigation-loading .is-navigation-loading { pointer-events: none; }
-html.navigation-loading .is-navigation-loading { color: var(--accent) !important; opacity: .72; }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
 .skip-link {

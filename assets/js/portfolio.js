@@ -19,8 +19,9 @@
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
-  let frozenEyeAnimations = [];
-  let frozenEyeSvgs = [];
+  let frozenNavigationAnimations = [];
+  let frozenNavigationSvgs = [];
+  let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 920;
   const eyeCodeDuration = 1640;
@@ -263,30 +264,53 @@
     }
   };
 
-  const freezeEyeHandoffSource = () => {
-    document.documentElement.classList.add('eye-handoff-frozen');
+  const freezeNavigationSource = () => {
+    document.documentElement.classList.add('navigation-source-frozen');
+    frozenNavigationStyleElements = [...document.querySelectorAll([
+      '[data-project-media]',
+      '.portfolio-nav',
+      '.portfolio-footer',
+      '.hero-copy',
+      '.hero-project-controls',
+      '.hero-project__interest',
+      '.project-index-card__info'
+    ].join(','))];
+    frozenNavigationStyleElements.forEach((element) => {
+      const style = window.getComputedStyle(element);
+      element.style.setProperty('--navigation-frozen-opacity', style.opacity);
+      element.style.setProperty('--navigation-frozen-visibility', style.visibility);
+      element.style.setProperty('--navigation-frozen-transform', style.transform);
+    });
     document.querySelectorAll('video').forEach((video) => {
       clearProjectVideoRetries(video);
       video.pause();
     });
-    frozenEyeSvgs = [...document.querySelectorAll('svg')];
-    frozenEyeSvgs.forEach((svg) => svg.pauseAnimations?.());
+    frozenNavigationSvgs = [...document.querySelectorAll('svg')];
+    frozenNavigationSvgs.forEach((svg) => svg.pauseAnimations?.());
     try {
-      frozenEyeAnimations = (document.body?.getAnimations?.({ subtree: true }) || []).filter((animation) => {
+      frozenNavigationAnimations = (document.body?.getAnimations?.({ subtree: true }) || []).filter((animation) => {
         const target = animation.effect?.target;
         return target !== document.body && target !== document.documentElement;
       });
-      frozenEyeAnimations.forEach((animation) => animation.pause());
+      frozenNavigationAnimations.forEach((animation) => animation.pause());
     } catch (error) { /* CSS pause remains the compatibility fallback. */ }
   };
 
-  const releaseEyeHandoffSource = () => {
-    frozenEyeAnimations.forEach((animation) => {
-      if (animation.playState === 'paused') animation.play();
+  const releaseNavigationSource = () => {
+    frozenNavigationAnimations.forEach((animation) => {
+      try {
+        if (animation.playState === 'paused') animation.play();
+      } catch (error) { /* The animation may have been detached during navigation. */ }
     });
-    frozenEyeSvgs.forEach((svg) => svg.unpauseAnimations?.());
-    frozenEyeAnimations = [];
-    frozenEyeSvgs = [];
+    frozenNavigationSvgs.forEach((svg) => svg.unpauseAnimations?.());
+    frozenNavigationStyleElements.forEach((element) => {
+      element.style.removeProperty('--navigation-frozen-opacity');
+      element.style.removeProperty('--navigation-frozen-visibility');
+      element.style.removeProperty('--navigation-frozen-transform');
+    });
+    frozenNavigationAnimations = [];
+    frozenNavigationSvgs = [];
+    frozenNavigationStyleElements = [];
   };
 
   const nextPaint = () => new Promise((resolve) => {
@@ -327,8 +351,8 @@
     navigationInProgress = false;
     gateReturnPlaying = false;
     hallEyeArrivalPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'eye-handoff-frozen', 'navigation-loading');
-    releaseEyeHandoffSource();
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'navigation-source-frozen');
+    releaseNavigationSource();
     if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
       ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
@@ -338,7 +362,6 @@
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
-    document.querySelectorAll('.is-navigation-loading').forEach((link) => link.classList.remove('is-navigation-loading'));
   };
 
   const showPageArrival = async () => {
@@ -569,7 +592,7 @@
     projectVideoRetryTimers.delete(video);
   };
   const playProjectVideo = (video) => {
-    if (document.documentElement.classList.contains('eye-handoff-frozen')) return;
+    if (document.documentElement.classList.contains('navigation-source-frozen')) return;
     if (video.dataset.userPaused === 'true') return;
     video.muted = true;
     video.defaultMuted = true;
@@ -593,7 +616,7 @@
     projectVideoRetryTimers.set(video, timers);
   };
   const resumeProjectVideos = () => {
-    if (document.documentElement.classList.contains('eye-media-held') || document.documentElement.classList.contains('eye-handoff-frozen')) return;
+    if (document.documentElement.classList.contains('eye-media-held') || document.documentElement.classList.contains('navigation-source-frozen')) return;
     projectVideos.forEach(primeProjectVideo);
     document.querySelectorAll('.hero-project.is-active video[data-project-media]').forEach((video) => {
       ensureVideoSource(video);
@@ -861,7 +884,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      freezeEyeHandoffSource();
+      freezeNavigationSource();
       // Finish priming the gate before the eye moves. The previous 240 ms
       // deadline often expired on the published site and exposed the document
       // load halfway through an otherwise correct animation.
@@ -950,7 +973,7 @@
       document.documentElement.classList.remove('gate-preparing');
       // Once the scan has resolved, hold that exact gate frame while the hall
       // finishes priming. Only the pupil overlay is allowed to move afterward.
-      freezeEyeHandoffSource();
+      freezeNavigationSource();
       await hallWarmup;
       // Timestamp the handoff only once every destination resource is ready;
       // slow networks must not make the destination reject a now-stale state.
@@ -980,11 +1003,8 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
+      freezeNavigationSource();
       await Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       const useDisplayFont = projectDisplayFontAvailable;
@@ -1261,11 +1281,8 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
+      freezeNavigationSource();
       await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       if (window.location.pathname.startsWith(target.pathname)) {
         sessionStorage.removeItem(archiveTransitionKey);
@@ -1310,11 +1327,8 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
+      freezeNavigationSource();
       await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       if (!/^\/(?:es|en)\/$/.test(target.pathname)) sessionStorage.removeItem(projectTransitionKey);
