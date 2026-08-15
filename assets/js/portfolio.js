@@ -21,7 +21,6 @@
   let updateEyeFromPointer = null;
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 920;
-  const eyeWarmupWindow = 360;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -165,14 +164,6 @@
     return warmup;
   };
 
-  // Fill the cache as soon as the user commits to the navigation, without
-  // stretching the visible transition if the network is slow. The warmup
-  // continues after this deadline and overlaps the eye motion.
-  const warmNavigationWithin = (link, duration = eyeWarmupWindow) => Promise.race([
-    warmNavigationPage(link),
-    new Promise((resolve) => window.setTimeout(() => resolve(false), duration))
-  ]);
-
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
     if (!source || video.getAttribute('src')) return;
@@ -258,6 +249,15 @@
       return isExpectedGate && isRecent ? state : null;
     } catch (error) {
       return null;
+    }
+  };
+
+  const hasManualEyeTransition = (key) => {
+    try {
+      const state = JSON.parse(sessionStorage.getItem(key) || 'null');
+      return state?.mode === 'manual' && Date.now() - Number(state.startedAt || 0) < 8000;
+    } catch (error) {
+      return false;
     }
   };
 
@@ -775,8 +775,8 @@
   window.addEventListener('online', resumeProjectVideos);
   window.addEventListener('portfolio-eye-transition-finished', resumeProjectVideos);
   resetNavigationState();
-  if (!supportsCrossDocumentViewTransitions && document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
-  if (!supportsCrossDocumentViewTransitions && gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
+  if ((!supportsCrossDocumentViewTransitions || hasManualEyeTransition(eyeHallTransitionKey)) && document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
+  if ((!supportsCrossDocumentViewTransitions || hasManualEyeTransition(eyeGateTransitionKey)) && gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {
@@ -822,7 +822,10 @@
       navigationInProgress = true;
       link.classList.add('is-navigation-loading');
       document.documentElement.classList.add('navigation-loading');
-      await warmNavigationWithin(link, 240);
+      // Finish priming the gate before the eye moves. The previous 240 ms
+      // deadline often expired on the published site and exposed the document
+      // load halfway through an otherwise correct animation.
+      await warmNavigationPage(link);
       link.classList.remove('is-navigation-loading');
       document.documentElement.classList.remove('navigation-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
@@ -841,6 +844,7 @@
         y: centerY,
         coverRadius,
         handoffRadius,
+        mode: 'manual',
         path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
@@ -850,10 +854,6 @@
       rootStyle.setProperty('--hall-eye-body-y', `${window.scrollY + centerY}px`);
       rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
       rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
-      if (supportsCrossDocumentViewTransitions) {
-        window.location.assign(link.href);
-        return;
-      }
       document.documentElement.classList.add('eye-gate-leaving');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
       window.location.assign(link.href);
@@ -893,7 +893,7 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       eyeTrackingLocked = true;
-      const hallWarmup = warmNavigationWithin(link);
+      const hallWarmup = warmNavigationPage(link);
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       const eyeGeometry = setPupilTransitionGeometry();
@@ -902,21 +902,23 @@
         window.location.assign(link.href);
         return;
       }
-      sessionStorage.setItem(eyeHallTransitionKey, JSON.stringify({
+      const hallTransitionState = {
         ...eyeGeometry,
-        path: new URL(link.href, window.location.href).pathname,
-        startedAt: Date.now()
-      }));
+        mode: 'manual',
+        path: new URL(link.href, window.location.href).pathname
+      };
       document.documentElement.classList.add('gate-preparing');
       await Promise.all([
         waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor'),
         hallWarmup
       ]);
       document.documentElement.classList.remove('gate-preparing');
-      if (supportsCrossDocumentViewTransitions) {
-        window.location.assign(link.href);
-        return;
-      }
+      // Timestamp the handoff only once every destination resource is ready;
+      // slow networks must not make the destination reject a now-stale state.
+      sessionStorage.setItem(eyeHallTransitionKey, JSON.stringify({
+        ...hallTransitionState,
+        startedAt: Date.now()
+      }));
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);

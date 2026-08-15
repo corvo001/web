@@ -31,6 +31,17 @@
             now - Number(state.startedAt || 0) < 8000 &&
             (!destinationPath || state.path === destinationPath);
 
+          // Language navigation uses the deterministic two-document handoff.
+          // Letting the browser start a second cross-document transition here
+          // makes the real page load compete with the simulated eye motion.
+          const isManualEyeNavigation = [hallState, gateState].some((state) =>
+            state?.mode === 'manual' && isCurrentEyeNavigation(state)
+          );
+          if (isManualEyeNavigation) {
+            event.viewTransition.skipTransition();
+            return;
+          }
+
           if (!isCurrentEyeNavigation(hallState) && !isCurrentEyeNavigation(gateState)) {
             event.viewTransition.skipTransition();
           }
@@ -49,8 +60,8 @@
           const hallState = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
           const gateState = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
           const isRecent = (state) => now - Number(state?.startedAt || 0) < 8000;
-          const enteringHall = !reducedMotion && hallState?.path === path && isRecent(hallState);
-          const returningToGate = !reducedMotion && gateState?.path === path && isRecent(gateState);
+          const enteringHall = !reducedMotion && hallState?.mode !== 'manual' && hallState?.path === path && isRecent(hallState);
+          const returningToGate = !reducedMotion && gateState?.mode !== 'manual' && gateState?.path === path && isRecent(gateState);
 
           if (!enteringHall && !returningToGate) {
             event.viewTransition.skipTransition();
