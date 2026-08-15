@@ -11,13 +11,3 @@ Ideas transformed into functional systems through code, experimentation and engi
 [**ENTER PORTFOLIO**](https://corvo001.github.io)
 
 </div>
-
----
-
-<div align="center">
-
-**CREATIVITY, TECHNOLOGY AND SYSTEMS WITH AN IDENTITY OF THEIR OWN.**
-
-[Portfolio](https://corvo001.github.io) · [GitHub](https://github.com/corvo001) · [LinkedIn](https://www.linkedin.com/in/danielcuervor/)
-
-</div>
