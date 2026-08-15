@@ -2,17 +2,13 @@
   const gate = document.querySelector('[data-language-gate]');
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const eyeSessionKey = 'portfolio-eye-entered';
-  const eyeReturnKey = 'portfolio-eye-return';
-  const eyeHallTransitionKey = 'portfolio-eye-hall-transition';
-  const eyeGateTransitionKey = 'portfolio-eye-gate-transition';
+  const languageBridgeKey = 'portfolio-language-bridge-v2';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
   let eyeTrackingLocked = false;
-  let gateReturnPlaying = false;
+  let languageArrivalPlaying = false;
   let gateInitialStateHandled = false;
-  let hallEyeArrivalPlaying = false;
   let archiveArrivalPlaying = false;
   let projectArrivalPlaying = false;
   let navigationInProgress = false;
@@ -22,7 +18,7 @@
   let frozenNavigationSvgs = [];
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
-  const eyeDiveDuration = 920;
+  const eyeDiveDuration = 860;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -203,11 +199,6 @@
       .catch(() => {});
   }
 
-  const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-  const gateHasReturnState = () => history.state?.eyeGateReturn === true ||
-    sessionStorage.getItem(eyeReturnKey) === '1' ||
-    sessionStorage.getItem(eyeSessionKey) === '1';
-
   eyeTrackingLocked = gate && document.documentElement.classList.contains('gate-natural-entry');
 
   const setPupilTransitionGeometry = () => {
@@ -230,28 +221,18 @@
     const centerY = markRect.top + (markRect.height * (456.5 / 1024));
     const radius = Math.hypot(Math.max(centerX, window.innerWidth - centerX), Math.max(centerY, window.innerHeight - centerY));
     const coverRadius = radius + 2;
-    const handoffRadius = Math.max((size / 2) + 1, coverRadius * .52);
     transition.style.setProperty('--pupil-x', `${centerX}px`);
     transition.style.setProperty('--pupil-y', `${centerY}px`);
     transition.style.setProperty('--pupil-radius', `${size / 2}px`);
     transition.style.setProperty('--pupil-cover-radius', `${coverRadius}px`);
-    transition.style.setProperty('--pupil-handoff-radius', `${handoffRadius}px`);
-    ['--pupil-start-x', '--pupil-start-y', '--pupil-start-radius', '--pupil-start-edge-opacity'].forEach((property) => {
-      transition.style.removeProperty(property);
-    });
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--language-eye-x', `${centerX}px`);
+    rootStyle.setProperty('--language-eye-y', `${centerY}px`);
+    rootStyle.setProperty('--language-eye-body-y', `${window.scrollY + centerY}px`);
+    rootStyle.setProperty('--language-eye-pupil-radius', `${size / 2}px`);
+    rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
     document.documentElement.appendChild(transition);
-    return { x: centerX, y: centerY, radius: size / 2, coverRadius, handoffRadius };
-  };
-
-  const readEyeGateTransition = () => {
-    try {
-      const state = JSON.parse(sessionStorage.getItem(eyeGateTransitionKey) || 'null');
-      const isExpectedGate = state?.path === window.location.pathname;
-      const isRecent = Date.now() - Number(state?.startedAt || 0) < 8000;
-      return isExpectedGate && isRecent ? state : null;
-    } catch (error) {
-      return null;
-    }
+    return { x: centerX, y: centerY, radius: size / 2, coverRadius };
   };
 
   const freezeNavigationSource = () => {
@@ -339,16 +320,15 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    gateReturnPlaying = false;
-    hallEyeArrivalPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'navigation-source-frozen');
+    languageArrivalPlaying = false;
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-bridge-leaving', 'navigation-source-frozen');
     releaseNavigationSource();
-    if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
-      ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
+    if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-bridge-return')) {
+      ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
       });
     }
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -370,29 +350,63 @@
     document.body.classList.remove('page-arriving');
   };
 
-  const showHallEyeArrival = async () => {
-    if (hallEyeArrivalPlaying || !document.documentElement.classList.contains('eye-hall-entry-boot')) return;
-    hallEyeArrivalPlaying = true;
-    sessionStorage.removeItem(eyeHallTransitionKey);
-    if (reduceMotion.matches) {
-      document.body.classList.add('page-arrival-complete');
-      document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
-      hallEyeArrivalPlaying = false;
-      return;
-    }
-    const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
-    if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
-    // The poster is already renderable. Waiting for a decoded video frame here
-    // stopped the eye exactly at the page boundary and exposed the load.
-    if (activeHallMedia) waitForRenderableMedia(activeHallMedia).catch(() => {});
-    document.documentElement.classList.add('eye-hall-entering');
-    await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-reveal');
-    document.body.classList.add('page-arrival-complete');
-    document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
-    ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
+  const finishLanguageArrival = () => {
+    sessionStorage.removeItem(languageBridgeKey);
+    document.documentElement.classList.remove(
+      'language-bridge-enter',
+      'language-bridge-entering',
+      'language-bridge-return',
+      'language-bridge-returning'
+    );
+    ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
       document.documentElement.style.removeProperty(property);
     });
-    hallEyeArrivalPlaying = false;
+    languageArrivalPlaying = false;
+  };
+
+  const showLanguageArrival = async () => {
+    const enteringHall = document.documentElement.classList.contains('language-bridge-enter');
+    const returningToGate = gate && document.documentElement.classList.contains('language-bridge-return');
+    if (languageArrivalPlaying || (!enteringHall && !returningToGate)) return;
+    languageArrivalPlaying = true;
+
+    if (reduceMotion.matches) {
+      if (enteringHall) document.body.classList.add('page-arrival-complete');
+      finishLanguageArrival();
+      return;
+    }
+
+    if (enteringHall) {
+      sessionStorage.removeItem(pageTransitionKey);
+      document.documentElement.classList.remove('page-transition-boot');
+      const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
+      if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
+      if (activeHallMedia) waitForRenderableMedia(activeHallMedia).catch(() => {});
+      await nextPaint();
+      document.documentElement.classList.add('language-bridge-entering');
+      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
+      document.body.classList.add('page-arrival-complete');
+      finishLanguageArrival();
+      return;
+    }
+
+    gateInitialStateHandled = true;
+    eyeTrackingLocked = true;
+    await waitForGateLayout();
+    const geometry = setPupilTransitionGeometry();
+    if (!geometry) {
+      finishLanguageArrival();
+      showNaturalGateEntrance();
+      return;
+    }
+    document.documentElement.classList.remove('gate-natural-entry');
+    await nextPaint();
+    document.documentElement.classList.add('language-bridge-returning');
+    await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyeDiveDuration, 'language-gate-focus');
+    finishLanguageArrival();
+    document.documentElement.classList.add('gate-entrance-skip');
+    eyeTrackingLocked = false;
+    mark?.classList.remove('eye-geometry-locked');
   };
 
   const readProjectTransition = () => {
@@ -695,80 +709,36 @@
   const showResolvedGate = () => {
     if (!gate) return;
     sessionStorage.removeItem(pageTransitionKey);
-    sessionStorage.removeItem(eyeReturnKey);
-    sessionStorage.removeItem(eyeSessionKey);
-    sessionStorage.removeItem(eyeHallTransitionKey);
-    sessionStorage.removeItem(eyeGateTransitionKey);
-    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
+    sessionStorage.removeItem(languageBridgeKey);
+    document.documentElement.classList.remove(
+      'page-transition-boot',
+      'gate-natural-entry',
+      'gate-preparing',
+      'gate-exiting',
+      'language-bridge-return',
+      'language-bridge-returning'
+    );
+    document.body.classList.remove('gate-preparing', 'gate-exiting');
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
-    gateReturnPlaying = false;
+    languageArrivalPlaying = false;
     navigationInProgress = false;
     mark?.classList.remove('eye-geometry-locked');
-  };
-
-  const showGateReturn = async () => {
-    if (!gate || reduceMotion.matches || gateReturnPlaying || !gateHasReturnState()) {
-      if (reduceMotion.matches) showResolvedGate();
-      return;
-    }
-
-    gateReturnPlaying = true;
-    gateInitialStateHandled = true;
-    sessionStorage.removeItem(pageTransitionKey);
-    document.documentElement.classList.remove('page-transition-boot');
-    navigationInProgress = false;
-    eyeTrackingLocked = true;
-    document.documentElement.classList.add('gate-return-pending');
-    await waitForGateLayout();
-    if (!setPupilTransitionGeometry()) {
-      gateReturnPlaying = false;
-      showResolvedGate();
-      return;
-    }
-
-    const gateTransition = readEyeGateTransition();
-    const transition = document.querySelector('[data-pupil-transition]');
-    if (gateTransition && transition) {
-      transition.style.setProperty('--pupil-start-x', `${Number(gateTransition.x) || (window.innerWidth / 2)}px`);
-      transition.style.setProperty('--pupil-start-y', `${Number(gateTransition.y) || (window.innerHeight / 2)}px`);
-      transition.style.setProperty('--pupil-start-radius', `${Math.max(Number(gateTransition.handoffRadius) || 1, 1)}px`);
-      transition.style.setProperty('--pupil-start-edge-opacity', '.96');
-    }
-
-    sessionStorage.removeItem(eyeReturnKey);
-    sessionStorage.removeItem(eyeSessionKey);
-    sessionStorage.removeItem(eyeGateTransitionKey);
-    document.documentElement.classList.remove('gate-natural-entry', 'gate-entrance-skip', 'gate-return-pending', 'gate-preparing', 'gate-exiting');
-    document.documentElement.classList.add('gate-return-mode', 'gate-entering');
-    await waitForMotion(transition, 'animationend', eyeDiveDuration, 'pupil-emerge');
-
-    document.documentElement.classList.remove('gate-entering', 'gate-return-mode');
-    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    eyeTrackingLocked = false;
-    gateReturnPlaying = false;
-    if (mark && lastPointerPosition && updateEyeFromPointer) {
-      mark.classList.remove('eye-geometry-locked');
-      mark.classList.add('eye-tracking-resuming');
-      updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
-      window.setTimeout(() => mark.classList.remove('eye-tracking-resuming'), 620);
-    } else {
-      mark?.classList.remove('eye-geometry-locked');
-    }
   };
 
   const showNaturalGateEntrance = () => {
     if (!gate) return;
     gateInitialStateHandled = true;
-    gateReturnPlaying = false;
+    languageArrivalPlaying = false;
     navigationInProgress = false;
-    sessionStorage.removeItem(eyeReturnKey);
-    sessionStorage.removeItem(eyeSessionKey);
-    sessionStorage.removeItem(eyeGateTransitionKey);
-    history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    document.documentElement.classList.remove('gate-return-pending', 'gate-return-mode', 'gate-entrance-skip', 'gate-preparing', 'gate-exiting', 'gate-entering');
+    sessionStorage.removeItem(languageBridgeKey);
+    document.documentElement.classList.remove(
+      'language-bridge-return',
+      'language-bridge-returning',
+      'gate-entrance-skip',
+      'gate-preparing',
+      'gate-exiting'
+    );
     document.documentElement.classList.add('gate-natural-entry');
     mark?.classList.remove('eye-geometry-locked');
     if (reduceMotion.matches) {
@@ -782,6 +752,8 @@
     }, eyeCodeDuration);
   };
 
+  // pageshow is the single owner of destination arrivals. Starting the bridge
+  // during script evaluation as well used to restart it when pageshow fired.
   window.addEventListener('pageshow', (event) => {
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches && document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -793,8 +765,7 @@
       if (event.persisted) resetNavigationState();
       if (gateInitialStateHandled && !event.persisted) return;
       if (event.persisted) gateInitialStateHandled = false;
-      const shouldAnimateReturn = gateHasReturnState() && (event.persisted || navigationType !== 'reload');
-      if (shouldAnimateReturn) showGateReturn();
+      if (document.documentElement.classList.contains('language-bridge-return')) showLanguageArrival();
       else showNaturalGateEntrance();
     } else {
       const projectState = readProjectTransition();
@@ -805,7 +776,7 @@
         document.documentElement.classList.add('archive-entry-boot');
       }
       resetNavigationState();
-      showHallEyeArrival();
+      showLanguageArrival();
       showPageArrival();
       showProjectArrival();
       resumeProjectVideos();
@@ -823,9 +794,6 @@
   });
   window.addEventListener('focus', resumeProjectVideos);
   window.addEventListener('online', resumeProjectVideos);
-  resetNavigationState();
-  if (document.documentElement.classList.contains('eye-hall-entry-boot')) showHallEyeArrival();
-  if (gate && document.documentElement.classList.contains('gate-return-pending') && gateHasReturnState()) showGateReturn();
 
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {
@@ -870,38 +838,31 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       freezeNavigationSource();
-      // Finish priming the gate before the eye moves. The previous 240 ms
-      // deadline often expired on the published site and exposed the document
-      // load halfway through an otherwise correct animation.
       await warmNavigationPage(link);
-      sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
 
       const centerX = window.innerWidth / 2;
       const centerY = (window.innerHeight / 2) - Math.min(76, window.innerHeight * .08);
+      const pupilRadius = Math.max(4, Math.min(8, Math.min(window.innerWidth, window.innerHeight) * .007));
       const coverRadius = Math.hypot(
         Math.max(centerX, window.innerWidth - centerX),
         Math.max(centerY, window.innerHeight - centerY)
       ) + 2;
-      const handoffRadius = Math.max(coverRadius * .52, 1);
-      sessionStorage.setItem(eyeGateTransitionKey, JSON.stringify({
-        x: centerX,
-        y: centerY,
-        coverRadius,
-        handoffRadius,
-        mode: 'manual',
+      const rootStyle = document.documentElement.style;
+      rootStyle.setProperty('--language-eye-x', `${centerX}px`);
+      rootStyle.setProperty('--language-eye-y', `${centerY}px`);
+      rootStyle.setProperty('--language-eye-body-y', `${window.scrollY + centerY}px`);
+      rootStyle.setProperty('--language-eye-pupil-radius', `${pupilRadius}px`);
+      rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
+      document.documentElement.classList.add('language-bridge-leaving');
+      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-depart');
+      sessionStorage.setItem(languageBridgeKey, JSON.stringify({
+        version: 2,
+        direction: 'return',
         path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
-      const rootStyle = document.documentElement.style;
-      rootStyle.setProperty('--hall-eye-x', `${centerX}px`);
-      rootStyle.setProperty('--hall-eye-y', `${centerY}px`);
-      rootStyle.setProperty('--hall-eye-body-y', `${window.scrollY + centerY}px`);
-      rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
-      rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
-      document.documentElement.classList.add('eye-gate-leaving');
-      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
       window.location.assign(link.href);
     });
   });
@@ -940,34 +901,27 @@
       navigationInProgress = true;
       eyeTrackingLocked = true;
       const hallWarmup = warmNavigationPage(link);
-      sessionStorage.setItem(eyeSessionKey, '1');
-      history.replaceState({ ...history.state, eyeGateReturn: true }, '');
+      sessionStorage.removeItem(pageTransitionKey);
+      sessionStorage.removeItem(projectTransitionKey);
       const eyeGeometry = setPupilTransitionGeometry();
       if (!eyeGeometry) {
-        sessionStorage.removeItem(eyeHallTransitionKey);
+        sessionStorage.removeItem(languageBridgeKey);
         window.location.assign(link.href);
         return;
       }
-      const hallTransitionState = {
-        ...eyeGeometry,
-        mode: 'manual',
-        path: new URL(link.href, window.location.href).pathname
-      };
       document.documentElement.classList.add('gate-preparing');
       await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
       document.documentElement.classList.remove('gate-preparing');
-      // Once the scan has resolved, hold that exact gate frame while the hall
-      // finishes priming. Only the pupil overlay is allowed to move afterward.
       freezeNavigationSource();
       await hallWarmup;
-      // Timestamp the handoff only once every destination resource is ready;
-      // slow networks must not make the destination reject a now-stale state.
-      sessionStorage.setItem(eyeHallTransitionKey, JSON.stringify({
-        ...hallTransitionState,
+      document.documentElement.classList.add('gate-exiting');
+      await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration, 'pupil-cover');
+      sessionStorage.setItem(languageBridgeKey, JSON.stringify({
+        version: 2,
+        direction: 'enter',
+        path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
-      document.documentElement.classList.add('gate-exiting');
-      await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);
     });
   });

@@ -25,61 +25,56 @@
     </script>
     {% endunless %}
     {% if active_body_class == 'home-page' %}
-    <style>html.eye-hall-entry-boot{background:#000;overflow:hidden}html.eye-hall-entry-boot body{opacity:0;animation:none}</style>
+    <style>html.language-bridge-enter{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-enter body{opacity:0;animation:none}html.language-bridge-enter::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
     <script>
       try {
-        const eyeHallTransition = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
-        const isExpectedHall = eyeHallTransition?.path === window.location.pathname;
-        const isRecentEyeEntry = Date.now() - Number(eyeHallTransition?.startedAt || 0) < 8000;
-        if (isExpectedHall && isRecentEyeEntry && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          const rootStyle = document.documentElement.style;
-          rootStyle.setProperty('--hall-eye-x', `${Number(eyeHallTransition.x) || (window.innerWidth / 2)}px`);
-          rootStyle.setProperty('--hall-eye-y', `${Number(eyeHallTransition.y) || (window.innerHeight / 2)}px`);
-          rootStyle.setProperty('--hall-eye-body-y', `${Number(eyeHallTransition.y) || (window.innerHeight / 2)}px`);
-          const coverRadius = Math.max(Number(eyeHallTransition.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1);
-          const handoffRadius = Math.max(Number(eyeHallTransition.handoffRadius) || (coverRadius * .52), 1);
-          rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
-          rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
-          document.documentElement.classList.add('eye-hall-entry-boot');
+        const languageBridge = JSON.parse(sessionStorage.getItem('portfolio-language-bridge-v2') || 'null');
+        const isExpectedHall = languageBridge?.version === 2 &&
+          languageBridge?.direction === 'enter' &&
+          languageBridge?.path === window.location.pathname;
+        const isRecentEntry = Date.now() - Number(languageBridge?.startedAt || 0) < 8000;
+        if (isExpectedHall && isRecentEntry && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          sessionStorage.removeItem('portfolio-page-transition');
+          document.documentElement.classList.remove('page-transition-boot');
+          document.documentElement.classList.add('language-bridge-enter');
           window.setTimeout(() => {
-            if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
+            if (!document.documentElement.classList.contains('language-bridge-enter')) return;
             document.body?.classList.add('page-arrival-complete');
-            document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
-            sessionStorage.removeItem('portfolio-eye-hall-transition');
+            document.documentElement.classList.remove('language-bridge-enter', 'language-bridge-entering');
+            sessionStorage.removeItem('portfolio-language-bridge-v2');
           }, 8000);
         } else {
-          sessionStorage.removeItem('portfolio-eye-hall-transition');
+          sessionStorage.removeItem('portfolio-language-bridge-v2');
         }
       } catch (error) {
-        sessionStorage.removeItem('portfolio-eye-hall-transition');
+        sessionStorage.removeItem('portfolio-language-bridge-v2');
       }
     </script>
     {% endif %}
     {% if active_body_class == 'language-page' %}
-    <style>html.gate-return-pending{background:#020302;color-scheme:dark}html.gate-return-pending body{visibility:hidden}</style>
+    <style>html.language-bridge-return{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-return body{animation:none}html.language-bridge-return::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
     <script>
       try {
-        const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-        const eyeGateTransition = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
-        const hasRecentGateTransition = eyeGateTransition?.path === window.location.pathname &&
-          Date.now() - Number(eyeGateTransition?.startedAt || 0) < 8000;
-        const returningFromPortfolio = navigationType !== 'reload' && (
-          history.state?.eyeGateReturn === true ||
-          sessionStorage.getItem('portfolio-eye-return') === '1' ||
-          sessionStorage.getItem('portfolio-eye-entered') === '1' ||
-          hasRecentGateTransition
-        );
+        const languageBridge = JSON.parse(sessionStorage.getItem('portfolio-language-bridge-v2') || 'null');
+        const returningFromPortfolio = languageBridge?.version === 2 &&
+          languageBridge?.direction === 'return' &&
+          languageBridge?.path === window.location.pathname &&
+          Date.now() - Number(languageBridge?.startedAt || 0) < 8000 &&
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (returningFromPortfolio) {
-          document.documentElement.classList.add('gate-entrance-skip', 'gate-return-pending');
+          document.documentElement.classList.add('gate-entrance-skip', 'language-bridge-return');
           window.setTimeout(() => {
-            if (!document.documentElement.classList.contains('gate-return-pending')) return;
-            document.documentElement.classList.remove('gate-return-pending');
+            if (!document.documentElement.classList.contains('language-bridge-return')) return;
+            document.documentElement.classList.remove('language-bridge-return', 'language-bridge-returning');
             document.documentElement.classList.add('gate-entrance-skip');
-          }, 2600);
+            sessionStorage.removeItem('portfolio-language-bridge-v2');
+          }, 8000);
         } else {
+          sessionStorage.removeItem('portfolio-language-bridge-v2');
           document.documentElement.classList.add('gate-natural-entry');
         }
       } catch (error) {
+        sessionStorage.removeItem('portfolio-language-bridge-v2');
         document.documentElement.classList.add('gate-natural-entry');
       }
     </script>

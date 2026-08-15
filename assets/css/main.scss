@@ -129,27 +129,52 @@ html.page-transition-boot .portfolio-shell.page-arriving {
   opacity: 0; transform: translateY(9px) scale(.997); animation: none;
 }
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
-html.eye-hall-entry-boot { background: #000; overflow: hidden; }
-html.eye-hall-entry-boot body {
-  opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); animation: none; overflow: hidden;
-  clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%)));
+html.language-bridge-enter,
+html.language-bridge-return,
+html.language-bridge-leaving { background: #000; overflow: hidden; }
+html.language-bridge-enter::before,
+html.language-bridge-return::before {
+  content: ""; position: fixed; z-index: 2147483646; inset: 0;
+  background: #000; pointer-events: none; opacity: 1;
+  transform: translateZ(0); backface-visibility: hidden;
+  will-change: opacity, clip-path;
+}
+html.language-bridge-enter body {
+  opacity: 0; animation: none; overflow: hidden;
+  filter: blur(12px) saturate(.72) brightness(.56);
+  transform: scale(1.022);
+  will-change: opacity, filter, transform;
+}
+html.language-bridge-enter.language-bridge-entering body {
+  animation: language-hall-arrive 860ms cubic-bezier(.16,1,.3,1) both;
+}
+html.language-bridge-enter.language-bridge-entering::before {
+  animation: language-black-release 860ms cubic-bezier(.3,0,.2,1) both;
+}
+html.language-bridge-leaving body {
+  pointer-events: none; overflow: hidden;
+  animation: language-hall-depart 860ms cubic-bezier(.55,0,.78,.42) both;
   will-change: clip-path, opacity, filter;
 }
-html.eye-hall-entry-boot.eye-hall-entering body {
-  animation: hall-eye-reveal 920ms cubic-bezier(.25,.28,.55,1) both;
-}
-html.eye-hall-entry-boot::after,
-html.eye-gate-leaving::after {
-  content: ""; position: fixed; z-index: 1200;
-  left: var(--hall-eye-x,50%); top: var(--hall-eye-y,50%);
-  width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2);
+html.language-bridge-return::after,
+html.language-bridge-leaving::after {
+  content: ""; position: fixed; z-index: 2147483647;
+  left: var(--language-eye-x,50%); top: var(--language-eye-y,50%);
+  width: calc(var(--language-eye-cover-radius,100vmax) * 2);
+  height: calc(var(--language-eye-cover-radius,100vmax) * 2);
   border: clamp(4px,.48vw,7px) solid #78ad8d; border-radius: 50%; opacity: 0;
   transform: translate(-50%,-50%); pointer-events: none;
   box-shadow: 0 0 1px rgba(205,239,217,.72), 0 0 14px rgba(137,202,163,.76), 0 0 34px rgba(91,154,118,.42), inset 0 0 13px rgba(174,223,193,.62);
   will-change: width, height, opacity;
 }
-html.eye-hall-entry-boot.eye-hall-entering::after {
-  animation: hall-eye-edge 920ms cubic-bezier(.25,.28,.55,1) both;
+html.language-bridge-leaving::after {
+  animation: language-eye-collapse 860ms cubic-bezier(.55,0,.78,.42) both;
+}
+html.language-bridge-return.language-bridge-returning::before {
+  animation: language-gate-uncover 860ms cubic-bezier(.2,.62,.3,1) both;
+}
+html.language-bridge-return.language-bridge-returning::after {
+  animation: language-eye-uncover 860ms cubic-bezier(.2,.62,.3,1) both;
 }
 /* Capture the current document as a still frame before any navigation.
    The body and purpose-built overlays remain free to perform their handoff. */
@@ -165,7 +190,7 @@ html.navigation-source-frozen.gate-exiting .language-options {
   transform: none;
 }
 html.navigation-source-frozen.gate-exiting .gate-inner {
-  animation: gate-eye-source-handoff 920ms cubic-bezier(.45,0,.75,.72) both;
+  animation: language-gate-depart 860ms cubic-bezier(.55,0,.78,.42) both;
   animation-play-state: running !important;
   will-change: filter, opacity;
 }
@@ -185,17 +210,6 @@ html.navigation-source-frozen .project-portal-leaving .hero-project__interest,
 html.navigation-source-frozen .project-portal-leaving .project-index-card__info {
   opacity: var(--navigation-frozen-opacity,1) !important;
   visibility: var(--navigation-frozen-visibility,visible) !important;
-}
-html.eye-gate-leaving { background: #000; overflow: hidden; }
-html.eye-gate-leaving body {
-  pointer-events: none; overflow: hidden;
-  animation: hall-eye-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
-  will-change: clip-path, opacity, filter;
-}
-html.eye-gate-leaving::after {
-  width: calc(var(--hall-eye-cover-radius,100vmax) * 2);
-  height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
-  animation: hall-eye-edge-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
 }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
@@ -360,17 +374,13 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   will-change: left, top, width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
-.gate-exiting .pupil-transition { animation: pupil-dive 920ms cubic-bezier(.45,0,.75,.72) forwards; }
-.gate-exiting .pupil-transition i { animation: pupil-edge-dive 920ms cubic-bezier(.45,0,.75,.72) forwards; }
+.gate-exiting .pupil-transition { animation: pupil-cover 860ms cubic-bezier(.55,0,.78,.42) forwards; }
+.gate-exiting .pupil-transition i { animation: pupil-edge-cover 860ms cubic-bezier(.55,0,.78,.42) forwards; }
 .gate-exiting .reactive-mark__image { opacity: 1; animation: none; }
-html.gate-return-mode.gate-entering .language-options { animation: gate-copy-return 560ms 240ms cubic-bezier(.22,1,.36,1) both; }
-html.gate-return-mode.gate-entering .gate-inner {
-  animation: gate-return-focus 920ms cubic-bezier(.25,.28,.55,1) both;
+html.language-bridge-return.language-bridge-returning .gate-inner {
+  animation: language-gate-focus 860ms cubic-bezier(.16,1,.3,1) both;
   will-change: filter, opacity;
 }
-.gate-entering .pupil-transition { animation: pupil-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
-.gate-entering .pupil-transition i { animation: pupil-edge-emerge 920ms cubic-bezier(.25,.28,.55,1) both; }
-.gate-entering .reactive-mark__image { animation: eye-logo-return 920ms ease both; }
 
 @keyframes mark-arrival {
   from { opacity: 0; transform: perspective(800px) scale(.94) translateY(.45rem); filter: blur(3px); }
@@ -423,91 +433,95 @@ html.gate-return-mode.gate-entering .gate-inner {
   from { transform: rotate(305deg) translateY(-1.8rem); }
   to { transform: rotate(665deg) translateY(-1.8rem); }
 }
-@keyframes pupil-dive {
+@keyframes pupil-cover {
   0% {
     opacity: 1;
     clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
   100% {
     opacity: 1;
-    clip-path: circle(var(--pupil-handoff-radius,52vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
+    clip-path: circle(var(--pupil-cover-radius,100vmax) at var(--pupil-x,50%) var(--pupil-y,50%));
   }
 }
-@keyframes pupil-emerge {
-  0% {
-    opacity: 1;
-    clip-path: circle(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) at var(--pupil-start-x,var(--pupil-x,50%)) var(--pupil-start-y,var(--pupil-y,50%)));
-  }
-  99% {
-    opacity: 1;
-    clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
-  }
-  100% {
-    opacity: 0;
-    clip-path: circle(var(--pupil-radius,.5rem) at var(--pupil-x,50%) var(--pupil-y,50%));
-  }
-}
-@keyframes pupil-edge-dive {
+@keyframes pupil-edge-cover {
   0% { width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1; }
-  72% { opacity: .94; }
-  100% { width: calc(var(--pupil-handoff-radius,52vmax) * 2); height: calc(var(--pupil-handoff-radius,52vmax) * 2); opacity: .96; }
-}
-@keyframes pupil-edge-emerge {
-  0% {
-    left: var(--pupil-start-x,var(--pupil-x,50%)); top: var(--pupil-start-y,var(--pupil-y,50%));
-    width: calc(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) * 2);
-    height: calc(var(--pupil-start-radius,var(--pupil-cover-radius,100vmax)) * 2);
-    opacity: var(--pupil-start-edge-opacity,0);
-  }
-  28% { opacity: .88; }
+  68% { opacity: .96; }
   100% {
-    left: var(--pupil-x,50%); top: var(--pupil-y,50%);
-    width: calc(var(--pupil-radius,.5rem) * 2); height: calc(var(--pupil-radius,.5rem) * 2); opacity: 1;
+    width: calc(var(--pupil-cover-radius,100vmax) * 2);
+    height: calc(var(--pupil-cover-radius,100vmax) * 2);
+    opacity: 0;
   }
 }
-@keyframes eye-logo-return {
-  0%, 70% { opacity: 0; filter: var(--mark-base-filter); }
-  86%, 100% { opacity: 1; filter: var(--mark-base-filter); }
+@keyframes language-gate-depart {
+  0%, 34% { opacity: 1; filter: blur(0); }
+  72% { opacity: .22; filter: blur(7px); }
+  100% { opacity: 0; filter: blur(12px); }
 }
-@keyframes gate-copy-return {
-  from { opacity: 0; transform: translateY(.25rem); }
-  to { opacity: 1; transform: none; }
+@keyframes language-hall-arrive {
+  0% { opacity: 0; filter: blur(12px) saturate(.72) brightness(.56); transform: scale(1.022); }
+  32% { opacity: .32; filter: blur(8px) saturate(.8) brightness(.7); }
+  68% { opacity: .86; filter: blur(2px) saturate(.96) brightness(.95); }
+  100% { opacity: 1; filter: blur(0) saturate(1) brightness(1); transform: scale(1); }
 }
-@keyframes gate-return-focus {
-  0% { opacity: .04; filter: blur(10px); }
-  18% { opacity: .22; filter: blur(8px); }
-  45% { opacity: .7; filter: blur(6px); }
-  72% { opacity: 1; filter: blur(2px); }
+@keyframes language-black-release {
+  0%, 12% { opacity: 1; }
+  52% { opacity: .48; }
+  100% { opacity: 0; }
+}
+@keyframes language-hall-depart {
+  0% {
+    opacity: 1; filter: blur(0) saturate(1) brightness(1);
+    clip-path: circle(var(--language-eye-cover-radius,100vmax) at var(--language-eye-x,50%) var(--language-eye-body-y,var(--language-eye-y,50%)));
+  }
+  48% { opacity: .84; filter: blur(2px) saturate(.94) brightness(.9); }
+  82% { opacity: .22; filter: blur(8px) saturate(.76) brightness(.62); }
+  100% {
+    opacity: 0; filter: blur(12px) saturate(.7) brightness(.5);
+    clip-path: circle(var(--language-eye-pupil-radius,5px) at var(--language-eye-x,50%) var(--language-eye-body-y,var(--language-eye-y,50%)));
+  }
+}
+@keyframes language-eye-collapse {
+  0% {
+    width: calc(var(--language-eye-cover-radius,100vmax) * 2);
+    height: calc(var(--language-eye-cover-radius,100vmax) * 2);
+    opacity: 0;
+  }
+  22% { opacity: .2; }
+  62% { opacity: .8; }
+  100% {
+    width: calc(var(--language-eye-pupil-radius,5px) * 2);
+    height: calc(var(--language-eye-pupil-radius,5px) * 2);
+    opacity: 1;
+  }
+}
+@keyframes language-gate-uncover {
+  0%, 10% {
+    opacity: 1;
+    clip-path: circle(var(--language-eye-cover-radius,100vmax) at var(--language-eye-x,50%) var(--language-eye-y,50%));
+  }
+  100% {
+    opacity: 1;
+    clip-path: circle(var(--language-eye-pupil-radius,5px) at var(--language-eye-x,50%) var(--language-eye-y,50%));
+  }
+}
+@keyframes language-eye-uncover {
+  0% {
+    width: calc(var(--language-eye-cover-radius,100vmax) * 2);
+    height: calc(var(--language-eye-cover-radius,100vmax) * 2);
+    opacity: 0;
+  }
+  26% { opacity: .28; }
+  72% { opacity: .9; }
+  100% {
+    width: calc(var(--language-eye-pupil-radius,5px) * 2);
+    height: calc(var(--language-eye-pupil-radius,5px) * 2);
+    opacity: 1;
+  }
+}
+@keyframes language-gate-focus {
+  0%, 12% { opacity: .06; filter: blur(12px); }
+  52% { opacity: .58; filter: blur(5px); }
   100% { opacity: 1; filter: blur(0); }
-}
-@keyframes gate-eye-source-handoff {
-  0%, 42% { opacity: 1; filter: blur(0); }
-  78% { opacity: .28; filter: blur(7px); }
-  100% { opacity: .04; filter: blur(10px); }
-}
-@keyframes hall-eye-reveal {
-  0% { opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-  18% { opacity: .28; filter: blur(7.5px) saturate(.82) brightness(.8); }
-  52% { opacity: .82; filter: blur(2.5px) saturate(.94) brightness(.94); }
-  100% { opacity: 1; filter: blur(0) saturate(1) brightness(1); clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-}
-@keyframes hall-eye-edge {
-  0% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
-  52% { opacity: .72; }
-  82% { opacity: .24; }
-  100% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
-}
-@keyframes hall-eye-collapse {
-  0% { opacity: 1; filter: blur(0) saturate(1) brightness(1); clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-  48% { opacity: .82; filter: blur(2.5px) saturate(.94) brightness(.94); }
-  82% { opacity: .28; filter: blur(7.5px) saturate(.82) brightness(.8); }
-  100% { opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); clip-path: circle(var(--hall-eye-handoff-radius,52vmax) at var(--hall-eye-x,50%) var(--hall-eye-body-y,var(--hall-eye-y,50%))); }
-}
-@keyframes hall-eye-edge-collapse {
-  0% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
-  18% { opacity: .24; }
-  48% { opacity: .72; }
-  100% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes page-transition-out {
