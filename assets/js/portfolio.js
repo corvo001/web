@@ -661,7 +661,6 @@
     const empty = filter.closest('.project-index__body')?.querySelector('[data-project-index-empty]');
     const label = filter.querySelector('[data-project-filter-label]');
     const triggerLabel = filter.querySelector('[data-project-filter-trigger-label]');
-    const triggerCode = filter.querySelector('[data-project-filter-trigger-code]');
     const buttons = [...filter.querySelectorAll('[data-project-filter-value]')];
     const cards = [...(grid?.querySelectorAll('[data-project-category]') || [])];
     if (!grid || !label || !buttons.length) return;
@@ -679,10 +678,9 @@
         if (visible) visibleCount += 1;
       });
       buttons.forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
-      const currentLabel = button.textContent.trim().replace(/^\d{2}\s*/, '');
+      const currentLabel = button.textContent.trim();
       label.textContent = currentLabel;
       if (triggerLabel) triggerLabel.textContent = currentLabel;
-      if (triggerCode) triggerCode.textContent = button.dataset.projectFilterCode || '00';
       if (empty) empty.hidden = visibleCount > 0;
       filter.open = false;
     };

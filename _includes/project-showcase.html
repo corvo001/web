@@ -8,32 +8,23 @@
       <details class="project-filter" data-project-filter>
         <summary aria-label="{{ t.work.filter }}">
           <span class="visually-hidden">{{ t.work.filter }}</span>
-          <span class="project-filter__trigger-index" aria-hidden="true">
-            <small>IDX</small>
-            <strong data-project-filter-trigger-code>00</strong>
-          </span>
           <i class="project-filter__icon" aria-hidden="true"><b></b><b></b><b></b></i>
           <span class="project-filter__trigger-label" data-project-filter-trigger-label>{{ t.work.all }}</span>
         </summary>
         <div class="project-filter__menu">
           <span class="project-filter__connector" aria-hidden="true"></span>
-          <header class="project-filter__header">
-            <small>INDEX // 03</small>
-            <span>{{ t.work.filter }}</span>
-            <strong data-project-filter-label>{{ t.work.all }}</strong>
-          </header>
+          <span class="visually-hidden" data-project-filter-label>{{ t.work.all }}</span>
           <div class="project-filter__options" role="group" aria-label="{{ t.work.filter }}">
-            <button type="button" data-project-filter-value="ALL" data-project-filter-code="00" aria-pressed="true">
-              <span>00</span><strong>{{ t.work.all }}</strong><i aria-hidden="true"></i>
+            <button type="button" data-project-filter-value="ALL" aria-pressed="true">
+              <strong>{{ t.work.all }}</strong><i aria-hidden="true"></i>
             </button>
-            <button type="button" data-project-filter-value="SOFTWARE" data-project-filter-code="01" aria-pressed="false">
-              <span>01</span><strong>SOFTWARE</strong><i aria-hidden="true"></i>
+            <button type="button" data-project-filter-value="SOFTWARE" aria-pressed="false">
+              <strong>SOFTWARE</strong><i aria-hidden="true"></i>
             </button>
-            <button type="button" data-project-filter-value="HARDWARE" data-project-filter-code="02" aria-pressed="false">
-              <span>02</span><strong>HARDWARE</strong><i aria-hidden="true"></i>
+            <button type="button" data-project-filter-value="HARDWARE" aria-pressed="false">
+              <strong>HARDWARE</strong><i aria-hidden="true"></i>
             </button>
           </div>
-          <span class="project-filter__footer" aria-hidden="true">CORVO 001 // FILTER MATRIX</span>
         </div>
       </details>
     </aside>
