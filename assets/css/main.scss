@@ -763,8 +763,8 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 .project-filter { position: relative; --filter-cut: .7rem; }
 .project-filter summary {
-  position: relative; isolation: isolate; display: grid; grid-template-rows: auto auto; align-content: center; justify-items: center; gap: .3rem;
-  width: 3.55rem; height: 4.35rem; padding: .45rem .3rem;
+  position: relative; isolation: isolate; display: grid; grid-template-rows: auto auto; align-content: center; justify-items: center; gap: .4rem;
+  width: 3.65rem; height: 4.55rem; padding: .5rem .35rem;
   color: var(--accent); list-style: none; cursor: pointer; overflow: hidden;
   border: 1px solid color-mix(in srgb,var(--accent) 26%,var(--line));
   background:
@@ -1348,7 +1348,7 @@ html.project-launch-from-hall[lang="en"] .project-world-title::after { content: 
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
   .project-index__filters { left: 1rem; top: auto; bottom: max(1rem,env(safe-area-inset-bottom)); transform: none; }
-  .project-filter summary { width: 3.55rem; height: 4.35rem; }
+  .project-filter summary { width: 3.65rem; height: 4.55rem; }
   .project-filter__menu { left: 0; top: auto; bottom: calc(100% + .75rem); width: min(18rem,calc(100vw - 2rem)); transform: none; transform-origin: left bottom; }
   .project-filter__connector { left: 1.7rem; top: auto; bottom: -.76rem; width: 1px; height: .76rem; background: linear-gradient(transparent,var(--accent)); }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
