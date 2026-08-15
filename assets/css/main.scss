@@ -1523,7 +1523,6 @@ body.info-page > #main.internal-main {
   flex: 1 1 auto; min-height: 0; height: auto; width: auto;
   margin: calc(4.7rem + var(--interface-frame-gap)) var(--interface-frame-inline) var(--interface-frame-gap);
   overflow: hidden;
-  border: 1px solid color-mix(in srgb,var(--line) 78%,var(--accent) 22%);
   background: var(--ink);
 }
 body.home-page > #main.portfolio-main { display: flex; }
@@ -1562,6 +1561,14 @@ body.home-page > #main.portfolio-main { display: flex; }
 .info-about-page .internal-copy > p {
   flex: 0 0 auto;
   margin-block: 0;
+  transform: translateY(clamp(.4rem,1dvh,.65rem));
+}
+.info-about-page .internal-header h1 {
+  --about-title-lift: clamp(.45rem,1.4dvh,.8rem);
+  transform: translateY(calc(-1 * var(--about-title-lift)));
+}
+.info-about-page .internal-subtitle {
+  margin-top: clamp(.75rem,1.5dvh,1rem);
 }
 .info-about-page .about-process {
   flex: 0 1 auto;
