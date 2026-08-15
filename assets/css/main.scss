@@ -1091,7 +1091,9 @@ html.project-entry-arriving::after {
 html.project-entry-arriving::after { animation: project-world-reveal 620ms cubic-bezier(.22,1,.36,1) both; }
 html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .project-portal-backdrop {
-  position: fixed; z-index: 198; inset: 0; background: #020302; opacity: 0; pointer-events: none;
+  position: fixed; z-index: 198; inset: 0;
+  background: radial-gradient(ellipse at center, #020302 0 32%, rgba(2,3,2,.96) 62%, #020302 100%);
+  opacity: 0; pointer-events: none;
   transition: opacity 700ms cubic-bezier(.4,0,.2,1); will-change: opacity;
   isolation: isolate; transform: translateZ(0); backface-visibility: hidden;
 }
@@ -1115,7 +1117,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   position: fixed; z-index: 202; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0;
   color: var(--text); font-size: clamp(2rem, 7vw, 7.5rem); font-weight: 400; letter-spacing: .18em;
   width: 100%; padding-inline: 4vw; white-space: nowrap; overflow: hidden;
-  text-align: center; text-shadow: 0 0 2rem rgba(0,0,0,.9); opacity: 0; pointer-events: none;
+  text-align: center; text-shadow: 0 0 .8rem #020302, 0 0 2.6rem #020302; opacity: 0; pointer-events: none;
   font-synthesis: none;
   transform: scale(.94); will-change: opacity, transform;
 }
@@ -1157,8 +1159,10 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
 }
 @keyframes project-world-backdrop {
   0% { opacity: 0; }
-  48% { opacity: .18; }
-  78% { opacity: .72; }
+  6% { opacity: .3; }
+  12% { opacity: .72; }
+  22% { opacity: .9; }
+  78% { opacity: .96; }
   100% { opacity: 1; }
 }
 @keyframes project-world-reveal {

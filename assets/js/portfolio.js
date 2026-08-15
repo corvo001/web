@@ -496,7 +496,7 @@
     return { backdrop, signal, title };
   };
 
-  const departIntoProject = async (link, media, label, useDisplayFont) => {
+  const departIntoProject = async (link, media, label, useDisplayFont, destinationReady = Promise.resolve()) => {
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
     link.classList.add('is-launching');
@@ -506,7 +506,8 @@
     backdrop.classList.add('is-departing-world');
     signal.classList.add('is-departing');
     title?.classList.add('is-departing');
-    await waitForMotion(backdrop, 'animationend', projectDepartureDuration, 'project-world-backdrop');
+    const departureFinished = waitForMotion(backdrop, 'animationend', projectDepartureDuration, 'project-world-backdrop');
+    await Promise.allSettled([departureFinished, destinationReady]);
     writeProjectTransition({
       id: link.dataset.projectId,
       phase: 'enter',
@@ -943,12 +944,12 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       freezeNavigationSource();
-      await Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
+      const destinationReady = Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       const useDisplayFont = projectDisplayFontAvailable;
       const label = link.querySelector('h2, h3')?.textContent.trim() || link.dataset.projectId;
-      departIntoProject(link, media, label, useDisplayFont).catch(() => {
+      departIntoProject(link, media, label, useDisplayFont, destinationReady).catch(() => {
         writeProjectTransition({
           id: link.dataset.projectId,
           phase: 'enter',
