@@ -19,6 +19,8 @@
   let navigationInProgress = false;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
+  let frozenEyeAnimations = [];
+  let frozenEyeSvgs = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 920;
   const eyeCodeDuration = 1640;
@@ -261,6 +263,32 @@
     }
   };
 
+  const freezeEyeHandoffSource = () => {
+    document.documentElement.classList.add('eye-handoff-frozen');
+    document.querySelectorAll('video').forEach((video) => {
+      clearProjectVideoRetries(video);
+      video.pause();
+    });
+    frozenEyeSvgs = [...document.querySelectorAll('svg')];
+    frozenEyeSvgs.forEach((svg) => svg.pauseAnimations?.());
+    try {
+      frozenEyeAnimations = (document.body?.getAnimations?.({ subtree: true }) || []).filter((animation) => {
+        const target = animation.effect?.target;
+        return target !== document.body && target !== document.documentElement;
+      });
+      frozenEyeAnimations.forEach((animation) => animation.pause());
+    } catch (error) { /* CSS pause remains the compatibility fallback. */ }
+  };
+
+  const releaseEyeHandoffSource = () => {
+    frozenEyeAnimations.forEach((animation) => {
+      if (animation.playState === 'paused') animation.play();
+    });
+    frozenEyeSvgs.forEach((svg) => svg.unpauseAnimations?.());
+    frozenEyeAnimations = [];
+    frozenEyeSvgs = [];
+  };
+
   const nextPaint = () => new Promise((resolve) => {
     window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
   });
@@ -297,7 +325,8 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'navigation-loading');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'eye-handoff-frozen', 'navigation-loading');
+    releaseEyeHandoffSource();
     if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
       ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
@@ -538,6 +567,7 @@
     projectVideoRetryTimers.delete(video);
   };
   const playProjectVideo = (video) => {
+    if (document.documentElement.classList.contains('eye-handoff-frozen')) return;
     if (video.dataset.userPaused === 'true') return;
     video.muted = true;
     video.defaultMuted = true;
@@ -561,7 +591,7 @@
     projectVideoRetryTimers.set(video, timers);
   };
   const resumeProjectVideos = () => {
-    if (document.documentElement.classList.contains('eye-media-held')) return;
+    if (document.documentElement.classList.contains('eye-media-held') || document.documentElement.classList.contains('eye-handoff-frozen')) return;
     projectVideos.forEach(primeProjectVideo);
     document.querySelectorAll('.hero-project.is-active video[data-project-media]').forEach((video) => {
       ensureVideoSource(video);
@@ -820,14 +850,11 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
+      freezeEyeHandoffSource();
       // Finish priming the gate before the eye moves. The previous 240 ms
       // deadline often expired on the published site and exposed the document
       // load halfway through an otherwise correct animation.
       await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);

@@ -185,6 +185,15 @@ html.eye-gate-leaving::after {
 html.eye-hall-entry-boot.eye-hall-entering::after {
   animation: hall-eye-edge 920ms cubic-bezier(.25,.28,.55,1) both;
 }
+/* Capture the hall as a still frame before returning to the language gate.
+   The body and the pupil edge remain free to perform the handoff itself. */
+html.eye-handoff-frozen body { pointer-events: none; }
+html.eye-handoff-frozen body *,
+html.eye-handoff-frozen body *::before,
+html.eye-handoff-frozen body *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
 html.eye-gate-leaving { background: #000; overflow: hidden; }
 html.eye-gate-leaving body {
   pointer-events: none; overflow: hidden;
