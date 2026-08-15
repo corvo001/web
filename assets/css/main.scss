@@ -465,16 +465,28 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .interface-divider--footer { top: -11px; transform: rotate(180deg); }
 .interface-divider__line,
 .interface-divider__signal,
+.interface-divider__pulse,
+.interface-divider__cursor-glow,
 .interface-divider__cursor { fill: none; vector-effect: non-scaling-stroke; }
 .interface-divider__line { stroke: var(--divider-line); stroke-width: 1; }
 .interface-divider__signal { stroke-width: 1; }
 .interface-divider__stop { stop-color: var(--divider-accent); }
 .interface-divider__stop--edge { stop-opacity: 0; }
-.interface-divider__stop--quiet { stop-opacity: .05; }
-.interface-divider__stop--active { stop-opacity: .26; }
+.interface-divider__stop--quiet { stop-opacity: .018; }
+.interface-divider__stop--rising { stop-opacity: .11; }
+.interface-divider__stop--active { stop-opacity: .38; }
+.interface-divider__pulse {
+  stroke: currentColor; stroke-width: 1.15; stroke-linecap: round;
+  stroke-dasharray: 110 1330; opacity: 0;
+  filter: drop-shadow(0 0 2px rgba(130,181,152,.48));
+}
+.interface-divider__cursor-glow {
+  stroke: currentColor; stroke-width: 5; stroke-linecap: round; opacity: 0;
+  filter: blur(2.5px) drop-shadow(0 0 4px rgba(130,181,152,.5));
+}
 .interface-divider__cursor {
-  stroke: currentColor; stroke-width: 1; stroke-linecap: round; opacity: .38;
-  filter: drop-shadow(0 0 2px rgba(130,181,152,.2));
+  stroke: currentColor; stroke-width: 1; stroke-linecap: round; opacity: .04;
+  filter: drop-shadow(0 0 2px rgba(130,181,152,.32));
 }
 .nav-logo {
   --nav-pupil-x: 0px; --nav-pupil-y: 0px;
