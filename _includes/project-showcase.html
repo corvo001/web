@@ -9,20 +9,12 @@
         <summary aria-label="{{ t.work.filter }}">
           <svg class="project-filter__frame" viewBox="0 0 64 84" preserveAspectRatio="none" aria-hidden="true" focusable="false">
             <path class="project-filter__frame-base" d="M1 14 14 1H63V69L49 83H1Z"/>
-            <path class="project-filter__frame-lead" d="M1 38V14L14 1H32M63 46V69L49 83H34"/>
-            <path class="project-filter__frame-ticks" d="M1 47H6M58 37H63M34 1H40M25 83H32"/>
           </svg>
           <span class="visually-hidden">{{ t.work.filter }}</span>
           <span class="project-filter__trigger-label" data-project-filter-trigger-label>{{ t.work.all }}</span>
           <i class="project-filter__icon" aria-hidden="true"><b></b><b></b><b></b></i>
         </summary>
         <div class="project-filter__menu">
-          <svg class="project-filter__menu-frame" viewBox="0 0 208 172" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path class="project-filter__menu-frame-base" d="M1 1H194L207 14V158L194 171H14L1 158Z"/>
-            <path class="project-filter__menu-frame-lead" d="M1 62V1H75M207 110V158L194 171H132"/>
-            <path class="project-filter__menu-frame-ticks" d="M1 72H7M201 99H207M84 1H97M119 171H128"/>
-          </svg>
-          <span class="project-filter__connector" aria-hidden="true"></span>
           <span class="visually-hidden" data-project-filter-label>{{ t.work.all }}</span>
           <div class="project-filter__options" role="group" aria-label="{{ t.work.filter }}">
             <button type="button" data-project-filter-value="ALL" aria-pressed="true">
