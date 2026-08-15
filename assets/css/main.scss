@@ -1091,7 +1091,16 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .contact-links a { color: var(--text); text-decoration-color: var(--line); transition: color 160ms ease, text-decoration-color 160ms ease; }
 .contact-links a:hover, .contact-links a:focus-visible { color: var(--accent); text-decoration-color: var(--accent); }
 .project-main { overflow: hidden; }
-.project-hero-media { position: relative; width: 100%; height: min(72svh, 760px); margin: 0 0 clamp(2.5rem, 6vw, 5rem); overflow: hidden; background: #070908; border: 1px solid var(--line); }
+.project-hero-media {
+  position: relative; isolation: isolate; width: 100%; height: min(72svh, 760px);
+  margin: 0 0 clamp(2.5rem, 6vw, 5rem); overflow: hidden; background: var(--ink); border: 0;
+}
+.project-hero-media::after {
+  content: ""; position: absolute; z-index: 3; inset: -1px; pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--ink) 0, transparent 7%, transparent 88%, var(--ink) 100%),
+    linear-gradient(to right, var(--ink) 0, transparent 6%, transparent 94%, var(--ink) 100%);
+}
 .project-hero-image {
   width: 100%; height: 100%; object-fit: cover; display: block;
   accent-color: var(--accent);
@@ -1204,6 +1213,15 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   .project-controls { inset-inline: .5rem; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
+  .project-hero-media {
+    width: calc(100% + (2 * var(--page-pad)));
+    margin-inline: calc(-1 * var(--page-pad));
+  }
+  .project-hero-media::after {
+    background:
+      linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 91%, var(--ink) 100%),
+      linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
+  }
   .about-process {
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
