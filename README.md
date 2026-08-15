@@ -4,7 +4,7 @@
 
 # DANIEL CUERVO
 
-### SOFTWARE · ROBOTICS · INDUSTRIAL AUTOMATION
+### SOFTWARE · INDUSTRIAL ROBOTICS
 
 Ideas transformed into functional systems through code, experimentation and engineering.
 
