@@ -345,10 +345,11 @@
 
   const showResolvedGate = () => {
     if (!gate) return;
+    sessionStorage.removeItem(pageTransitionKey);
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
-    document.documentElement.classList.remove('gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
+    document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
@@ -364,6 +365,8 @@
     }
 
     gateReturnPlaying = true;
+    sessionStorage.removeItem(pageTransitionKey);
+    document.documentElement.classList.remove('page-transition-boot');
     navigationInProgress = false;
     eyeTrackingLocked = true;
     document.documentElement.classList.add('gate-return-pending');
@@ -481,6 +484,7 @@
     link.addEventListener('click', (event) => {
       if (!reduceMotion.matches && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         sessionStorage.setItem(eyeReturnKey, '1');
+        sessionStorage.removeItem(pageTransitionKey);
         sessionStorage.removeItem(projectTransitionKey);
       }
     });
@@ -648,7 +652,7 @@
 
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || reduceMotion.matches || event.defaultPrevented) return;
+      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-language-menu') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || reduceMotion.matches || event.defaultPrevented) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
       const target = new URL(link.href, window.location.href);
       if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;

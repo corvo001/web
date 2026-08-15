@@ -180,7 +180,8 @@ html.gate-natural-entry .reactive-mark__image { animation: eye-code-resolve 1640
 .reactive-mark__pupil {
   position: absolute; z-index: 2;
   width: 3.2%; aspect-ratio: 1; border-radius: 50%;
-  left: 50%; top: 44.5801%; background: var(--accent);
+  left: 50%; top: 44.5801%; background: #8fc5a4;
+  box-shadow: 0 0 4px rgba(143,197,164,.62), 0 0 10px rgba(130,181,152,.24);
   transform: translate(calc(-50% + var(--px)), calc(-50% + var(--py)));
   transition: transform 90ms cubic-bezier(.22,1,.36,1);
   pointer-events: none;
@@ -238,9 +239,9 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .pupil-transition i {
   position: absolute; left: var(--pupil-x,50%); top: var(--pupil-y,50%);
   display: block; width: calc(var(--pupil-radius, .5rem) * 2); height: calc(var(--pupil-radius, .5rem) * 2);
-  border: 1px solid rgba(143,197,164,.92); border-radius: 50%; opacity: 0; pointer-events: none;
+  border: 2px solid #8fc5a4; border-radius: 50%; opacity: 0; pointer-events: none;
   transform: translate(-50%,-50%); background: transparent;
-  box-shadow: 0 0 5px rgba(130,181,152,.78), inset 0 0 3px rgba(130,181,152,.34);
+  box-shadow: 0 0 7px rgba(143,197,164,.9), 0 0 16px rgba(130,181,152,.42), inset 0 0 4px rgba(143,197,164,.42);
   will-change: width, height, opacity;
 }
 .gate-exiting .language-options { opacity: 0; transform: translateY(.25rem); transition: opacity 180ms ease, transform 300ms ease; }
@@ -1214,7 +1215,7 @@ html.project-entry-boot body { opacity: 0; animation: none; }
 @media (prefers-color-scheme: light) {
   .reactive-mark__image, .nav-logo img { filter: invert(1); }
   .reactive-mark__image { filter: invert(1); }
-  .reactive-mark__pupil { background: var(--text); }
+  .reactive-mark__pupil { background: var(--accent); }
   .pupil-transition { border-color: var(--text); box-shadow: none; }
   .project-stage, .project-card { background: #101311; }
   .home-page .portfolio-hero {
