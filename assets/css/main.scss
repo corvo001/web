@@ -154,6 +154,11 @@ html.eye-gate-leaving::after {
   height: calc(var(--hall-eye-cover-radius,100vmax) * 2);
   animation: hall-eye-edge-collapse 920ms cubic-bezier(.45,0,.75,.72) both;
 }
+html.eye-page-loading,
+html.eye-page-loading body { cursor: progress; }
+html.eye-page-loading [data-language-link],
+html.eye-page-loading [data-language-menu] { pointer-events: none; }
+html.eye-page-loading .is-eye-loading { color: var(--accent) !important; opacity: .72; }
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
 .skip-link {

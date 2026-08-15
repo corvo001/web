@@ -121,11 +121,6 @@
     <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v4.png' | relative_url }}" sizes="180x180">
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
-    <link rel="preload" href="{{ '/assets/videos/dyson-swarm-loop.webm' | relative_url }}" as="video" type="video/webm" fetchpriority="high">
-    <link rel="prefetch" href="{{ '/es/' | relative_url }}" as="document">
-    <link rel="prefetch" href="{{ '/en/' | relative_url }}" as="document">
-    {% else %}
-    <link rel="prefetch" href="{{ '/' | relative_url }}" as="document">
     {% endif %}
     {% if page.layout == 'project' %}
       {% assign preload_project_list = site.data.projects | where: 'id', page.project_id %}

@@ -28,29 +28,63 @@
   const warmedProjectVideos = new Set();
   const warmedEyePages = new Map();
 
+  const consumeResponse = async (response) => {
+    const reader = response.body?.getReader();
+    if (!reader) {
+      await response.arrayBuffer();
+      return;
+    }
+    while (!(await reader.read()).done) { /* Fill the HTTP cache before the handoff. */ }
+  };
+
+  const collectEyePageResources = (html, target) => {
+    const targetDocument = new DOMParser().parseFromString(html, 'text/html');
+    const resources = new Set();
+    const add = (value) => {
+      if (!value) return;
+      const resource = new URL(value, target);
+      if (resource.origin === window.location.origin) resources.add(resource.href);
+    };
+
+    targetDocument.querySelectorAll('link[rel="stylesheet"][href], link[rel="preload"][href]').forEach((element) => add(element.getAttribute('href')));
+    targetDocument.querySelectorAll('script[src]').forEach((element) => add(element.getAttribute('src')));
+    targetDocument.querySelectorAll('.nav-logo img[src], .reactive-mark__image[src]').forEach((element) => add(element.getAttribute('src')));
+    const activeMedia = targetDocument.querySelector('.hero-project.is-active [data-project-media]');
+    if (activeMedia) {
+      add(activeMedia.getAttribute('src'));
+      add(activeMedia.getAttribute('data-src'));
+      add(activeMedia.getAttribute('poster'));
+    }
+    return [...resources];
+  };
+
   const warmEyePage = (link) => {
     const target = link?.href;
     if (!target) return Promise.resolve(false);
     const activeWarmup = warmedEyePages.get(target);
     if (activeWarmup) return activeWarmup;
-    const warmup = fetch(target, { cache: 'force-cache', priority: 'high' })
-      .then((response) => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 8000);
+    const warmup = fetch(target, { cache: 'force-cache', priority: 'high', signal: controller.signal })
+      .then(async (response) => {
         if (!response.ok) throw new Error(`Page preload failed: ${response.status}`);
-        return response.text();
+        const html = await response.text();
+        const resources = collectEyePageResources(html, target);
+        await Promise.allSettled(resources.map(async (resource) => {
+          const assetResponse = await fetch(resource, { cache: 'force-cache', priority: 'high', signal: controller.signal });
+          if (!assetResponse.ok) throw new Error(`Asset preload failed: ${assetResponse.status}`);
+          await consumeResponse(assetResponse);
+        }));
+        return true;
       })
-      .then(() => true)
       .catch(() => {
         warmedEyePages.delete(target);
         return false;
-      });
+      })
+      .finally(() => window.clearTimeout(timeout));
     warmedEyePages.set(target, warmup);
     return warmup;
   };
-
-  const finishEyePageWarmup = (warmup) => Promise.race([
-    warmup || Promise.resolve(false),
-    new Promise((resolve) => window.setTimeout(() => resolve(false), 500))
-  ]);
 
   const ensureVideoSource = (video) => {
     const source = video?.dataset.src;
@@ -168,7 +202,7 @@
 
   const resetNavigationState = () => {
     navigationInProgress = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering', 'eye-gate-leaving', 'eye-page-loading');
     if (!document.documentElement.classList.contains('eye-hall-entry-boot')) {
       ['--hall-eye-x', '--hall-eye-y', '--hall-eye-body-y', '--hall-eye-handoff-radius', '--hall-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
@@ -178,6 +212,7 @@
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
+    document.querySelectorAll('.is-eye-loading').forEach((link) => link.classList.remove('is-eye-loading'));
     document.querySelectorAll('[data-project-media], [data-project-hero-media]').forEach((media) => { media.style.visibility = ''; });
   };
 
@@ -612,15 +647,16 @@
   });
 
   document.querySelectorAll('[data-language-menu]').forEach((link) => {
-    link.addEventListener('pointerenter', () => warmEyePage(link), { passive: true, once: true });
-    link.addEventListener('focus', () => warmEyePage(link), { passive: true, once: true });
-    link.addEventListener('touchstart', () => warmEyePage(link), { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      const eyePageWarmup = warmEyePage(link);
+      link.classList.add('is-eye-loading');
+      document.documentElement.classList.add('eye-page-loading');
+      await warmEyePage(link);
+      link.classList.remove('is-eye-loading');
+      document.documentElement.classList.remove('eye-page-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -648,7 +684,6 @@
       rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
       document.documentElement.classList.add('eye-gate-leaving');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
-      await finishEyePageWarmup(eyePageWarmup);
       window.location.assign(link.href);
     });
   });
@@ -676,22 +711,22 @@
   }
 
   document.querySelectorAll('[data-language-link]').forEach((link) => {
-    link.addEventListener('pointerenter', () => warmEyePage(link), { passive: true, once: true });
-    link.addEventListener('focus', () => warmEyePage(link), { passive: true, once: true });
-    link.addEventListener('touchstart', () => warmEyePage(link), { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      const eyePageWarmup = warmEyePage(link);
+      link.classList.add('is-eye-loading');
+      document.documentElement.classList.add('eye-page-loading');
+      await warmEyePage(link);
+      link.classList.remove('is-eye-loading');
+      document.documentElement.classList.remove('eye-page-loading');
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
       const eyeGeometry = setPupilTransitionGeometry();
       if (!eyeGeometry) {
         sessionStorage.removeItem(eyeHallTransitionKey);
-        await finishEyePageWarmup(eyePageWarmup);
         window.location.assign(link.href);
         return;
       }
@@ -705,7 +740,6 @@
       document.documentElement.classList.remove('gate-preparing');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
-      await finishEyePageWarmup(eyePageWarmup);
       window.location.assign(link.href);
     });
   });
