@@ -37,13 +37,13 @@
           const handoffRadius = Math.max(Number(eyeHallTransition.handoffRadius) || (coverRadius * .52), 1);
           rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
           rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
-          document.documentElement.classList.add('eye-hall-entry-boot', 'eye-hall-entering');
+          document.documentElement.classList.add('eye-hall-entry-boot');
           window.setTimeout(() => {
             if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
             document.body?.classList.add('page-arrival-complete');
             document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
             sessionStorage.removeItem('portfolio-eye-hall-transition');
-          }, 2600);
+          }, 8000);
         } else {
           sessionStorage.removeItem('portfolio-eye-hall-transition');
         }

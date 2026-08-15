@@ -42,10 +42,14 @@
   const collectNavigationResources = (html, target) => {
     const targetDocument = new DOMParser().parseFromString(html, 'text/html');
     const resources = new Set();
-    const add = (value) => {
-      if (!value) return;
+    const resolve = (value) => {
+      if (!value) return null;
       const resource = new URL(value, target);
-      if (resource.origin === window.location.origin) resources.add(resource.href);
+      return resource.origin === window.location.origin ? resource.href : null;
+    };
+    const add = (value) => {
+      const resource = resolve(value);
+      if (resource) resources.add(resource);
     };
 
     targetDocument.querySelectorAll('link[rel="stylesheet"][href], link[rel="preload"][href]').forEach((element) => add(element.getAttribute('href')));
@@ -54,12 +58,80 @@
     const activeMedia = targetDocument.querySelector(
       '[data-project-hero-media], .hero-project.is-active [data-project-media], .project-index-card [data-project-media]'
     );
+    const preparedMedia = activeMedia || targetDocument.querySelector('.reactive-mark__image');
     if (activeMedia) {
       add(activeMedia.getAttribute('src'));
       add(activeMedia.getAttribute('data-src'));
       add(activeMedia.getAttribute('poster'));
     }
-    return [...resources];
+    return {
+      resources: [...resources],
+      activeMedia: preparedMedia ? {
+        type: preparedMedia.tagName.toLowerCase(),
+        source: resolve(preparedMedia.getAttribute('src') || preparedMedia.getAttribute('data-src')),
+        poster: resolve(preparedMedia.getAttribute('poster'))
+      } : null
+    };
+  };
+
+  const primeNavigationMedia = (media, signal) => {
+    if (!media?.source) return Promise.resolve();
+    if (media.type === 'img') {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        let settled = false;
+        const finish = (error) => {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeout);
+          signal.removeEventListener('abort', onAbort);
+          if (error) reject(error);
+          else resolve();
+        };
+        const onAbort = () => finish(new DOMException('Image preload aborted', 'AbortError'));
+        const timeout = window.setTimeout(() => finish(new Error('Image decode timed out')), 2000);
+        signal.addEventListener('abort', onAbort, { once: true });
+        image.decoding = 'async';
+        image.src = media.source;
+        const decode = image.decode?.();
+        if (decode) decode.then(() => finish(), () => finish(new Error('Image decode failed')));
+        else {
+          image.addEventListener('load', () => finish(), { once: true });
+          image.addEventListener('error', () => finish(new Error('Image preload failed')), { once: true });
+        }
+      });
+    }
+    if (media.type !== 'video') return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        signal.removeEventListener('abort', onAbort);
+        video.removeEventListener('loadeddata', onReady);
+        video.removeEventListener('error', onError);
+        video.removeAttribute('src');
+        video.load();
+        if (error) reject(error);
+        else resolve();
+      };
+      const onReady = () => finish();
+      const onError = () => finish(new Error('Media decode failed'));
+      const onAbort = () => finish(new DOMException('Media preload aborted', 'AbortError'));
+      const timeout = window.setTimeout(() => finish(new Error('Media decode timed out')), 3000);
+      signal.addEventListener('abort', onAbort, { once: true });
+      video.addEventListener('loadeddata', onReady, { once: true });
+      video.addEventListener('error', onError, { once: true });
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.preload = 'auto';
+      if (media.poster) video.poster = media.poster;
+      video.src = media.source;
+      video.load();
+    });
   };
 
   const warmNavigationPage = (link) => {
@@ -73,12 +145,13 @@
       .then(async (response) => {
         if (!response.ok) throw new Error(`Page preload failed: ${response.status}`);
         const html = await response.text();
-        const resources = collectNavigationResources(html, target);
-        await Promise.allSettled(resources.map(async (resource) => {
+        const { resources, activeMedia } = collectNavigationResources(html, target);
+        await Promise.all(resources.map(async (resource) => {
           const assetResponse = await fetch(resource, { cache: 'force-cache', priority: 'high', signal: controller.signal });
           if (!assetResponse.ok) throw new Error(`Asset preload failed: ${assetResponse.status}`);
           await consumeResponse(assetResponse);
         }));
+        await primeNavigationMedia(activeMedia, controller.signal);
         return true;
       })
       .catch(() => {
@@ -253,6 +326,9 @@
       hallEyeArrivalPlaying = false;
       return;
     }
+    const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
+    if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
+    if (activeHallMedia) await waitForRenderableMedia(activeHallMedia);
     document.documentElement.classList.add('eye-hall-entering');
     await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-reveal');
     document.body.classList.add('page-arrival-complete');

@@ -1368,9 +1368,16 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
 
 @media (max-width: 700px) {
   html, body, .language-page { width: 100%; max-width: 100%; overflow-x: hidden; }
-  .language-gate { min-height: 100dvh; padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)); }
-  .gate-inner { width: 100%; }
-  .reactive-mark { width: clamp(12.5rem, 62vw, 17rem); margin-bottom: clamp(2rem, 7vh, 3.5rem); }
+  body.language-page {
+    position: fixed; inset: 0; width: 100%; height: 100dvh; min-height: 100dvh; max-height: 100dvh;
+    overflow: hidden; overscroll-behavior: none;
+  }
+  .language-gate {
+    width: 100%; height: 100%; min-height: 0; overflow: hidden;
+    padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  }
+  .gate-inner { width: 100%; max-height: 100%; }
+  .reactive-mark { width: clamp(11rem, min(62vw,38dvh),17rem); margin-bottom: clamp(1.35rem,4.5dvh,2.75rem); }
   .language-options { width: 100%; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); gap: clamp(.35rem, 2.5vw, .75rem); }
   .language-options a { gap: 1.35rem; padding: .7rem .15rem 1rem; }
   .language-options a span { font-size: clamp(.48rem, 2.15vw, .58rem); letter-spacing: .065em; }
