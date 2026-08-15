@@ -762,7 +762,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 }
 .project-filter { position: relative; --filter-cut: .7rem; }
 .project-filter summary {
-  position: relative; isolation: isolate; display: grid; grid-template-rows: 1fr auto; justify-items: center;
+  position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; justify-items: center;
   width: 3.85rem; height: 5.7rem; padding: .72rem .42rem .62rem;
   color: var(--accent); list-style: none; cursor: pointer; overflow: hidden;
   border: 1px solid color-mix(in srgb,var(--accent) 26%,var(--line));
@@ -800,7 +800,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-filter[open] summary::after { opacity: .34; transform: translateY(25%); }
 .project-filter summary::-webkit-details-marker { display: none; }
 .project-filter__icon {
-  position: relative; align-self: center; display: grid; place-items: center; gap: .42rem; width: 1rem;
+  position: relative; align-self: end; display: grid; place-items: center; gap: .42rem; width: 1rem;
 }
 .project-filter__icon::before {
   content: ""; position: absolute; left: 50%; top: .2rem; bottom: .2rem; width: 1px;
@@ -815,7 +815,7 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 .project-filter[open] .project-filter__icon b:nth-child(2) { background: var(--accent); box-shadow: 0 0 .65rem rgba(130,181,152,.5); transform: rotate(135deg) scale(.82); }
 .project-filter[open] .project-filter__icon b:nth-child(3) { transform: translateY(.12rem) rotate(45deg); }
 .project-filter__trigger-label {
-  max-width: 100%; overflow: hidden; color: var(--muted); font: 500 .43rem/1 var(--mono);
+  max-width: 100%; align-self: start; overflow: hidden; color: var(--muted); font: 500 .43rem/1 var(--mono);
   letter-spacing: .12em; text-overflow: clip; white-space: nowrap;
 }
 .project-filter__menu {
