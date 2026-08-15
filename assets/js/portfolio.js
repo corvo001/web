@@ -641,22 +641,47 @@
   const indexCapsules = [...document.querySelectorAll('.project-index-card__visual')];
   if (indexCapsules.length) {
     const capsuleStates = new WeakMap();
+    const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let lastCapsulePointer = null;
+    let capsulePointerFrame = 0;
     const updateCapsule = (capsule) => {
       const state = capsuleStates.get(capsule);
       const card = capsule.closest('.project-index-card');
       const video = capsule.querySelector('video[data-project-media]');
       if (!state || !card) return;
-      const active = !card.hidden && !reduceMotion.matches && (state.near || state.hovered || state.focused);
+      const proximityActive = desktopPointer.matches ? state.pointerNear : state.near;
+      const active = !document.hidden && !card.hidden && !reduceMotion.matches && (proximityActive || state.hovered || state.focused);
       capsule.classList.toggle('is-proximity-active', active);
       if (!video) return;
       if (active) video.play().catch(() => {});
       else video.pause();
     };
 
+    const updatePointerProximity = () => {
+      capsulePointerFrame = 0;
+      if (!desktopPointer.matches || !lastCapsulePointer) return;
+      indexCapsules.forEach((capsule) => {
+        const state = capsuleStates.get(capsule);
+        const card = capsule.closest('.project-index-card');
+        if (!state || !card || card.hidden) return;
+        const rect = capsule.getBoundingClientRect();
+        const activationRange = Math.min(140, Math.max(78, rect.width * .24));
+        const distanceX = Math.max(rect.left - lastCapsulePointer.x, 0, lastCapsulePointer.x - rect.right);
+        const distanceY = Math.max(rect.top - lastCapsulePointer.y, 0, lastCapsulePointer.y - rect.bottom);
+        const pointerNear = Math.hypot(distanceX, distanceY) <= activationRange;
+        if (pointerNear === state.pointerNear) return;
+        state.pointerNear = pointerNear;
+        updateCapsule(capsule);
+      });
+    };
+    const schedulePointerProximity = () => {
+      if (!capsulePointerFrame) capsulePointerFrame = window.requestAnimationFrame(updatePointerProximity);
+    };
+
     indexCapsules.forEach((capsule) => {
       const card = capsule.closest('.project-index-card');
       const video = capsule.querySelector('video[data-project-media]');
-      const state = { near: false, hovered: false, focused: false };
+      const state = { near: false, pointerNear: false, hovered: false, focused: false };
       capsuleStates.set(capsule, state);
       video?.pause();
 
@@ -677,6 +702,29 @@
       }, { rootMargin: '-22% 0px -22% 0px', threshold: 0.15 });
       indexCapsules.forEach((capsule) => capsuleObserver.observe(capsule));
     }
+
+    window.addEventListener('pointermove', (event) => {
+      lastCapsulePointer = { x: event.clientX, y: event.clientY };
+      schedulePointerProximity();
+    }, { passive: true });
+    window.addEventListener('scroll', schedulePointerProximity, { passive: true });
+    document.documentElement.addEventListener('pointerleave', () => {
+      lastCapsulePointer = null;
+      indexCapsules.forEach((capsule) => {
+        const state = capsuleStates.get(capsule);
+        if (!state?.pointerNear) return;
+        state.pointerNear = false;
+        updateCapsule(capsule);
+      });
+    });
+    desktopPointer.addEventListener?.('change', () => {
+      indexCapsules.forEach((capsule) => {
+        const state = capsuleStates.get(capsule);
+        if (state) state.pointerNear = false;
+        updateCapsule(capsule);
+      });
+      schedulePointerProximity();
+    });
 
     document.addEventListener('visibilitychange', () => {
       indexCapsules.forEach((capsule) => {
