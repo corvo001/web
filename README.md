@@ -6,7 +6,7 @@
 
 ### SOFTWARE · INDUSTRIAL ROBOTICS
 
-Ideas transformed into functional systems through code, experimentation and engineering.
+Ideas transformed into functional systems through code, creativity and experimentation.
 
 [**ENTER PORTFOLIO**](https://corvo001.github.io)
 
