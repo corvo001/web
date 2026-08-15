@@ -1527,8 +1527,15 @@ body.info-page > #main.internal-main {
 }
 body.home-page > #main.portfolio-main { display: flex; }
 .home-page .portfolio-hero {
+  --hall-copy-lift: clamp(.65rem,1.6dvh,1rem);
   display: grid; place-items: center;
   height: 100%; padding: 0 var(--page-pad);
+}
+.home-page .hero-copy {
+  transform: translateY(calc(-1 * var(--hall-copy-lift)));
+}
+.home-page .hero-project__interest {
+  top: calc(50% + clamp(4.5rem,9vw,8rem) - var(--hall-copy-lift));
 }
 .home-page .hero-projects { inset: 0; }
 .info-page .internal-main {
