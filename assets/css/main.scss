@@ -1659,6 +1659,15 @@ body.home-page > #main.portfolio-main { display: flex; }
     --interface-frame-gap: .45rem;
     --interface-footer-size: clamp(4.25rem,9.5dvh,5rem);
   }
+  body.home-page { --interface-frame-inline: 0rem; }
+  .home-page .hero-project-controls { inset-inline: 0; }
+  .home-page .project-control {
+    width: 2.75rem;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .home-page .project-control:hover:not(:disabled),
+  .home-page .project-control:focus-visible { background: rgba(9,11,10,.42); }
   .home-page .portfolio-footer,
   .info-page .portfolio-footer {
     justify-content: space-between;
