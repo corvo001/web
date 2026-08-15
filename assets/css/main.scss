@@ -1163,12 +1163,21 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   text-align: center; text-wrap: pretty;
 }
 .project-summary p { margin: 0; }
-.project-gallery { position: relative; width: 100%; margin-top: clamp(3rem, 7vw, 6rem); overflow: hidden; background: #070908; }
+.project-gallery {
+  position: relative; isolation: isolate; width: 100%; margin-top: clamp(3rem, 7vw, 6rem);
+  overflow: hidden; background: var(--ink);
+}
+.project-gallery::after {
+  content: ""; position: absolute; z-index: 4; inset: -1px; pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--ink) 0, transparent 7%, transparent 91%, var(--ink) 100%),
+    linear-gradient(to right, var(--ink) 0, transparent 6%, transparent 94%, var(--ink) 100%);
+}
 .project-gallery__controls { position: absolute; z-index: 5; inset: 50% clamp(.75rem,2vw,2rem) auto; display: flex; justify-content: space-between; pointer-events: none; transform: translateY(-50%); }
 .project-gallery__track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-inline: contain; }
 .project-gallery__track::-webkit-scrollbar { display: none; }
 .project-gallery__slide { flex: 0 0 100%; height: min(72svh, 720px); margin: 0; scroll-snap-align: start; }
-.project-gallery__slide img { width: 100%; height: 100%; object-fit: cover; display: block; border: 1px solid var(--line); }
+.project-gallery__slide img { width: 100%; height: 100%; object-fit: cover; display: block; border: 0; }
 .project-repository { display: flex; justify-content: center; padding: clamp(4rem,9vw,8rem) 0 1rem; }
 .project-repository a { color: var(--text); font: 500 .78rem/1 var(--mono); letter-spacing: .14em; text-decoration: none; text-transform: uppercase; border-bottom: 1px solid var(--accent); padding: 0 0 .55rem; transition: color 180ms ease; }
 .project-repository a:hover, .project-repository a:focus-visible { color: var(--accent); }
@@ -1220,6 +1229,15 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   .project-hero-media::after {
     background:
       linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 91%, var(--ink) 100%),
+      linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
+  }
+  .project-gallery {
+    width: calc(100% + (2 * var(--page-pad)));
+    margin-inline: calc(-1 * var(--page-pad));
+  }
+  .project-gallery::after {
+    background:
+      linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 94%, var(--ink) 100%),
       linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
   }
   .about-process {
