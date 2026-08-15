@@ -862,7 +862,7 @@ html.project-entry-boot body { opacity: 0; animation: none; }
   text-shadow: 0 0 .75rem rgba(130,181,152,.35); transform: translateX(-50%); opacity: 0;
 }
 .project-world-title::before { content: "PROJECT // SIGNAL ACQUIRED"; top: calc(50% - clamp(3.3rem,8vw,8rem)); }
-.project-world-title::after { content: "INITIALIZING VISUAL CORE"; bottom: calc(50% - clamp(3.3rem,8vw,8rem)); }
+.project-world-title::after { content: "INITIALIZING"; bottom: calc(50% - clamp(3.3rem,8vw,8rem)); }
 .project-world-title.is-departing { animation: project-world-title 1280ms cubic-bezier(.6,0,.2,1) both; }
 .project-world-title.is-departing::before { animation: project-world-meta 1280ms 40ms ease both; }
 .project-world-title.is-departing::after { animation: project-world-meta 1280ms 110ms ease both reverse; }
