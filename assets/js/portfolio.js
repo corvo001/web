@@ -17,8 +17,8 @@
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
-  const archiveDepartureDuration = 1120;
-  const archiveArrivalDuration = 720;
+  const archiveCycleDuration = 1600;
+  const archiveHandoffDuration = 820;
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
@@ -189,13 +189,16 @@
       return;
     }
 
+    const startedAt = Number(state.startedAt) || Date.now();
+    const elapsed = Math.min(archiveHandoffDuration + 120, Math.max(archiveHandoffDuration, Date.now() - startedAt));
+
     const transition = createArchiveTransition(state.label || '');
-    transition.classList.add('is-arrival-ready');
+    transition.style.setProperty('--archive-cycle-delay', (-elapsed) + 'ms');
+    transition.classList.add('is-cycling');
     document.body.classList.add('archive-arriving');
     await nextPaint();
     document.documentElement.classList.remove('archive-entry-boot');
-    transition.classList.add('is-arriving');
-    await waitForMotion(transition, 'animationend', archiveArrivalDuration, 'archive-shell-out');
+    await waitForMotion(transition, 'animationend', archiveCycleDuration - elapsed, 'archive-cycle-shell');
     document.body.classList.add('page-arrival-complete');
     document.body.classList.remove('archive-arriving');
     transition.remove();
@@ -827,12 +830,13 @@
         return;
       }
       const label = link.dataset.workLabel || link.textContent.trim();
-      sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label }));
       const transition = createArchiveTransition(label);
       document.body.classList.add('archive-leaving');
-      nextPaint().then(() => transition.classList.add('is-departing'));
-      waitForMotion(transition, 'animationend', archiveDepartureDuration, 'archive-shell-in')
-        .then(() => window.location.assign(target.href));
+      nextPaint().then(() => {
+        sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, startedAt: Date.now() }));
+        transition.classList.add('is-cycling');
+        window.setTimeout(() => window.location.assign(target.href), archiveHandoffDuration);
+      });
     });
   });
 
