@@ -504,9 +504,9 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
   96%,100% { transform: translateX(102%); }
 }
 @keyframes archive-cycle-aperture {
-  0%,48% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
-  52% { opacity: .58; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
-  64% { opacity: 1; transform: translate(-50%,-50%) rotate(45deg) scale(.62); }
+  0%,55% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
+  58% { opacity: .58; transform: translate(-50%,-50%) rotate(45deg) scale(.34); }
+  68% { opacity: 1; transform: translate(-50%,-50%) rotate(45deg) scale(.62); }
   90% { opacity: .72; transform: translate(-50%,-50%) rotate(45deg) scale(7.4); }
   100% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(8.6); }
 }

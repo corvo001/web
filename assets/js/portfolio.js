@@ -18,7 +18,7 @@
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
   const archiveCycleDuration = 1600;
-  const archiveHandoffDuration = 820;
+  const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Set();
@@ -189,16 +189,15 @@
       return;
     }
 
-    const startedAt = Number(state.startedAt) || Date.now();
-    const elapsed = Math.min(archiveHandoffDuration + 120, Math.max(archiveHandoffDuration, Date.now() - startedAt));
-
+    // Resume from the exact closed-shutter handoff frame. Page-load time must
+    // never advance the visual timeline or the second half visibly skips.
     const transition = createArchiveTransition(state.label || '');
-    transition.style.setProperty('--archive-cycle-delay', (-elapsed) + 'ms');
+    transition.style.setProperty('--archive-cycle-delay', (-archiveHandoffDuration) + 'ms');
     transition.classList.add('is-cycling');
     document.body.classList.add('archive-arriving');
     await nextPaint();
     document.documentElement.classList.remove('archive-entry-boot');
-    await waitForMotion(transition, 'animationend', archiveCycleDuration - elapsed, 'archive-cycle-shell');
+    await waitForMotion(transition, 'animationend', archiveCycleDuration - archiveHandoffDuration, 'archive-cycle-shell');
     document.body.classList.add('page-arrival-complete');
     document.body.classList.remove('archive-arriving');
     transition.remove();
@@ -828,9 +827,21 @@
   }
 
   document.querySelectorAll('[data-work-entry]').forEach((link) => {
+    const target = new URL(link.href, window.location.href);
+    if (target.pathname !== window.location.pathname) {
+      let archiveWarmed = false;
+      const warmArchive = () => {
+        if (archiveWarmed) return;
+        archiveWarmed = true;
+        fetch(target.href, { cache: 'force-cache', priority: 'low' }).catch(() => { archiveWarmed = false; });
+      };
+      if ('requestIdleCallback' in window) window.requestIdleCallback(warmArchive, { timeout: 1400 });
+      else window.setTimeout(warmArchive, 500);
+      link.addEventListener('pointerenter', warmArchive, { once: true, passive: true });
+      link.addEventListener('focus', warmArchive, { once: true, passive: true });
+    }
     link.addEventListener('click', (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
-      const target = new URL(link.href, window.location.href);
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
       if (navigationInProgress) return;
@@ -846,7 +857,7 @@
       const transition = createArchiveTransition(label);
       document.body.classList.add('archive-leaving');
       nextPaint().then(() => {
-        sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label, startedAt: Date.now() }));
+        sessionStorage.setItem(archiveTransitionKey, JSON.stringify({ label }));
         transition.classList.add('is-cycling');
         window.setTimeout(() => window.location.assign(target.href), archiveHandoffDuration);
       });
