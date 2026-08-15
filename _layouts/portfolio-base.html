@@ -21,6 +21,34 @@
       }
     </script>
     {% endunless %}
+    {% if active_body_class == 'home-page' %}
+    <style>html.eye-hall-entry-boot{background:#000;overflow:hidden}html.eye-hall-entry-boot body{opacity:0;animation:none}</style>
+    <script>
+      try {
+        const eyeHallTransition = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
+        const isExpectedHall = eyeHallTransition?.path === window.location.pathname;
+        const isRecentEyeEntry = Date.now() - Number(eyeHallTransition?.startedAt || 0) < 8000;
+        if (isExpectedHall && isRecentEyeEntry && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          const rootStyle = document.documentElement.style;
+          rootStyle.setProperty('--hall-eye-x', `${Number(eyeHallTransition.x) || (window.innerWidth / 2)}px`);
+          rootStyle.setProperty('--hall-eye-y', `${Number(eyeHallTransition.y) || (window.innerHeight / 2)}px`);
+          rootStyle.setProperty('--hall-eye-radius', `${Math.max(Number(eyeHallTransition.radius) || 1, 1)}px`);
+          rootStyle.setProperty('--hall-eye-cover-radius', `${Math.max(Number(eyeHallTransition.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1)}px`);
+          document.documentElement.classList.add('eye-hall-entry-boot');
+          window.setTimeout(() => {
+            if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
+            document.body?.classList.add('page-arrival-complete');
+            document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
+            sessionStorage.removeItem('portfolio-eye-hall-transition');
+          }, 2600);
+        } else {
+          sessionStorage.removeItem('portfolio-eye-hall-transition');
+        }
+      } catch (error) {
+        sessionStorage.removeItem('portfolio-eye-hall-transition');
+      }
+    </script>
+    {% endif %}
     {% if active_body_class == 'language-page' %}
     <style>html.gate-return-pending{background:#020302;color-scheme:dark}html.gate-return-pending body{visibility:hidden}</style>
     <script>
@@ -86,6 +114,7 @@
     <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v4.png' | relative_url }}" sizes="180x180">
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
+    <link rel="preload" href="{{ '/assets/videos/dyson-swarm-loop.webm' | relative_url }}" as="video" type="video/webm" fetchpriority="high">
     {% endif %}
     {% if page.layout == 'project' %}
       {% assign preload_project_list = site.data.projects | where: 'id', page.project_id %}

@@ -4,6 +4,7 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
+  const eyeHallTransitionKey = 'portfolio-eye-hall-transition';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
@@ -83,7 +84,7 @@
     transition.style.setProperty('--pupil-radius', `${size / 2}px`);
     transition.style.setProperty('--pupil-cover-radius', `${radius + 2}px`);
     document.documentElement.appendChild(transition);
-    return true;
+    return { x: centerX, y: centerY, radius: size / 2, coverRadius: radius + 2 };
   };
 
   const nextPaint = () => new Promise((resolve) => {
@@ -151,6 +152,24 @@
     await waitForMotion(document.body, 'animationend', 680, 'page-transition-in');
     document.body.classList.add('page-arrival-complete');
     document.body.classList.remove('page-arriving');
+  };
+
+  const showHallEyeArrival = async () => {
+    if (!document.documentElement.classList.contains('eye-hall-entry-boot')) return;
+    sessionStorage.removeItem(eyeHallTransitionKey);
+    if (reduceMotion.matches) {
+      document.body.classList.add('page-arrival-complete');
+      document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
+      return;
+    }
+    await nextPaint();
+    document.documentElement.classList.add('eye-hall-entering');
+    await waitForMotion(document.body, 'animationend', 1180, 'hall-eye-reveal');
+    document.body.classList.add('page-arrival-complete');
+    document.documentElement.classList.remove('eye-hall-entry-boot', 'eye-hall-entering');
+    ['--hall-eye-x', '--hall-eye-y', '--hall-eye-radius', '--hall-eye-cover-radius'].forEach((property) => {
+      document.documentElement.style.removeProperty(property);
+    });
   };
 
   const readProjectTransition = () => {
@@ -394,6 +413,7 @@
     sessionStorage.removeItem(pageTransitionKey);
     sessionStorage.removeItem(eyeReturnKey);
     sessionStorage.removeItem(eyeSessionKey);
+    sessionStorage.removeItem(eyeHallTransitionKey);
     history.replaceState({ ...history.state, eyeGateReturn: false }, '');
     document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-preparing', 'gate-exiting', 'gate-entering');
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'gate-entering');
@@ -482,6 +502,7 @@
         document.documentElement.classList.add('archive-entry-boot');
       }
       resetNavigationState();
+      showHallEyeArrival();
       showPageArrival();
       showProjectArrival();
       resumeProjectVideos();
@@ -569,10 +590,17 @@
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
-      if (!setPupilTransitionGeometry()) {
+      const eyeGeometry = setPupilTransitionGeometry();
+      if (!eyeGeometry) {
+        sessionStorage.removeItem(eyeHallTransitionKey);
         window.location.assign(link.href);
         return;
       }
+      sessionStorage.setItem(eyeHallTransitionKey, JSON.stringify({
+        ...eyeGeometry,
+        path: new URL(link.href, window.location.href).pathname,
+        startedAt: Date.now()
+      }));
       document.documentElement.classList.add('gate-preparing');
       await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
       document.documentElement.classList.remove('gate-preparing');

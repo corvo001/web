@@ -127,6 +127,28 @@ html.page-transition-boot .portfolio-shell.page-arriving {
   opacity: 0; transform: translateY(9px) scale(.997); animation: none;
 }
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
+html.eye-hall-entry-boot { background: #000; overflow: hidden; }
+html.eye-hall-entry-boot body {
+  opacity: 0; animation: none; overflow: hidden;
+  clip-path: circle(var(--hall-eye-radius,.5rem) at var(--hall-eye-x,50%) var(--hall-eye-y,50%));
+  transform: scale(1.045); transform-origin: var(--hall-eye-x,50%) var(--hall-eye-y,50%);
+  will-change: clip-path, opacity, transform;
+}
+html.eye-hall-entry-boot.eye-hall-entering body {
+  animation: hall-eye-reveal 1180ms cubic-bezier(.68,0,.18,1) both;
+}
+html.eye-hall-entry-boot::after {
+  content: ""; position: fixed; z-index: 1200;
+  left: var(--hall-eye-x,50%); top: var(--hall-eye-y,50%);
+  width: calc(var(--hall-eye-radius,.5rem) * 2); height: calc(var(--hall-eye-radius,.5rem) * 2);
+  border: clamp(4px,.48vw,7px) solid #78ad8d; border-radius: 50%; opacity: 0;
+  transform: translate(-50%,-50%); pointer-events: none;
+  box-shadow: 0 0 1px rgba(205,239,217,.72), 0 0 14px rgba(137,202,163,.76), 0 0 34px rgba(91,154,118,.42), inset 0 0 13px rgba(174,223,193,.62);
+  will-change: width, height, opacity;
+}
+html.eye-hall-entry-boot.eye-hall-entering::after {
+  animation: hall-eye-edge 1180ms cubic-bezier(.68,0,.18,1) both;
+}
 .portfolio-shell.project-portal-leaving,
 .portfolio-shell.archive-leaving { overflow: hidden; }
 .skip-link {
@@ -400,6 +422,18 @@ html.gate-return-mode.gate-entering .language-options { animation: gate-copy-ret
 @keyframes gate-copy-return {
   from { opacity: 0; transform: translateY(.25rem); }
   to { opacity: 1; transform: none; }
+}
+@keyframes hall-eye-reveal {
+  0% { opacity: .04; clip-path: circle(var(--hall-eye-radius,.5rem) at var(--hall-eye-x,50%) var(--hall-eye-y,50%)); transform: scale(1.045); }
+  18% { opacity: .28; }
+  52% { opacity: .82; transform: scale(1.014); }
+  100% { opacity: 1; clip-path: circle(var(--hall-eye-cover-radius,100vmax) at var(--hall-eye-x,50%) var(--hall-eye-y,50%)); transform: scale(1); }
+}
+@keyframes hall-eye-edge {
+  0% { width: calc(var(--hall-eye-radius,.5rem) * 2); height: calc(var(--hall-eye-radius,.5rem) * 2); opacity: .96; }
+  52% { opacity: .72; }
+  82% { opacity: .24; }
+  100% { width: calc(var(--hall-eye-cover-radius,100vmax) * 2); height: calc(var(--hall-eye-cover-radius,100vmax) * 2); opacity: 0; }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes page-transition-out {
