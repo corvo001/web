@@ -1,6 +1,10 @@
 ---
 ---
 
+@view-transition {
+  navigation: auto;
+}
+
 @font-face {
   font-family: "IBM Plex Sans";
   src: url("../fonts/ibm-plex-sans-latin.woff2") format("woff2");
@@ -129,6 +133,28 @@ html.page-transition-boot .portfolio-shell.page-arriving {
   opacity: 0; transform: translateY(9px) scale(.997); animation: none;
 }
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
+html.eye-mpa-entering::view-transition-image-pair(root),
+html.eye-mpa-returning::view-transition-image-pair(root) {
+  isolation: auto;
+}
+html.eye-mpa-entering::view-transition-old(root),
+html.eye-mpa-entering::view-transition-new(root),
+html.eye-mpa-returning::view-transition-old(root),
+html.eye-mpa-returning::view-transition-new(root) {
+  width: 100%; height: 100%;
+  mix-blend-mode: normal;
+  animation: none;
+}
+html.eye-mpa-entering::view-transition-old(root) { z-index: 1; }
+html.eye-mpa-entering::view-transition-new(root) {
+  z-index: 2;
+  animation: eye-mpa-reveal 880ms cubic-bezier(.22,1,.36,1) both;
+}
+html.eye-mpa-returning::view-transition-new(root) { z-index: 1; }
+html.eye-mpa-returning::view-transition-old(root) {
+  z-index: 2;
+  animation: eye-mpa-collapse 880ms cubic-bezier(.4,0,.2,1) both;
+}
 html.eye-hall-entry-boot { background: #000; overflow: hidden; }
 html.eye-hall-entry-boot body {
   opacity: .04; filter: blur(10px) saturate(.78) brightness(.72); animation: none; overflow: hidden;
@@ -475,6 +501,38 @@ html.gate-return-mode.gate-entering .gate-inner {
   18% { opacity: .24; }
   48% { opacity: .72; }
   100% { width: calc(var(--hall-eye-handoff-radius,52vmax) * 2); height: calc(var(--hall-eye-handoff-radius,52vmax) * 2); opacity: .96; }
+}
+@keyframes eye-mpa-reveal {
+  0% {
+    opacity: .08;
+    clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
+    filter: blur(7px) drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
+  }
+  42% {
+    opacity: .72;
+    filter: blur(2px) drop-shadow(0 0 8px rgba(135,201,162,.7));
+  }
+  100% {
+    opacity: 1;
+    clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
+    filter: blur(0) drop-shadow(0 0 0 transparent);
+  }
+}
+@keyframes eye-mpa-collapse {
+  0% {
+    opacity: 1;
+    clip-path: circle(var(--eye-vt-cover,150vmax) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
+    filter: blur(0) drop-shadow(0 0 0 transparent);
+  }
+  58% {
+    opacity: .76;
+    filter: blur(2px) drop-shadow(0 0 8px rgba(135,201,162,.7));
+  }
+  100% {
+    opacity: 0;
+    clip-path: circle(var(--eye-vt-radius,3px) at var(--eye-vt-x,50%) var(--eye-vt-y,50%));
+    filter: blur(7px) drop-shadow(0 0 10px rgba(135,201,162,.92)) drop-shadow(0 0 22px rgba(98,165,126,.5));
+  }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes page-transition-out {

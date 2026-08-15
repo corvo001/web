@@ -2,6 +2,7 @@
   const gate = document.querySelector('[data-language-gate]');
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const supportsCrossDocumentViewTransitions = 'onpagereveal' in window;
   const eyeSessionKey = 'portfolio-eye-entered';
   const eyeReturnKey = 'portfolio-eye-return';
   const eyeHallTransitionKey = 'portfolio-eye-hall-transition';
@@ -729,6 +730,10 @@
       document.activeElement.blur();
     }
     if (gate) {
+      if (document.documentElement.classList.contains('eye-mpa-returning')) {
+        gateInitialStateHandled = true;
+        return;
+      }
       if (gateInitialStateHandled && !event.persisted) return;
       if (event.persisted) gateInitialStateHandled = false;
       const shouldAnimateReturn = gateHasReturnState() && (event.persisted || navigationType !== 'reload');
@@ -793,16 +798,15 @@
   });
 
   document.querySelectorAll('[data-language-menu]').forEach((link) => {
+    const warmLanguageGate = () => warmNavigationPage(link);
+    link.addEventListener('pointerenter', warmLanguageGate, { passive: true });
+    link.addEventListener('focus', warmLanguageGate, { passive: true });
+    link.addEventListener('touchstart', warmLanguageGate, { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
-      await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       sessionStorage.setItem(eyeReturnKey, '1');
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
@@ -828,6 +832,15 @@
       rootStyle.setProperty('--hall-eye-body-y', `${window.scrollY + centerY}px`);
       rootStyle.setProperty('--hall-eye-handoff-radius', `${handoffRadius}px`);
       rootStyle.setProperty('--hall-eye-cover-radius', `${coverRadius}px`);
+      if (supportsCrossDocumentViewTransitions) {
+        window.location.assign(link.href);
+        return;
+      }
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       document.documentElement.classList.add('eye-gate-leaving');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'hall-eye-collapse');
       window.location.assign(link.href);
@@ -857,16 +870,15 @@
   }
 
   document.querySelectorAll('[data-language-link]').forEach((link) => {
+    const warmLanguageHall = () => warmNavigationPage(link);
+    link.addEventListener('pointerenter', warmLanguageHall, { passive: true });
+    link.addEventListener('focus', warmLanguageHall, { passive: true });
+    link.addEventListener('touchstart', warmLanguageHall, { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      link.classList.add('is-navigation-loading');
-      document.documentElement.classList.add('navigation-loading');
-      await warmNavigationPage(link);
-      link.classList.remove('is-navigation-loading');
-      document.documentElement.classList.remove('navigation-loading');
       eyeTrackingLocked = true;
       sessionStorage.setItem(eyeSessionKey, '1');
       history.replaceState({ ...history.state, eyeGateReturn: true }, '');
@@ -884,6 +896,15 @@
       document.documentElement.classList.add('gate-preparing');
       await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyePrepareDuration, 'eye-entry-tremor');
       document.documentElement.classList.remove('gate-preparing');
+      if (supportsCrossDocumentViewTransitions) {
+        window.location.assign(link.href);
+        return;
+      }
+      link.classList.add('is-navigation-loading');
+      document.documentElement.classList.add('navigation-loading');
+      await warmNavigationPage(link);
+      link.classList.remove('is-navigation-loading');
+      document.documentElement.classList.remove('navigation-loading');
       document.documentElement.classList.add('gate-exiting');
       await waitForMotion(document.querySelector('[data-pupil-transition]'), 'animationend', eyeDiveDuration);
       window.location.assign(link.href);

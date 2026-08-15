@@ -4,6 +4,57 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      window.addEventListener('pagereveal', (event) => {
+        if (!event.viewTransition) return;
+        try {
+          const root = document.documentElement;
+          const path = window.location.pathname;
+          const now = Date.now();
+          const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const hallState = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
+          const gateState = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
+          const isRecent = (state) => now - Number(state?.startedAt || 0) < 8000;
+          const enteringHall = !reducedMotion && hallState?.path === path && isRecent(hallState);
+          const returningToGate = !reducedMotion && gateState?.path === path && isRecent(gateState);
+
+          if (!enteringHall && !returningToGate) {
+            event.viewTransition.skipTransition();
+            return;
+          }
+
+          const state = enteringHall ? hallState : gateState;
+          const centerX = Number(state.x) || (window.innerWidth / 2);
+          const centerY = Number(state.y) || (window.innerHeight / 2);
+          const coverRadius = Math.max(Number(state.coverRadius) || Math.hypot(window.innerWidth, window.innerHeight), 1);
+          root.style.setProperty('--eye-vt-x', `${centerX}px`);
+          root.style.setProperty('--eye-vt-y', `${centerY}px`);
+          root.style.setProperty('--eye-vt-radius', `${Math.max(Number(state.radius) || 3, 1)}px`);
+          root.style.setProperty('--eye-vt-cover', `${coverRadius}px`);
+
+          if (enteringHall) {
+            root.classList.remove('eye-hall-entry-boot', 'eye-hall-entering', 'page-transition-boot');
+            root.classList.add('eye-mpa-entering');
+            document.body?.classList.add('page-arrival-complete');
+            sessionStorage.removeItem('portfolio-eye-hall-transition');
+          } else {
+            root.classList.remove('gate-natural-entry', 'gate-return-pending', 'gate-return-mode', 'gate-entering');
+            root.classList.add('gate-entrance-skip', 'eye-mpa-returning');
+            sessionStorage.removeItem('portfolio-eye-return');
+            sessionStorage.removeItem('portfolio-eye-entered');
+            sessionStorage.removeItem('portfolio-eye-gate-transition');
+            history.replaceState({ ...(history.state || {}), eyeGateReturn: false }, '');
+          }
+
+          event.viewTransition.finished.finally(() => {
+            root.classList.remove('eye-mpa-entering', 'eye-mpa-returning');
+            ['--eye-vt-x', '--eye-vt-y', '--eye-vt-radius', '--eye-vt-cover'].forEach((property) => root.style.removeProperty(property));
+          });
+        } catch (error) {
+          event.viewTransition.skipTransition();
+        }
+      });
+    </script>
     {% unless active_body_class == 'language-page' %}
     <style>html.page-transition-boot{background:#090b0a}html.page-transition-boot body{opacity:0;animation:none}@media(prefers-color-scheme:light){html.page-transition-boot{background:#f3f4ef}}</style>
     <script>
