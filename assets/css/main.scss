@@ -849,14 +849,9 @@ html.project-entry-boot body { opacity: 0; animation: none; }
 .about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
 .about-process__identity { --about-draw-length: 60; animation-name: about-resolve-identity; }
 .about-process__pupil {
-  fill: #b7f5cf; stroke: none; transform-box: fill-box; transform-origin: center;
-  filter: drop-shadow(0 0 2px rgba(183,245,207,.9)) drop-shadow(0 0 7px rgba(116,211,153,.48));
+  fill: #8fc5a4; stroke: none; transform-box: fill-box; transform-origin: center;
+  filter: drop-shadow(0 0 2px rgba(143,197,164,.5)) drop-shadow(0 0 6px rgba(130,181,152,.2));
   animation: about-pupil 6.4s ease-in-out infinite;
-}
-.about-process__pupil-star {
-  fill: none; stroke: #a9edc4; stroke-width: .8; stroke-linecap: round;
-  transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 4px rgba(143,226,176,.7));
-  animation: about-pupil-star 6.4s cubic-bezier(.37,0,.63,1) infinite;
 }
 .about-process__result-glow { fill: currentColor; stroke: none; opacity: 0; filter: blur(14px); animation: about-result-glow 6.4s ease-out infinite; }
 .about-process__signal, .about-process__signal-glow { fill: currentColor; stroke: none; }
@@ -876,7 +871,6 @@ html.project-entry-boot body { opacity: 0; animation: none; }
 @keyframes about-resolve-iris { 0%,55% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 74%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
 @keyframes about-resolve-identity { 0%,60% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } }
 @keyframes about-pupil { 0%,72% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
-@keyframes about-pupil-star { 0%,74% { opacity: 0; transform: scale(.18); } 84% { opacity: .72; transform: scale(.72); } 91% { opacity: .38; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18); } }
 @keyframes about-result-glow { 0%,74% { opacity: 0; transform: scale(.5); } 82% { opacity: .16; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
 @keyframes about-scan { 0%,51% { opacity: 0; transform: translateY(-86px); } 66% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
@@ -1005,18 +999,18 @@ html.project-entry-boot body { opacity: 0; animation: none; }
     width: 100%;
     shape-rendering: geometricPrecision;
   }
-  /* At this scale the ornamental eye details collapse into a bright blur.
-     Keep the result glyph as restrained technical linework on small screens. */
-  .about-process__result { stroke-width: 1.1; }
-  .about-process__eye { opacity: .82; }
-  .about-process__iris { opacity: .58; }
-  .about-process__identity,
-  .about-process__pupil-star,
-  .about-process__result-glow { display: none; }
+  /* Keep the resolved eye legible and structurally consistent with desktop. */
+  .about-process__result {
+    stroke-width: 1.2;
+    transform-box: view-box;
+    transform-origin: 752px 260px;
+    transform: scale(1.22);
+  }
+  .about-process__eye, .about-process__iris { stroke-width: 1.25; }
+  .about-process__result-glow { filter: blur(10px); }
   .about-process__pupil {
-    fill: currentColor;
-    opacity: .78;
-    filter: none;
+    fill: #8fc5a4;
+    filter: drop-shadow(0 0 2px rgba(143,197,164,.42));
   }
   .portfolio-footer { flex-direction: column; }
 }
@@ -1053,7 +1047,6 @@ html.project-entry-boot body { opacity: 0; animation: none; }
   .about-process__code-line, .about-process__eye, .about-process__iris, .about-process__identity { stroke-dashoffset: 0; opacity: 1; }
   .about-process__orbit { stroke-dashoffset: 0; opacity: .65; }
   .about-process__pupil { opacity: 1; transform: none; }
-  .about-process__pupil-star { opacity: .45; transform: none; }
   .about-process__visual { top: auto; width: 100%; animation: none; transform: none; }
   .interface-divider__cursor { display: none; }
 }
