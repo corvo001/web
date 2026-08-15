@@ -991,7 +991,7 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .internal-main--about .internal-copy { max-width: 68rem; }
 .internal-main--about .internal-copy > p { max-width: 52rem; margin-inline: auto; }
 .about-process {
-  --about-cycle: 11.2s;
+  --about-cycle: 6.4s;
   position: relative; width: 100%; margin: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 16px)) 0 0;
   color: var(--accent); overflow: hidden;
 }
@@ -1015,17 +1015,17 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
 .about-process__machine { animation: about-stage-machine var(--about-cycle) ease-in-out infinite; }
 .about-process__result { animation: about-stage-result var(--about-cycle) ease-in-out infinite; }
 .about-process__bracket { stroke-width: 1; opacity: .72; }
-.about-process__code-line { stroke-dasharray: 96; stroke-dashoffset: 96; animation: about-code var(--about-cycle) cubic-bezier(.4,0,.2,1) infinite; }
-.about-process__code-line--two { animation-delay: .18s; }
-.about-process__code-line--three { animation-delay: .36s; }
+.about-process__code-line { stroke-dasharray: 96; stroke-dashoffset: 96; animation: about-code var(--about-cycle) cubic-bezier(.22,1,.36,1) infinite; }
+.about-process__code-line--two { animation-delay: .13s; }
+.about-process__code-line--three { animation-delay: .26s; }
 .about-process__orbit { stroke-dasharray: 3 8; transform-origin: 514px 255px; animation: about-orbit var(--about-cycle) ease-in-out infinite; }
 .about-process__arm, .about-process__grip { stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .about-process__joint { fill: var(--ink); animation: about-joint var(--about-cycle) ease-in-out infinite; }
-.about-process__joint--late { animation-delay: .22s; }
+.about-process__joint--late { animation-delay: .16s; }
 .about-process__eye, .about-process__iris, .about-process__identity {
   vector-effect: non-scaling-stroke; stroke-linecap: round;
   stroke-dasharray: var(--about-draw-length); stroke-dashoffset: var(--about-draw-length);
-  animation: about-resolve var(--about-cycle) cubic-bezier(.4,0,.2,1) infinite;
+  animation: about-resolve var(--about-cycle) cubic-bezier(.22,1,.36,1) infinite;
 }
 .about-process__eye { --about-draw-length: 400; }
 .about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
@@ -1044,25 +1044,29 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
-/* One continuous 11.2 s timeline: modules respond without stopping the signal. */
-@keyframes about-stage-idea { 0%,10%,100% { opacity: .24; } 13%,23% { opacity: 1; } 30% { opacity: .3; } }
-@keyframes about-stage-software { 0%,28%,100% { opacity: .2; } 32%,43% { opacity: 1; } 50% { opacity: .3; } }
-@keyframes about-stage-machine { 0%,48%,100% { opacity: .2; } 52%,65% { opacity: 1; } 72% { opacity: .3; } }
-@keyframes about-stage-result { 0%,70%,100% { opacity: .16; } 74%,92% { opacity: 1; } }
-@keyframes about-particle { 0%,10%,30%,100% { opacity: .22; transform: translate(0); } 14% { opacity: 1; transform: translate(1.5px,-3px); } 23% { opacity: .7; transform: translate(-1.5px,1.5px); } }
-@keyframes about-spin { 0%,10% { transform: rotate(0); opacity: .25; } 14% { opacity: 1; } 26% { transform: rotate(210deg); opacity: 1; } 31%,100% { transform: rotate(230deg); opacity: .25; } }
-@keyframes about-code { 0%,28% { stroke-dashoffset: 96; opacity: .12; } 36%,44% { stroke-dashoffset: 0; opacity: 1; } 51%,100% { stroke-dashoffset: -96; opacity: .12; } }
-@keyframes about-orbit { 0%,48% { stroke-dashoffset: 55; opacity: .15; transform: rotate(-18deg) scale(.97); } 55%,66% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 73%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.04); } }
-@keyframes about-joint { 0%,48%,72%,100% { stroke: currentColor; opacity: .3; } 54%,66% { stroke: var(--text); opacity: 1; } }
-/* The eye resolves at 84%; its structure fades before the green pupil. */
-@keyframes about-resolve { 0%,70% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 80%,90% { stroke-dashoffset: 0; opacity: 1; } 97%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-resolve-iris { 0%,73% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 82%,91% { stroke-dashoffset: 0; opacity: 1; } 97%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-resolve-identity { 0%,76% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 84%,92% { stroke-dashoffset: 0; opacity: 1; } 97%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes about-pupil { 0%,81% { opacity: 0; transform: scale(.32); } 85%,96% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
-@keyframes about-result-glow { 0%,82% { opacity: 0; transform: scale(.6); } 86% { opacity: .14; transform: scale(1); } 94% { opacity: .11; transform: scale(1.04); } 100% { opacity: 0; transform: scale(1.18); } }
-@keyframes about-signal { 0%,4% { opacity: 0; } 7%,84% { opacity: 1; } 92%,100% { opacity: 0; } }
-@keyframes about-signal-glow { 0%,4% { opacity: 0; } 7%,84% { opacity: .48; } 92%,100% { opacity: 0; } }
-@keyframes about-scan { 0%,70% { opacity: 0; transform: translateY(-72px); } 77% { opacity: .1; } 86% { opacity: 0; transform: translateY(72px); } 100% { opacity: 0; } }
+/* Original compact motion, with each module powered by the travelling signal. */
+@keyframes about-stage-idea { 0%,9.5%,100% { opacity: .24; } 12%,22% { opacity: 1; } 30% { opacity: .3; } }
+@keyframes about-stage-software { 0%,25%,100% { opacity: .2; } 28%,41% { opacity: 1; } 49% { opacity: .3; } }
+@keyframes about-stage-machine { 0%,43%,100% { opacity: .2; } 46%,62% { opacity: 1; } 70% { opacity: .3; } }
+@keyframes about-stage-result { 0%,67.5%,100% { opacity: .16; } 70%,94% { opacity: 1; } }
+@keyframes about-particle { 0%,9.5%,30%,100% { opacity: .22; transform: translate(0); } 13% { opacity: 1; transform: translate(2px,-4px); } 21% { opacity: .7; transform: translate(-2px,2px); } }
+@keyframes about-spin { 0%,9.5% { transform: rotate(0); opacity: .25; } 12% { opacity: 1; } 25% { transform: rotate(230deg); opacity: 1; } 31%,100% { transform: rotate(250deg); opacity: .25; } }
+@keyframes about-code { 0%,25% { stroke-dashoffset: 96; opacity: .12; } 32%,43% { stroke-dashoffset: 0; opacity: 1; } 49%,100% { stroke-dashoffset: -96; opacity: .12; } }
+@keyframes about-orbit { 0%,43% { stroke-dashoffset: 55; opacity: .15; transform: rotate(-18deg) scale(.96); } 49%,63% { stroke-dashoffset: 0; opacity: .85; transform: rotate(-18deg) scale(1); } 70%,100% { stroke-dashoffset: -55; opacity: .12; transform: rotate(-18deg) scale(1.06); } }
+@keyframes about-joint { 0%,43%,70%,100% { stroke: currentColor; opacity: .3; } 49%,63% { stroke: var(--text); opacity: 1; } }
+@keyframes about-resolve { 0%,67.5% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 76%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-iris { 0%,68% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 78%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-resolve-identity { 0%,71% { stroke-dashoffset: var(--about-draw-length); opacity: 0; } 80%,94% { stroke-dashoffset: 0; opacity: 1; } 99%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes about-pupil { 0%,77% { opacity: 0; transform: scale(.25); } 82%,94% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); } }
+@keyframes about-result-glow { 0%,77% { opacity: 0; transform: scale(.5); } 80% { opacity: .16; transform: scale(.9); } 84% { opacity: .07; transform: scale(1.08); } 88%,100% { opacity: 0; transform: scale(1.2); } }
+@keyframes about-signal { 0%,5% { opacity: 0; } 8%,78% { opacity: 1; } 84%,100% { opacity: 0; } }
+@keyframes about-signal-glow { 0%,5% { opacity: 0; } 8%,76% { opacity: .48; } 83%,100% { opacity: 0; } }
+@keyframes about-scan { 0%,67.5% { opacity: 0; transform: translateY(-86px); } 73% { opacity: .12; } 82% { opacity: 0; transform: translateY(86px); } 100% { opacity: 0; } }
+@keyframes about-mobile-pan {
+  0%,10% { transform: translate3d(0,-50%,0); }
+  68%,94% { transform: translate3d(-39.5%,-50%,0); }
+  100% { transform: translate3d(0,-50%,0); }
+}
 .internal-copy h2 { margin-top: 3rem; color: var(--text); font-weight: 400; }
 .internal-copy a { text-underline-offset: .25em; }
 .contact-links { font-family: var(--mono); font-size: .88em; }
@@ -1183,22 +1187,13 @@ html.project-entry-boot.project-entry-arriving::after { animation: none; }
   .project-control { width: 2.75rem; }
   .project-hero-media, .project-gallery__slide { height: auto; aspect-ratio: 4/5; }
   .about-process {
+    height: clamp(15rem,72vw,18rem);
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
   .about-process__visual {
-    width: 100%;
+    position: relative; top: 50%; width: 165%; max-width: none;
+    animation: about-mobile-pan var(--about-cycle) cubic-bezier(.45,0,.22,1) infinite;
     shape-rendering: geometricPrecision;
-  }
-  /* Preserve the desktop eye geometry; mobile only receives a softer glow. */
-  .about-process__result {
-    stroke-width: 1.4;
-    transform: none;
-  }
-  .about-process__eye, .about-process__iris { stroke-width: 1.4; }
-  .about-process__result-glow { filter: blur(8px); }
-  .about-process__pupil {
-    fill: #8fc5a4;
-    filter: drop-shadow(0 0 1.5px rgba(143,197,164,.38)) drop-shadow(0 0 4px rgba(130,181,152,.14));
   }
   .portfolio-footer { flex-direction: column; }
 }
