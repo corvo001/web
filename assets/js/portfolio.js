@@ -390,7 +390,7 @@
     const isExpectedArchive = state?.path === window.location.pathname;
     const isRecentArchive = Date.now() - Number(state?.startedAt || 0) < 8000;
 
-    if (!isExpectedArchive || !isRecentArchive || !document.body.classList.contains('work-page') || reduceMotion.matches) {
+    if (state?.phase !== 'handoff' || !isExpectedArchive || !isRecentArchive || !document.body.classList.contains('work-page') || reduceMotion.matches) {
       document.documentElement.classList.remove('archive-entry-boot');
       return;
     }
@@ -1238,13 +1238,23 @@
       const handoff = transition.querySelector('.archive-transition__handoff');
       document.body.classList.add('archive-leaving');
       await nextPaint();
+      transition.classList.add('is-cycling');
+      await waitForMotion(handoff, 'animationend', archiveHandoffDuration, 'archive-cycle-handoff');
+
+      // Navigation can take a few frames even after preloading. Freeze every
+      // CSS animation at the fully closed handoff so the source page cannot
+      // begin opening its shutters before the destination takes ownership.
+      transition.classList.add('is-handoff-held');
+      try {
+        transition.getAnimations?.({ subtree: true }).forEach((animation) => animation.pause());
+      } catch (error) { /* CSS pause remains the compatibility fallback. */ }
+      void transition.offsetWidth;
       sessionStorage.setItem(archiveTransitionKey, JSON.stringify({
         label,
         path: target.pathname,
+        phase: 'handoff',
         startedAt: Date.now()
       }));
-      transition.classList.add('is-cycling');
-      await waitForMotion(handoff, 'animationend', archiveHandoffDuration, 'archive-cycle-handoff');
       window.location.assign(target.href);
     });
   });

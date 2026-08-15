@@ -623,6 +623,8 @@ html.gate-return-mode.gate-entering .gate-inner {
 .archive-transition.is-cycling .archive-transition__title { animation: archive-cycle-title 1600ms var(--archive-cycle-delay,0ms) cubic-bezier(.2,.7,.2,1) both; }
 .archive-transition.is-cycling .archive-transition__meta,
 .archive-transition.is-cycling .archive-transition__status { animation: archive-cycle-data 1600ms var(--archive-cycle-delay,0ms) ease both; }
+.archive-transition.is-handoff-held,
+.archive-transition.is-handoff-held * { animation-play-state: paused !important; }
 
 @keyframes archive-cycle-shell { 0% { opacity: 0; } 6%,84% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes archive-cycle-grid {

@@ -16,6 +16,17 @@
           const now = Date.now();
           const hallState = JSON.parse(sessionStorage.getItem('portfolio-eye-hall-transition') || 'null');
           const gateState = JSON.parse(sessionStorage.getItem('portfolio-eye-gate-transition') || 'null');
+          const archiveState = JSON.parse(sessionStorage.getItem('portfolio-archive-transition') || 'null');
+          const isCurrentArchiveNavigation = archiveState?.phase === 'handoff' &&
+            now - Number(archiveState.startedAt || 0) < 8000 &&
+            (!destinationPath || archiveState.path === destinationPath);
+
+          // The archive owns its shutter handoff. Never let the browser also
+          // cross-fade a captured source frame over that same opening.
+          if (isCurrentArchiveNavigation) {
+            event.viewTransition.skipTransition();
+            return;
+          }
           const isCurrentEyeNavigation = (state) => state &&
             now - Number(state.startedAt || 0) < 8000 &&
             (!destinationPath || state.path === destinationPath);
@@ -188,7 +199,7 @@
         const archiveTransition = JSON.parse(sessionStorage.getItem('portfolio-archive-transition') || 'null');
         const isExpectedArchive = archiveTransition?.path === window.location.pathname;
         const isRecentArchive = Date.now() - Number(archiveTransition?.startedAt || 0) < 8000;
-        if ('{{ active_body_class }}' === 'work-page' && isExpectedArchive && isRecentArchive) {
+        if ('{{ active_body_class }}' === 'work-page' && archiveTransition?.phase === 'handoff' && isExpectedArchive && isRecentArchive) {
           document.documentElement.classList.add('archive-entry-boot');
         } else if (archiveTransition) {
           sessionStorage.removeItem('portfolio-archive-transition');
