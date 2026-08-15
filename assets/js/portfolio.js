@@ -616,6 +616,10 @@
       cards.forEach((card) => {
         const visible = category === 'ALL' || card.dataset.projectCategory === category;
         card.hidden = !visible;
+        if (!visible) {
+          card.querySelector('video[data-project-media]')?.pause();
+          card.querySelector('.project-index-card__visual')?.classList.remove('is-proximity-active');
+        }
         if (visible) visibleCount += 1;
       });
       buttons.forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
@@ -625,11 +629,52 @@
     }));
   });
 
-  if (window.matchMedia('(max-width: 700px) and (hover: none), (max-width: 700px) and (pointer: coarse)').matches && 'IntersectionObserver' in window) {
-    const capsuleObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => entry.target.classList.toggle('is-proximity-active', entry.isIntersecting));
-    }, { rootMargin: '-31% 0px -31% 0px', threshold: 0.01 });
-    document.querySelectorAll('.project-index-card__visual').forEach((capsule) => capsuleObserver.observe(capsule));
+  const indexCapsules = [...document.querySelectorAll('.project-index-card__visual')];
+  if (indexCapsules.length) {
+    const capsuleStates = new WeakMap();
+    const updateCapsule = (capsule) => {
+      const state = capsuleStates.get(capsule);
+      const card = capsule.closest('.project-index-card');
+      const video = capsule.querySelector('video[data-project-media]');
+      if (!state || !card) return;
+      const active = !card.hidden && !reduceMotion.matches && (state.near || state.hovered || state.focused);
+      capsule.classList.toggle('is-proximity-active', active);
+      if (!video) return;
+      if (active) video.play().catch(() => {});
+      else video.pause();
+    };
+
+    indexCapsules.forEach((capsule) => {
+      const card = capsule.closest('.project-index-card');
+      const video = capsule.querySelector('video[data-project-media]');
+      const state = { near: false, hovered: false, focused: false };
+      capsuleStates.set(capsule, state);
+      video?.pause();
+
+      capsule.addEventListener('pointerenter', () => { state.hovered = true; updateCapsule(capsule); });
+      capsule.addEventListener('pointerleave', () => { state.hovered = false; updateCapsule(capsule); });
+      card?.addEventListener('focus', () => { state.focused = true; updateCapsule(capsule); });
+      card?.addEventListener('blur', () => { state.focused = false; updateCapsule(capsule); });
+    });
+
+    if ('IntersectionObserver' in window) {
+      const capsuleObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const state = capsuleStates.get(entry.target);
+          if (!state) return;
+          state.near = entry.isIntersecting;
+          updateCapsule(entry.target);
+        });
+      }, { rootMargin: '-22% 0px -22% 0px', threshold: 0.15 });
+      indexCapsules.forEach((capsule) => capsuleObserver.observe(capsule));
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      indexCapsules.forEach((capsule) => {
+        if (document.hidden) capsule.querySelector('video[data-project-media]')?.pause();
+        else updateCapsule(capsule);
+      });
+    });
   }
 
   document.querySelectorAll('[data-work-entry]').forEach((link) => {

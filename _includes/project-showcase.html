@@ -31,7 +31,7 @@
               <div class="project-index-card__visual">
                 {% assign card_video = project.preview_video | default: project.video %}
                 {% if card_video %}
-                  <video class="project-index-card__media" src="{{ card_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay data-project-media></video>
+                  <video class="project-index-card__media" src="{{ card_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="metadata" data-project-media></video>
                 {% else %}
                   <img class="project-index-card__media" src="{{ project.image | relative_url }}?v={{ site.time | date: '%s' }}" alt="" loading="lazy" data-project-media>
                 {% endif %}
