@@ -1048,8 +1048,8 @@ html.project-launch-from-hall[lang="en"] .project-world-title::after { content: 
   stroke-dasharray: var(--about-draw-length); stroke-dashoffset: var(--about-draw-length);
   animation: about-resolve var(--about-cycle) cubic-bezier(.22,1,.36,1) infinite;
 }
-.about-process__eye { --about-draw-length: 400; }
-.about-process__iris { --about-draw-length: 233; animation-name: about-resolve-iris; }
+.about-process__eye { --about-draw-length: 280; }
+.about-process__iris { --about-draw-length: 180; animation-name: about-resolve-iris; }
 .about-process__identity { --about-draw-length: 60; animation-name: about-resolve-identity; }
 .about-process__pupil {
   fill: #8fc5a4; stroke: none; transform-box: fill-box; transform-origin: center;
