@@ -1579,8 +1579,16 @@ body.home-page > #main.portfolio-main { display: flex; }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: min(43dvh,29rem);
 }
+.info-contact-page .internal-header {
+  --contact-header-lift: clamp(2rem,5dvh,3.4rem);
+  margin-bottom: clamp(2.4rem,5dvh,3.6rem);
+  transform: translateY(calc(-1 * var(--contact-header-lift)));
+}
+.info-contact-page .internal-subtitle {
+  margin-top: clamp(.75rem,1.45dvh,1rem);
+}
 .info-contact-page .contact-links {
-  gap: clamp(.35rem,1.2dvh,.75rem);
+  gap: clamp(.85rem,2dvh,1.25rem);
 }
 .info-contact-page .contact-links p { margin: 0; }
 .home-page .portfolio-footer,
