@@ -1708,6 +1708,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   max-width: 68rem;
   font-size: clamp(1rem,1.4vw,1.2rem);
   line-height: 1.8;
+  transform: translateY(clamp(-.75rem,-1.2dvh,-.45rem));
 }
 .info-about-page .internal-copy > p {
   max-width: 52rem;
@@ -1741,9 +1742,10 @@ body.home-page > #main.portfolio-main { display: flex; }
   font-size: .72rem;
 }
 .info-contact-page .internal-copy {
-  display: grid; justify-items: center;
+  display: grid; justify-items: center; align-self: center;
   font-size: clamp(1rem,1.4vw,1.2rem);
   line-height: 1.8;
+  transform: translateY(clamp(.75rem,1.8dvh,1.15rem));
 }
 .contact-card {
   position: relative; isolation: isolate; width: min(34rem,100%);
