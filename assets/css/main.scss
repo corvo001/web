@@ -955,10 +955,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-filter::after {
   z-index: -1; inset: 1px;
-  background: linear-gradient(90deg,
-    transparent,
-    color-mix(in srgb,var(--surface) 20%,transparent) 14% 86%,
-    transparent);
+  background: color-mix(in srgb,var(--ink) 97%,var(--surface) 3%);
   box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--text) 1%,transparent);
 }
 .project-filter:hover::before,
