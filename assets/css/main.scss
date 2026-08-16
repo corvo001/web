@@ -131,6 +131,7 @@ html.page-transition-boot .portfolio-shell.page-arriving {
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
 html.language-bridge-enter,
 html.language-bridge-return,
+html.language-bridge-return-preparing,
 html.language-bridge-leaving { background: #000; overflow: hidden; }
 html.language-bridge-enter::before,
 html.language-bridge-return::before {
@@ -151,12 +152,16 @@ html.language-bridge-enter.language-bridge-entering body {
 html.language-bridge-enter.language-bridge-entering::before {
   animation: language-black-release 860ms cubic-bezier(.3,0,.2,1) both;
 }
+html.language-bridge-return-preparing body {
+  pointer-events: none; overflow: hidden;
+  animation: language-hall-return-prep 240ms cubic-bezier(.2,.7,.3,1) both;
+  will-change: opacity, filter;
+}
 html.language-bridge-leaving body {
   pointer-events: none; overflow: hidden;
   animation: language-hall-depart 860ms cubic-bezier(.55,0,.78,.42) both;
   will-change: clip-path, opacity, filter;
 }
-html.language-bridge-return::after,
 html.language-bridge-leaving::after {
   content: ""; position: fixed; z-index: 2147483647;
   left: var(--language-eye-x,50%); top: var(--language-eye-y,50%);
@@ -171,10 +176,7 @@ html.language-bridge-leaving::after {
   animation: language-eye-collapse 860ms cubic-bezier(.55,0,.78,.42) both;
 }
 html.language-bridge-return.language-bridge-returning::before {
-  animation: language-gate-uncover 860ms cubic-bezier(.2,.62,.3,1) both;
-}
-html.language-bridge-return.language-bridge-returning::after {
-  animation: language-eye-uncover 860ms cubic-bezier(.2,.62,.3,1) both;
+  animation: language-gate-release 860ms cubic-bezier(.2,.62,.3,1) both;
 }
 /* Capture the current document as a still frame before any navigation.
    The body and purpose-built overlays remain free to perform their handoff. */
@@ -468,12 +470,16 @@ html.language-bridge-return.language-bridge-returning .gate-inner {
   52% { opacity: .48; }
   100% { opacity: 0; }
 }
+@keyframes language-hall-return-prep {
+  from { opacity: 1; filter: blur(0) saturate(1) brightness(1); }
+  to { opacity: .94; filter: blur(3px) saturate(.9) brightness(.84); }
+}
 @keyframes language-hall-depart {
   0% {
-    opacity: 1; filter: blur(0) saturate(1) brightness(1);
+    opacity: .94; filter: blur(3px) saturate(.9) brightness(.84);
     clip-path: circle(var(--language-eye-cover-radius,100vmax) at var(--language-eye-x,50%) var(--language-eye-body-y,var(--language-eye-y,50%)));
   }
-  48% { opacity: .84; filter: blur(2px) saturate(.94) brightness(.9); }
+  48% { opacity: .76; filter: blur(5px) saturate(.84) brightness(.74); }
   82% { opacity: .22; filter: blur(8px) saturate(.76) brightness(.62); }
   100% {
     opacity: 0; filter: blur(12px) saturate(.7) brightness(.5);
@@ -494,29 +500,10 @@ html.language-bridge-return.language-bridge-returning .gate-inner {
     opacity: 1;
   }
 }
-@keyframes language-gate-uncover {
-  0%, 10% {
-    opacity: 1;
-    clip-path: circle(var(--language-eye-cover-radius,100vmax) at var(--language-eye-x,50%) var(--language-eye-y,50%));
-  }
-  100% {
-    opacity: 1;
-    clip-path: circle(var(--language-eye-pupil-radius,5px) at var(--language-eye-x,50%) var(--language-eye-y,50%));
-  }
-}
-@keyframes language-eye-uncover {
-  0% {
-    width: calc(var(--language-eye-cover-radius,100vmax) * 2);
-    height: calc(var(--language-eye-cover-radius,100vmax) * 2);
-    opacity: 0;
-  }
-  26% { opacity: .28; }
-  72% { opacity: .9; }
-  100% {
-    width: calc(var(--language-eye-pupil-radius,5px) * 2);
-    height: calc(var(--language-eye-pupil-radius,5px) * 2);
-    opacity: 1;
-  }
+@keyframes language-gate-release {
+  0%, 14% { opacity: 1; }
+  56% { opacity: .52; }
+  100% { opacity: 0; }
 }
 @keyframes language-gate-focus {
   0%, 12% { opacity: .06; filter: blur(12px); }

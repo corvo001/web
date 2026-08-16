@@ -19,6 +19,7 @@
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
+  const languageReturnPrepareDuration = 240;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -201,18 +202,23 @@
 
   eyeTrackingLocked = gate && document.documentElement.classList.contains('gate-natural-entry');
 
-  const setPupilTransitionGeometry = () => {
-    const pupil = mark?.querySelector('.reactive-mark__pupil');
-    const transition = document.querySelector('[data-pupil-transition]');
-    if (!pupil || !transition) return false;
-
-    // The pupil follows the pointer. Always transition through its real,
-    // centered resting position so the circle cannot drift between frames.
+  const lockEyeAtRest = () => {
+    if (!mark) return false;
     mark.classList.add('eye-geometry-locked');
     mark.style.setProperty('--rx', '0deg');
     mark.style.setProperty('--ry', '0deg');
     mark.style.setProperty('--px', '0px');
     mark.style.setProperty('--py', '0px');
+    return true;
+  };
+
+  const setPupilTransitionGeometry = () => {
+    const pupil = mark?.querySelector('.reactive-mark__pupil');
+    const transition = document.querySelector('[data-pupil-transition]');
+    if (!pupil || !transition || !lockEyeAtRest()) return false;
+
+    // The pupil follows the pointer. Always transition through its real,
+    // centered resting position so the circle cannot drift between frames.
     void pupil.offsetWidth;
     const markRect = mark.getBoundingClientRect();
     const size = Math.max(markRect.width * .032, 1);
@@ -321,7 +327,7 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-bridge-leaving', 'navigation-source-frozen');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-bridge-return-preparing', 'language-bridge-leaving', 'navigation-source-frozen');
     releaseNavigationSource();
     if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-bridge-return')) {
       ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
@@ -393,8 +399,7 @@
     gateInitialStateHandled = true;
     eyeTrackingLocked = true;
     await waitForGateLayout();
-    const geometry = setPupilTransitionGeometry();
-    if (!geometry) {
+    if (!lockEyeAtRest()) {
       finishLanguageArrival();
       showNaturalGateEntrance();
       return;
@@ -838,8 +843,10 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      const blurReady = waitForMotion(document.body, 'animationend', languageReturnPrepareDuration, 'language-hall-return-prep');
+      document.documentElement.classList.add('language-bridge-return-preparing');
       freezeNavigationSource();
-      await warmNavigationPage(link);
+      await Promise.allSettled([warmNavigationPage(link), blurReady]);
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
 
@@ -857,6 +864,7 @@
       rootStyle.setProperty('--language-eye-pupil-radius', `${pupilRadius}px`);
       rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
       document.documentElement.classList.add('language-bridge-leaving');
+      document.documentElement.classList.remove('language-bridge-return-preparing');
       await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-depart');
       sessionStorage.setItem(languageBridgeKey, JSON.stringify({
         version: 2,
