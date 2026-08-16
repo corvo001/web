@@ -2026,6 +2026,11 @@ body.home-page > #main.portfolio-main { display: flex; }
     --accent: #82b598;
     color: var(--text);
   }
+  .home-page .interface-divider {
+    --divider-line: rgba(63,119,88,.46);
+    --divider-accent: #3f7758;
+  }
+  .home-page .interface-divider__line { stroke-width: 1.15; }
 }
 
 @media (prefers-color-scheme: light) and (max-width: 700px) {
