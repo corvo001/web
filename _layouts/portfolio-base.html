@@ -52,29 +52,28 @@
     </script>
     {% endif %}
     {% if active_body_class == 'language-page' %}
-    <style>html.language-bridge-return{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-return body{opacity:0;animation:none}html.language-bridge-return::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
+    <style>html.language-return-boot{background:#000;color-scheme:dark;overflow:hidden}html.language-return-boot body{visibility:hidden;animation:none}</style>
     <script>
       try {
-        const languageBridge = JSON.parse(sessionStorage.getItem('portfolio-language-bridge-v2') || 'null');
-        const returningFromPortfolio = languageBridge?.version === 2 &&
-          languageBridge?.direction === 'return' &&
-          languageBridge?.path === window.location.pathname &&
-          Date.now() - Number(languageBridge?.startedAt || 0) < 8000 &&
+        const languageReturn = JSON.parse(sessionStorage.getItem('portfolio-language-return-v3') || 'null');
+        const returningFromPortfolio = languageReturn?.version === 3 &&
+          languageReturn?.path === window.location.pathname &&
+          Date.now() - Number(languageReturn?.startedAt || 0) < 10000 &&
           !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (returningFromPortfolio) {
-          document.documentElement.classList.add('gate-entrance-skip', 'language-bridge-return');
+          document.documentElement.classList.add('gate-entrance-skip', 'language-return-boot');
           window.setTimeout(() => {
-            if (!document.documentElement.classList.contains('language-bridge-return')) return;
-            document.documentElement.classList.remove('language-bridge-return', 'language-bridge-returning');
+            if (!document.documentElement.classList.contains('language-return-boot')) return;
+            document.documentElement.classList.remove('language-return-boot', 'language-return-entering');
             document.documentElement.classList.add('gate-entrance-skip');
-            sessionStorage.removeItem('portfolio-language-bridge-v2');
+            sessionStorage.removeItem('portfolio-language-return-v3');
           }, 8000);
         } else {
-          sessionStorage.removeItem('portfolio-language-bridge-v2');
+          sessionStorage.removeItem('portfolio-language-return-v3');
           document.documentElement.classList.add('gate-natural-entry');
         }
       } catch (error) {
-        sessionStorage.removeItem('portfolio-language-bridge-v2');
+        sessionStorage.removeItem('portfolio-language-return-v3');
         document.documentElement.classList.add('gate-natural-entry');
       }
     </script>

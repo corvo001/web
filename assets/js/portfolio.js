@@ -3,11 +3,13 @@
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const languageBridgeKey = 'portfolio-language-bridge-v2';
+  const languageReturnKey = 'portfolio-language-return-v3';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
   let eyeTrackingLocked = false;
   let languageArrivalPlaying = false;
+  let languageReturnPlaying = false;
   let gateInitialStateHandled = false;
   let archiveArrivalPlaying = false;
   let projectArrivalPlaying = false;
@@ -19,7 +21,8 @@
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
-  const languageReturnPrepareDuration = 240;
+  const languageReturnPrepareDuration = 260;
+  const languageReturnDuration = 920;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -231,6 +234,9 @@
     transition.style.setProperty('--pupil-y', `${centerY}px`);
     transition.style.setProperty('--pupil-radius', `${size / 2}px`);
     transition.style.setProperty('--pupil-cover-radius', `${coverRadius}px`);
+    ['--pupil-start-x', '--pupil-start-y', '--pupil-start-radius', '--pupil-start-edge-opacity'].forEach((property) => {
+      transition.style.removeProperty(property);
+    });
     const rootStyle = document.documentElement.style;
     rootStyle.setProperty('--language-eye-x', `${centerX}px`);
     rootStyle.setProperty('--language-eye-y', `${centerY}px`);
@@ -294,6 +300,43 @@
     window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
   });
 
+  const readLanguageReturn = () => {
+    try {
+      const state = JSON.parse(sessionStorage.getItem(languageReturnKey) || 'null');
+      const expectedPath = state?.path === window.location.pathname;
+      const recent = Date.now() - Number(state?.startedAt || 0) < 10000;
+      return state?.version === 3 && expectedPath && recent ? state : null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const waitForLanguageGate = async () => {
+    const image = mark?.querySelector('.reactive-mark__image');
+    const waits = [];
+    const deadline = (promise, duration = 2400) => Promise.race([
+      promise,
+      new Promise((resolve) => window.setTimeout(resolve, duration))
+    ]);
+    if (document.fonts?.ready) waits.push(deadline(document.fonts.ready.catch(() => {})));
+    if (image && (!image.complete || !image.naturalWidth)) {
+      waits.push(new Promise((resolve) => {
+        const finish = () => {
+          window.clearTimeout(timeout);
+          image.removeEventListener('load', finish);
+          image.removeEventListener('error', finish);
+          resolve();
+        };
+        const timeout = window.setTimeout(finish, 2400);
+        image.addEventListener('load', finish, { once: true });
+        image.addEventListener('error', finish, { once: true });
+      }));
+    }
+    await Promise.allSettled(waits);
+    if (image?.decode) await deadline(image.decode().catch(() => {}));
+    await nextPaint();
+  };
+
   const waitForMotion = (element, eventName, duration, propertyName = '') => new Promise((resolve) => {
     let settled = false;
     const finish = () => {
@@ -315,10 +358,11 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-bridge-return-preparing', 'language-bridge-leaving', 'navigation-source-frozen');
+    languageReturnPlaying = false;
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-loading', 'language-return-departing', 'navigation-source-frozen');
     releaseNavigationSource();
-    if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-bridge-return')) {
-      ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
+    if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-return-boot')) {
+      ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-handoff-radius', '--language-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
       });
     }
@@ -348,9 +392,7 @@
     sessionStorage.removeItem(languageBridgeKey);
     document.documentElement.classList.remove(
       'language-bridge-enter',
-      'language-bridge-entering',
-      'language-bridge-return',
-      'language-bridge-returning'
+      'language-bridge-entering'
     );
     ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
       document.documentElement.style.removeProperty(property);
@@ -360,8 +402,7 @@
 
   const showLanguageArrival = async () => {
     const enteringHall = document.documentElement.classList.contains('language-bridge-enter');
-    const returningToGate = gate && document.documentElement.classList.contains('language-bridge-return');
-    if (languageArrivalPlaying || (!enteringHall && !returningToGate)) return;
+    if (languageArrivalPlaying || !enteringHall) return;
     languageArrivalPlaying = true;
 
     if (reduceMotion.matches) {
@@ -370,30 +411,62 @@
       return;
     }
 
-    if (enteringHall) {
-      sessionStorage.removeItem(pageTransitionKey);
-      document.documentElement.classList.remove('page-transition-boot');
-      const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
-      if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
-      if (activeHallMedia) waitForRenderableMedia(activeHallMedia).catch(() => {});
-      await nextPaint();
-      document.documentElement.classList.add('language-bridge-entering');
-      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
-      document.body.classList.add('page-arrival-complete');
-      finishLanguageArrival();
+    sessionStorage.removeItem(pageTransitionKey);
+    document.documentElement.classList.remove('page-transition-boot');
+    const activeHallMedia = document.querySelector('.hero-project.is-active [data-project-media]');
+    if (activeHallMedia instanceof HTMLVideoElement) ensureVideoSource(activeHallMedia);
+    if (activeHallMedia) waitForRenderableMedia(activeHallMedia).catch(() => {});
+    await nextPaint();
+    document.documentElement.classList.add('language-bridge-entering');
+    await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
+    document.body.classList.add('page-arrival-complete');
+    finishLanguageArrival();
+  };
+
+  const finishLanguageReturn = () => {
+    sessionStorage.removeItem(languageReturnKey);
+    document.documentElement.classList.remove('language-return-boot', 'language-return-entering', 'language-return-mode');
+    document.documentElement.classList.add('gate-entrance-skip');
+    languageReturnPlaying = false;
+    navigationInProgress = false;
+    eyeTrackingLocked = false;
+    mark?.classList.remove('eye-geometry-locked');
+  };
+
+  const showLanguageReturn = async () => {
+    const state = readLanguageReturn();
+    if (!gate || languageReturnPlaying || !document.documentElement.classList.contains('language-return-boot')) return;
+    if (reduceMotion.matches || !state) {
+      finishLanguageReturn();
       return;
     }
 
+    languageReturnPlaying = true;
     gateInitialStateHandled = true;
+    navigationInProgress = false;
     eyeTrackingLocked = true;
-    document.documentElement.classList.remove('gate-natural-entry');
-    await nextPaint();
-    document.documentElement.classList.add('language-bridge-returning');
-    await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
-    finishLanguageArrival();
-    document.documentElement.classList.add('gate-entrance-skip');
-    eyeTrackingLocked = false;
-    mark?.classList.remove('eye-geometry-locked');
+    sessionStorage.removeItem(pageTransitionKey);
+    document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry');
+
+    // Keep the destination fully black until the real logo has decoded. The
+    // source frame can then hand its exact circle to this document in one motion.
+    await waitForLanguageGate();
+    const geometry = setPupilTransitionGeometry();
+    const transition = document.querySelector('[data-pupil-transition]');
+    if (!geometry || !transition) {
+      finishLanguageReturn();
+      return;
+    }
+    transition.style.setProperty('--pupil-start-x', `${Number(state.x) || (window.innerWidth / 2)}px`);
+    transition.style.setProperty('--pupil-start-y', `${Number(state.y) || (window.innerHeight / 2)}px`);
+    transition.style.setProperty('--pupil-start-radius', `${Math.max(Number(state.handoffRadius) || 1, 1)}px`);
+    transition.style.setProperty('--pupil-start-edge-opacity', '.96');
+
+    document.documentElement.classList.remove('language-return-boot', 'gate-entrance-skip');
+    document.documentElement.classList.add('language-return-mode', 'language-return-entering');
+    await waitForMotion(transition, 'animationend', languageReturnDuration, 'language-return-emerge');
+    finishLanguageReturn();
+    if (lastPointerPosition && updateEyeFromPointer) updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
   };
 
   const readProjectTransition = () => {
@@ -698,18 +771,21 @@
     if (!gate) return;
     sessionStorage.removeItem(pageTransitionKey);
     sessionStorage.removeItem(languageBridgeKey);
+    sessionStorage.removeItem(languageReturnKey);
     document.documentElement.classList.remove(
       'page-transition-boot',
       'gate-natural-entry',
       'gate-preparing',
       'gate-exiting',
-      'language-bridge-return',
-      'language-bridge-returning'
+      'language-return-boot',
+      'language-return-entering',
+      'language-return-mode'
     );
     document.body.classList.remove('gate-preparing', 'gate-exiting');
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
     languageArrivalPlaying = false;
+    languageReturnPlaying = false;
     navigationInProgress = false;
     mark?.classList.remove('eye-geometry-locked');
   };
@@ -720,9 +796,11 @@
     languageArrivalPlaying = false;
     navigationInProgress = false;
     sessionStorage.removeItem(languageBridgeKey);
+    sessionStorage.removeItem(languageReturnKey);
     document.documentElement.classList.remove(
-      'language-bridge-return',
-      'language-bridge-returning',
+      'language-return-boot',
+      'language-return-entering',
+      'language-return-mode',
       'gate-entrance-skip',
       'gate-preparing',
       'gate-exiting'
@@ -750,10 +828,18 @@
       // A frozen source document can be restored from the back-forward cache.
       // Release that captured frame before consuming the fresh return state,
       // otherwise every language handoff after the first remains paused.
-      if (event.persisted) resetNavigationState();
+      if (event.persisted) {
+        resetNavigationState();
+        // The inline boot script is not rerun when the language gate comes from
+        // the back-forward cache. Re-arm the receiver before the restored frame
+        // is painted so every return behaves exactly like the first one.
+        if (readLanguageReturn()) {
+          document.documentElement.classList.add('gate-entrance-skip', 'language-return-boot');
+        }
+      }
       if (gateInitialStateHandled && !event.persisted) return;
       if (event.persisted) gateInitialStateHandled = false;
-      if (document.documentElement.classList.contains('language-bridge-return')) showLanguageArrival();
+      if (document.documentElement.classList.contains('language-return-boot')) showLanguageReturn();
       else showNaturalGateEntrance();
     } else {
       const projectState = readProjectTransition();
@@ -826,7 +912,7 @@
       if (navigationInProgress) return;
       navigationInProgress = true;
       const blurReady = waitForMotion(document.body, 'animationend', languageReturnPrepareDuration, 'language-hall-return-prep');
-      document.documentElement.classList.add('language-bridge-return-preparing');
+      document.documentElement.classList.add('language-return-loading');
       freezeNavigationSource();
       await Promise.allSettled([warmNavigationPage(link), blurReady]);
       sessionStorage.removeItem(pageTransitionKey);
@@ -834,26 +920,28 @@
 
       const centerX = window.innerWidth / 2;
       const centerY = (window.innerHeight / 2) - Math.min(76, window.innerHeight * .08);
-      const pupilRadius = Math.max(4, Math.min(8, Math.min(window.innerWidth, window.innerHeight) * .007));
       const coverRadius = Math.hypot(
         Math.max(centerX, window.innerWidth - centerX),
         Math.max(centerY, window.innerHeight - centerY)
       ) + 2;
+      const handoffRadius = Math.max(coverRadius * .52, 1);
       const rootStyle = document.documentElement.style;
       rootStyle.setProperty('--language-eye-x', `${centerX}px`);
       rootStyle.setProperty('--language-eye-y', `${centerY}px`);
       rootStyle.setProperty('--language-eye-body-y', `${window.scrollY + centerY}px`);
-      rootStyle.setProperty('--language-eye-pupil-radius', `${pupilRadius}px`);
+      rootStyle.setProperty('--language-eye-handoff-radius', `${handoffRadius}px`);
       rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
-      document.documentElement.classList.add('language-bridge-leaving');
-      document.documentElement.classList.remove('language-bridge-return-preparing');
-      await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-depart');
-      sessionStorage.setItem(languageBridgeKey, JSON.stringify({
-        version: 2,
-        direction: 'return',
+      sessionStorage.setItem(languageReturnKey, JSON.stringify({
+        version: 3,
+        x: centerX,
+        y: centerY,
+        coverRadius,
+        handoffRadius,
         path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
+      document.documentElement.classList.add('language-return-departing');
+      await waitForMotion(document.body, 'animationend', languageReturnDuration, 'language-return-collapse');
       window.location.assign(link.href);
     });
   });
