@@ -8,20 +8,21 @@ layout: portfolio-base
 <main class="internal-main internal-main--{{ page.section }}" id="main">
   <header class="internal-header">
     <h1>{{ section.title }}</h1>
-    {% if page.section == 'about' %}
-      <p class="internal-subtitle"><a href="https://www.instagram.com/danicr01/" rel="me">{{ section.subtitle }}</a></p>
-    {% endif %}
+    <p class="internal-subtitle">{% if page.section == 'about' %}<a href="https://www.instagram.com/danicr01/" rel="me">{{ section.subtitle }}</a>{% else %}{{ section.intro }}{% endif %}</p>
   </header>
   <div class="internal-copy">
     {% if page.section == 'about' %}
       {{ section.body | markdownify }}
       {% include about-process.html lang=page.lang alt=section.visual_alt %}
     {% else %}
-      <p class="internal-subtitle">{{ section.intro }}</p>
-      <div class="contact-links">
-        <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
-        <p><a href="tel:+34639218007">(+34) 639 218 007</a></p>
-        <p><a href="https://www.linkedin.com/in/danielcuervor/" rel="me">LinkedIn</a></p>
+      <div class="contact-card">
+        <span class="contact-card__signal" aria-hidden="true"></span>
+        <p class="contact-card__identity"><i aria-hidden="true"></i>@DANICR01</p>
+        <div class="contact-links">
+          <p><a href="mailto:danielcuervor01@gmail.com">danielcuervor01@gmail.com</a></p>
+          <p><a href="tel:+34639218007">(+34) 639 218 007</a></p>
+          <p><a href="https://www.linkedin.com/in/danielcuervor/" rel="me">LinkedIn</a></p>
+        </div>
       </div>
     {% endif %}
   </div>
