@@ -1951,6 +1951,16 @@ body.home-page > #main.portfolio-main { display: flex; }
 
 @media (hover: none), (pointer: coarse) {
   .hero-project.is-active .hero-project__interest { opacity: .72; transform: translate(-50%,0); }
+  .project-index-card:hover h2 {
+    color: var(--text);
+    letter-spacing: .09em;
+  }
+  .project-filter__options button:hover {
+    color: var(--filter-copy-dim);
+    background: transparent;
+    transform: none;
+  }
+  .project-filter__options button:hover > strong { letter-spacing: .17em; }
 }
 
 @media (hover: none), (pointer: coarse) {

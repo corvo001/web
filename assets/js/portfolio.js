@@ -1133,7 +1133,14 @@
       filter.open = false;
     };
 
-    buttons.forEach((button) => button.addEventListener('click', () => selectCategory(button)));
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      selectCategory(button);
+      if (window.matchMedia('(hover: none), (pointer: coarse)').matches) button.blur();
+    }));
+    filter.addEventListener('pointerup', (event) => {
+      if (event.pointerType !== 'touch') return;
+      window.requestAnimationFrame(() => event.target.closest('summary, button')?.blur());
+    }, { passive: true });
     filter.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
       filter.open = false;
