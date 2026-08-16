@@ -775,7 +775,7 @@ html.language-return-entering .reactive-mark__image {
 .nav-hover-locked .nav-links a:focus-visible, .nav-hover-locked .language-switch:focus-visible { color: var(--text); }
 .language-switch { justify-self: end; min-width: 2.4rem; font-family: var(--mono); text-align: center; }
 .language-switch::before {
-  left: 50%; top: 50%; bottom: auto; width: 2.7rem; height: 2.7rem;
+  content: ""; left: 50%; top: 50%; bottom: auto; width: 2.7rem; height: 2.7rem;
   border: 1px solid transparent; border-top-color: color-mix(in srgb,var(--accent) 58%,transparent); border-right-color: color-mix(in srgb,var(--text) 18%,transparent); border-radius: 50%;
   background: none; box-shadow: none; opacity: 0;
   transform: translate(-50%,-50%) rotate(-55deg) scale(.72); transform-origin: center;
@@ -783,7 +783,7 @@ html.language-return-entering .reactive-mark__image {
   transition: opacity 180ms ease, transform 620ms cubic-bezier(.16,1,.3,1);
 }
 .language-switch::after {
-  left: 50%; top: 50%; bottom: auto; width: 3px; height: 3px; border-radius: 50%;
+  content: ""; left: 50%; top: 50%; bottom: auto; width: 3px; height: 3px; border-radius: 50%;
   background: var(--accent); box-shadow: 0 0 5px rgba(130,181,152,.5); opacity: 0;
   transform: translate(-50%,-50%) rotate(-55deg) translateY(-1.35rem); transform-origin: center;
   transition: opacity 180ms ease, transform 620ms cubic-bezier(.16,1,.3,1);
