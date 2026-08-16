@@ -1439,7 +1439,7 @@ video.project-hero-image {
 }
 .project-video-controls {
   position: absolute; z-index: 4;
-  left: clamp(2.5rem,5vw,6rem); right: clamp(2.5rem,5vw,6rem); bottom: clamp(1.25rem,2.4vw,2.15rem);
+  left: clamp(2.5rem,5vw,6rem); right: clamp(2.5rem,5vw,6rem); bottom: clamp(2.35rem,3.4vw,3.25rem);
   display: grid; grid-template-columns: 2.5rem minmax(0,1fr) auto 2.5rem; align-items: center; gap: .75rem;
   min-height: 3.25rem; padding: .45rem .7rem;
   color: var(--text);
@@ -1594,7 +1594,7 @@ video.project-hero-image {
     background: linear-gradient(to bottom,var(--ink) 0,rgba(9,11,10,.32) 2.5%,transparent 9%,transparent 88%,rgba(4,6,5,.18) 95%,var(--ink) 100%);
   }
   .project-video-controls {
-    left: max(.8rem,env(safe-area-inset-left)); right: max(.8rem,env(safe-area-inset-right)); bottom: .72rem;
+    left: max(.8rem,env(safe-area-inset-left)); right: max(.8rem,env(safe-area-inset-right)); bottom: 1.15rem;
     grid-template-columns: 2.15rem minmax(0,1fr) auto 2.15rem; gap: .42rem;
     min-height: 2.8rem; padding: .3rem .42rem;
   }
@@ -2007,10 +2007,33 @@ body.home-page > #main.portfolio-main { display: flex; }
   .reactive-mark__image, .nav-logo img { filter: invert(1); }
   .reactive-mark__pupil { background: var(--accent); }
   .pupil-transition { border-color: var(--text); box-shadow: none; }
+  .project-hero-media::after {
+    background:
+      linear-gradient(to bottom,var(--ink) 0,rgba(243,244,239,.44) 3%,transparent 12%,transparent 94%,rgba(243,244,239,.24) 100%),
+      linear-gradient(to right,var(--ink) 0,rgba(243,244,239,.34) 2%,transparent 7%,transparent 93%,rgba(243,244,239,.34) 98%,var(--ink) 100%);
+  }
+  video.project-hero-image {
+    -webkit-mask-image:
+      linear-gradient(to right,transparent 0,#000 3%,#000 97%,transparent 100%),
+      linear-gradient(to bottom,transparent 0,#000 6%,#000 98%,transparent 100%);
+    mask-image:
+      linear-gradient(to right,transparent 0,#000 3%,#000 97%,transparent 100%),
+      linear-gradient(to bottom,transparent 0,#000 6%,#000 98%,transparent 100%);
+  }
   .home-page .portfolio-hero {
     --text: #eff2ed;
     --muted: #98a099;
     --accent: #82b598;
     color: var(--text);
+  }
+}
+
+@media (prefers-color-scheme: light) and (max-width: 700px) {
+  .project-hero-media::after {
+    background: linear-gradient(to bottom,var(--ink) 0,rgba(243,244,239,.36) 2.5%,transparent 9%,transparent 95%,rgba(243,244,239,.2) 100%);
+  }
+  video.project-hero-image {
+    -webkit-mask-image: linear-gradient(to bottom,transparent 0,#000 5%,#000 98%,transparent 100%);
+    mask-image: linear-gradient(to bottom,transparent 0,#000 5%,#000 98%,transparent 100%);
   }
 }
