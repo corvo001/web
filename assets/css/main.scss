@@ -784,9 +784,7 @@ html.language-bridge-return.language-bridge-returning .gate-inner {
   content: ""; position: absolute; z-index: 4; inset: 0; pointer-events: none;
   background:
     linear-gradient(to bottom, #070908 0, rgba(7,9,8,.96) .45rem, rgba(7,9,8,.55) 2.2rem, transparent clamp(4.5rem,8vh,7rem)),
-    linear-gradient(to top, #070908 0, rgba(7,9,8,.9) .55rem, rgba(7,9,8,.46) 2.4rem, transparent clamp(4rem,7vh,6.5rem)),
-    linear-gradient(to right, rgba(7,9,8,.94) 0, rgba(7,9,8,.42) 1.5rem, transparent clamp(3rem,6vw,6rem)),
-    linear-gradient(to left, rgba(7,9,8,.94) 0, rgba(7,9,8,.42) 1.5rem, transparent clamp(3rem,6vw,6rem));
+    linear-gradient(to top, #070908 0, rgba(7,9,8,.9) .55rem, rgba(7,9,8,.46) 2.4rem, transparent clamp(4rem,7vh,6.5rem));
 }
 .hero-project {
   position: absolute; inset: 0; display: block; overflow: hidden;
@@ -1500,6 +1498,12 @@ body.info-page > #main.internal-main {
   background: var(--ink);
 }
 body.home-page > #main.portfolio-main { display: flex; }
+@media (min-width: 701px) {
+  body.home-page {
+    --interface-frame-inline: 0rem;
+    --interface-frame-gap: 0rem;
+  }
+}
 .home-page .portfolio-hero {
   /* Compensate for the unequal visual weight of the fixed nav and footer.
      A viewport-relative lift keeps the same optical centre on desktop and mobile. */
