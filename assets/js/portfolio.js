@@ -3,7 +3,7 @@
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const languageBridgeKey = 'portfolio-language-bridge-v2';
-  const languageReturnKey = 'portfolio-language-return-v3';
+  const languageReturnKey = 'portfolio-language-return-v4';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
@@ -21,8 +21,7 @@
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
-  const languageReturnPrepareDuration = 560;
-  const languageReturnDuration = 920;
+  const languageReturnDuration = 1040;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -305,7 +304,7 @@
       const state = JSON.parse(sessionStorage.getItem(languageReturnKey) || 'null');
       const expectedPath = state?.path === window.location.pathname;
       const recent = Date.now() - Number(state?.startedAt || 0) < 10000;
-      return state?.version === 3 && expectedPath && recent ? state : null;
+      return state?.version === 4 && expectedPath && recent ? state : null;
     } catch (error) {
       return null;
     }
@@ -359,7 +358,7 @@
     navigationInProgress = false;
     languageArrivalPlaying = false;
     languageReturnPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-loading', 'language-return-departing', 'navigation-source-frozen');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-departing', 'navigation-source-frozen');
     releaseNavigationSource();
     if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-return-boot')) {
       ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-handoff-radius', '--language-eye-cover-radius'].forEach((property) => {
@@ -427,6 +426,9 @@
     sessionStorage.removeItem(languageReturnKey);
     document.documentElement.classList.remove('language-return-boot', 'language-return-entering', 'language-return-mode');
     document.documentElement.classList.add('gate-entrance-skip');
+    ['--language-return-start-x', '--language-return-start-y', '--language-return-start-radius'].forEach((property) => {
+      document.documentElement.style.removeProperty(property);
+    });
     languageReturnPlaying = false;
     navigationInProgress = false;
     eyeTrackingLocked = false;
@@ -911,10 +913,6 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      const blurReady = waitForMotion(document.body, 'animationend', languageReturnPrepareDuration, 'language-hall-return-prep');
-      document.documentElement.classList.add('language-return-loading');
-      freezeNavigationSource();
-      await Promise.allSettled([warmNavigationPage(link), blurReady]);
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
 
@@ -924,7 +922,7 @@
         Math.max(centerX, window.innerWidth - centerX),
         Math.max(centerY, window.innerHeight - centerY)
       ) + 2;
-      const handoffRadius = Math.max(coverRadius * .52, 1);
+      const handoffRadius = Math.max(coverRadius * .4, 1);
       const rootStyle = document.documentElement.style;
       rootStyle.setProperty('--language-eye-x', `${centerX}px`);
       rootStyle.setProperty('--language-eye-y', `${centerY}px`);
@@ -932,7 +930,7 @@
       rootStyle.setProperty('--language-eye-handoff-radius', `${handoffRadius}px`);
       rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
       sessionStorage.setItem(languageReturnKey, JSON.stringify({
-        version: 3,
+        version: 4,
         x: centerX,
         y: centerY,
         coverRadius,
@@ -940,8 +938,11 @@
         path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
+      freezeNavigationSource();
+      const gateReady = warmNavigationPage(link);
+      const departureReady = waitForMotion(document.body, 'animationend', languageReturnDuration, 'language-return-collapse');
       document.documentElement.classList.add('language-return-departing');
-      await waitForMotion(document.body, 'animationend', languageReturnDuration, 'language-return-collapse');
+      await Promise.allSettled([gateReady, departureReady]);
       window.location.assign(link.href);
     });
   });
