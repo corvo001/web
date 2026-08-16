@@ -1652,7 +1652,6 @@ body.home-page > #main.portfolio-main { display: flex; }
 .home-page .portfolio-hero {
   /* Compensate for the unequal visual weight of the fixed nav and footer.
      A viewport-relative lift keeps the same optical centre on desktop and mobile. */
-  --hall-frame-ink: #090b0a;
   --hall-copy-lift: clamp(1.35rem,3.6dvh,2.15rem);
   --hall-interest-lift: clamp(.45rem,1.1dvh,.7rem);
   --hall-control-lift: clamp(1.15rem,2.5dvh,1.55rem);
@@ -1860,15 +1859,11 @@ body.home-page > #main.portfolio-main { display: flex; }
     --interface-footer-size: clamp(4.25rem,9.5dvh,5rem);
   }
   body.home-page { --interface-frame-inline: 0rem; }
-  .home-page .hero-projects { background: var(--hall-frame-ink); }
-  .home-page .hero-projects::after {
-    background:
-      linear-gradient(to bottom,var(--hall-frame-ink) 0,color-mix(in srgb,var(--hall-frame-ink) 84%,transparent) 4%,transparent 11%),
-      linear-gradient(to top,var(--hall-frame-ink) 0,color-mix(in srgb,var(--hall-frame-ink) 84%,transparent) 4%,transparent 11%);
-  }
-  .home-page .hero-project__media {
-    -webkit-mask-image: linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);
-    mask-image: linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);
+  .home-page img.hero-project__media {
+    object-fit: contain;
+    object-position: center;
+    padding-inline: var(--page-pad);
+    transform: none;
   }
   .home-page .hero-project-controls { inset-inline: 0; }
   .home-page .project-control {
