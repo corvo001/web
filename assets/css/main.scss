@@ -1379,7 +1379,7 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
   backface-visibility: hidden; transform: translateZ(0);
 }
 video.project-hero-image {
-  object-fit: contain; background: transparent;
+  object-fit: cover; object-position: center bottom; background: transparent;
   -webkit-mask-image:
     linear-gradient(to right,transparent 0,#000 3%,#000 97%,transparent 100%),
     linear-gradient(to bottom,transparent 0,#000 6%,#000 94%,transparent 100%);
@@ -1389,6 +1389,11 @@ video.project-hero-image {
     linear-gradient(to bottom,transparent 0,#000 6%,#000 94%,transparent 100%);
   mask-composite: intersect;
 }
+.project-hero-media:fullscreen video.project-hero-image {
+  object-fit: contain; object-position: center; -webkit-mask-image: none; mask-image: none;
+}
+.project-hero-media:fullscreen::before,
+.project-hero-media:fullscreen::after { display: none; }
 .project-hero-image::-webkit-media-controls-timeline,
 .project-hero-image::-webkit-media-controls-volume-slider {
   accent-color: var(--accent);
