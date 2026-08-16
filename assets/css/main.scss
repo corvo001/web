@@ -1691,7 +1691,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   text-align: center;
 }
 .info-about-page .internal-header {
-  margin-bottom: clamp(2rem,4vw,3.5rem);
+  margin-bottom: clamp(1.15rem,2vw,1.5rem);
 }
 .info-about-page .internal-header h1 {
   margin: 1rem 0 0;
@@ -1700,7 +1700,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   transform: none;
 }
 .info-about-page .internal-subtitle {
-  margin: .65rem 0 0;
+  margin: clamp(1.55rem,2.4vw,2rem) 0 0;
   font-size: .72rem;
 }
 .info-about-page .internal-copy {
@@ -1871,9 +1871,9 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-about-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
   }
-  .info-about-page .internal-header { margin-bottom: clamp(2rem,8vw,3.5rem); }
+  .info-about-page .internal-header { margin-bottom: clamp(.85rem,2.2dvh,1.1rem); }
   .info-about-page .internal-header h1 { font-size: clamp(3rem,8vw,8rem); }
-  .info-about-page .internal-subtitle { margin-top: .65rem; font-size: .72rem; line-height: 1.35; }
+  .info-about-page .internal-subtitle { margin-top: clamp(1.25rem,3dvh,1.55rem); font-size: .72rem; line-height: 1.35; }
   .info-about-page .internal-copy { font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8; }
   .info-about-page .about-process {
     width: 100%; max-height: none;
