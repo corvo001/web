@@ -7,9 +7,6 @@
     <aside class="project-index__filters" aria-label="{{ t.work.filter }}">
       <details class="project-filter" data-project-filter data-project-filter-current="ALL">
         <summary aria-label="{{ t.work.filter }}">
-          <svg class="project-filter__frame" viewBox="0 0 64 84" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path class="project-filter__frame-base" d="M1 14 14 1H63V69L49 83H1Z"/>
-          </svg>
           <span class="visually-hidden">{{ t.work.filter }}</span>
           <span class="project-filter__trigger-label" data-project-filter-trigger-label>{{ t.work.all }}</span>
           <i class="project-filter__icon" aria-hidden="true"><b></b><b></b><b></b></i>
@@ -21,10 +18,10 @@
               <strong>{{ t.work.all }}</strong><i aria-hidden="true"></i>
             </button>
             <button type="button" data-project-filter-value="SOFTWARE" aria-pressed="false">
-              <strong>SOFTWARE</strong><i aria-hidden="true"></i>
+              <strong>{{ t.project.terms.SOFTWARE }}</strong><i aria-hidden="true"></i>
             </button>
             <button type="button" data-project-filter-value="HARDWARE" aria-pressed="false">
-              <strong>HARDWARE</strong><i aria-hidden="true"></i>
+              <strong>{{ t.project.terms.HARDWARE }}</strong><i aria-hidden="true"></i>
             </button>
           </div>
         </div>

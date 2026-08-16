@@ -910,45 +910,76 @@ html.language-return-entering .reactive-mark__image {
 .project-index__header h1 { margin: 0; font-size: clamp(3rem,8vw,8rem); font-weight: 300; letter-spacing: .05em; line-height: .85; }
 .project-index__body { max-width: 1500px; margin-inline: auto; }
 .project-index__filters {
-  position: fixed; z-index: 28; left: clamp(.85rem,1.6vw,1.5rem); top: 50%;
-  transform: translate3d(0,-50%,0); backface-visibility: hidden; will-change: transform;
+  position: fixed; z-index: 28; left: clamp(.8rem,1.45vw,1.35rem); top: 50%;
+  transform: translate3d(0,-50%,0); backface-visibility: hidden;
 }
 .project-filter {
-  position: relative; --filter-cut: .72rem; --filter-width: 4rem; --filter-height: 5.25rem;
+  --filter-rail-width: 5rem;
+  --filter-open-width: 13.25rem;
+  --filter-height: 7rem;
+  --filter-cut: .72rem;
+  position: relative; isolation: isolate; width: var(--filter-rail-width); height: var(--filter-height);
+  overflow: hidden; color: var(--accent);
+  transition: width 440ms cubic-bezier(.16,1,.3,1), filter 260ms ease;
+}
+.project-filter[open] { width: var(--filter-open-width); }
+.project-filter::before,
+.project-filter::after {
+  content: ""; position: absolute; pointer-events: none;
+  clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,calc(100% - .55rem) 0,100% .55rem,100% calc(100% - var(--filter-cut)),calc(100% - var(--filter-cut)) 100%,var(--filter-cut) 100%,0 calc(100% - var(--filter-cut)));
+}
+.project-filter::before {
+  z-index: -2; inset: 0;
+  background: color-mix(in srgb,var(--accent) 34%,var(--line));
+  opacity: .72;
+  transition: opacity 260ms ease, background 260ms ease;
+}
+.project-filter::after {
+  z-index: -1; inset: 1px;
+  background:
+    radial-gradient(circle at 0 50%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 36%),
+    linear-gradient(105deg,color-mix(in srgb,var(--surface) 74%,transparent),color-mix(in srgb,var(--surface) 38%,transparent) 52%,transparent 100%);
+}
+.project-filter:hover::before,
+.project-filter:focus-within::before,
+.project-filter[open]::before {
+  background: color-mix(in srgb,var(--accent) 52%,var(--line)); opacity: .9;
+}
+.project-index__filters::before {
+  content: ""; position: absolute; z-index: -3; right: calc(100% - .15rem); top: 50%; width: clamp(.8rem,1.45vw,1.35rem); height: 1px;
+  background: linear-gradient(90deg,transparent,color-mix(in srgb,var(--accent) 28%,transparent));
 }
 .project-filter summary {
-  position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; align-content: center; justify-items: center; gap: .48rem;
-  width: var(--filter-width); height: var(--filter-height); padding: .72rem .42rem .62rem;
+  position: absolute; z-index: 3; inset: 0 auto 0 0;
+  display: grid; grid-template-rows: auto 1fr; align-content: center; justify-items: center; gap: .58rem;
+  width: var(--filter-rail-width); height: 100%; padding: 1rem .55rem .78rem;
   color: var(--accent); list-style: none; cursor: pointer; overflow: hidden;
-  border: 0; background: color-mix(in srgb,var(--surface) 48%,transparent);
-  clip-path: polygon(0 var(--filter-cut),var(--filter-cut) 0,100% 0,100% calc(100% - var(--filter-cut)),calc(100% - var(--filter-cut)) 100%,0 100%);
-  box-shadow: none; transition: color 220ms ease, background 260ms ease;
+  border: 0; background: transparent;
+  transition: color 220ms ease, background 260ms ease;
 }
 .project-filter summary::-webkit-details-marker { display: none; }
-.project-filter summary > :not(.project-filter__frame) { position: relative; z-index: 2; }
-.project-filter__frame {
-  position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; pointer-events: none;
-}
-.project-filter__frame path {
-  vector-effect: non-scaling-stroke; stroke-linecap: square; stroke-linejoin: miter;
-  transition: opacity 240ms ease, stroke 240ms ease;
-}
-.project-filter__frame-base { stroke: color-mix(in srgb,var(--accent) 28%,var(--line)); opacity: .62; }
 .project-filter summary:hover,
 .project-filter summary:focus-visible,
 .project-filter[open] summary {
   color: var(--text); outline: none;
-  background: color-mix(in srgb,var(--surface) 66%,transparent);
+  background: linear-gradient(90deg,color-mix(in srgb,var(--accent) 5%,transparent),transparent 92%);
 }
-.project-filter summary:hover .project-filter__frame-base,
-.project-filter summary:focus-visible .project-filter__frame-base,
-.project-filter[open] .project-filter__frame-base { stroke: color-mix(in srgb,var(--accent) 52%,var(--line)); opacity: .84; }
+.project-filter[open] summary::after {
+  content: ""; position: absolute; right: 0; top: 1rem; bottom: 1rem; width: 1px;
+  background: linear-gradient(transparent,color-mix(in srgb,var(--accent) 32%,transparent) 22% 78%,transparent);
+}
 .project-filter__icon {
-  position: relative; align-self: center; display: grid; place-items: center; align-content: center; gap: .38rem; width: 1.15rem; min-height: 2.4rem;
+  position: relative; align-self: center; display: grid; place-items: center; align-content: space-between;
+  width: 1.25rem; height: 2.75rem; padding-block: .15rem;
+}
+.project-filter__icon::before {
+  content: ""; position: absolute; z-index: -1; left: 50%; top: .3rem; bottom: .3rem; width: 1px;
+  background: linear-gradient(transparent,color-mix(in srgb,currentColor 38%,transparent) 24% 76%,transparent);
+  transform: translateX(-50%);
 }
 .project-filter__icon b {
-  display: block; width: .34rem; aspect-ratio: 1;
-  border: 1px solid currentColor; background: transparent; transform: rotate(45deg);
+  display: block; width: .38rem; aspect-ratio: 1;
+  border: 1px solid currentColor; background: var(--surface); transform: rotate(45deg);
   transition: background 180ms ease, box-shadow 220ms ease, transform 360ms cubic-bezier(.16,1,.3,1), color 180ms ease;
 }
 .project-filter[data-project-filter-current="ALL"] .project-filter__icon b:nth-child(1),
@@ -958,45 +989,44 @@ html.language-return-entering .reactive-mark__image {
   box-shadow: 0 0 .42rem rgba(130,181,152,.34); transform: rotate(45deg) scale(.86);
 }
 .project-filter__trigger-label {
-  max-width: 100%; align-self: center; overflow: hidden; color: color-mix(in srgb,var(--muted) 88%,var(--accent)); font: 500 .44rem/1 var(--mono);
-  letter-spacing: .16em; text-indent: .16em; text-overflow: clip; white-space: nowrap; transform: translateY(.18rem);
+  max-width: 100%; align-self: center; overflow: hidden; color: color-mix(in srgb,var(--muted) 78%,var(--accent)); font: 500 .5rem/1 var(--mono);
+  letter-spacing: .19em; text-indent: .19em; text-overflow: clip; white-space: nowrap;
+  transition: color 220ms ease, letter-spacing 360ms cubic-bezier(.16,1,.3,1);
 }
+.project-filter[open] .project-filter__trigger-label { color: var(--accent); letter-spacing: .22em; }
 .project-filter__menu {
-  position: absolute; left: calc(100% + .65rem); top: 50%; width: 9.4rem;
-  padding: .35rem .28rem; overflow: hidden;
-  border: 0; border-left: 1px solid color-mix(in srgb,var(--accent) 34%,transparent);
-  background: color-mix(in srgb,var(--surface) 92%,transparent);
-  box-shadow: .7rem 1rem 2.2rem rgba(0,0,0,.18);
-  transform: translateY(-50%); transform-origin: left center;
-  animation: project-filter-panel-in 240ms cubic-bezier(.16,1,.3,1) both;
+  position: absolute; z-index: 2; left: var(--filter-rail-width); right: .35rem; top: 0; height: 100%;
+  display: grid; align-items: center; padding: .72rem .5rem .72rem .62rem; overflow: hidden;
+  border: 0; background: transparent;
+  transform-origin: left center;
+  animation: project-filter-panel-in 360ms 40ms cubic-bezier(.16,1,.3,1) both;
 }
-.project-filter__options { position: relative; z-index: 2; display: grid; }
+.project-filter__options { position: relative; z-index: 2; display: grid; align-content: center; gap: .16rem; }
 .project-filter__options button {
   position: relative; display: grid; grid-template-columns: minmax(0,1fr) .6rem; align-items: center; gap: .5rem;
-  min-height: 2.45rem; padding: 0 .45rem 0 .62rem; border: 0;
+  min-height: 2.7rem; padding: 0 .28rem 0 .7rem; border: 0;
   background: transparent; color: var(--muted); cursor: pointer; text-align: left;
   transition: color 180ms ease, transform 260ms cubic-bezier(.16,1,.3,1);
 }
-.project-filter__options button > strong { font: 500 .56rem/1 var(--mono); letter-spacing: .16em; transition: letter-spacing 220ms ease; }
+.project-filter__options button::before {
+  content: ""; position: absolute; left: 0; top: 50%; width: .32rem; height: 1px;
+  background: currentColor; opacity: .34; transform: translateY(-50%);
+}
+.project-filter__options button > strong { font: 500 .58rem/1 var(--mono); letter-spacing: .17em; transition: letter-spacing 220ms ease; }
 .project-filter__options button > i {
   width: .32rem; aspect-ratio: 1; justify-self: end; border: 1px solid currentColor; background: transparent; transform: rotate(45deg);
   transition: background 180ms ease, box-shadow 220ms ease;
 }
+.project-filter__options button[aria-pressed="true"] { display: none; }
 .project-filter__options button:hover,
 .project-filter__options button:focus-visible {
   color: var(--text); outline: none; transform: translateX(.12rem);
 }
 .project-filter__options button:hover > strong,
 .project-filter__options button:focus-visible > strong { letter-spacing: .18em; }
-.project-filter__options button[aria-pressed="true"] {
-  color: var(--accent);
-}
-.project-filter__options button[aria-pressed="true"] > i {
-  background: var(--accent); box-shadow: 0 0 .42rem rgba(130,181,152,.34);
-}
 @keyframes project-filter-panel-in {
-  from { opacity: 0; transform: translateY(-50%) translateX(-.25rem); }
-  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-.35rem); }
+  to { opacity: 1; clip-path: inset(0); transform: translateX(0); }
 }
 .project-index__grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(4.5rem,7vw,7rem) clamp(2rem,5vw,5rem); }
 .project-index-card {
@@ -1476,15 +1506,12 @@ html[lang="en"] .project-world-title::after { content: "INITIALIZING"; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
   .project-index__filters {
-    position: fixed; left: max(1rem,env(safe-area-inset-left)); top: calc(100dvh - 50svh - 2.625rem); bottom: auto;
-    width: 4rem; height: 5.25rem; margin: 0;
-    transform: translateZ(0); backface-visibility: hidden; will-change: auto;
+    position: fixed; left: max(.7rem,env(safe-area-inset-left)); top: 50svh; bottom: auto;
+    width: auto; height: auto; margin: 0;
+    transform: translate3d(0,-50%,0); backface-visibility: hidden;
   }
-
-  .project-filter summary { width: 4rem; height: 5.25rem; }
-  .project-filter__menu {
-    left: calc(100% + .65rem); top: 50%; bottom: auto;
-    width: min(9.4rem,calc(100vw - 6.5rem)); transform: translateY(-50%); transform-origin: left center;
+  .project-filter {
+    --filter-rail-width: 4.6rem; --filter-open-width: min(12.2rem,calc(100vw - 1.4rem)); --filter-height: 6.5rem;
   }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
   .project-index-card__visual, .project-index-card__info { width: 82%; }
