@@ -1862,7 +1862,9 @@ body.home-page > #main.portfolio-main { display: flex; }
   .home-page .hero-project .hero-project__media {
     object-fit: cover;
     object-position: center;
-    padding-inline: var(--page-pad);
+    padding-inline: 0;
+    -webkit-mask-image: linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
+    mask-image: linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
     transform: none;
   }
   .home-page .hero-project-controls { inset-inline: 0; }
