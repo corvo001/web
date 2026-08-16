@@ -1856,8 +1856,8 @@ body.home-page > #main.portfolio-main { display: flex; }
     --interface-footer-size: clamp(4.25rem,9.5dvh,5rem);
   }
   body.home-page { --interface-frame-inline: 0rem; }
-  .home-page img.hero-project__media {
-    object-fit: contain;
+  .home-page .hero-project .hero-project__media {
+    object-fit: cover;
     object-position: center;
     padding-inline: var(--page-pad);
     transform: none;
