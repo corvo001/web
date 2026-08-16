@@ -1723,13 +1723,13 @@ body.home-page > #main.portfolio-main { display: flex; }
   width: 100%; height: auto; max-height: none;
 }
 .info-contact-page .internal-main {
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  position: relative; display: block;
   padding: clamp(2rem,4.7dvh,2.75rem) var(--page-pad) 0;
   text-align: center;
 }
 .info-contact-page .internal-header {
-  margin-bottom: clamp(2.75rem,5vw,4.25rem);
-  transform: none;
+  position: absolute; inset-inline: var(--page-pad); top: clamp(1.6rem,3.7dvh,2.35rem);
+  width: auto; margin: 0; transform: none;
 }
 .info-contact-page .internal-header h1 {
   margin: 1rem 0 0;
@@ -1737,17 +1737,20 @@ body.home-page > #main.portfolio-main { display: flex; }
   line-height: normal;
 }
 .info-contact-page .internal-subtitle {
-  margin: .95rem 0 0;
+  position: absolute; left: 50%; bottom: calc(100% + clamp(.8rem,1.8dvh,1.15rem));
+  width: min(90vw,40rem); margin: 0; transform: translateX(-50%);
   font-size: .72rem;
 }
 .info-contact-page .internal-copy {
+  position: absolute; left: 50%; top: 50%; width: min(100%,52rem);
+  margin: 0; transform: translate(-50%,-50%);
   font-size: clamp(1rem,1.4vw,1.2rem);
   line-height: 1.8;
 }
 .info-contact-page .contact-links {
   gap: clamp(.15rem,.45dvh,.3rem);
 }
-.info-contact-page .contact-links p { margin: 1.15em 0; }
+.info-contact-page .contact-links p { margin: .55em 0; }
 .home-page .portfolio-footer,
 .info-page .portfolio-footer {
   flex: 0 0 var(--interface-footer-size);
@@ -1811,9 +1814,12 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-contact-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
   }
-  .info-contact-page .internal-header { margin-bottom: clamp(1.35rem,3.2dvh,1.75rem); }
+  .info-contact-page .internal-header { inset-inline: 1rem; top: clamp(1.5rem,3.5dvh,2rem); margin: 0; }
   .info-contact-page .internal-header h1 { font-size: clamp(3rem,8vw,8rem); }
-  .info-contact-page .internal-subtitle { margin-top: clamp(1.75rem,4.2dvh,2.15rem); font-size: .72rem; line-height: 1.35; }
+  .info-contact-page .internal-subtitle {
+    bottom: calc(100% + clamp(.65rem,1.7dvh,.95rem));
+    margin: 0; font-size: .72rem; line-height: 1.35;
+  }
   .info-contact-page .internal-copy { font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8; }
 }
 
