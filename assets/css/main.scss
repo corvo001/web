@@ -1841,9 +1841,11 @@ body.home-page > #main.portfolio-main { display: flex; }
   54%,100% { top: calc(100% - .87rem); opacity: 0; }
 }
 .home-page .portfolio-footer,
-.info-page .portfolio-footer {
-  flex: 0 0 var(--interface-footer-size);
-  height: var(--interface-footer-size); min-height: var(--interface-footer-size);
+.info-page .portfolio-footer,
+.work-page .portfolio-footer {
+  flex: 0 0 var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
+  height: var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
+  min-height: var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
   flex-direction: row; align-items: center;
   gap: 1rem; padding: 0 var(--page-pad);
   font-size: clamp(.54rem,min(.72vw,1.05dvh),.64rem);
@@ -1866,7 +1868,8 @@ body.home-page > #main.portfolio-main { display: flex; }
   .home-page .project-control:hover:not(:disabled),
   .home-page .project-control:focus-visible { background: rgba(9,11,10,.42); }
   .home-page .portfolio-footer,
-  .info-page .portfolio-footer {
+  .info-page .portfolio-footer,
+  .work-page .portfolio-footer {
     justify-content: space-between;
     gap: .75rem; padding-inline: 1rem;
     font-size: .5rem;
