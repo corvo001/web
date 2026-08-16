@@ -1611,20 +1611,6 @@ video.project-hero-image {
       linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 94%, var(--ink) 100%),
       linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
   }
-  .project-gallery .project-control {
-    background: rgba(2,3,2,.76);
-    color: color-mix(in srgb,var(--accent) 88%,var(--text));
-    -webkit-backdrop-filter: blur(7px) brightness(.52);
-    backdrop-filter: blur(7px) brightness(.52);
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb,var(--accent) 18%,transparent),
-      0 .35rem 1rem rgba(0,0,0,.32);
-  }
-  .project-gallery .project-chevron {
-    filter:
-      drop-shadow(0 0 1px rgba(0,0,0,.98))
-      drop-shadow(0 0 .28rem color-mix(in srgb,var(--accent) 72%,transparent));
-  }
   .about-process {
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
@@ -1879,13 +1865,25 @@ body.home-page > #main.portfolio-main { display: flex; }
     transform: none;
   }
   .home-page .hero-project-controls { inset-inline: 0; }
-  .home-page .project-control {
+  .home-page .project-control,
+  .project-gallery .project-control {
     width: 2.75rem;
     background: transparent;
+    color: color-mix(in srgb,var(--accent) 88%,var(--text));
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+  .home-page .project-chevron,
+  .project-gallery .project-chevron {
+    filter:
+      drop-shadow(0 0 1px rgba(0,0,0,.98))
+      drop-shadow(0 0 .28rem color-mix(in srgb,var(--accent) 72%,transparent));
+  }
   .home-page .project-control:hover:not(:disabled),
-  .home-page .project-control:focus-visible { background: rgba(9,11,10,.42); }
+  .home-page .project-control:focus-visible,
+  .project-gallery .project-control:hover:not(:disabled),
+  .project-gallery .project-control:focus-visible { background: rgba(9,11,10,.42); }
   .home-page .portfolio-footer,
   .info-page .portfolio-footer,
   .work-page .portfolio-footer {
