@@ -31,6 +31,46 @@
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
 
+  document.querySelectorAll('.about-process').forEach((process) => {
+    const svg = process.querySelector('.about-process__visual');
+    const cycleSignal = process.querySelector('.about-process__signal');
+    if (!svg || !cycleSignal || typeof svg.setCurrentTime !== 'function') return;
+
+    let timelineSyncing = false;
+    const resetMotionTimeline = () => {
+      if (timelineSyncing || reduceMotion.matches || document.hidden) return;
+      timelineSyncing = true;
+
+      try {
+        svg.pauseAnimations?.();
+        svg.setCurrentTime(0);
+        svg.unpauseAnimations?.();
+      } finally {
+        window.requestAnimationFrame(() => { timelineSyncing = false; });
+      }
+    };
+    const restartTimeline = () => {
+      if (reduceMotion.matches || document.hidden) return;
+      if (typeof process.getAnimations === 'function') {
+        process.getAnimations({ subtree: true }).forEach((animation) => {
+          try { animation.currentTime = 0; }
+          catch (error) { /* A detached animation can disappear between collection and reset. */ }
+        });
+      }
+      resetMotionTimeline();
+    };
+    const restartOnNextFrame = () => window.requestAnimationFrame(restartTimeline);
+
+    cycleSignal.addEventListener('animationiteration', resetMotionTimeline);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) restartOnNextFrame();
+    });
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) restartOnNextFrame();
+    });
+    restartOnNextFrame();
+  });
+
   const consumeResponse = async (response) => {
     const reader = response.body?.getReader();
     if (!reader) {
