@@ -916,7 +916,10 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .work-main { min-height: 100svh; padding-top: 4.7rem; }
 .project-index { padding: clamp(2rem,4vw,4rem) var(--page-pad) clamp(6rem,10vw,10rem); }
 .project-index__header { display: grid; place-items: center; min-height: clamp(9rem,16vw,13rem); padding-bottom: clamp(4rem,7vw,7rem); text-align: center; }
-.project-index__header h1 { margin: 0; font-size: clamp(3rem,8vw,8rem); font-weight: 300; letter-spacing: .05em; line-height: .85; }
+.project-index__header h1 {
+  margin: 0; font-size: clamp(3rem,8vw,8rem); font-weight: 300; letter-spacing: .05em; line-height: normal;
+  transform: translateY(.92rem);
+}
 .project-index__body { max-width: 1500px; margin-inline: auto; }
 .project-index__filters {
   position: fixed; z-index: 28; left: clamp(.8rem,1.45vw,1.35rem); top: 50%;
@@ -1559,9 +1562,9 @@ video.project-hero-image {
     padding-top: clamp(7.5rem, 18svh, 10rem);
     padding-bottom: clamp(7rem, 16svh, 9rem);
   }
-  .project-index { padding: 7rem 1rem 5rem; }
+  .project-index { padding: 3.2rem 1rem 5rem; }
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
-  .project-index__header h1 { font-size: clamp(2.6rem,12vw,4rem); }
+  .project-index__header h1 { font-size: clamp(3rem,8vw,8rem); }
   .project-index__filters {
     position: fixed; left: max(.7rem,env(safe-area-inset-left)); top: 50svh; bottom: auto;
     width: auto; height: auto; margin: 0;
