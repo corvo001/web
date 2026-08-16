@@ -52,7 +52,7 @@
     </script>
     {% endif %}
     {% if active_body_class == 'language-page' %}
-    <style>html.language-bridge-return{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-return body{animation:none}html.language-bridge-return::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
+    <style>html.language-bridge-return{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-return body{opacity:0;animation:none}html.language-bridge-return::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
     <script>
       try {
         const languageBridge = JSON.parse(sessionStorage.getItem('portfolio-language-bridge-v2') || 'null');

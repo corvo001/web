@@ -294,18 +294,6 @@
     window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
   });
 
-  const waitForGateLayout = async () => {
-    const waits = [];
-    if (document.fonts?.ready) {
-      waits.push(Promise.race([
-        document.fonts.ready,
-        new Promise((resolve) => window.setTimeout(resolve, 90))
-      ]));
-    }
-    await Promise.all(waits);
-    await nextPaint();
-  };
-
   const waitForMotion = (element, eventName, duration, propertyName = '') => new Promise((resolve) => {
     let settled = false;
     const finish = () => {
@@ -398,16 +386,10 @@
 
     gateInitialStateHandled = true;
     eyeTrackingLocked = true;
-    await waitForGateLayout();
-    if (!lockEyeAtRest()) {
-      finishLanguageArrival();
-      showNaturalGateEntrance();
-      return;
-    }
     document.documentElement.classList.remove('gate-natural-entry');
     await nextPaint();
     document.documentElement.classList.add('language-bridge-returning');
-    await waitForMotion(gate.querySelector('.gate-inner'), 'animationend', eyeDiveDuration, 'language-gate-focus');
+    await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
     finishLanguageArrival();
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
