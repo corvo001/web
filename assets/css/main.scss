@@ -927,8 +927,6 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   --filter-open-width: 13.25rem;
   --filter-height: 7rem;
   --filter-cut: .72rem;
-  --filter-surface: color-mix(in srgb,var(--surface) 20%,transparent);
-  --filter-surface-raised: color-mix(in srgb,var(--surface-raised) 28%,transparent);
   --filter-copy: color-mix(in srgb,var(--text) 68%,var(--muted));
   --filter-copy-dim: color-mix(in srgb,var(--muted) 84%,var(--ink));
   position: relative; isolation: isolate; width: var(--filter-rail-width); height: var(--filter-height);
@@ -957,11 +955,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-filter::after {
   z-index: -1; inset: 1px;
-  background:
-    radial-gradient(ellipse at 0 50%,color-mix(in srgb,var(--accent) 5%,transparent),transparent 52%),
-    linear-gradient(90deg,transparent,var(--filter-surface-raised) 14%,var(--filter-surface) 86%,transparent);
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb,var(--surface) 20%,transparent) 14% 86%,
+    transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--text) 1%,transparent);
-  backdrop-filter: blur(5px) saturate(.72);
 }
 .project-filter:hover::before,
 .project-filter:focus-within::before,
