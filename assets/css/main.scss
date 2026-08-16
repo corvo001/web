@@ -153,7 +153,7 @@ html.language-bridge-enter.language-bridge-entering::before {
 }
 html.language-return-loading body {
   pointer-events: none; overflow: hidden;
-  animation: language-hall-return-prep 240ms cubic-bezier(.2,.7,.3,1) both;
+  animation: language-hall-return-prep 560ms cubic-bezier(.2,.7,.3,1) both;
   will-change: opacity, filter;
 }
 html.language-return-departing body {
@@ -478,18 +478,19 @@ html.language-return-entering .reactive-mark__image {
   100% { opacity: 0; }
 }
 @keyframes language-hall-return-prep {
-  from { opacity: 1; filter: blur(0) saturate(1) brightness(1); }
-  to { opacity: .94; filter: blur(3px) saturate(.9) brightness(.84); }
+  0% { opacity: 1; filter: blur(0) saturate(1) brightness(1); }
+  42% { opacity: .88; filter: blur(3px) saturate(.9) brightness(.82); }
+  100% { opacity: .58; filter: blur(9px) saturate(.78) brightness(.56); }
 }
 @keyframes language-return-collapse {
   0% {
-    opacity: .94; filter: blur(3px) saturate(.9) brightness(.84);
+    opacity: .58; filter: blur(9px) saturate(.78) brightness(.56);
     clip-path: circle(var(--language-eye-cover-radius,100vmax) at var(--language-eye-x,50%) var(--language-eye-body-y,var(--language-eye-y,50%)));
   }
-  48% { opacity: .76; filter: blur(5px) saturate(.84) brightness(.74); }
-  82% { opacity: .22; filter: blur(8px) saturate(.76) brightness(.62); }
+  48% { opacity: .4; filter: blur(11px) saturate(.73) brightness(.48); }
+  82% { opacity: .12; filter: blur(14px) saturate(.68) brightness(.4); }
   100% {
-    opacity: 0; filter: blur(12px) saturate(.7) brightness(.5);
+    opacity: .02; filter: blur(16px) saturate(.64) brightness(.34);
     clip-path: circle(var(--language-eye-handoff-radius,52vmax) at var(--language-eye-x,50%) var(--language-eye-body-y,var(--language-eye-y,50%)));
   }
 }
@@ -547,9 +548,9 @@ html.language-return-entering .reactive-mark__image {
   to { opacity: 1; transform: none; }
 }
 @keyframes language-return-focus {
-  0% { opacity: .18; filter: blur(10px); }
-  45% { opacity: .7; filter: blur(6px); }
-  72% { opacity: 1; filter: blur(2px); }
+  0% { opacity: .04; filter: blur(14px); }
+  42% { opacity: .48; filter: blur(8px); }
+  74% { opacity: .9; filter: blur(2px); }
   100% { opacity: 1; filter: blur(0); }
 }
 @keyframes page-arrival { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

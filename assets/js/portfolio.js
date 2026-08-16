@@ -21,7 +21,7 @@
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
-  const languageReturnPrepareDuration = 260;
+  const languageReturnPrepareDuration = 560;
   const languageReturnDuration = 920;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
