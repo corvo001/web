@@ -927,18 +927,18 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   --filter-open-width: 13.25rem;
   --filter-height: 7rem;
   --filter-cut: .72rem;
-  --filter-surface: color-mix(in srgb,var(--ink) 94%,var(--surface) 6%);
-  --filter-surface-raised: color-mix(in srgb,var(--ink) 86%,var(--surface-raised) 14%);
-  --filter-copy: color-mix(in srgb,var(--text) 62%,var(--muted));
-  --filter-copy-dim: color-mix(in srgb,var(--muted) 74%,var(--ink));
+  --filter-surface: color-mix(in srgb,var(--surface) 20%,transparent);
+  --filter-surface-raised: color-mix(in srgb,var(--surface-raised) 28%,transparent);
+  --filter-copy: color-mix(in srgb,var(--text) 68%,var(--muted));
+  --filter-copy-dim: color-mix(in srgb,var(--muted) 84%,var(--ink));
   position: relative; isolation: isolate; width: var(--filter-rail-width); height: var(--filter-height);
   overflow: hidden; color: var(--filter-copy);
-  filter: drop-shadow(0 .65rem 1.4rem rgba(0,0,0,.18));
+  filter: drop-shadow(0 .45rem 1.1rem rgba(0,0,0,.1));
   transition: width 440ms cubic-bezier(.16,1,.3,1), filter 260ms ease;
 }
 .project-filter[open] {
   width: var(--filter-open-width);
-  filter: drop-shadow(0 .8rem 1.65rem rgba(0,0,0,.24));
+  filter: drop-shadow(0 .6rem 1.35rem rgba(0,0,0,.14));
 }
 .project-filter::before,
 .project-filter::after {
@@ -948,29 +948,30 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .project-filter::before {
   z-index: -2; inset: 0;
   background: linear-gradient(135deg,
-    color-mix(in srgb,var(--accent) 52%,transparent),
-    color-mix(in srgb,var(--text) 9%,transparent) 27%,
-    color-mix(in srgb,var(--accent) 15%,transparent) 66%,
-    color-mix(in srgb,var(--accent) 38%,transparent));
-  opacity: .62;
+    color-mix(in srgb,var(--accent) 36%,transparent),
+    color-mix(in srgb,var(--text) 5%,transparent) 29%,
+    color-mix(in srgb,var(--accent) 10%,transparent) 68%,
+    color-mix(in srgb,var(--accent) 28%,transparent));
+  opacity: .54;
   transition: opacity 260ms ease, background 260ms ease;
 }
 .project-filter::after {
   z-index: -1; inset: 1px;
   background:
-    radial-gradient(ellipse at 0 50%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 43%),
-    linear-gradient(108deg,var(--filter-surface-raised),var(--filter-surface) 58%,color-mix(in srgb,var(--filter-surface) 96%,var(--accent) 4%));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--text) 2%,transparent);
+    radial-gradient(ellipse at 0 50%,color-mix(in srgb,var(--accent) 5%,transparent),transparent 52%),
+    linear-gradient(90deg,transparent,var(--filter-surface-raised) 14%,var(--filter-surface) 86%,transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--text) 1%,transparent);
+  backdrop-filter: blur(5px) saturate(.72);
 }
 .project-filter:hover::before,
 .project-filter:focus-within::before,
 .project-filter[open]::before {
   background: linear-gradient(135deg,
-    color-mix(in srgb,var(--accent) 66%,transparent),
-    color-mix(in srgb,var(--text) 13%,transparent) 27%,
-    color-mix(in srgb,var(--accent) 22%,transparent) 66%,
-    color-mix(in srgb,var(--accent) 52%,transparent));
-  opacity: .82;
+    color-mix(in srgb,var(--accent) 46%,transparent),
+    color-mix(in srgb,var(--text) 7%,transparent) 29%,
+    color-mix(in srgb,var(--accent) 14%,transparent) 68%,
+    color-mix(in srgb,var(--accent) 36%,transparent));
+  opacity: .7;
 }
 .project-index__filters::before {
   content: ""; position: absolute; z-index: -3; right: calc(100% - .15rem); top: 50%; width: clamp(.8rem,1.45vw,1.35rem); height: 1px;
@@ -1006,7 +1007,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-filter__icon b {
   display: block; width: .38rem; aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb,currentColor 72%,transparent); background: var(--filter-surface); transform: rotate(45deg);
+  border: 1px solid color-mix(in srgb,currentColor 64%,transparent); background: transparent; transform: rotate(45deg);
   transition: background 180ms ease, box-shadow 220ms ease, transform 360ms cubic-bezier(.16,1,.3,1), color 180ms ease;
 }
 .project-filter[data-project-filter-current="ALL"] .project-filter__icon b:nth-child(1),
@@ -1041,8 +1042,13 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-filter__options button > strong { font: 500 .58rem/1 var(--mono); letter-spacing: .17em; transition: letter-spacing 220ms ease; }
 .project-filter__options button > i {
-  width: .32rem; aspect-ratio: 1; justify-self: end; border: 1px solid currentColor; background: var(--filter-surface); transform: rotate(45deg);
+  width: .32rem; aspect-ratio: 1; justify-self: end; border: 1px solid currentColor; background: transparent; transform: rotate(45deg);
   transition: background 180ms ease, box-shadow 220ms ease;
+}
+.project-filter__options button::after {
+  content: ""; position: absolute; left: .7rem; right: .12rem; top: 0; height: 1px;
+  background: linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent),color-mix(in srgb,var(--text) 4%,transparent) 42%,transparent 92%);
+  opacity: .7;
 }
 .project-filter__options button[aria-pressed="true"] { display: none; }
 .project-filter__options button:hover,
