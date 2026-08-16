@@ -3,13 +3,12 @@
   const mark = document.querySelector('[data-reactive-mark]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const languageBridgeKey = 'portfolio-language-bridge-v2';
-  const languageReturnKey = 'portfolio-language-return-v4';
+  const languageReturnKey = 'portfolio-language-return-v5';
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
   let eyeTrackingLocked = false;
   let languageArrivalPlaying = false;
-  let languageReturnPlaying = false;
   let gateInitialStateHandled = false;
   let archiveArrivalPlaying = false;
   let projectArrivalPlaying = false;
@@ -21,7 +20,7 @@
   let frozenNavigationStyleElements = [];
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
-  const languageReturnDuration = 1040;
+  const languageReturnStageDuration = 1320;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
   const projectArrivalDuration = 620;
@@ -299,41 +298,58 @@
     window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
   });
 
-  const readLanguageReturn = () => {
+  const readSettledLanguageReturn = () => {
     try {
       const state = JSON.parse(sessionStorage.getItem(languageReturnKey) || 'null');
       const expectedPath = state?.path === window.location.pathname;
       const recent = Date.now() - Number(state?.startedAt || 0) < 10000;
-      return state?.version === 4 && expectedPath && recent ? state : null;
+      return state?.version === 5 && state?.phase === 'settled' && expectedPath && recent ? state : null;
     } catch (error) {
       return null;
     }
   };
 
-  const waitForLanguageGate = async () => {
-    const image = mark?.querySelector('.reactive-mark__image');
-    const waits = [];
-    const deadline = (promise, duration = 2400) => Promise.race([
-      promise,
-      new Promise((resolve) => window.setTimeout(resolve, duration))
-    ]);
-    if (document.fonts?.ready) waits.push(deadline(document.fonts.ready.catch(() => {})));
-    if (image && (!image.complete || !image.naturalWidth)) {
-      waits.push(new Promise((resolve) => {
-        const finish = () => {
-          window.clearTimeout(timeout);
-          image.removeEventListener('load', finish);
-          image.removeEventListener('error', finish);
-          resolve();
-        };
-        const timeout = window.setTimeout(finish, 2400);
-        image.addEventListener('load', finish, { once: true });
-        image.addEventListener('error', finish, { once: true });
-      }));
-    }
-    await Promise.allSettled(waits);
-    if (image?.decode) await deadline(image.decode().catch(() => {}));
-    await nextPaint();
+  const createLanguageReturnStage = () => {
+    const stage = document.createElement('div');
+    const logoSource = document.querySelector('.nav-logo img')?.src || '/assets/images/logo-original-transparent.png?v=228737cd';
+    stage.className = 'language-return-stage';
+    stage.setAttribute('aria-hidden', 'true');
+    stage.innerHTML = `
+      <main class="language-return-stage__gate language-gate">
+        <div class="gate-inner">
+          <div class="reactive-mark eye-geometry-locked">
+            <img class="reactive-mark__image" alt="" decoding="sync">
+            <span class="reactive-mark__pupil"></span>
+          </div>
+          <nav class="language-options">
+            <a href="/es/" tabindex="-1"><span>Selecciona idioma</span><strong>ES</strong></a>
+            <span class="language-divider"></span>
+            <a href="/en/" tabindex="-1"><span>Select language</span><strong>EN</strong></a>
+          </nav>
+        </div>
+      </main>
+      <span class="language-return-stage__aperture"></span>`;
+    stage.querySelector('.reactive-mark__image').src = logoSource;
+    document.documentElement.appendChild(stage);
+    return stage;
+  };
+
+  const setLanguageReturnStageGeometry = (stage) => {
+    const stageMark = stage?.querySelector('.reactive-mark');
+    if (!stageMark) return false;
+    const markRect = stageMark.getBoundingClientRect();
+    const centerX = markRect.left + (markRect.width * .5);
+    const centerY = markRect.top + (markRect.height * (456.5 / 1024));
+    const pupilRadius = Math.max(markRect.width * .016, 1);
+    const coverRadius = Math.hypot(
+      Math.max(centerX, window.innerWidth - centerX),
+      Math.max(centerY, window.innerHeight - centerY)
+    ) + 2;
+    stage.style.setProperty('--language-return-stage-x', `${centerX}px`);
+    stage.style.setProperty('--language-return-stage-y', `${centerY}px`);
+    stage.style.setProperty('--language-return-stage-pupil-radius', `${pupilRadius}px`);
+    stage.style.setProperty('--language-return-stage-cover-radius', `${coverRadius}px`);
+    return true;
   };
 
   const waitForMotion = (element, eventName, duration, propertyName = '') => new Promise((resolve) => {
@@ -357,17 +373,17 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
-    languageReturnPlaying = false;
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-departing', 'navigation-source-frozen');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-staging', 'navigation-source-frozen');
     releaseNavigationSource();
-    if (!document.documentElement.classList.contains('language-bridge-enter') && !document.documentElement.classList.contains('language-return-boot')) {
-      ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-handoff-radius', '--language-eye-cover-radius'].forEach((property) => {
+    if (!document.documentElement.classList.contains('language-bridge-enter')) {
+      ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
         document.documentElement.style.removeProperty(property);
       });
     }
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
     document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
+    document.querySelectorAll('.language-return-stage').forEach((stage) => stage.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
   };
 
@@ -420,55 +436,6 @@
     await waitForMotion(document.body, 'animationend', eyeDiveDuration, 'language-hall-arrive');
     document.body.classList.add('page-arrival-complete');
     finishLanguageArrival();
-  };
-
-  const finishLanguageReturn = () => {
-    sessionStorage.removeItem(languageReturnKey);
-    document.documentElement.classList.remove('language-return-boot', 'language-return-entering', 'language-return-mode');
-    document.documentElement.classList.add('gate-entrance-skip');
-    ['--language-return-start-x', '--language-return-start-y', '--language-return-start-radius'].forEach((property) => {
-      document.documentElement.style.removeProperty(property);
-    });
-    languageReturnPlaying = false;
-    navigationInProgress = false;
-    eyeTrackingLocked = false;
-    mark?.classList.remove('eye-geometry-locked');
-  };
-
-  const showLanguageReturn = async () => {
-    const state = readLanguageReturn();
-    if (!gate || languageReturnPlaying || !document.documentElement.classList.contains('language-return-boot')) return;
-    if (reduceMotion.matches || !state) {
-      finishLanguageReturn();
-      return;
-    }
-
-    languageReturnPlaying = true;
-    gateInitialStateHandled = true;
-    navigationInProgress = false;
-    eyeTrackingLocked = true;
-    sessionStorage.removeItem(pageTransitionKey);
-    document.documentElement.classList.remove('page-transition-boot', 'gate-natural-entry');
-
-    // Keep the destination fully black until the real logo has decoded. The
-    // source frame can then hand its exact circle to this document in one motion.
-    await waitForLanguageGate();
-    const geometry = setPupilTransitionGeometry();
-    const transition = document.querySelector('[data-pupil-transition]');
-    if (!geometry || !transition) {
-      finishLanguageReturn();
-      return;
-    }
-    transition.style.setProperty('--pupil-start-x', `${Number(state.x) || (window.innerWidth / 2)}px`);
-    transition.style.setProperty('--pupil-start-y', `${Number(state.y) || (window.innerHeight / 2)}px`);
-    transition.style.setProperty('--pupil-start-radius', `${Math.max(Number(state.handoffRadius) || 1, 1)}px`);
-    transition.style.setProperty('--pupil-start-edge-opacity', '.96');
-
-    document.documentElement.classList.remove('language-return-boot', 'gate-entrance-skip');
-    document.documentElement.classList.add('language-return-mode', 'language-return-entering');
-    await waitForMotion(transition, 'animationend', languageReturnDuration, 'language-return-emerge');
-    finishLanguageReturn();
-    if (lastPointerPosition && updateEyeFromPointer) updateEyeFromPointer(lastPointerPosition.x, lastPointerPosition.y);
   };
 
   const readProjectTransition = () => {
@@ -779,15 +746,12 @@
       'gate-natural-entry',
       'gate-preparing',
       'gate-exiting',
-      'language-return-boot',
-      'language-return-entering',
-      'language-return-mode'
+      'language-return-settled'
     );
     document.body.classList.remove('gate-preparing', 'gate-exiting');
     document.documentElement.classList.add('gate-entrance-skip');
     eyeTrackingLocked = false;
     languageArrivalPlaying = false;
-    languageReturnPlaying = false;
     navigationInProgress = false;
     mark?.classList.remove('eye-geometry-locked');
   };
@@ -800,9 +764,7 @@
     sessionStorage.removeItem(languageBridgeKey);
     sessionStorage.removeItem(languageReturnKey);
     document.documentElement.classList.remove(
-      'language-return-boot',
-      'language-return-entering',
-      'language-return-mode',
+      'language-return-settled',
       'gate-entrance-skip',
       'gate-preparing',
       'gate-exiting'
@@ -832,17 +794,16 @@
       // otherwise every language handoff after the first remains paused.
       if (event.persisted) {
         resetNavigationState();
-        // The inline boot script is not rerun when the language gate comes from
-        // the back-forward cache. Re-arm the receiver before the restored frame
-        // is painted so every return behaves exactly like the first one.
-        if (readLanguageReturn()) {
-          document.documentElement.classList.add('gate-entrance-skip', 'language-return-boot');
+        if (readSettledLanguageReturn()) {
+          document.documentElement.classList.add('gate-entrance-skip', 'language-return-settled');
         }
       }
       if (gateInitialStateHandled && !event.persisted) return;
       if (event.persisted) gateInitialStateHandled = false;
-      if (document.documentElement.classList.contains('language-return-boot')) showLanguageReturn();
-      else showNaturalGateEntrance();
+      if (document.documentElement.classList.contains('language-return-settled')) {
+        gateInitialStateHandled = true;
+        showResolvedGate();
+      } else showNaturalGateEntrance();
     } else {
       const projectState = readProjectTransition();
       if (projectState?.phase === 'enter' && document.querySelector('[data-project-hero]')) {
@@ -915,34 +876,24 @@
       navigationInProgress = true;
       sessionStorage.removeItem(pageTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
-
-      const centerX = window.innerWidth / 2;
-      const centerY = (window.innerHeight / 2) - Math.min(76, window.innerHeight * .08);
-      const coverRadius = Math.hypot(
-        Math.max(centerX, window.innerWidth - centerX),
-        Math.max(centerY, window.innerHeight - centerY)
-      ) + 2;
-      const handoffRadius = Math.max(coverRadius * .4, 1);
-      const rootStyle = document.documentElement.style;
-      rootStyle.setProperty('--language-eye-x', `${centerX}px`);
-      rootStyle.setProperty('--language-eye-y', `${centerY}px`);
-      rootStyle.setProperty('--language-eye-body-y', `${window.scrollY + centerY}px`);
-      rootStyle.setProperty('--language-eye-handoff-radius', `${handoffRadius}px`);
-      rootStyle.setProperty('--language-eye-cover-radius', `${coverRadius}px`);
+      const gateReady = warmNavigationPage(link);
+      const stage = createLanguageReturnStage();
+      await nextPaint();
+      if (!setLanguageReturnStageGeometry(stage)) {
+        stage.remove();
+        window.location.assign(link.href);
+        return;
+      }
+      freezeNavigationSource();
+      const departureReady = waitForMotion(document.body, 'animationend', languageReturnStageDuration, 'language-return-source-v5');
+      document.documentElement.classList.add('language-return-staging');
+      await Promise.allSettled([gateReady, departureReady]);
       sessionStorage.setItem(languageReturnKey, JSON.stringify({
-        version: 4,
-        x: centerX,
-        y: centerY,
-        coverRadius,
-        handoffRadius,
+        version: 5,
+        phase: 'settled',
         path: new URL(link.href, window.location.href).pathname,
         startedAt: Date.now()
       }));
-      freezeNavigationSource();
-      const gateReady = warmNavigationPage(link);
-      const departureReady = waitForMotion(document.body, 'animationend', languageReturnDuration, 'language-return-collapse');
-      document.documentElement.classList.add('language-return-departing');
-      await Promise.allSettled([gateReady, departureReady]);
       window.location.assign(link.href);
     });
   });

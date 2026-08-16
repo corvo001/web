@@ -52,32 +52,29 @@
     </script>
     {% endif %}
     {% if active_body_class == 'language-page' %}
-    <style>html.language-return-boot{background:#000;color-scheme:dark;overflow:hidden}html.language-return-boot body{visibility:hidden;animation:none}html.language-return-boot::after{content:"";position:fixed;z-index:2147483647;left:var(--language-return-start-x,50%);top:var(--language-return-start-y,50%);width:calc(var(--language-return-start-radius,40vmax)*2);height:calc(var(--language-return-start-radius,40vmax)*2);border:clamp(4px,.48vw,7px) solid #78ad8d;border-radius:50%;opacity:.96;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 1px rgba(205,239,217,.72),0 0 14px rgba(137,202,163,.76),0 0 34px rgba(91,154,118,.42),inset 0 0 13px rgba(174,223,193,.62)}</style>
     <script>
       try {
-        const languageReturn = JSON.parse(sessionStorage.getItem('portfolio-language-return-v4') || 'null');
-        const returningFromPortfolio = languageReturn?.version === 4 &&
+        sessionStorage.removeItem('portfolio-language-return-v4');
+        const languageReturn = JSON.parse(sessionStorage.getItem('portfolio-language-return-v5') || 'null');
+        const returningFromPortfolio = languageReturn?.version === 5 &&
+          languageReturn?.phase === 'settled' &&
           languageReturn?.path === window.location.pathname &&
           Date.now() - Number(languageReturn?.startedAt || 0) < 10000 &&
           !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (returningFromPortfolio) {
-          document.documentElement.style.setProperty('--language-return-start-x', `${Number(languageReturn.x) || (window.innerWidth / 2)}px`);
-          document.documentElement.style.setProperty('--language-return-start-y', `${Number(languageReturn.y) || (window.innerHeight / 2)}px`);
-          document.documentElement.style.setProperty('--language-return-start-radius', `${Math.max(Number(languageReturn.handoffRadius) || 1,1)}px`);
-          document.documentElement.classList.add('gate-entrance-skip', 'language-return-boot');
+          document.documentElement.classList.add('gate-entrance-skip', 'language-return-settled');
           window.setTimeout(() => {
-            if (!document.documentElement.classList.contains('language-return-boot')) return;
-            document.documentElement.classList.remove('language-return-boot', 'language-return-entering');
+            if (!document.documentElement.classList.contains('language-return-settled')) return;
+            document.documentElement.classList.remove('language-return-settled');
             document.documentElement.classList.add('gate-entrance-skip');
-            ['--language-return-start-x','--language-return-start-y','--language-return-start-radius'].forEach((property) => document.documentElement.style.removeProperty(property));
-            sessionStorage.removeItem('portfolio-language-return-v4');
+            sessionStorage.removeItem('portfolio-language-return-v5');
           }, 8000);
         } else {
-          sessionStorage.removeItem('portfolio-language-return-v4');
+          sessionStorage.removeItem('portfolio-language-return-v5');
           document.documentElement.classList.add('gate-natural-entry');
         }
       } catch (error) {
-        sessionStorage.removeItem('portfolio-language-return-v4');
+        sessionStorage.removeItem('portfolio-language-return-v5');
         document.documentElement.classList.add('gate-natural-entry');
       }
     </script>
