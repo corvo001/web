@@ -1607,6 +1607,19 @@ video.project-hero-image {
       linear-gradient(to bottom, var(--ink) 0, transparent 5%, transparent 94%, var(--ink) 100%),
       linear-gradient(to right, var(--ink) 0, transparent 9%, transparent 91%, var(--ink) 100%);
   }
+  .project-gallery .project-control {
+    width: 3rem;
+    border: 1px solid color-mix(in srgb,var(--accent) 42%,rgba(255,255,255,.12));
+    background: rgba(4,6,5,.78);
+    color: color-mix(in srgb,var(--accent) 82%,#dce8e1);
+    box-shadow: 0 .4rem 1.25rem rgba(0,0,0,.48), inset 0 0 0 1px rgba(0,0,0,.28);
+    backdrop-filter: blur(8px) saturate(.72);
+  }
+  .project-gallery .project-chevron {
+    width: .82rem;
+    border-width: 1.5px;
+    filter: drop-shadow(0 0 .28rem rgba(130,181,152,.48));
+  }
   .about-process {
     margin-top: max(0px, calc(clamp(.5rem, 1.5vw, 1rem) - 3px));
   }
