@@ -25,7 +25,7 @@
     </script>
     {% endunless %}
     {% if active_body_class == 'home-page' %}
-    <style>html.language-bridge-enter{background:#000;color-scheme:dark;overflow:hidden}html.language-bridge-enter body{opacity:0;animation:none}html.language-bridge-enter::before{content:"";position:fixed;z-index:2147483646;inset:0;background:#000;pointer-events:none}</style>
+    <style>html.language-bridge-enter{--language-bridge-critical-ink:#090b0a;background:var(--language-bridge-critical-ink);color-scheme:dark;overflow:hidden}html.language-bridge-enter body{opacity:0;animation:none}html.language-bridge-enter::before{content:"";position:fixed;z-index:2147483646;inset:0;background:var(--language-bridge-critical-ink);pointer-events:none}@media(prefers-color-scheme:light){html.language-bridge-enter{--language-bridge-critical-ink:#f3f4ef;color-scheme:light}}</style>
     <script>
       try {
         const languageBridge = JSON.parse(sessionStorage.getItem('portfolio-language-bridge-v2') || 'null');

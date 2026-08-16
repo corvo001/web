@@ -130,10 +130,10 @@ html.page-transition-boot .portfolio-shell.page-arriving {
 }
 .portfolio-shell.page-arrival-complete:not(.page-leaving):not(.page-arriving) { animation: none; }
 html.language-bridge-enter,
-html.language-return-staging { background: #000; overflow: hidden; }
+html.language-return-staging { background: var(--ink); overflow: hidden; }
 html.language-bridge-enter::before {
   content: ""; position: fixed; z-index: 2147483646; inset: 0;
-  background: #000; pointer-events: none; opacity: 1;
+  background: var(--ink); pointer-events: none; opacity: 1;
   transform: translateZ(0); backface-visibility: hidden;
   will-change: opacity, clip-path;
 }
@@ -374,7 +374,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 
 .pupil-transition {
   position: fixed; z-index: 100; inset: 0;
-  background: #000;
+  background: var(--ink);
   opacity: 0; pointer-events: none;
   clip-path: circle(0 at var(--pupil-x,50%) var(--pupil-y,50%));
   will-change: clip-path, opacity;
