@@ -2013,13 +2013,4 @@ body.home-page > #main.portfolio-main { display: flex; }
     --accent: #82b598;
     color: var(--text);
   }
-  .home-page .portfolio-nav {
-    background: linear-gradient(to bottom, #070908 0, rgba(7,9,8,.98) 68%, rgba(7,9,8,.92) 100%);
-    box-shadow: 0 1px 0 rgba(239,242,237,.12), 0 .85rem 1.8rem rgba(2,3,2,.34);
-  }
-  .home-page .interface-divider { --divider-line: rgba(239,242,237,.14); --divider-accent: #82b598; }
-  .home-page .nav-logo img { filter: none; }
-  .home-page .nav-links a, .home-page .language-switch { color: #c3c9c3; }
-  .home-page .nav-links a:hover, .home-page .nav-links a:focus-visible, .home-page .language-switch:hover { color: #eff2ed; }
-  .home-page .nav-hover-locked .nav-links a:hover, .home-page .nav-hover-locked .language-switch:hover { color: #c3c9c3; }
 }
