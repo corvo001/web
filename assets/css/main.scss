@@ -1757,10 +1757,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .contact-card {
   position: relative; isolation: isolate; width: min(52rem,82vw);
   padding: clamp(1.45rem,2.8dvh,1.9rem) 2.25rem; overflow: hidden;
-  background: linear-gradient(90deg,
-    transparent,
-    color-mix(in srgb,var(--surface) 20%,transparent) 14% 86%,
-    transparent);
+  background: transparent;
 }
 .contact-card::before,
 .contact-card::after {
