@@ -735,35 +735,37 @@ html.language-return-entering .reactive-mark__image {
   transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y)));
   transition: transform 120ms cubic-bezier(.22,1,.36,1), background 180ms ease, box-shadow 180ms ease; pointer-events: none;
 }
-.nav-links { display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
+.nav-links { position: relative; z-index: 3; display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
 .nav-links a, .language-switch {
   position: relative;
   color: var(--muted); font-size: .78rem; font-weight: 500; letter-spacing: .07em;
   text-decoration: none; text-transform: uppercase;
   transition: color 180ms ease, letter-spacing 420ms cubic-bezier(.16,1,.3,1), transform 300ms cubic-bezier(.16,1,.3,1);
 }
-.nav-links a::before, .language-switch::before {
-  content: ""; position: absolute; left: 50%; bottom: -.72rem; width: 1px; height: .34rem;
-  background: var(--accent); opacity: 0; transform: translate(-50%,.18rem) scaleY(.25); transform-origin: top;
-  box-shadow: 0 0 5px rgba(130,181,152,.35);
-  transition: opacity 160ms ease, transform 360ms cubic-bezier(.16,1,.3,1);
+.nav-links a::before {
+  content: ""; position: absolute; left: 50%; bottom: -1.38rem; width: 4.25rem; height: .72rem;
+  background: linear-gradient(90deg,transparent 0,color-mix(in srgb,var(--accent) 42%,transparent) 22%,var(--accent) 50%,color-mix(in srgb,var(--accent) 42%,transparent) 78%,transparent 100%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 66 10'%3E%3Cpath d='M1 7C13 7 17 7 22 6C27 5 28.5 2 33 2S39 5 44 6C49 7 53 7 65 7' fill='none' stroke='black' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 66 10'%3E%3Cpath d='M1 7C13 7 17 7 22 6C27 5 28.5 2 33 2S39 5 44 6C49 7 53 7 65 7' fill='none' stroke='black' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+  opacity: 0; transform: translateX(-50%) scaleX(.28); transform-origin: center 70%;
+  filter: drop-shadow(0 0 2px rgba(130,181,152,.18));
+  transition: opacity 180ms ease, transform 560ms cubic-bezier(.16,1,.3,1), filter 420ms ease;
 }
-.nav-links a::after, .language-switch::after {
-  content: ""; position: absolute; left: 50%; bottom: -.4rem; width: 2.6rem; height: 1px;
-  background: linear-gradient(90deg,transparent,var(--accent),transparent); opacity: 0;
-  transform: translateX(-50%) scaleX(.08); transform-origin: center;
-  transition: opacity 160ms ease, transform 480ms cubic-bezier(.16,1,.3,1);
+.nav-links a::after {
+  content: ""; position: absolute; left: 50%; bottom: -1.02rem; width: 1.15rem; height: .28rem;
+  border-radius: 50%; background: radial-gradient(ellipse at center,color-mix(in srgb,var(--accent) 52%,transparent),transparent 72%);
+  opacity: 0; transform: translateX(-50%) scale(.35); filter: blur(1.8px);
+  transition: opacity 240ms ease 70ms, transform 620ms cubic-bezier(.16,1,.3,1) 40ms;
 }
 .nav-links a:hover, .nav-links a:focus-visible, .language-switch:hover, .language-switch:focus-visible {
   color: var(--text); letter-spacing: .105em; transform: translateY(-1px);
 }
-.nav-links a:hover::before, .nav-links a:focus-visible::before,
-.language-switch:hover::before, .language-switch:focus-visible::before {
-  opacity: .9; transform: translate(-50%,0) scaleY(1);
+.nav-links a:hover::before, .nav-links a:focus-visible::before {
+  opacity: .78; transform: translateX(-50%) scaleX(1);
+  filter: drop-shadow(0 0 3px rgba(130,181,152,.34));
 }
-.nav-links a:hover::after, .nav-links a:focus-visible::after,
-.language-switch:hover::after, .language-switch:focus-visible::after {
-  opacity: .5; transform: translateX(-50%) scaleX(1);
+.nav-links a:hover::after, .nav-links a:focus-visible::after {
+  opacity: .62; transform: translateX(-50%) scale(1);
 }
 .nav-logo:hover::before, .nav-logo:focus-visible::before { opacity: 1; transform: rotate(125deg) scale(1); }
 .nav-logo:hover img, .nav-logo:focus-visible img { transform: scale(1.045); }
