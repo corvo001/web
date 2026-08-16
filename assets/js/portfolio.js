@@ -1000,6 +1000,10 @@
     let active = coverIndex >= 0 ? coverIndex : 0;
     let historyIndex = 0;
     let scrollSoftenTimer = 0;
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    let swipeTracking = false;
+    let suppressProjectClickUntil = 0;
     const history = [active];
     const controls = projects.parentElement?.querySelector('.hero-project-controls');
     const previous = controls?.querySelector('[data-home-project-previous]');
@@ -1067,6 +1071,34 @@
     show(active);
     previous?.addEventListener('click', choosePrevious);
     next?.addEventListener('click', chooseNext);
+    projects.addEventListener('touchstart', (event) => {
+      if (event.touches.length !== 1) {
+        swipeTracking = false;
+        return;
+      }
+      swipeStartX = event.touches[0].clientX;
+      swipeStartY = event.touches[0].clientY;
+      swipeTracking = true;
+    }, { passive: true });
+    projects.addEventListener('touchend', (event) => {
+      if (!swipeTracking || !event.changedTouches.length) return;
+      swipeTracking = false;
+      const deltaX = event.changedTouches[0].clientX - swipeStartX;
+      const deltaY = event.changedTouches[0].clientY - swipeStartY;
+      if (Math.abs(deltaX) < 44 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+
+      suppressProjectClickUntil = performance.now() + 420;
+      if (deltaX < 0) chooseNext();
+      else choosePrevious();
+    }, { passive: true });
+    projects.addEventListener('touchcancel', () => {
+      swipeTracking = false;
+    }, { passive: true });
+    projects.addEventListener('click', (event) => {
+      if (performance.now() >= suppressProjectClickUntil) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
     projects.addEventListener('wheel', softenDuringScroll, { passive: true });
     projects.addEventListener('touchmove', softenDuringScroll, { passive: true });
   });
