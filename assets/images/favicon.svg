@@ -1,16 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <style>
-    :root { color: #101311; }
-    @media (prefers-color-scheme: dark) { :root { color: #f7f9f6; } }
-  </style>
-  <g fill="none" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 3v9M21 7l3.5 7M43 7l-3.5 7M13 13l6 5M51 13l-6 5"/>
-    <path d="M7 25c7.5-9 15.8-13.5 25-13.5S49.5 16 57 25c-7.5 9-15.8 13.5-25 13.5S14.5 34 7 25Z"/>
-    <circle cx="32" cy="25" r="7.2"/>
-    <circle cx="32" cy="25" r="2.5" fill="currentColor" stroke="none"/>
-    <path d="M18 35v8M32 38v5M46 35v8"/>
-    <path d="M18 41c-7 5-5 13 0 18 5-5 7-13 0-18ZM18 44v12M18 48l-4-3M18 51l4-4M18 54l-3 2"/>
-    <path d="M32 41c-8 6-7 15 0 20 7-5 8-14 0-20ZM32 44v14M32 48l-5-4M32 52l5-5M32 56l-4 3"/>
-    <path d="M46 41c-7 5-5 13 0 18 5-5 7-13 0-18ZM46 44v12M46 48l-4-3M46 51l4-4M46 54l-3 2"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#090b0a"/>
+  <rect x="2.75" y="2.75" width="58.5" height="58.5" rx="13.25" fill="none" stroke="#82b598" stroke-opacity=".32" stroke-width="1.5"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 10v7M20.5 13.5l3.2 5.6M43.5 13.5l-3.2 5.6" stroke="#82b598" stroke-width="3"/>
+    <path d="M8.5 34c6.4-8.6 14.2-12.9 23.5-12.9S49.1 25.4 55.5 34C49.1 42.6 41.3 46.9 32 46.9S14.9 42.6 8.5 34Z" stroke="#eff2ed" stroke-width="3.6"/>
+    <circle cx="32" cy="34" r="8.4" stroke="#eff2ed" stroke-width="3.4"/>
   </g>
+  <circle cx="32" cy="34" r="3.1" fill="#82b598"/>
 </svg>
