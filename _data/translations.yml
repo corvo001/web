@@ -20,9 +20,9 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "@danicr01"
+    subtitle: "¿DISEÑO TECNOLÓGICO?"
     body: |
-      Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. Exploro ideas, y las hago reales.
+      Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. ¿Tienes una idea? Te la hago real.
     visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
   contact:
     title: "CONTACTO"
@@ -53,7 +53,7 @@ en:
     contact: "CONTACT"
   gate_prompt: "Select a language"
   hero:
-    eyebrow: "Software · Industrial robotics"
+    eyebrow: "TECHNOLOGICAL DESIGN"
     interest: "INTERESTED?"
   work:
     title: "PROJECTS"
@@ -66,9 +66,9 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "@danicr01"
+    subtitle: "TECHNOLOGICAL DESIGN?"
     body: |
-      I’m Daniel Cuervo and I work in **technological creativity**. I explore ideas, and make them real.
+      I’m Daniel Cuervo and I work in **technological creativity**. Got an idea? I’ll make it real.
     visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
   contact:
     title: "CONTACT"
