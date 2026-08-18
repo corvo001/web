@@ -1051,7 +1051,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
-  position: relative; isolation: isolate; width: 72%; aspect-ratio: 1; margin-inline: auto; overflow: hidden;
+  position: relative; isolation: isolate; width: min(80%,23rem); aspect-ratio: 3/2; margin-inline: auto; overflow: hidden;
   background: #080a09; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
   transition: transform 720ms cubic-bezier(.16,1,.3,1), filter 420ms ease;
 }
@@ -1062,8 +1062,8 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .project-index-card__visual::before {
   z-index: 1;
   background:
-    radial-gradient(circle at 50% 50%, rgba(7,10,8,.08) 0 12%, rgba(7,10,8,.46) 66%, rgba(7,10,8,.82) 100%),
-    linear-gradient(135deg, rgba(255,255,255,.025), transparent 42% 58%, rgba(0,0,0,.14));
+    radial-gradient(ellipse at 50% 50%, rgba(7,10,8,.04) 0 18%, rgba(7,10,8,.32) 70%, rgba(7,10,8,.68) 100%),
+    linear-gradient(135deg, rgba(255,255,255,.025), transparent 42% 58%, rgba(0,0,0,.1));
 }
 .project-index-card__visual::after {
   z-index: 2; opacity: .28;
@@ -1071,11 +1071,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index-card__media {
   position: relative; z-index: 0; width: 100%; height: 100%; display: block; object-fit: cover;
-  opacity: .34; filter: grayscale(.28) saturate(.48) brightness(.62) contrast(1.08); transform: scale(1.035);
+  opacity: .46; filter: grayscale(.18) saturate(.62) brightness(.72) contrast(1.06); transform: scale(1.015);
   transition: opacity 520ms ease, transform 900ms cubic-bezier(.16,1,.3,1), filter 620ms ease;
 }
 .project-index-card[data-project-id="dyson-swarm"] .project-index-card__media {
-  opacity: .44; filter: grayscale(.2) saturate(.5) brightness(1.12) contrast(.96);
+  opacity: .54; filter: grayscale(.14) saturate(.62) brightness(1.15) contrast(.96);
 }
 .project-index-card__frame {
   position: absolute; z-index: 3; inset: 0; width: 100%; height: 100%; overflow: visible;
@@ -1085,14 +1085,14 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .project-index-card__frame-outer { stroke: currentColor; stroke-width: .65; opacity: .32; }
 .project-index-card__frame-inner { stroke: currentColor; stroke-width: .4; stroke-dasharray: 1.5 3.5; opacity: .1; }
 .project-index-card__lock {
-  position: absolute; z-index: 4; left: 50%; top: 50%; width: 1.05rem; aspect-ratio: 1;
+  position: absolute; z-index: 4; left: 50%; top: 50%; width: .78rem; aspect-ratio: 1;
   border: 1px solid color-mix(in srgb,var(--capsule-accent) 76%,transparent); background: color-mix(in srgb,var(--capsule-accent) 7%,transparent);
   box-shadow: 0 0 .75rem color-mix(in srgb,var(--capsule-glow) 54%,transparent);
   transform: translate(-50%,-50%) rotate(45deg); pointer-events: none;
   transition: opacity 260ms ease, transform 520ms cubic-bezier(.16,1,.3,1), box-shadow 300ms ease;
 }
 .project-index-card__lock::before {
-  content: ""; position: absolute; inset: -.38rem; border: 1px solid color-mix(in srgb,var(--capsule-accent) 15%,transparent);
+  content: ""; position: absolute; inset: -.3rem; border: 1px solid color-mix(in srgb,var(--capsule-accent) 15%,transparent);
 }
 .project-index-card__lock::after {
   content: ""; position: absolute; inset: 39%; background: var(--capsule-core);
@@ -1101,11 +1101,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index-card:nth-child(2n) .project-index-card__lock,
 .project-index-card:nth-child(2n) .project-index-card__lock::after { animation-delay: -2.7s; }
-.project-index-card__info { width: 72%; margin-inline: auto; padding-top: 1.35rem; text-align: center; }
+.project-index-card__info { width: min(80%,23rem); margin-inline: auto; padding-top: 1.1rem; text-align: center; }
 .project-index-card__info span { display: block; margin-bottom: .72rem; color: var(--capsule-accent); font: 500 .59rem/1.3 var(--mono); letter-spacing: .18em; opacity: .78; }
 .project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.25rem,2.25vw,2.2rem); letter-spacing: .09em; transition: color 220ms ease, letter-spacing 520ms cubic-bezier(.16,1,.3,1); }
 .project-index-card__visual:hover .project-index-card__media, .project-index-card__visual.is-proximity-active .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
-  opacity: .88; transform: scale(1.075); filter: grayscale(0) saturate(.78) brightness(.78) contrast(1.08);
+  opacity: .9; transform: scale(1.04); filter: grayscale(0) saturate(.82) brightness(.82) contrast(1.06);
 }
 .project-index-card[data-project-id="dyson-swarm"] .project-index-card__visual:hover .project-index-card__media,
 .project-index-card[data-project-id="dyson-swarm"] .project-index-card__visual.is-proximity-active .project-index-card__media,
@@ -1548,7 +1548,9 @@ video.project-hero-image {
     --filter-closed-width: 6.875rem; --filter-open-width: min(17.5rem,calc(100vw - 1rem)); --filter-height: 2.6rem;
   }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
-  .project-index-card__visual, .project-index-card__info { width: 82%; }
+  .project-index-card__visual, .project-index-card__info { width: min(72vw,18rem); }
+  .project-index-card__media { opacity: .58; filter: grayscale(.1) saturate(.68) brightness(.78) contrast(1.04); }
+  .project-index-card[data-project-id="dyson-swarm"] .project-index-card__media { opacity: .62; filter: grayscale(.08) saturate(.68) brightness(1.16) contrast(.96); }
   .project-world-title {
     font-size: clamp(1.35rem, 6.8vw, 2rem); letter-spacing: .06em;
     backface-visibility: hidden;
