@@ -763,19 +763,20 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   opacity: 0; transform: translateX(-50%) scale(.35); filter: blur(1.8px);
   transition: opacity 240ms ease 70ms, transform 620ms cubic-bezier(.16,1,.3,1) 40ms;
 }
-.nav-links a:hover, .nav-links a:focus-visible, .language-switch:hover, .language-switch:focus-visible {
+.nav-links a:hover, .nav-links a:focus-visible, .nav-links a.is-touch-active,
+.language-switch:hover, .language-switch:focus-visible, .language-switch.is-touch-active {
   color: var(--text); letter-spacing: .105em; transform: translateY(-1px);
 }
-.nav-links a:hover::before, .nav-links a:focus-visible::before {
+.nav-links a:hover::before, .nav-links a:focus-visible::before, .nav-links a.is-touch-active::before {
   opacity: .78; transform: translateX(-50%) scaleX(1);
   filter: drop-shadow(0 0 3px rgba(130,181,152,.34));
 }
-.nav-links a:hover::after, .nav-links a:focus-visible::after {
+.nav-links a:hover::after, .nav-links a:focus-visible::after, .nav-links a.is-touch-active::after {
   opacity: .62; transform: translateX(-50%) scale(1);
 }
-.nav-logo:hover::before, .nav-logo:focus-visible::before { opacity: 1; transform: rotate(125deg) scale(1); }
-.nav-logo:hover img, .nav-logo:focus-visible img { transform: scale(1.045); }
-.nav-logo:hover::after, .nav-logo:focus-visible::after {
+.nav-logo:hover::before, .nav-logo:focus-visible::before, .nav-logo.is-touch-active::before { opacity: 1; transform: rotate(125deg) scale(1); }
+.nav-logo:hover img, .nav-logo:focus-visible img, .nav-logo.is-touch-active img { transform: scale(1.045); }
+.nav-logo:hover::after, .nav-logo:focus-visible::after, .nav-logo.is-touch-active::after {
   background: var(--accent); box-shadow: 0 0 4px rgba(130,181,152,.72);
   transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y))) scale(1.35);
 }
@@ -801,10 +802,10 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   transform: translate(-50%,-50%) rotate(-55deg) translateY(-1.35rem); transform-origin: center;
   transition: opacity 180ms ease, transform 620ms cubic-bezier(.16,1,.3,1); pointer-events: none;
 }
-.language-switch:hover::before, .language-switch:focus-visible::before {
+.language-switch:hover::before, .language-switch:focus-visible::before, .language-switch.is-touch-active::before {
   opacity: 1; transform: translate(-50%,-50%) rotate(125deg) scale(1);
 }
-.language-switch:hover::after, .language-switch:focus-visible::after {
+.language-switch:hover::after, .language-switch:focus-visible::after, .language-switch.is-touch-active::after {
   opacity: .78; transform: translate(-50%,-50%) rotate(125deg) translateY(-1.35rem);
 }
 
@@ -1545,24 +1546,7 @@ video.project-hero-image {
     transform: translate3d(-50%,0,0); backface-visibility: hidden;
   }
   .project-filter {
-    --filter-closed-width: 6.875rem; --filter-open-width: min(17.5rem,calc(100vw - 1rem)); --filter-height: 2.6rem;
-  }
-  .project-filter__options button { padding: 0 1.35rem 0 .7rem; }
-  .project-filter__options button::after {
-    content: ""; position: absolute; z-index: 1; left: .55rem; right: .55rem; top: .42rem; height: 1px;
-    background: linear-gradient(90deg,transparent,color-mix(in srgb,var(--filter-accent) 28%,transparent) 18% 82%,transparent);
-    opacity: .72; pointer-events: none;
-  }
-  .project-filter__options button > i {
-    display: block; position: absolute; z-index: 2; right: .58rem; top: 50%;
-    width: .32rem; aspect-ratio: 1; border: 1px solid color-mix(in srgb,var(--filter-accent) 62%,transparent);
-    border-radius: 50%; background: color-mix(in srgb,var(--filter-accent) 8%,transparent);
-    box-shadow: 0 0 .35rem color-mix(in srgb,var(--filter-accent) 18%,transparent);
-    transform: translateY(-50%); pointer-events: none;
-  }
-  .project-filter__options button:focus-visible > i,
-  .project-filter__options button:active > i {
-    background: var(--filter-accent); box-shadow: 0 0 .5rem color-mix(in srgb,var(--filter-accent) 48%,transparent);
+    --filter-closed-width: 7.375rem; --filter-open-width: min(18.5rem,calc(100vw - 1rem)); --filter-height: 2.7rem;
   }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
   .project-index-card__visual, .project-index-card__info { width: min(76vw,19rem); }
@@ -1963,27 +1947,32 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 
 @media (hover: none), (pointer: coarse) {
-  .portfolio-nav .nav-links a:hover,
-  .portfolio-nav .nav-links a:focus,
-  .portfolio-nav .nav-links a:focus-visible,
-  .portfolio-nav .language-switch:hover,
-  .portfolio-nav .language-switch:focus,
-  .portfolio-nav .language-switch:focus-visible {
-    color: var(--muted); letter-spacing: .07em; transform: none;
+  .portfolio-nav .is-touch-active,
+  .portfolio-nav .is-touch-active::before,
+  .portfolio-nav .is-touch-active::after,
+  .portfolio-nav .is-touch-active img {
+    animation-play-state: running !important;
   }
-  .portfolio-nav .nav-links a::before,
-  .portfolio-nav .nav-links a::after,
-  .portfolio-nav .language-switch::before,
-  .portfolio-nav .language-switch::after,
-  .portfolio-nav .nav-logo::before { display: none; }
-  .portfolio-nav .nav-logo:hover img,
-  .portfolio-nav .nav-logo:focus img,
-  .portfolio-nav .nav-logo:focus-visible img { transform: none; }
-  .portfolio-nav .nav-logo:hover::after,
-  .portfolio-nav .nav-logo:focus::after,
-  .portfolio-nav .nav-logo:focus-visible::after {
-    background: var(--text); box-shadow: none;
-    transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y)));
+  .portfolio-nav .nav-links a.is-touch-active,
+  .portfolio-nav .language-switch.is-touch-active {
+    transition: color 180ms ease, letter-spacing 420ms cubic-bezier(.16,1,.3,1), transform 300ms cubic-bezier(.16,1,.3,1) !important;
+  }
+  .portfolio-nav .nav-links a.is-touch-active::before {
+    transition: opacity 180ms ease, transform 560ms cubic-bezier(.16,1,.3,1), filter 420ms ease !important;
+  }
+  .portfolio-nav .nav-links a.is-touch-active::after {
+    transition: opacity 240ms ease 70ms, transform 620ms cubic-bezier(.16,1,.3,1) 40ms !important;
+  }
+  .portfolio-nav .nav-logo.is-touch-active::before,
+  .portfolio-nav .language-switch.is-touch-active::before,
+  .portfolio-nav .language-switch.is-touch-active::after {
+    transition: opacity 180ms ease, transform 620ms cubic-bezier(.16,1,.3,1) !important;
+  }
+  .portfolio-nav .nav-logo.is-touch-active img {
+    transition: transform 420ms cubic-bezier(.16,1,.3,1) !important;
+  }
+  .portfolio-nav .nav-logo.is-touch-active::after {
+    transition: transform 120ms cubic-bezier(.22,1,.36,1), background 180ms ease, box-shadow 180ms ease !important;
   }
 }
 

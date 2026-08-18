@@ -875,6 +875,17 @@
   const portfolioNav = document.querySelector('.portfolio-nav');
   if (portfolioNav) {
     let lastNavScroll = 0;
+    portfolioNav.querySelectorAll('.nav-logo, .nav-links a, .language-switch').forEach((control) => {
+      let touchAnimationTimer;
+      control.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse') return;
+        window.clearTimeout(touchAnimationTimer);
+        control.classList.remove('is-touch-active');
+        void control.offsetWidth;
+        control.classList.add('is-touch-active');
+        touchAnimationTimer = window.setTimeout(() => control.classList.remove('is-touch-active'), 720);
+      }, { passive: true });
+    });
     window.addEventListener('scroll', () => {
       lastNavScroll = performance.now();
       portfolioNav.classList.add('nav-hover-locked');
