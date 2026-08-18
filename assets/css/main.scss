@@ -1903,7 +1903,7 @@ body.home-page > #main.portfolio-main { display: flex; }
     font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8;
     transform: translateY(1rem);
   }
-  .info-about-page .internal-copy > p { font-size: .84rem; }
+  .info-about-page .internal-copy > p { font-size: calc(.84rem + 1px); }
   .info-about-page .about-process {
     width: 100%; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
