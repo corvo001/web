@@ -22,7 +22,7 @@ es:
     title: "SOBRE MÍ"
     subtitle: "CREAR | INSTALAR | MANTENER"
     body: |
-      Soy Daniel Cuervo. Me dedico a la **creatividad tecnológica**. ¿Qué quieres hacer?
+      Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. ¿Qué quieres hacer?
     visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
   contact:
     title: "CONTACTO"
@@ -68,7 +68,7 @@ en:
     title: "ABOUT"
     subtitle: "CREATE | INSTALL | MAINTAIN"
     body: |
-      I’m Daniel Cuervo. I work in **technological creativity**. What do you want to make?
+      I’m Daniel Cuervo, and I work in **technological creativity**. What do you want to make?
     visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
   contact:
     title: "CONTACT"
