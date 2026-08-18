@@ -922,7 +922,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index__body { max-width: 1500px; margin-inline: auto; }
 .project-index__filters {
-  position: fixed; z-index: 28; left: 50%; bottom: max(1rem,env(safe-area-inset-bottom));
+  position: fixed; z-index: 28; left: 50%; bottom: max(.35rem,env(safe-area-inset-bottom));
   transform: translate3d(-50%,0,0); backface-visibility: hidden;
 }
 .project-filter {
@@ -1532,7 +1532,7 @@ video.project-hero-image {
   .project-index__header { min-height: 8rem; padding-bottom: 4.5rem; }
   .project-index__header h1 { font-size: clamp(3rem,8vw,8rem); transform: translateY(.73rem); }
   .project-index__filters {
-    position: fixed; left: 50%; top: auto; bottom: max(.75rem,env(safe-area-inset-bottom));
+    position: fixed; left: 50%; top: auto; bottom: max(.15rem,env(safe-area-inset-bottom));
     width: auto; height: auto; margin: 0;
     transform: translate3d(-50%,0,0); backface-visibility: hidden;
   }
