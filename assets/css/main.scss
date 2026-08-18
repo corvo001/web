@@ -1014,7 +1014,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   clip-path: polygon(0 var(--filter-option-cut),var(--filter-option-cut) 0,calc(100% - var(--filter-option-cut)) 0,100% var(--filter-option-cut),100% calc(100% - var(--filter-option-cut)),calc(100% - var(--filter-option-cut)) 100%,var(--filter-option-cut) 100%,0 calc(100% - var(--filter-option-cut)));
   background: linear-gradient(135deg,var(--filter-line),var(--filter-line-soft) 50%,color-mix(in srgb,var(--filter-accent) 14%,transparent));
   color: var(--filter-copy-dim); cursor: pointer; text-align: center;
-  transition: color 180ms ease, transform 260ms cubic-bezier(.16,1,.3,1), background 220ms ease;
+  transition: color 180ms ease, background 220ms ease;
 }
 .project-filter__options button::before {
   content: ""; position: absolute; z-index: 0; inset: 1px;
@@ -1026,7 +1026,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .project-filter__options button[aria-pressed="true"] { display: none; }
 .project-filter__options button:hover,
 .project-filter__options button:focus-visible {
-  color: var(--text); outline: none; transform: translateY(-1px);
+  color: var(--text); outline: none;
   background: linear-gradient(135deg,color-mix(in srgb,var(--filter-accent) 46%,transparent),color-mix(in srgb,var(--filter-accent) 28%,transparent) 50%,var(--filter-line));
 }
 .project-filter__options button:hover::before,
@@ -1932,7 +1932,6 @@ body.home-page > #main.portfolio-main { display: flex; }
   .project-filter__options button:hover {
     color: var(--filter-copy-dim);
     background: linear-gradient(135deg,var(--filter-line),var(--filter-line-soft) 50%,color-mix(in srgb,var(--filter-accent) 14%,transparent));
-    transform: none;
   }
   .project-filter__options button:hover::before { background: color-mix(in srgb,var(--ink) 97%,var(--surface) 3%); }
   .project-filter__options button:hover > strong { letter-spacing: .16em; }
