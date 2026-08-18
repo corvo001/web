@@ -1052,7 +1052,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
   position: relative; isolation: isolate; width: min(80%,23rem); aspect-ratio: 3/2; margin-inline: auto; overflow: hidden;
-  background: #080a09; clip-path: polygon(50% 12.5%,100% 50%,50% 87.5%,0 50%);
+  background: #080a09; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
   transition: transform 720ms cubic-bezier(.16,1,.3,1), filter 420ms ease;
 }
 .project-index-card__visual::before, .project-index-card__visual::after {
