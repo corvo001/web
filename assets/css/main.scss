@@ -1840,11 +1840,13 @@ body.home-page > #main.portfolio-main { display: flex; }
     overscroll-behavior-inline: contain;
   }
   .home-page .hero-project .hero-project__media {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center center;
     padding-inline: 0;
-    -webkit-mask-image: linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
-    mask-image: linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);
+    -webkit-mask-image: none;
+    mask-image: none;
     transform: none;
   }
   .home-page .hero-project-controls { inset-inline: 0; }
