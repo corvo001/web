@@ -1913,7 +1913,10 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-about-page .internal-header { margin-bottom: clamp(.55rem,1.2dvh,.8rem); }
   .info-about-page .internal-header h1 { font-size: clamp(3rem,8vw,8rem); }
   .info-about-page .internal-subtitle { margin-top: clamp(1.25rem,3dvh,1.55rem); font-size: .72rem; line-height: 1.35; }
-  .info-about-page .internal-copy { font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8; }
+  .info-about-page .internal-copy {
+    font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8;
+    transform: translateY(1rem);
+  }
   .info-about-page .internal-copy > p { font-size: .84rem; }
   .info-about-page .about-process {
     width: 100%; max-height: none;
