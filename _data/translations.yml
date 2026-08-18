@@ -7,7 +7,7 @@ es:
     contact: "CONTACTO"
   gate_prompt: "Selecciona un idioma"
   hero:
-    eyebrow: "DISEÑO TECNOLÓGICO"
+    eyebrow: "TALLER TECNOLÓGICO"
     interest: "¿TE INTERESA?"
   work:
     title: "PROYECTOS"
@@ -20,7 +20,7 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "¿DISEÑO TECNOLÓGICO?"
+    subtitle: "¿TALLER TECNOLÓGICO?"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. ¿Tienes una idea? Te la hago real.
     visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
@@ -53,7 +53,7 @@ en:
     contact: "CONTACT"
   gate_prompt: "Select a language"
   hero:
-    eyebrow: "TECHNOLOGICAL DESIGN"
+    eyebrow: "TECHNOLOGY WORKSHOP"
     interest: "INTERESTED?"
   work:
     title: "PROJECTS"
@@ -66,7 +66,7 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "TECHNOLOGICAL DESIGN?"
+    subtitle: "TECHNOLOGY WORKSHOP?"
     body: |
       I’m Daniel Cuervo and I work in **technological creativity**. Got an idea? I’ll make it real.
     visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
