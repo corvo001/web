@@ -1672,7 +1672,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   text-align: center;
 }
 .info-about-page .internal-header {
-  margin-bottom: clamp(1.15rem,2vw,1.5rem);
+  margin-bottom: clamp(.45rem,1vw,.7rem);
 }
 .info-about-page .internal-header h1 {
   margin: 1rem 0 0;
@@ -1687,13 +1687,13 @@ body.home-page > #main.portfolio-main { display: flex; }
 .info-about-page .internal-copy {
   display: block;
   max-width: 68rem;
-  font-size: clamp(1rem,1.4vw,1.2rem);
+  font-size: clamp(calc(1rem + 2px),calc(1.4vw + 2px),calc(1.2rem + 2px));
   line-height: 1.8;
-  transform: translateY(clamp(.8rem,2.2dvh,1.4rem));
+  transform: translateY(clamp(.25rem,.8dvh,.5rem));
 }
 .info-about-page .internal-copy > p {
   max-width: 52rem;
-  margin: 1em auto;
+  margin: .55em auto 1em;
   transform: none;
 }
 .info-about-page .about-process {
@@ -1889,10 +1889,10 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-about-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
   }
-  .info-about-page .internal-header { margin-bottom: clamp(.85rem,2.2dvh,1.1rem); }
+  .info-about-page .internal-header { margin-bottom: clamp(.4rem,1.2dvh,.65rem); }
   .info-about-page .internal-header h1 { font-size: clamp(3rem,8vw,8rem); }
   .info-about-page .internal-subtitle { margin-top: clamp(1.25rem,3dvh,1.55rem); font-size: .72rem; line-height: 1.35; }
-  .info-about-page .internal-copy { font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8; }
+  .info-about-page .internal-copy { font-size: clamp(calc(1rem + 2px),calc(1.4vw + 2px),calc(1.2rem + 2px)); line-height: 1.8; }
   .info-about-page .about-process {
     width: 100%; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
