@@ -1547,6 +1547,23 @@ video.project-hero-image {
   .project-filter {
     --filter-closed-width: 6.875rem; --filter-open-width: min(17.5rem,calc(100vw - 1rem)); --filter-height: 2.6rem;
   }
+  .project-filter__options button { padding: 0 1.35rem 0 .7rem; }
+  .project-filter__options button::after {
+    content: ""; position: absolute; z-index: 1; left: .55rem; right: .55rem; top: .42rem; height: 1px;
+    background: linear-gradient(90deg,transparent,color-mix(in srgb,var(--filter-accent) 28%,transparent) 18% 82%,transparent);
+    opacity: .72; pointer-events: none;
+  }
+  .project-filter__options button > i {
+    display: block; position: absolute; z-index: 2; right: .58rem; top: 50%;
+    width: .32rem; aspect-ratio: 1; border: 1px solid color-mix(in srgb,var(--filter-accent) 62%,transparent);
+    border-radius: 50%; background: color-mix(in srgb,var(--filter-accent) 8%,transparent);
+    box-shadow: 0 0 .35rem color-mix(in srgb,var(--filter-accent) 18%,transparent);
+    transform: translateY(-50%); pointer-events: none;
+  }
+  .project-filter__options button:focus-visible > i,
+  .project-filter__options button:active > i {
+    background: var(--filter-accent); box-shadow: 0 0 .5rem color-mix(in srgb,var(--filter-accent) 48%,transparent);
+  }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
   .project-index-card__visual, .project-index-card__info { width: min(72vw,18rem); }
   .project-index-card__media { opacity: .58; filter: grayscale(.1) saturate(.68) brightness(.78) contrast(1.04); }
