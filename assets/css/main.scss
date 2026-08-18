@@ -1687,13 +1687,14 @@ body.home-page > #main.portfolio-main { display: flex; }
 .info-about-page .internal-copy {
   display: block;
   max-width: 68rem;
-  font-size: clamp(calc(1rem + 1px),calc(1.4vw + 1px),calc(1.2rem + 1px));
+  font-size: clamp(1rem,1.4vw,1.2rem);
   line-height: 1.8;
   transform: translateY(clamp(.25rem,.8dvh,.5rem));
 }
 .info-about-page .internal-copy > p {
   max-width: 52rem;
   margin: .55em auto 1em;
+  font-size: .88em;
   transform: translateY(.5rem);
 }
 .info-about-page .about-process {
@@ -1893,7 +1894,8 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-about-page .internal-header { margin-bottom: clamp(.55rem,1.2dvh,.8rem); }
   .info-about-page .internal-header h1 { font-size: clamp(3rem,8vw,8rem); }
   .info-about-page .internal-subtitle { margin-top: clamp(1.25rem,3dvh,1.55rem); font-size: .72rem; line-height: 1.35; }
-  .info-about-page .internal-copy { font-size: clamp(calc(1rem + 1px),calc(1.4vw + 1px),calc(1.2rem + 1px)); line-height: 1.8; }
+  .info-about-page .internal-copy { font-size: clamp(1rem,1.4vw,1.2rem); line-height: 1.8; }
+  .info-about-page .internal-copy > p { font-size: .84rem; }
   .info-about-page .about-process {
     width: 100%; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
