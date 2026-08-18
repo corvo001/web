@@ -4,8 +4,8 @@ description: >-
   Technical portfolio focused on software and robotics.
 
 baseurl: ""
-url: "https://corvo001.github.io"
-repository: "corvo001/corvo001.github.io"
+url: "https://corvo01.com"
+repository: "corvo001/web"
 locale: "es-ES"
 
 sass:
