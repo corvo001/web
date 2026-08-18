@@ -1818,7 +1818,8 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .home-page .portfolio-footer,
 .info-page .portfolio-footer,
-.work-page .portfolio-footer {
+.work-page .portfolio-footer,
+.project-page .portfolio-footer {
   flex: 0 0 var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
   height: var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
   min-height: var(--interface-footer-size,clamp(3.5rem,6.2dvh,4rem));
@@ -1871,7 +1872,8 @@ body.home-page > #main.portfolio-main { display: flex; }
   .project-gallery .project-control:focus-visible { background: rgba(9,11,10,.42); }
   .home-page .portfolio-footer,
   .info-page .portfolio-footer,
-  .work-page .portfolio-footer {
+  .work-page .portfolio-footer,
+  .project-page .portfolio-footer {
     justify-content: space-between;
     gap: .75rem; padding-inline: 1rem;
     font-size: .5rem;
