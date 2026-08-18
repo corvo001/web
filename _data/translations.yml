@@ -20,7 +20,7 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "CREAR | INSTALAR | MANTENER"
+    subtitle: "CREACIÓN | INSTALACIÓN | MANTENIMIENTO"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. ¿Qué quieres hacer?
     visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
@@ -66,7 +66,7 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "CREATE | INSTALL | MAINTAIN"
+    subtitle: "CREATION | INSTALLATION | MAINTENANCE"
     body: |
       I’m Daniel Cuervo, and I work in **technological creativity**. What do you want to make?
     visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
