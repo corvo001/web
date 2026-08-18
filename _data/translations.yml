@@ -20,9 +20,9 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "¿TALLER TECNOLÓGICO?"
+    subtitle: "CREAR | INSTALAR | MANTENER"
     body: |
-      Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**. ¿Tienes una idea? Te la hago real.
+      Soy Daniel Cuervo. Este es mi taller. ¿Qué quieres hacer?
     visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
   contact:
     title: "CONTACTO"
@@ -66,9 +66,9 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "TECHNOLOGY WORKSHOP?"
+    subtitle: "CREATE | INSTALL | MAINTAIN"
     body: |
-      I’m Daniel Cuervo and I work in **technological creativity**. Got an idea? I’ll make it real.
+      I’m Daniel Cuervo. This is my workshop. What do you want to make?
     visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
   contact:
     title: "CONTACT"
