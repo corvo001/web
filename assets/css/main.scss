@@ -1051,7 +1051,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index-card[hidden] { display: none; }
 .project-index-card__visual {
-  position: relative; isolation: isolate; width: min(80%,23rem); aspect-ratio: 3/2; margin-inline: auto; overflow: hidden;
+  position: relative; isolation: isolate; width: min(82%,24rem); aspect-ratio: 1; margin-inline: auto; overflow: hidden;
   background: #080a09; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
   transition: transform 720ms cubic-bezier(.16,1,.3,1), filter 420ms ease;
 }
@@ -1101,7 +1101,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .project-index-card:nth-child(2n) .project-index-card__lock,
 .project-index-card:nth-child(2n) .project-index-card__lock::after { animation-delay: -2.7s; }
-.project-index-card__info { width: min(80%,23rem); margin-inline: auto; padding-top: 1.1rem; text-align: center; }
+.project-index-card__info { width: min(82%,24rem); margin-inline: auto; padding-top: 1.1rem; text-align: center; }
 .project-index-card__info span { display: block; margin-bottom: .72rem; color: var(--capsule-accent); font: 500 .59rem/1.3 var(--mono); letter-spacing: .18em; opacity: .78; }
 .project-index-card__info h2 { margin: 0; color: var(--text); font-size: clamp(1.25rem,2.25vw,2.2rem); letter-spacing: .09em; transition: color 220ms ease, letter-spacing 520ms cubic-bezier(.16,1,.3,1); }
 .project-index-card__visual:hover .project-index-card__media, .project-index-card__visual.is-proximity-active .project-index-card__media, .project-index-card:focus-visible .project-index-card__media {
@@ -1565,7 +1565,7 @@ video.project-hero-image {
     background: var(--filter-accent); box-shadow: 0 0 .5rem color-mix(in srgb,var(--filter-accent) 48%,transparent);
   }
   .project-index__grid { grid-template-columns: 1fr; gap: 3rem; }
-  .project-index-card__visual, .project-index-card__info { width: min(72vw,18rem); }
+  .project-index-card__visual, .project-index-card__info { width: min(76vw,19rem); }
   .project-index-card__media { opacity: .58; filter: grayscale(.1) saturate(.68) brightness(.78) contrast(1.04); }
   .project-index-card[data-project-id="dyson-swarm"] .project-index-card__media { opacity: .62; filter: grayscale(.08) saturate(.68) brightness(1.16) contrast(.96); }
   .project-world-title {
