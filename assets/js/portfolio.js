@@ -27,6 +27,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
+  const contactDepartureDuration = 940;
+  const contactArrivalDuration = 780;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -410,6 +412,44 @@
     element?.addEventListener(eventName, onEnd);
   });
 
+  const readPageTransition = () => {
+    try { return JSON.parse(sessionStorage.getItem(pageTransitionKey) || 'null'); }
+    catch (error) { return null; }
+  };
+
+  const createContactTransition = (from, to) => {
+    const transition = document.createElement('div');
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const label = document.documentElement.lang === 'en' ? 'CONTACT' : 'CONTACTO';
+    transition.className = 'contact-transition';
+    transition.setAttribute('aria-hidden', 'true');
+    transition.innerHTML = `
+      <span class="contact-transition__cover"></span>
+      <span class="contact-transition__axis"></span>
+      <span class="contact-transition__signal"></span>
+      <span class="contact-transition__label">${label}</span>`;
+    path.classList.add('contact-transition__route');
+    path.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
+    path.setAttribute('preserveAspectRatio', 'none');
+    line.classList.add('contact-transition__path');
+    line.setAttribute('x1', from.x);
+    line.setAttribute('y1', from.y);
+    line.setAttribute('x2', to.x);
+    line.setAttribute('y2', to.y);
+    line.setAttribute('pathLength', '1');
+    path.appendChild(line);
+    transition.insertBefore(path, transition.querySelector('.contact-transition__signal'));
+    transition.style.setProperty('--contact-from-x', `${from.x}px`);
+    transition.style.setProperty('--contact-from-y', `${from.y}px`);
+    transition.style.setProperty('--contact-to-x', `${to.x}px`);
+    transition.style.setProperty('--contact-to-y', `${to.y}px`);
+    transition.style.setProperty('--contact-dx', `${to.x - from.x}px`);
+    transition.style.setProperty('--contact-dy', `${to.y - from.y}px`);
+    document.documentElement.appendChild(transition);
+    return transition;
+  };
+
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
@@ -420,8 +460,8 @@
         document.documentElement.style.removeProperty(property);
       });
     }
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
-    document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'contact-leaving', 'contact-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
+    document.querySelectorAll('.archive-transition, .contact-transition').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('.language-return-stage').forEach((stage) => stage.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -429,10 +469,28 @@
 
   const showPageArrival = async () => {
     if (!document.documentElement.classList.contains('page-transition-boot')) return;
+    const pageTransition = readPageTransition();
     sessionStorage.removeItem(pageTransitionKey);
     if (reduceMotion.matches) {
       document.body.classList.add('page-arrival-complete');
       document.documentElement.classList.remove('page-transition-boot');
+      return;
+    }
+    if (pageTransition?.type === 'contact' && document.body.classList.contains('info-contact-page')) {
+      const destinationSignal = document.querySelector('.contact-card__signal')?.getBoundingClientRect();
+      const from = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
+      const to = destinationSignal
+        ? { x: destinationSignal.left + (destinationSignal.width * .5), y: destinationSignal.top + (destinationSignal.height * .5) }
+        : from;
+      const transition = createContactTransition(from, to);
+      document.body.classList.add('contact-arriving');
+      await nextPaint();
+      document.documentElement.classList.remove('page-transition-boot');
+      transition.classList.add('is-arriving');
+      await waitForMotion(transition, 'animationend', contactArrivalDuration, 'contact-transition-arrive');
+      transition.remove();
+      document.body.classList.add('page-arrival-complete');
+      document.body.classList.remove('contact-arriving');
       return;
     }
     document.body.classList.add('page-arriving');
@@ -1404,9 +1462,44 @@
     });
   });
 
+  document.querySelectorAll('[data-contact-entry]').forEach((link) => {
+    ['pointerenter', 'focus', 'touchstart'].forEach((eventName) => {
+      link.addEventListener(eventName, () => { warmNavigationPage(link); }, { passive: true, once: true });
+    });
+    link.addEventListener('click', async (event) => {
+      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+      const target = new URL(link.href, window.location.href);
+      if (target.pathname === window.location.pathname) return;
+      event.preventDefault();
+      if (navigationInProgress) return;
+      navigationInProgress = true;
+      warmNavigationPage(link);
+      const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
+      const from = signalRect
+        ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
+        : { x: link.getBoundingClientRect().left, y: link.getBoundingClientRect().top };
+      const to = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
+      const transition = createContactTransition(from, to);
+      freezeNavigationSource();
+      document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
+      sessionStorage.removeItem(archiveTransitionKey);
+      sessionStorage.removeItem(projectTransitionKey);
+      document.body.classList.add('contact-leaving');
+      await nextPaint();
+      transition.classList.add('is-departing');
+      await waitForMotion(transition, 'animationend', contactDepartureDuration, 'contact-transition-depart');
+      sessionStorage.setItem(pageTransitionKey, JSON.stringify({
+        type: 'contact',
+        path: target.pathname,
+        startedAt: Date.now()
+      }));
+      window.location.assign(target.href);
+    });
+  });
+
   document.querySelectorAll('a[href]').forEach((link) => {
     link.addEventListener('click', async (event) => {
-      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-language-menu') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || reduceMotion.matches || event.defaultPrevented) return;
+      if (link.hasAttribute('data-language-link') || link.hasAttribute('data-language-menu') || link.hasAttribute('data-project-link') || link.hasAttribute('data-work-entry') || link.hasAttribute('data-contact-entry') || reduceMotion.matches || event.defaultPrevented) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
       const target = new URL(link.href, window.location.href);
       if (target.origin !== window.location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;

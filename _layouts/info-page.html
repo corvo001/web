@@ -19,7 +19,7 @@ layout: portfolio-base
       {% else %}
         {% assign about_contact_url = '/es/contacto/' %}
       {% endif %}
-      <a class="about-contact-cta" href="{{ about_contact_url | relative_url }}">
+      <a class="about-contact-cta" href="{{ about_contact_url | relative_url }}" data-contact-entry>
         <span class="about-contact-cta__signal" aria-hidden="true"></span>
         <span class="about-contact-cta__label">{{ section.cta }}</span>
         <span class="about-contact-cta__arrow" aria-hidden="true"></span>
