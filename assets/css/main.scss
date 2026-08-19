@@ -817,7 +817,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .hero-copy { position: relative; z-index: 3; width: 100%; min-width: 0; max-width: 100%; overflow: hidden; text-align: center; pointer-events: none; }
 .hero-eyebrow {
-  margin: 0 0 1.5rem; color: var(--accent); font: 500 .72rem/1.4 var(--mono); letter-spacing: .14em; text-align: center; text-transform: uppercase;
+  margin: 1.5rem 0 0; color: var(--accent); font: 500 .72rem/1.4 var(--mono); letter-spacing: .14em; text-align: center; text-transform: uppercase;
   text-shadow:
     1px 0 #020302, -1px 0 #020302, 0 1px #020302, 0 -1px #020302,
     0 0 .45rem rgba(2,3,2,.98), 0 0 1.2rem rgba(2,3,2,.9);
@@ -869,7 +869,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
     linear-gradient(180deg, rgba(4,6,5,.2), rgba(4,6,5,.02) 32% 68%, rgba(4,6,5,.31));
 }
 .hero-project__interest {
-  position: absolute; z-index: 2; left: 50%; top: calc(50% + clamp(4.5rem, 9vw, 8rem));
+  position: absolute; z-index: 2; left: 50%; top: calc(50% - clamp(4.5rem, 9vw, 8rem));
   color: var(--text); font: 500 .72rem/1 var(--mono); letter-spacing: .2em;
   opacity: 0; transform: translate(-50%,.75rem); transition: opacity 280ms ease, transform 420ms cubic-bezier(.22,1,.36,1);
 }
@@ -1531,6 +1531,7 @@ video.project-hero-image {
   .nav-links { justify-content: center; gap: 1rem; }
   .nav-links a { font-size: .64rem; }
   .display-name { font-size: clamp(1.5rem, 6vw, 2.85rem); letter-spacing: 0; }
+  .hero-eyebrow { margin-top: clamp(.55rem,1.8dvh,.8rem); }
   .hero-project__interest { display: none; }
   .portfolio-hero {
     min-height: 100svh;
@@ -1639,7 +1640,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   transform: translateY(calc(-1 * var(--hall-copy-lift)));
 }
 .home-page .hero-project__interest {
-  top: calc(50% + clamp(4.5rem,9vw,8rem) - var(--hall-copy-lift) - var(--hall-interest-lift));
+  top: calc(50% - clamp(4.5rem,9vw,8rem) - var(--hall-copy-lift) + var(--hall-interest-lift));
 }
 .home-page .hero-project-controls {
   transform: translateY(calc(-50% - var(--hall-control-lift)));
