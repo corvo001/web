@@ -641,7 +641,10 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 @keyframes contact-axis-arrive { 0% { opacity: .72; transform: translateX(0); } 88% { opacity: .45; } 100% { opacity: 0; transform: translateX(100vw); } }
 @keyframes contact-cover-depart { 0%,42% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
 @keyframes contact-cover-arrive { 0%,8% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
-@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(4vw); } }
+@keyframes contact-source-shift {
+  0%,52% { opacity: 1; transform: translateX(0); }
+  100% { opacity: .38; transform: translateX(4vw); }
+}
 @keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(-4vw); } 100% { opacity: 1; transform: translateX(0); } }
 @keyframes contact-impact-depart {
   0%,49% { opacity: 0; transform: translate(-50%,-50%) scale(.15); box-shadow: 0 0 0 transparent; }
