@@ -1937,10 +1937,10 @@ body.home-page > #main.portfolio-main { display: flex; }
   transition: transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow {
-  position: relative; width: 1.25rem; height: 1px; justify-self: end;
+  position: relative; width: .78rem; height: 1px; justify-self: end;
   background: color-mix(in srgb,var(--text) 48%,transparent);
   transform: translateX(0);
-  transition: background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
+  transition: width 420ms cubic-bezier(.16,1,.3,1), background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow::after {
   content: ""; position: absolute; right: 0; top: 50%; width: .38rem; height: .38rem;
@@ -1973,7 +1973,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:hover .about-contact-cta__label,
 .about-contact-cta:focus-visible .about-contact-cta__label { transform: translateX(.14rem); }
 .about-contact-cta:hover .about-contact-cta__arrow,
-.about-contact-cta:focus-visible .about-contact-cta__arrow { background: var(--accent); transform: translateX(.22rem); }
+.about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.25rem; background: var(--accent); transform: translateX(.22rem); }
 .info-contact-page .internal-main {
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
   padding: clamp(2rem,4.7dvh,2.75rem) var(--page-pad) 0;
@@ -2192,7 +2192,7 @@ body.home-page > #main.portfolio-main { display: flex; }
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.25rem,.8dvh,.45rem);
     padding: .62rem .75rem; font-size: clamp(.55rem,2.45vw,.64rem); letter-spacing: .1em;
   }
-  .about-contact-cta__arrow { width: 1.05rem; }
+  .about-contact-cta__arrow { width: .72rem; }
   .info-contact-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
   }
