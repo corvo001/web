@@ -1857,7 +1857,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   border: 0; border-radius: 0;
   color: var(--text);
   background: transparent;
-  font: 500 clamp(.62rem,.72vw,.72rem)/1.25 var(--mono);
+  font: 500 calc(clamp(.62rem,.72vw,.72rem) + 1px)/1.25 var(--mono);
   letter-spacing: .14em; text-decoration: none; text-transform: none;
   transition: color 180ms ease;
 }
@@ -2141,7 +2141,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   .about-contact-cta {
     grid-template-columns: .35rem minmax(0,1fr) 1.25rem; gap: .55rem;
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.25rem,.8dvh,.45rem);
-    padding: .62rem .75rem; font-size: clamp(.55rem,2.45vw,.64rem); letter-spacing: .1em;
+    padding: .62rem .75rem; font-size: calc(clamp(.55rem,2.45vw,.64rem) + 1px); letter-spacing: .1em;
   }
   .about-contact-cta__arrow { width: .72rem; }
   .info-contact-page .internal-main {
