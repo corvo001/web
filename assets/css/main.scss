@@ -1878,21 +1878,23 @@ body.home-page > #main.portfolio-main { display: flex; }
   border: 0; border-radius: 0;
   color: var(--text);
   background: transparent;
-  box-shadow:
-    inset 0 1px color-mix(in srgb,var(--text) 14%,transparent),
-    inset 0 -1px color-mix(in srgb,var(--text) 7%,transparent);
+  box-shadow: none;
   font: 500 clamp(.62rem,.72vw,.72rem)/1.25 var(--mono);
   letter-spacing: .14em; text-decoration: none; text-transform: uppercase;
   transition: color 180ms ease, box-shadow 260ms ease;
 }
 .about-contact-cta::before,
 .about-contact-cta::after {
-  content: ""; position: absolute; top: 50%; width: .42rem; height: 1.25rem;
-  border-block: 1px solid color-mix(in srgb,var(--accent) 34%,transparent);
-  opacity: .72; transform: translateY(-50%); transition: border-color 180ms ease;
+  content: ""; position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0,
+    color-mix(in srgb,var(--text) 13%,transparent) 18%,
+    color-mix(in srgb,var(--text) 13%,transparent) 82%,
+    transparent 100%);
+  opacity: .9; transition: opacity 180ms ease, background 260ms ease;
 }
-.about-contact-cta::before { left: 0; border-left: 1px solid color-mix(in srgb,var(--accent) 34%,transparent); }
-.about-contact-cta::after { right: 0; border-right: 1px solid color-mix(in srgb,var(--accent) 34%,transparent); }
+.about-contact-cta::before { top: 0; }
+.about-contact-cta::after { bottom: 0; }
 .about-contact-cta__signal {
   width: .28rem; aspect-ratio: 1; justify-self: center;
   background: color-mix(in srgb,var(--accent) 78%,var(--text)); transform: rotate(45deg);
@@ -1912,14 +1914,19 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:hover,
 .about-contact-cta:focus-visible {
   color: var(--accent);
-  box-shadow:
-    inset 0 1px color-mix(in srgb,var(--accent) 48%,transparent),
-    inset 0 -1px color-mix(in srgb,var(--accent) 16%,transparent);
+  box-shadow: none;
 }
 .about-contact-cta:hover::before,
 .about-contact-cta:hover::after,
 .about-contact-cta:focus-visible::before,
-.about-contact-cta:focus-visible::after { border-color: color-mix(in srgb,var(--accent) 72%,transparent); }
+.about-contact-cta:focus-visible::after {
+  opacity: 1;
+  background: linear-gradient(90deg,
+    transparent 0,
+    color-mix(in srgb,var(--accent) 34%,transparent) 18%,
+    color-mix(in srgb,var(--accent) 34%,transparent) 82%,
+    transparent 100%);
+}
 .about-contact-cta:hover .about-contact-cta__signal,
 .about-contact-cta:focus-visible .about-contact-cta__signal {
   background: var(--accent); transform: rotate(135deg) scale(.78);
