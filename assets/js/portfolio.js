@@ -23,7 +23,8 @@
   const languageReturnStageDuration = 1320;
   const eyeCodeDuration = 1640;
   const projectDepartureDuration = 1280;
-  const projectArrivalDuration = 620;
+  const projectArrivalDuration = 720;
+  const projectCardOpenDuration = 520;
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
@@ -626,7 +627,13 @@
   const departIntoProject = async (link, media, label, useDisplayFont, destinationReady = Promise.resolve()) => {
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
     const { backdrop, signal, title } = createProjectDeparture(label, useDisplayFont);
+    const cardVisual = link.querySelector('.project-index-card__visual');
     link.classList.add('is-launching');
+    if (cardVisual) {
+      await nextPaint();
+      await waitForMotion(cardVisual, 'animationend', projectCardOpenDuration, 'project-card-open');
+    }
+    freezeNavigationSource();
     document.body.classList.add('project-portal-leaving');
     void backdrop.offsetWidth;
     await nextPaint();
@@ -709,7 +716,7 @@
       document.documentElement.classList.add('project-entry-arriving');
       await nextPaint();
       document.documentElement.classList.remove('project-entry-boot');
-      await waitForMotion(document.documentElement, 'animationend', projectArrivalDuration, 'project-world-reveal');
+      await waitForMotion(document.documentElement, 'animationend', projectArrivalDuration, 'project-door-left-reveal');
       document.body.classList.add('page-arrival-complete');
     } finally {
       document.documentElement.classList.remove('project-entry-arriving');
@@ -1109,7 +1116,6 @@
       if (touchInterestEngaged) {
         await new Promise((resolve) => window.setTimeout(resolve, 300));
       }
-      freezeNavigationSource();
       const destinationReady = Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);

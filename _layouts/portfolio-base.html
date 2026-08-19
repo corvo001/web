@@ -82,6 +82,9 @@
     {% if page.layout == 'project' or active_body_class == 'work-page' %}
     <style>
       html.project-entry-boot{background:#020302;color-scheme:dark;overflow:hidden}
+      html.project-entry-boot::before,html.project-entry-boot::after{content:"";position:fixed;z-index:1001;top:0;bottom:0;width:56%;background:#020302;pointer-events:none;backface-visibility:hidden}
+      html.project-entry-boot::before{left:0;clip-path:polygon(0 0,100% 0,89% 50%,100% 100%,0 100%)}
+      html.project-entry-boot::after{right:0;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,11% 50%)}
       html.project-entry-boot body,html.archive-entry-boot body{opacity:0;animation:none}
       html.archive-entry-boot{--archive-critical-shutter:#070908;--archive-critical-edge:#111714;--archive-critical-glow:rgba(130,181,152,.34);background:var(--archive-critical-shutter);color-scheme:dark;overflow:hidden}
       html.archive-entry-boot::before,html.archive-entry-boot::after{content:"";position:fixed;z-index:1000;top:0;bottom:0;width:58%;pointer-events:none;filter:drop-shadow(0 0 .3rem var(--archive-critical-glow));backface-visibility:hidden}
