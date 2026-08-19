@@ -487,10 +487,11 @@
     }
     if (pageTransition?.type === 'contact' && document.body.classList.contains('info-contact-page')) {
       const destinationCard = document.querySelector('.contact-card')?.getBoundingClientRect();
-      const from = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
-      const to = destinationCard
-        ? { x: destinationCard.right, y: destinationCard.top + Math.min(destinationCard.height * .5, 52) }
-        : { x: window.innerWidth * .88, y: window.innerHeight * .5 };
+      const routeY = destinationCard
+        ? destinationCard.top + Math.min(destinationCard.height * .5, 52)
+        : window.innerHeight * .5;
+      const from = { x: window.innerWidth * .5, y: routeY };
+      const to = { x: destinationCard?.right || window.innerWidth * .88, y: routeY };
       const transition = createContactTransition(from, to);
       document.body.classList.add('contact-arriving');
       await nextPaint();
@@ -1490,7 +1491,7 @@
       const from = signalRect
         ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
         : { x: link.getBoundingClientRect().left, y: link.getBoundingClientRect().top };
-      const to = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
+      const to = { x: window.innerWidth * .5, y: from.y };
       const transition = createContactTransition(from, to);
       freezeNavigationSource();
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());

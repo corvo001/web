@@ -623,8 +623,8 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 @keyframes contact-axis-arrive { 0% { opacity: .72; transform: translateX(0); } 88% { opacity: .45; } 100% { opacity: 0; transform: translateX(100vw); } }
 @keyframes contact-cover-depart { 0%,42% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
 @keyframes contact-cover-arrive { 0%,8% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
-@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(-2.2vw); } }
-@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(2.2vw); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(-4vw); } }
+@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(4vw); } 100% { opacity: 1; transform: translateX(0); } }
 
 /* Project inventory entrance */
 .archive-transition {
@@ -1882,7 +1882,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:hover,
 .about-contact-cta:focus-visible {
   color: var(--accent);
-  box-shadow: none;
+  box-shadow: none; outline: none;
 }
 .about-contact-cta:hover::before,
 .about-contact-cta:hover::after,
