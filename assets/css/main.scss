@@ -1854,7 +1854,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   display: block;
   width: 100%; max-width: 60rem; max-height: none;
   margin: 0 auto;
-  transform: none;
+  transform: translateY(-.5rem);
 }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: none;
@@ -2135,7 +2135,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-about-page .about-process {
     left: 50%; width: 108%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
-    transform: translateX(-50%);
+    transform: translate(-50%,-.5rem);
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
