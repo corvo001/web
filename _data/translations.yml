@@ -17,7 +17,6 @@ es:
     back_to_hall: "Volver al inicio"
     filter: "Filtrar proyectos"
     all: "TODOS"
-    open: "ABRIR"
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
@@ -65,7 +64,6 @@ en:
     back_to_hall: "Back to the top"
     filter: "Filter projects"
     all: "ALL"
-    open: "OPEN"
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"

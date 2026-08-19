@@ -1335,16 +1335,14 @@
       const card = capsule.closest('.project-index-card');
       const video = capsule.querySelector('video[data-project-media]');
       if (!state || !card) return;
-      const proximityActive = desktopPointer.matches ? state.pointerNear : state.near;
-      const active = !document.hidden && !card.hidden && !reduceMotion.matches && (proximityActive || state.hovered || state.focused);
+      const active = !document.hidden && !card.hidden && !reduceMotion.matches && (
+        desktopPointer.matches
+          ? (state.pointerNear || state.hovered || state.focused)
+          : state.focused
+      );
       capsule.classList.toggle('is-proximity-active', active);
       if (active) warmProjectVideo(card);
-      if (!video) return;
-      if (active) {
-        ensureVideoSource(video);
-        video.play().catch(() => {});
-      }
-      else video.pause();
+      video?.pause();
     };
 
     const updatePointerProximity = () => {
