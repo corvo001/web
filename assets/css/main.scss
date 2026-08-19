@@ -1776,7 +1776,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .home-page .portfolio-hero {
   /* Compensate for the unequal visual weight of the fixed nav and footer.
      A viewport-relative lift keeps the same optical centre on desktop and mobile. */
-  --hall-copy-lift: clamp(1.15rem,2.5dvh,1.55rem);
+  --hall-copy-lift: calc((4.7rem - var(--interface-footer-size)) / 2);
   --hall-label-center-adjust: 0rem;
   --hall-interest-lift: clamp(.45rem,1.1dvh,.7rem);
   --hall-control-lift: var(--hall-copy-lift);
