@@ -434,7 +434,8 @@
     flight.innerHTML = `
       <span class="contact-flight__veil"></span>
       <span class="contact-flight__sweep"></span>
-      <span class="contact-flight__emitter"></span>`;
+      <span class="contact-flight__emitter"></span>
+      <span class="contact-flight__terminal"></span>`;
     route.classList.add('contact-flight__route');
     route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
     route.setAttribute('preserveAspectRatio', 'none');
@@ -1480,7 +1481,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      target.searchParams.set(contactTransitionQueryKey, 'clean');
+      target.searchParams.set(contactTransitionQueryKey, 'minimal');
       warmNavigationPage({ href: target.href });
       const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
       const from = signalRect
