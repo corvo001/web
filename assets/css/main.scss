@@ -601,15 +601,33 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   box-shadow: 0 0 .8rem color-mix(in srgb,var(--accent) 12%,transparent);
   transform: translateX(0); will-change: transform, opacity;
 }
+.contact-transition__impact {
+  position: absolute; z-index: 4;
+  top: var(--contact-impact-y); left: var(--contact-impact-x);
+  width: .28rem; aspect-ratio: 1; border-radius: 50%;
+  background: var(--accent); opacity: 0;
+  transform: translate(-50%,-50%) scale(.15);
+  box-shadow: 0 0 0 transparent;
+}
+.contact-transition__impact::before,
+.contact-transition__impact::after {
+  position: absolute; top: 50%; left: 50%; content: "";
+  background: linear-gradient(90deg,transparent,rgba(205,255,225,.85),transparent);
+  transform: translate(-50%,-50%);
+}
+.contact-transition__impact::before { width: 3rem; height: 1px; }
+.contact-transition__impact::after { width: 1px; height: 3rem; }
 .contact-transition.is-departing { animation: contact-transition-depart 940ms linear both; }
 .contact-transition.is-departing .contact-transition__path { animation: contact-route-depart 690ms cubic-bezier(.22,.72,.2,1) both; }
 .contact-transition.is-departing .contact-transition__pulse { animation: contact-pulse-depart 760ms cubic-bezier(.22,.72,.2,1) both; }
 .contact-transition.is-departing .contact-transition__axis { animation: contact-axis-depart 940ms cubic-bezier(.16,1,.3,1) both; }
+.contact-transition.is-departing .contact-transition__impact { animation: contact-impact-depart 940ms cubic-bezier(.2,.75,.2,1) both; }
 .contact-transition.is-departing .contact-transition__cover { animation: contact-cover-depart 940ms cubic-bezier(.76,0,.24,1) both; }
 .contact-transition.is-arriving { animation: contact-transition-arrive 780ms linear both; }
 .contact-transition.is-arriving .contact-transition__path { animation: contact-route-arrive 640ms 40ms cubic-bezier(.16,1,.3,1) both; }
 .contact-transition.is-arriving .contact-transition__pulse { animation: contact-pulse-arrive 700ms 20ms cubic-bezier(.16,1,.3,1) both; }
 .contact-transition.is-arriving .contact-transition__axis { animation: contact-axis-arrive 780ms cubic-bezier(.16,1,.3,1) both; }
+.contact-transition.is-arriving .contact-transition__impact { animation: contact-impact-arrive 780ms cubic-bezier(.2,.75,.2,1) both; }
 .contact-transition.is-arriving .contact-transition__cover { animation: contact-cover-arrive 780ms cubic-bezier(.76,0,.24,1) both; }
 .portfolio-shell.contact-leaving { animation: contact-source-shift 940ms cubic-bezier(.55,0,.3,1) both; }
 .portfolio-shell.contact-arriving { animation: contact-destination-shift 780ms cubic-bezier(.16,1,.3,1) both; }
@@ -623,8 +641,18 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 @keyframes contact-axis-arrive { 0% { opacity: .72; transform: translateX(0); } 88% { opacity: .45; } 100% { opacity: 0; transform: translateX(100vw); } }
 @keyframes contact-cover-depart { 0%,42% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
 @keyframes contact-cover-arrive { 0%,8% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
-@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(-4vw); } }
-@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(4vw); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(4vw); } }
+@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(-4vw); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes contact-impact-depart {
+  0%,49% { opacity: 0; transform: translate(-50%,-50%) scale(.15); box-shadow: 0 0 0 transparent; }
+  55% { opacity: 1; transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 1.8rem rgba(79,224,132,.72); }
+  67%,100% { opacity: 0; transform: translate(-50%,-50%) scale(2.1); box-shadow: 0 0 3rem rgba(79,224,132,0); }
+}
+@keyframes contact-impact-arrive {
+  0%,44% { opacity: 0; transform: translate(-50%,-50%) scale(.15); }
+  52% { opacity: .9; transform: translate(-50%,-50%) scale(.8); }
+  64%,100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
+}
 
 /* Project inventory entrance */
 .archive-transition {
@@ -1837,7 +1865,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .about-contact-cta {
   position: relative;
-  display: grid; grid-template-columns: 1.15rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
+  display: grid; grid-template-columns: .4rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
   width: min(22rem,100%); min-height: 3rem;
   margin: clamp(.35rem,1dvh,.65rem) auto 0;
   padding: .7rem .85rem;
@@ -1862,11 +1890,9 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta::before { top: 0; }
 .about-contact-cta::after { bottom: 0; }
 .about-contact-cta__signal {
-  width: 1.15rem; height: .5rem; justify-self: center;
+  width: .28rem; height: .28rem; justify-self: center;
   background: color-mix(in srgb,var(--accent) 74%,var(--text));
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M1 5h4l2-3 3 6 3-6 3 6 2-3h5' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M1 5h4l2-3 3 6 3-6 3 6 2-3h5' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
-  opacity: .72; transform: scaleX(.92); transform-origin: left center;
+  opacity: 1; transform: rotate(45deg); transform-origin: center;
   transition: background-color 180ms ease, opacity 180ms ease, transform 320ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__label { position: relative; z-index: 1; text-align: center; white-space: nowrap; }
@@ -1898,7 +1924,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .about-contact-cta:hover .about-contact-cta__signal,
 .about-contact-cta:focus-visible .about-contact-cta__signal {
-  background: var(--accent); opacity: 1; transform: scaleX(1.08);
+  background: var(--accent); opacity: 1; transform: rotate(135deg) scale(.78);
 }
 .about-contact-cta:hover .about-contact-cta__arrow,
 .about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.5rem; background: var(--accent); }
@@ -2116,7 +2142,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
-    grid-template-columns: 1rem minmax(0,1fr) 1.25rem; gap: .55rem;
+    grid-template-columns: .35rem minmax(0,1fr) 1.25rem; gap: .55rem;
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.25rem,.8dvh,.45rem);
     padding: .62rem .75rem; font-size: clamp(.55rem,2.45vw,.64rem); letter-spacing: .1em;
   }

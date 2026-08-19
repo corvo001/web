@@ -423,38 +423,26 @@
     const route = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const guide = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const deltaX = to.x - from.x;
-    const deltaY = to.y - from.y;
-    const distance = Math.max(Math.hypot(deltaX, deltaY), 1);
-    const normalX = -deltaY / distance;
-    const normalY = deltaX / distance;
-    const amplitude = Math.min(10, Math.max(4, distance * .018));
-    const points = Array.from({ length: 49 }, (_, index) => {
-      const progress = index / 48;
-      const envelope = Math.sin(Math.PI * progress);
-      const wave = Math.sin(progress * Math.PI * 10) * amplitude * envelope;
-      return {
-        x: from.x + (deltaX * progress) + (normalX * wave),
-        y: from.y + (deltaY * progress) + (normalY * wave)
-      };
-    });
-    const wavePath = points.map((point, index) => `${index ? 'L' : 'M'}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ');
+    const flashPath = `M${from.x.toFixed(2)} ${from.y.toFixed(2)} L${to.x.toFixed(2)} ${to.y.toFixed(2)}`;
     transition.className = 'contact-transition';
     transition.setAttribute('aria-hidden', 'true');
     transition.innerHTML = `
       <span class="contact-transition__cover"></span>
+      <span class="contact-transition__impact"></span>
       <span class="contact-transition__axis"></span>`;
     route.classList.add('contact-transition__route');
     route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
     route.setAttribute('preserveAspectRatio', 'none');
     [guide, pulse].forEach((wave) => {
-      wave.setAttribute('d', wavePath);
+      wave.setAttribute('d', flashPath);
       wave.setAttribute('pathLength', '1');
       route.appendChild(wave);
     });
     guide.classList.add('contact-transition__path');
     pulse.classList.add('contact-transition__pulse');
     transition.insertBefore(route, transition.querySelector('.contact-transition__axis'));
+    transition.style.setProperty('--contact-impact-x', `${to.x}px`);
+    transition.style.setProperty('--contact-impact-y', `${to.y}px`);
     document.documentElement.appendChild(transition);
     return transition;
   };
@@ -1491,7 +1479,7 @@
       const from = signalRect
         ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
         : { x: link.getBoundingClientRect().left, y: link.getBoundingClientRect().top };
-      const to = { x: window.innerWidth * .5, y: from.y };
+      const to = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
       const transition = createContactTransition(from, to);
       freezeNavigationSource();
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
