@@ -4,12 +4,10 @@
   {% assign other_lang = 'EN' %}
   {% assign work_url = '/es/proyectos/' %}
   {% assign about_url = '/es/sobre-mi/' %}
-  {% assign contact_url = '/es/contacto/' %}
 {% else %}
   {% assign other_lang = 'ES' %}
   {% assign work_url = '/en/work/' %}
   {% assign about_url = '/en/about/' %}
-  {% assign contact_url = '/en/contact/' %}
 {% endif %}
 <nav class="portfolio-nav" aria-label="Primary">
   <a class="nav-logo" href="{{ home_url | relative_url }}" aria-label="{% if page.lang == 'es' %}Volver al inicio{% else %}Back to home{% endif %}">
@@ -18,7 +16,6 @@
   <div class="nav-links">
     <a href="{{ work_url | relative_url }}" data-work-entry data-work-label="{{ t.work.archive }}">{{ t.nav.work }}</a>
     <a href="{{ about_url | relative_url }}">{{ t.nav.about }}</a>
-    <a href="{{ contact_url | relative_url }}">{{ t.nav.contact }}</a>
   </div>
   <a class="language-switch" href="{{ '/' | relative_url }}" aria-label="Language selection / Selección de idioma" data-language-menu>{{ other_lang }}</a>
   {% include interface-divider.html position='nav' %}

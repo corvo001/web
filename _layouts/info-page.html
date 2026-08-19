@@ -19,7 +19,11 @@ layout: portfolio-base
       {% else %}
         {% assign about_contact_url = '/es/contacto/' %}
       {% endif %}
-      <a class="about-contact-cta" href="{{ about_contact_url | relative_url }}">{{ section.cta }}</a>
+      <a class="about-contact-cta" href="{{ about_contact_url | relative_url }}">
+        <span class="about-contact-cta__signal" aria-hidden="true"></span>
+        <span class="about-contact-cta__label">{{ section.cta }}</span>
+        <span class="about-contact-cta__arrow" aria-hidden="true"></span>
+      </a>
     {% else %}
       <div class="contact-card">
         <span class="contact-card__signal" aria-hidden="true"></span>
