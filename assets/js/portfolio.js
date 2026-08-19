@@ -428,8 +428,7 @@
     flight.innerHTML = `
       <span class="contact-flight__veil"></span>
       <span class="contact-flight__sweep"></span>
-      <span class="contact-flight__emitter"></span>
-      <span class="contact-flight__impact"></span>`;
+      <span class="contact-flight__emitter"></span>`;
     route.classList.add('contact-flight__route');
     route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
     route.setAttribute('preserveAspectRatio', 'none');

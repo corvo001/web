@@ -594,8 +594,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   stroke-dasharray: .09 .91; stroke-dashoffset: 1; opacity: 0;
   filter: drop-shadow(0 0 .32rem color-mix(in srgb,var(--accent) 64%,transparent));
 }
-.contact-flight__emitter,
-.contact-flight__impact {
+.contact-flight__emitter {
   position: absolute; z-index: 4; width: .34rem; aspect-ratio: 1;
   background: var(--accent); opacity: 0;
 }
@@ -603,39 +602,6 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   left: var(--flight-from-x); top: var(--flight-from-y);
   transform: translate(-50%,-50%) rotate(45deg) scale(.5);
   box-shadow: 0 0 .8rem color-mix(in srgb,var(--accent) 42%,transparent);
-}
-.contact-flight__impact {
-  left: var(--flight-to-x); top: var(--flight-to-y); border-radius: 50%;
-  background:
-    radial-gradient(circle,rgba(235,255,242,.96) 0 14%,var(--accent) 17% 38%,transparent 42%);
-  border: 1px solid color-mix(in srgb,var(--accent) 72%,transparent);
-  box-shadow:
-    0 0 .75rem color-mix(in srgb,var(--accent) 34%,transparent),
-    inset 0 0 .3rem color-mix(in srgb,var(--accent) 48%,transparent);
-  transform: translate(-50%,-50%) scale(.1);
-}
-.contact-flight__impact::before,
-.contact-flight__impact::after {
-  position: absolute; top: 50%; left: 50%; content: ""; aspect-ratio: 1;
-  border-radius: 50%; transform: translate(-50%,-50%);
-}
-.contact-flight__impact::before {
-  width: 1.45rem;
-  border: 1px solid color-mix(in srgb,var(--accent) 58%,transparent);
-  box-shadow:
-    0 0 .6rem color-mix(in srgb,var(--accent) 18%,transparent),
-    inset 0 0 .5rem color-mix(in srgb,var(--accent) 12%,transparent);
-}
-.contact-flight__impact::after {
-  width: 2.35rem;
-  opacity: .78;
-  background: repeating-conic-gradient(
-    from 22.5deg,
-    color-mix(in srgb,var(--accent) 82%,white) 0 5deg,
-    transparent 5deg 42deg
-  );
-  -webkit-mask: radial-gradient(circle,transparent 0 61%,#000 63% 69%,transparent 71%);
-  mask: radial-gradient(circle,transparent 0 61%,#000 63% 69%,transparent 71%);
 }
 .contact-flight__sweep {
   position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: 1px; opacity: 0;
@@ -647,13 +613,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .contact-flight.is-departing .contact-flight__beam { animation: contact-flight-beam-out 980ms cubic-bezier(.2,.72,.2,1) both; }
 .contact-flight.is-departing .contact-flight__spark { animation: contact-flight-spark-out 980ms cubic-bezier(.2,.72,.2,1) both; }
 .contact-flight.is-departing .contact-flight__emitter { animation: contact-flight-emitter 980ms cubic-bezier(.16,1,.3,1) both; }
-.contact-flight.is-departing .contact-flight__impact { animation: contact-flight-impact-out 980ms cubic-bezier(.16,1,.3,1) both; }
 .contact-flight.is-departing .contact-flight__sweep { animation: contact-flight-sweep-out 980ms cubic-bezier(.65,0,.2,1) both; }
 .contact-flight.is-departing .contact-flight__veil { animation: contact-flight-veil-out 980ms cubic-bezier(.72,0,.24,1) both; }
 .contact-flight.is-arriving { animation: contact-flight-arrive 820ms linear both; }
 .contact-flight.is-arriving .contact-flight__beam { animation: contact-flight-beam-in 820ms cubic-bezier(.16,1,.3,1) both; }
 .contact-flight.is-arriving .contact-flight__spark { animation: contact-flight-spark-in 820ms cubic-bezier(.16,1,.3,1) both; }
-.contact-flight.is-arriving .contact-flight__impact { animation: contact-flight-impact-in 820ms cubic-bezier(.16,1,.3,1) both; }
 .contact-flight.is-arriving .contact-flight__sweep { animation: contact-flight-sweep-in 820ms cubic-bezier(.65,0,.2,1) both; }
 .contact-flight.is-arriving .contact-flight__veil { animation: contact-flight-veil-in 820ms cubic-bezier(.72,0,.24,1) both; }
 .portfolio-shell.contact-leaving { animation: contact-flight-source 980ms cubic-bezier(.55,0,.3,1) both; }
@@ -677,11 +641,6 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   34% { opacity: 1; transform: translate(-50%,-50%) rotate(135deg) scale(.82); }
   46%,100% { opacity: 0; transform: translate(-50%,-50%) rotate(225deg) scale(.18); }
 }
-@keyframes contact-flight-impact-out {
-  0%,40% { opacity: 0; transform: translate(-50%,-50%) scale(.1); box-shadow: 0 0 0 transparent; }
-  47% { opacity: 1; transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 2rem rgba(79,224,132,.68); }
-  59%,100% { opacity: 0; transform: translate(-50%,-50%) scale(2.2); box-shadow: 0 0 3rem rgba(79,224,132,0); }
-}
 @keyframes contact-flight-sweep-out {
   0%,46% { opacity: 0; transform: translateX(var(--flight-to-x)); }
   52% { opacity: .82; }
@@ -699,11 +658,6 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   0%,12% { stroke-dashoffset: 1; opacity: 0; }
   20%,56% { opacity: 1; }
   70%,100% { stroke-dashoffset: 0; opacity: 0; }
-}
-@keyframes contact-flight-impact-in {
-  0%,51% { opacity: 0; transform: translate(-50%,-50%) scale(.1); }
-  59% { opacity: .9; transform: translate(-50%,-50%) scale(.8); }
-  73%,100% { opacity: 0; transform: translate(-50%,-50%) scale(1.7); }
 }
 @keyframes contact-flight-sweep-in { 0% { opacity: .7; transform: translateX(0); } 92% { opacity: .35; } 100% { opacity: 0; transform: translateX(100vw); } }
 @keyframes contact-flight-veil-in { 0%,6% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
