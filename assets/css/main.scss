@@ -606,16 +606,37 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .contact-flight__impact {
   left: var(--flight-to-x); top: var(--flight-to-y); border-radius: 50%;
+  background:
+    radial-gradient(circle,rgba(235,255,242,.96) 0 14%,var(--accent) 17% 38%,transparent 42%);
+  border: 1px solid color-mix(in srgb,var(--accent) 72%,transparent);
+  box-shadow:
+    0 0 .75rem color-mix(in srgb,var(--accent) 34%,transparent),
+    inset 0 0 .3rem color-mix(in srgb,var(--accent) 48%,transparent);
   transform: translate(-50%,-50%) scale(.1);
 }
 .contact-flight__impact::before,
 .contact-flight__impact::after {
-  position: absolute; top: 50%; left: 50%; content: "";
-  background: linear-gradient(90deg,transparent,rgba(218,255,231,.9),transparent);
-  transform: translate(-50%,-50%);
+  position: absolute; top: 50%; left: 50%; content: ""; aspect-ratio: 1;
+  border-radius: 50%; transform: translate(-50%,-50%);
 }
-.contact-flight__impact::before { width: 3.4rem; height: 1px; }
-.contact-flight__impact::after { width: 1px; height: 3.4rem; }
+.contact-flight__impact::before {
+  width: 1.45rem;
+  border: 1px solid color-mix(in srgb,var(--accent) 58%,transparent);
+  box-shadow:
+    0 0 .6rem color-mix(in srgb,var(--accent) 18%,transparent),
+    inset 0 0 .5rem color-mix(in srgb,var(--accent) 12%,transparent);
+}
+.contact-flight__impact::after {
+  width: 2.35rem;
+  opacity: .78;
+  background: repeating-conic-gradient(
+    from 22.5deg,
+    color-mix(in srgb,var(--accent) 82%,white) 0 5deg,
+    transparent 5deg 42deg
+  );
+  -webkit-mask: radial-gradient(circle,transparent 0 61%,#000 63% 69%,transparent 71%);
+  mask: radial-gradient(circle,transparent 0 61%,#000 63% 69%,transparent 71%);
+}
 .contact-flight__sweep {
   position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: 1px; opacity: 0;
   background: linear-gradient(transparent 5%,color-mix(in srgb,var(--accent) 42%,transparent) 30% 70%,transparent 95%);
