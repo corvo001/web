@@ -577,67 +577,54 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .contact-transition__cover {
   position: absolute; z-index: 1; inset: 0; background: var(--ink);
-  clip-path: inset(50% 0 50%); will-change: clip-path, opacity;
+  clip-path: inset(0 100% 0 0); will-change: clip-path;
 }
 .contact-transition__route {
   position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible;
 }
+.contact-transition__path,
+.contact-transition__pulse {
+  fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
+}
 .contact-transition__path {
-  fill: none; stroke: color-mix(in srgb,var(--accent) 64%,var(--text)); stroke-width: 1;
-  vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .72;
+  stroke: color-mix(in srgb,var(--accent) 42%,var(--text)); stroke-width: 1;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .5;
+}
+.contact-transition__pulse {
+  stroke: color-mix(in srgb,var(--accent) 88%,var(--text)); stroke-width: 1.35;
+  stroke-dasharray: .11 .89; stroke-dashoffset: 1; opacity: 0;
+  filter: drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 48%,transparent));
 }
 .contact-transition__axis {
-  position: absolute; z-index: 3; left: 50%; top: 50%; width: 0; height: 1px;
-  background: color-mix(in srgb,var(--accent) 52%,transparent); transform: translate(-50%,-50%);
-}
-.contact-transition__signal {
-  position: absolute; z-index: 4; left: var(--contact-from-x); top: var(--contact-from-y);
-  width: .34rem; aspect-ratio: 1; background: var(--accent);
-  transform: translate(-50%,-50%) rotate(45deg) scale(.45); opacity: 0;
-  box-shadow: 0 0 .55rem color-mix(in srgb,var(--accent) 34%,transparent);
-  will-change: transform, opacity;
-}
-.contact-transition__label {
-  position: absolute; z-index: 4; left: 50%; top: calc(50% + 1rem);
-  color: color-mix(in srgb,var(--accent) 72%,var(--text)); opacity: 0;
-  font: 500 .52rem/1 var(--mono); letter-spacing: .24em; text-transform: uppercase;
-  transform: translateX(-50%);
+  position: absolute; z-index: 3; left: 0; top: 0; bottom: 0; width: 1px; opacity: 0;
+  background: linear-gradient(transparent 6%,color-mix(in srgb,var(--accent) 38%,transparent) 28% 72%,transparent 94%);
+  box-shadow: 0 0 .8rem color-mix(in srgb,var(--accent) 12%,transparent);
+  transform: translateX(0); will-change: transform, opacity;
 }
 .contact-transition.is-departing { animation: contact-transition-depart 940ms linear both; }
-.contact-transition.is-departing .contact-transition__path { animation: contact-route-depart 650ms cubic-bezier(.22,.72,.2,1) both; }
-.contact-transition.is-departing .contact-transition__signal { animation: contact-signal-route 940ms cubic-bezier(.22,.72,.2,1) both; }
+.contact-transition.is-departing .contact-transition__path { animation: contact-route-depart 690ms cubic-bezier(.22,.72,.2,1) both; }
+.contact-transition.is-departing .contact-transition__pulse { animation: contact-pulse-depart 760ms cubic-bezier(.22,.72,.2,1) both; }
 .contact-transition.is-departing .contact-transition__axis { animation: contact-axis-depart 940ms cubic-bezier(.16,1,.3,1) both; }
 .contact-transition.is-departing .contact-transition__cover { animation: contact-cover-depart 940ms cubic-bezier(.76,0,.24,1) both; }
-.contact-transition.is-departing .contact-transition__label { animation: contact-label-depart 940ms ease both; }
 .contact-transition.is-arriving { animation: contact-transition-arrive 780ms linear both; }
-.contact-transition.is-arriving .contact-transition__path { animation: contact-route-arrive 620ms 60ms cubic-bezier(.16,1,.3,1) both; }
-.contact-transition.is-arriving .contact-transition__signal { animation: contact-signal-arrive 780ms cubic-bezier(.16,1,.3,1) both; }
+.contact-transition.is-arriving .contact-transition__path { animation: contact-route-arrive 640ms 40ms cubic-bezier(.16,1,.3,1) both; }
+.contact-transition.is-arriving .contact-transition__pulse { animation: contact-pulse-arrive 700ms 20ms cubic-bezier(.16,1,.3,1) both; }
 .contact-transition.is-arriving .contact-transition__axis { animation: contact-axis-arrive 780ms cubic-bezier(.16,1,.3,1) both; }
 .contact-transition.is-arriving .contact-transition__cover { animation: contact-cover-arrive 780ms cubic-bezier(.76,0,.24,1) both; }
-.contact-transition.is-arriving .contact-transition__label { animation: contact-label-arrive 780ms ease both; }
+.portfolio-shell.contact-leaving { animation: contact-source-shift 940ms cubic-bezier(.55,0,.3,1) both; }
+.portfolio-shell.contact-arriving { animation: contact-destination-shift 780ms cubic-bezier(.16,1,.3,1) both; }
 @keyframes contact-transition-depart { 0% { opacity: 0; } 5%,100% { opacity: 1; } }
 @keyframes contact-transition-arrive { 0%,92% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes contact-route-depart { 0%,8% { stroke-dashoffset: 1; } 62%,100% { stroke-dashoffset: 0; } }
-@keyframes contact-route-arrive { 0% { stroke-dashoffset: 1; opacity: .72; } 72% { stroke-dashoffset: 0; opacity: .72; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes contact-signal-route {
-  0% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.45); }
-  9% { opacity: 1; }
-  62% { opacity: 1; transform: translate(calc(-50% + var(--contact-dx)),calc(-50% + var(--contact-dy))) rotate(225deg) scale(1); }
-  79% { opacity: 1; transform: translate(calc(-50% + var(--contact-dx)),calc(-50% + var(--contact-dy))) rotate(225deg) scale(.72); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--contact-dx)),calc(-50% + var(--contact-dy))) rotate(315deg) scale(.18); }
-}
-@keyframes contact-signal-arrive {
-  0%,10% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.25); }
-  20% { opacity: 1; }
-  76% { opacity: 1; transform: translate(calc(-50% + var(--contact-dx)),calc(-50% + var(--contact-dy))) rotate(225deg) scale(1); }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--contact-dx)),calc(-50% + var(--contact-dy))) rotate(225deg) scale(.4); }
-}
-@keyframes contact-axis-depart { 0%,48% { width: 0; opacity: 0; } 65% { width: 4.2rem; opacity: 1; } 100% { width: 100vw; opacity: .18; } }
-@keyframes contact-axis-arrive { 0% { width: 100vw; opacity: .18; } 55% { width: 4.2rem; opacity: 1; } 100% { width: 0; opacity: 0; } }
-@keyframes contact-cover-depart { 0%,55% { clip-path: inset(50% 0 50%); } 100% { clip-path: inset(0); } }
-@keyframes contact-cover-arrive { 0%,18% { clip-path: inset(0); opacity: 1; } 82%,100% { clip-path: inset(50% 0 50%); opacity: 0; } }
-@keyframes contact-label-depart { 0%,54% { opacity: 0; } 65%,82% { opacity: .78; } 100% { opacity: 0; } }
-@keyframes contact-label-arrive { 0%,16% { opacity: .78; } 42%,100% { opacity: 0; } }
+@keyframes contact-route-depart { 0%,7% { stroke-dashoffset: 1; opacity: 0; } 14% { opacity: .5; } 68% { stroke-dashoffset: 0; opacity: .5; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes contact-route-arrive { 0% { stroke-dashoffset: 1; opacity: 0; } 12% { opacity: .5; } 72% { stroke-dashoffset: 0; opacity: .5; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes contact-pulse-depart { 0%,8% { stroke-dashoffset: 1; opacity: 0; } 16%,64% { opacity: 1; } 78%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes contact-pulse-arrive { 0%,8% { stroke-dashoffset: 1; opacity: 0; } 18%,70% { opacity: 1; } 88%,100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes contact-axis-depart { 0%,42% { opacity: 0; transform: translateX(0); } 49% { opacity: .8; } 100% { opacity: 0; transform: translateX(100vw); } }
+@keyframes contact-axis-arrive { 0% { opacity: .72; transform: translateX(0); } 88% { opacity: .45; } 100% { opacity: 0; transform: translateX(100vw); } }
+@keyframes contact-cover-depart { 0%,42% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
+@keyframes contact-cover-arrive { 0%,8% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
+@keyframes contact-source-shift { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(-2.2vw); } }
+@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(2.2vw); } 100% { opacity: 1; transform: translateX(0); } }
 
 /* Project inventory entrance */
 .archive-transition {
@@ -1849,7 +1836,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .about-contact-cta {
   position: relative;
-  display: grid; grid-template-columns: .4rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
+  display: grid; grid-template-columns: 1.15rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
   width: min(22rem,100%); min-height: 3rem;
   margin: clamp(.35rem,1dvh,.65rem) auto 0;
   padding: .7rem .85rem;
@@ -1874,9 +1861,12 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta::before { top: 0; }
 .about-contact-cta::after { bottom: 0; }
 .about-contact-cta__signal {
-  width: .28rem; aspect-ratio: 1; justify-self: center;
-  background: color-mix(in srgb,var(--accent) 78%,var(--text)); transform: rotate(45deg);
-  transition: background-color 180ms ease, transform 280ms cubic-bezier(.16,1,.3,1);
+  width: 1.15rem; height: .5rem; justify-self: center;
+  background: color-mix(in srgb,var(--accent) 74%,var(--text));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M1 5h4l2-3 3 6 3-6 3 6 2-3h5' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 10'%3E%3Cpath d='M1 5h4l2-3 3 6 3-6 3 6 2-3h5' fill='none' stroke='black' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity: .72; transform: scaleX(.92); transform-origin: left center;
+  transition: background-color 180ms ease, opacity 180ms ease, transform 320ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__label { position: relative; z-index: 1; text-align: center; white-space: nowrap; }
 .about-contact-cta__arrow {
@@ -1907,7 +1897,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .about-contact-cta:hover .about-contact-cta__signal,
 .about-contact-cta:focus-visible .about-contact-cta__signal {
-  background: var(--accent); transform: rotate(135deg) scale(.78);
+  background: var(--accent); opacity: 1; transform: scaleX(1.08);
 }
 .about-contact-cta:hover .about-contact-cta__arrow,
 .about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.5rem; background: var(--accent); }
@@ -2124,7 +2114,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
-    grid-template-columns: .35rem minmax(0,1fr) 1.25rem; gap: .55rem;
+    grid-template-columns: 1rem minmax(0,1fr) 1.25rem; gap: .55rem;
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.25rem,.8dvh,.45rem);
     padding: .62rem .75rem; font-size: clamp(.55rem,2.45vw,.64rem); letter-spacing: .1em;
   }

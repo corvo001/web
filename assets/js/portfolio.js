@@ -420,33 +420,41 @@
 
   const createContactTransition = (from, to) => {
     const transition = document.createElement('div');
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const label = document.documentElement.lang === 'en' ? 'CONTACT' : 'CONTACTO';
+    const route = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const guide = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const deltaX = to.x - from.x;
+    const deltaY = to.y - from.y;
+    const distance = Math.max(Math.hypot(deltaX, deltaY), 1);
+    const normalX = -deltaY / distance;
+    const normalY = deltaX / distance;
+    const amplitude = Math.min(10, Math.max(4, distance * .018));
+    const points = Array.from({ length: 49 }, (_, index) => {
+      const progress = index / 48;
+      const envelope = Math.sin(Math.PI * progress);
+      const wave = Math.sin(progress * Math.PI * 10) * amplitude * envelope;
+      return {
+        x: from.x + (deltaX * progress) + (normalX * wave),
+        y: from.y + (deltaY * progress) + (normalY * wave)
+      };
+    });
+    const wavePath = points.map((point, index) => `${index ? 'L' : 'M'}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ');
     transition.className = 'contact-transition';
     transition.setAttribute('aria-hidden', 'true');
     transition.innerHTML = `
       <span class="contact-transition__cover"></span>
-      <span class="contact-transition__axis"></span>
-      <span class="contact-transition__signal"></span>
-      <span class="contact-transition__label">${label}</span>`;
-    path.classList.add('contact-transition__route');
-    path.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-    path.setAttribute('preserveAspectRatio', 'none');
-    line.classList.add('contact-transition__path');
-    line.setAttribute('x1', from.x);
-    line.setAttribute('y1', from.y);
-    line.setAttribute('x2', to.x);
-    line.setAttribute('y2', to.y);
-    line.setAttribute('pathLength', '1');
-    path.appendChild(line);
-    transition.insertBefore(path, transition.querySelector('.contact-transition__signal'));
-    transition.style.setProperty('--contact-from-x', `${from.x}px`);
-    transition.style.setProperty('--contact-from-y', `${from.y}px`);
-    transition.style.setProperty('--contact-to-x', `${to.x}px`);
-    transition.style.setProperty('--contact-to-y', `${to.y}px`);
-    transition.style.setProperty('--contact-dx', `${to.x - from.x}px`);
-    transition.style.setProperty('--contact-dy', `${to.y - from.y}px`);
+      <span class="contact-transition__axis"></span>`;
+    route.classList.add('contact-transition__route');
+    route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
+    route.setAttribute('preserveAspectRatio', 'none');
+    [guide, pulse].forEach((wave) => {
+      wave.setAttribute('d', wavePath);
+      wave.setAttribute('pathLength', '1');
+      route.appendChild(wave);
+    });
+    guide.classList.add('contact-transition__path');
+    pulse.classList.add('contact-transition__pulse');
+    transition.insertBefore(route, transition.querySelector('.contact-transition__axis'));
     document.documentElement.appendChild(transition);
     return transition;
   };
@@ -478,11 +486,11 @@
       return;
     }
     if (pageTransition?.type === 'contact' && document.body.classList.contains('info-contact-page')) {
-      const destinationSignal = document.querySelector('.contact-card__signal')?.getBoundingClientRect();
+      const destinationCard = document.querySelector('.contact-card')?.getBoundingClientRect();
       const from = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
-      const to = destinationSignal
-        ? { x: destinationSignal.left + (destinationSignal.width * .5), y: destinationSignal.top + (destinationSignal.height * .5) }
-        : from;
+      const to = destinationCard
+        ? { x: destinationCard.right, y: destinationCard.top + Math.min(destinationCard.height * .5, 52) }
+        : { x: window.innerWidth * .88, y: window.innerHeight * .5 };
       const transition = createContactTransition(from, to);
       document.body.classList.add('contact-arriving');
       await nextPaint();
