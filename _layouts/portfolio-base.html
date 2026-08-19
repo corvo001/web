@@ -115,10 +115,12 @@
     </script>
     {% endif %}
     <title>{% if page.title and page.title != site.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+    <meta name="description" content="Technical portfolio">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Technical Portfolio">
-    <meta property="og:description" content="">
+    <meta property="og:site_name" content="Daniel Cuervo">
+    <meta property="og:title" content="Daniel Cuervo">
+    <meta property="og:description" content="Technical portfolio">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:locale" content="{% if page.lang == 'en' %}en_US{% else %}es_ES{% endif %}">
     <meta property="og:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
@@ -127,12 +129,12 @@
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Technical Portfolio">
+    <meta property="og:image:alt" content="Daniel Cuervo — Technical portfolio">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Technical Portfolio">
-    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Daniel Cuervo">
+    <meta name="twitter:description" content="Technical portfolio">
     <meta name="twitter:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
-    <meta name="twitter:image:alt" content="Technical Portfolio">
+    <meta name="twitter:image:alt" content="Daniel Cuervo — Technical portfolio">
     <link rel="icon" href="{{ '/assets/images/favicon-v6.ico' | relative_url }}" sizes="any">
     <link rel="icon" href="{{ '/assets/images/favicon.svg' | relative_url }}" type="image/svg+xml" sizes="any">
     <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v6.png' | relative_url }}" sizes="180x180">
