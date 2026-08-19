@@ -1803,14 +1803,18 @@ body.home-page > #main.portfolio-main { display: flex; }
   width: 100%; height: auto; max-height: none;
 }
 @media (min-width: 701px) {
+  .info-about-page .internal-copy > p {
+    transform: translate3d(0,clamp(0rem,calc(12dvh - 5.4rem),2.75rem),0);
+  }
   .info-about-page .about-process__visual {
     position: absolute; left: 50%; top: 50%;
     width: 100%; margin: 0;
     transform: translate(-50%,-50%);
   }
+  .info-about-page .about-contact-cta { transform: translate3d(0,-.75rem,0); }
 }
 @media (min-width: 701px) and (min-height: 801px) {
-  .info-about-page .about-contact-cta { transform: translate3d(0,.45rem,0); }
+  .info-about-page .about-contact-cta { transform: translate3d(0,-1.75rem,0); }
 }
 .about-contact-cta {
   position: relative; isolation: isolate;
@@ -2095,12 +2099,11 @@ body.home-page > #main.portfolio-main { display: flex; }
     margin-bottom: clamp(.45rem,1.2dvh,.75rem);
     font-size: clamp(.95rem,4vw,1rem);
     line-height: 1.6;
-    transform: translate3d(0,1.25rem,0);
   }
   .info-about-page .about-process {
     left: 50%; width: 114%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
-    transform: translate(-50%,.75rem);
+    transform: translate(-50%,-.5rem);
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
