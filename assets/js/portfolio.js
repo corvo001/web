@@ -29,8 +29,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactFlightDepartureDuration = 1080;
-  const contactFlightArrivalDuration = 900;
+  const contactShiftDepartureDuration = 1100;
+  const contactShiftArrivalDuration = 760;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -425,20 +425,18 @@
     catch (error) { return null; }
   };
 
-  const createContactFlight = (from, to) => {
-    const flight = document.createElement('div');
-    flight.className = 'contact-flight';
-    flight.setAttribute('aria-hidden', 'true');
-    flight.innerHTML = `
-      <span class="contact-flight__veil"></span>
-      <span class="contact-flight__axis"></span>
-      <span class="contact-flight__emitter"></span>`;
-    flight.style.setProperty('--flight-from-x', `${from.x}px`);
-    flight.style.setProperty('--flight-from-y', `${from.y}px`);
-    flight.style.setProperty('--flight-to-x', `${to.x}px`);
-    flight.style.setProperty('--flight-to-y', `${to.y}px`);
-    document.documentElement.appendChild(flight);
-    return flight;
+  const createContactShift = (origin) => {
+    const shift = document.createElement('div');
+    shift.className = 'contact-shift';
+    shift.setAttribute('aria-hidden', 'true');
+    shift.innerHTML = `
+      <span class="contact-shift__curtain"></span>
+      <span class="contact-shift__line"></span>
+      <span class="contact-shift__core"></span>`;
+    shift.style.setProperty('--contact-origin-x', `${origin.x}px`);
+    shift.style.setProperty('--contact-origin-y', `${origin.y}px`);
+    document.documentElement.appendChild(shift);
+    return shift;
   };
 
   const resetNavigationState = () => {
@@ -451,8 +449,8 @@
         document.documentElement.style.removeProperty(property);
       });
     }
-    document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'contact-leaving', 'contact-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
-    document.querySelectorAll('.archive-transition, .contact-flight').forEach((transition) => transition.remove());
+    document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'contact-shift-leaving', 'contact-shift-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
+    document.querySelectorAll('.archive-transition, .contact-shift').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('.language-return-stage').forEach((stage) => stage.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -467,21 +465,16 @@
       document.documentElement.classList.remove('page-transition-boot');
       return;
     }
-    if (pageTransition?.type === 'contact' && document.body.classList.contains('info-contact-page')) {
-      const destinationSignal = document.querySelector('.contact-card__signal')?.getBoundingClientRect();
-      const from = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
-      const to = destinationSignal
-        ? { x: destinationSignal.left + (destinationSignal.width * .5), y: destinationSignal.top + (destinationSignal.height * .5) }
-        : { x: window.innerWidth * .82, y: window.innerHeight * .5 };
-      const transition = createContactFlight(from, to);
-      document.body.classList.add('contact-arriving');
+    if (pageTransition?.type === 'contact-shift' && document.body.classList.contains('info-contact-page')) {
+      const transition = createContactShift({ x: window.innerWidth, y: window.innerHeight * .5 });
+      document.body.classList.add('contact-shift-arriving');
       await nextPaint();
       document.documentElement.classList.remove('page-transition-boot');
       transition.classList.add('is-arriving');
-      await waitForMotion(transition, 'animationend', contactFlightArrivalDuration, 'contact-flight-arrive');
+      await waitForMotion(transition, 'animationend', contactShiftArrivalDuration, 'contact-shift-arrive');
       transition.remove();
       document.body.classList.add('page-arrival-complete');
-      document.body.classList.remove('contact-arriving');
+      document.body.classList.remove('contact-shift-arriving');
       return;
     }
     document.body.classList.add('page-arriving');
@@ -1467,24 +1460,23 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      target.searchParams.set(contactTransitionQueryKey, 'axis');
+      target.searchParams.set(contactTransitionQueryKey, 'shift');
       warmNavigationPage({ href: target.href });
       const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
       const from = signalRect
         ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
         : { x: link.getBoundingClientRect().left, y: link.getBoundingClientRect().top };
-      const to = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
-      const transition = createContactFlight(from, to);
+      const transition = createContactShift(from);
       freezeNavigationSource();
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       sessionStorage.removeItem(projectTransitionKey);
-      document.body.classList.add('contact-leaving');
+      document.body.classList.add('contact-shift-leaving');
       await nextPaint();
       transition.classList.add('is-departing');
-      await waitForMotion(transition, 'animationend', contactFlightDepartureDuration, 'contact-flight-depart');
+      await waitForMotion(transition, 'animationend', contactShiftDepartureDuration, 'contact-shift-depart');
       sessionStorage.setItem(pageTransitionKey, JSON.stringify({
-        type: 'contact',
+        type: 'contact-shift',
         path: target.pathname,
         startedAt: Date.now()
       }));
