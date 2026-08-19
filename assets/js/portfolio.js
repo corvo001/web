@@ -28,8 +28,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactDepartureDuration = 940;
-  const contactArrivalDuration = 780;
+  const contactFlightDepartureDuration = 980;
+  const contactFlightArrivalDuration = 820;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -418,33 +418,38 @@
     catch (error) { return null; }
   };
 
-  const createContactTransition = (from, to) => {
-    const transition = document.createElement('div');
+  const createContactFlight = (from, to) => {
+    const flight = document.createElement('div');
     const route = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const guide = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const flashPath = `M${from.x.toFixed(2)} ${from.y.toFixed(2)} L${to.x.toFixed(2)} ${to.y.toFixed(2)}`;
-    transition.className = 'contact-transition';
-    transition.setAttribute('aria-hidden', 'true');
-    transition.innerHTML = `
-      <span class="contact-transition__cover"></span>
-      <span class="contact-transition__impact"></span>
-      <span class="contact-transition__axis"></span>`;
-    route.classList.add('contact-transition__route');
+    const beam = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const spark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    flight.className = 'contact-flight';
+    flight.setAttribute('aria-hidden', 'true');
+    flight.innerHTML = `
+      <span class="contact-flight__veil"></span>
+      <span class="contact-flight__sweep"></span>
+      <span class="contact-flight__emitter"></span>
+      <span class="contact-flight__impact"></span>`;
+    route.classList.add('contact-flight__route');
     route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
     route.setAttribute('preserveAspectRatio', 'none');
-    [guide, pulse].forEach((wave) => {
-      wave.setAttribute('d', flashPath);
-      wave.setAttribute('pathLength', '1');
-      route.appendChild(wave);
+    [beam, spark].forEach((line) => {
+      line.setAttribute('x1', from.x);
+      line.setAttribute('y1', from.y);
+      line.setAttribute('x2', to.x);
+      line.setAttribute('y2', to.y);
+      line.setAttribute('pathLength', '1');
+      route.appendChild(line);
     });
-    guide.classList.add('contact-transition__path');
-    pulse.classList.add('contact-transition__pulse');
-    transition.insertBefore(route, transition.querySelector('.contact-transition__axis'));
-    transition.style.setProperty('--contact-impact-x', `${to.x}px`);
-    transition.style.setProperty('--contact-impact-y', `${to.y}px`);
-    document.documentElement.appendChild(transition);
-    return transition;
+    beam.classList.add('contact-flight__beam');
+    spark.classList.add('contact-flight__spark');
+    flight.insertBefore(route, flight.querySelector('.contact-flight__sweep'));
+    flight.style.setProperty('--flight-from-x', `${from.x}px`);
+    flight.style.setProperty('--flight-from-y', `${from.y}px`);
+    flight.style.setProperty('--flight-to-x', `${to.x}px`);
+    flight.style.setProperty('--flight-to-y', `${to.y}px`);
+    document.documentElement.appendChild(flight);
+    return flight;
   };
 
   const resetNavigationState = () => {
@@ -458,7 +463,7 @@
       });
     }
     document.body.classList.remove('gate-preparing', 'gate-exiting', 'page-leaving', 'page-arriving', 'contact-leaving', 'contact-arriving', 'project-portal-leaving', 'archive-leaving', 'archive-arriving');
-    document.querySelectorAll('.archive-transition, .contact-transition').forEach((transition) => transition.remove());
+    document.querySelectorAll('.archive-transition, .contact-flight').forEach((transition) => transition.remove());
     document.querySelectorAll('.project-portal-backdrop, .project-world-signal, .project-world-title').forEach((portal) => portal.remove());
     document.querySelectorAll('.language-return-stage').forEach((stage) => stage.remove());
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
@@ -474,18 +479,17 @@
       return;
     }
     if (pageTransition?.type === 'contact' && document.body.classList.contains('info-contact-page')) {
-      const destinationCard = document.querySelector('.contact-card')?.getBoundingClientRect();
-      const routeY = destinationCard
-        ? destinationCard.top + Math.min(destinationCard.height * .5, 52)
-        : window.innerHeight * .5;
-      const from = { x: window.innerWidth * .5, y: routeY };
-      const to = { x: destinationCard?.right || window.innerWidth * .88, y: routeY };
-      const transition = createContactTransition(from, to);
+      const destinationSignal = document.querySelector('.contact-card__signal')?.getBoundingClientRect();
+      const from = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
+      const to = destinationSignal
+        ? { x: destinationSignal.left + (destinationSignal.width * .5), y: destinationSignal.top + (destinationSignal.height * .5) }
+        : { x: window.innerWidth * .82, y: window.innerHeight * .5 };
+      const transition = createContactFlight(from, to);
       document.body.classList.add('contact-arriving');
       await nextPaint();
       document.documentElement.classList.remove('page-transition-boot');
       transition.classList.add('is-arriving');
-      await waitForMotion(transition, 'animationend', contactArrivalDuration, 'contact-transition-arrive');
+      await waitForMotion(transition, 'animationend', contactFlightArrivalDuration, 'contact-flight-arrive');
       transition.remove();
       document.body.classList.add('page-arrival-complete');
       document.body.classList.remove('contact-arriving');
@@ -1480,7 +1484,7 @@
         ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
         : { x: link.getBoundingClientRect().left, y: link.getBoundingClientRect().top };
       const to = { x: window.innerWidth * .5, y: window.innerHeight * .5 };
-      const transition = createContactTransition(from, to);
+      const transition = createContactFlight(from, to);
       freezeNavigationSource();
       document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
       sessionStorage.removeItem(archiveTransitionKey);
@@ -1488,7 +1492,7 @@
       document.body.classList.add('contact-leaving');
       await nextPaint();
       transition.classList.add('is-departing');
-      await waitForMotion(transition, 'animationend', contactDepartureDuration, 'contact-transition-depart');
+      await waitForMotion(transition, 'animationend', contactFlightDepartureDuration, 'contact-flight-depart');
       sessionStorage.setItem(pageTransitionKey, JSON.stringify({
         type: 'contact',
         path: target.pathname,

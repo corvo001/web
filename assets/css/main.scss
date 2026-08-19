@@ -569,93 +569,124 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* About to contact: one technical signal carries the navigation across pages. */
-.contact-transition {
+/* About to contact: one emitter, one trajectory and one directional handoff. */
+.contact-flight {
   position: fixed; z-index: 2147483647; inset: 0; overflow: hidden;
-  pointer-events: none; color: var(--accent); opacity: 0;
-  isolation: isolate; transform: translateZ(0);
+  pointer-events: none; opacity: 0; isolation: isolate; transform: translateZ(0);
 }
-.contact-transition__cover {
+.contact-flight__veil {
   position: absolute; z-index: 1; inset: 0; background: var(--ink);
   clip-path: inset(0 100% 0 0); will-change: clip-path;
 }
-.contact-transition__route {
+.contact-flight__route {
   position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible;
 }
-.contact-transition__path,
-.contact-transition__pulse {
-  fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;
+.contact-flight__beam,
+.contact-flight__spark {
+  fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round;
 }
-.contact-transition__path {
-  stroke: color-mix(in srgb,var(--accent) 42%,var(--text)); stroke-width: 1;
-  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .5;
+.contact-flight__beam {
+  stroke: color-mix(in srgb,var(--accent) 52%,var(--text)); stroke-width: 1;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0;
 }
-.contact-transition__pulse {
-  stroke: color-mix(in srgb,var(--accent) 88%,var(--text)); stroke-width: 1.35;
-  stroke-dasharray: .11 .89; stroke-dashoffset: 1; opacity: 0;
-  filter: drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 48%,transparent));
+.contact-flight__spark {
+  stroke: color-mix(in srgb,var(--accent) 88%,white); stroke-width: 1.5;
+  stroke-dasharray: .09 .91; stroke-dashoffset: 1; opacity: 0;
+  filter: drop-shadow(0 0 .32rem color-mix(in srgb,var(--accent) 64%,transparent));
 }
-.contact-transition__axis {
-  position: absolute; z-index: 3; left: 0; top: 0; bottom: 0; width: 1px; opacity: 0;
-  background: linear-gradient(transparent 6%,color-mix(in srgb,var(--accent) 38%,transparent) 28% 72%,transparent 94%);
-  box-shadow: 0 0 .8rem color-mix(in srgb,var(--accent) 12%,transparent);
-  transform: translateX(0); will-change: transform, opacity;
-}
-.contact-transition__impact {
-  position: absolute; z-index: 4;
-  top: var(--contact-impact-y); left: var(--contact-impact-x);
-  width: .28rem; aspect-ratio: 1; border-radius: 50%;
+.contact-flight__emitter,
+.contact-flight__impact {
+  position: absolute; z-index: 4; width: .34rem; aspect-ratio: 1;
   background: var(--accent); opacity: 0;
-  transform: translate(-50%,-50%) scale(.15);
-  box-shadow: 0 0 0 transparent;
 }
-.contact-transition__impact::before,
-.contact-transition__impact::after {
+.contact-flight__emitter {
+  left: var(--flight-from-x); top: var(--flight-from-y);
+  transform: translate(-50%,-50%) rotate(45deg) scale(.5);
+  box-shadow: 0 0 .8rem color-mix(in srgb,var(--accent) 42%,transparent);
+}
+.contact-flight__impact {
+  left: var(--flight-to-x); top: var(--flight-to-y); border-radius: 50%;
+  transform: translate(-50%,-50%) scale(.1);
+}
+.contact-flight__impact::before,
+.contact-flight__impact::after {
   position: absolute; top: 50%; left: 50%; content: "";
-  background: linear-gradient(90deg,transparent,rgba(205,255,225,.85),transparent);
+  background: linear-gradient(90deg,transparent,rgba(218,255,231,.9),transparent);
   transform: translate(-50%,-50%);
 }
-.contact-transition__impact::before { width: 3rem; height: 1px; }
-.contact-transition__impact::after { width: 1px; height: 3rem; }
-.contact-transition.is-departing { animation: contact-transition-depart 940ms linear both; }
-.contact-transition.is-departing .contact-transition__path { animation: contact-route-depart 690ms cubic-bezier(.22,.72,.2,1) both; }
-.contact-transition.is-departing .contact-transition__pulse { animation: contact-pulse-depart 760ms cubic-bezier(.22,.72,.2,1) both; }
-.contact-transition.is-departing .contact-transition__axis { animation: contact-axis-depart 940ms cubic-bezier(.16,1,.3,1) both; }
-.contact-transition.is-departing .contact-transition__impact { animation: contact-impact-depart 940ms cubic-bezier(.2,.75,.2,1) both; }
-.contact-transition.is-departing .contact-transition__cover { animation: contact-cover-depart 940ms cubic-bezier(.76,0,.24,1) both; }
-.contact-transition.is-arriving { animation: contact-transition-arrive 780ms linear both; }
-.contact-transition.is-arriving .contact-transition__path { animation: contact-route-arrive 640ms 40ms cubic-bezier(.16,1,.3,1) both; }
-.contact-transition.is-arriving .contact-transition__pulse { animation: contact-pulse-arrive 700ms 20ms cubic-bezier(.16,1,.3,1) both; }
-.contact-transition.is-arriving .contact-transition__axis { animation: contact-axis-arrive 780ms cubic-bezier(.16,1,.3,1) both; }
-.contact-transition.is-arriving .contact-transition__impact { animation: contact-impact-arrive 780ms cubic-bezier(.2,.75,.2,1) both; }
-.contact-transition.is-arriving .contact-transition__cover { animation: contact-cover-arrive 780ms cubic-bezier(.76,0,.24,1) both; }
-.portfolio-shell.contact-leaving { animation: contact-source-shift 940ms cubic-bezier(.55,0,.3,1) both; }
-.portfolio-shell.contact-arriving { animation: contact-destination-shift 780ms cubic-bezier(.16,1,.3,1) both; }
-@keyframes contact-transition-depart { 0% { opacity: 0; } 5%,100% { opacity: 1; } }
-@keyframes contact-transition-arrive { 0%,92% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes contact-route-depart { 0%,7% { stroke-dashoffset: 1; opacity: 0; } 14% { opacity: .5; } 68% { stroke-dashoffset: 0; opacity: .5; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes contact-route-arrive { 0% { stroke-dashoffset: 1; opacity: 0; } 12% { opacity: .5; } 72% { stroke-dashoffset: 0; opacity: .5; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes contact-pulse-depart { 0%,8% { stroke-dashoffset: 1; opacity: 0; } 16%,64% { opacity: 1; } 78%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes contact-pulse-arrive { 0%,8% { stroke-dashoffset: 1; opacity: 0; } 18%,70% { opacity: 1; } 88%,100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes contact-axis-depart { 0%,42% { opacity: 0; transform: translateX(0); } 49% { opacity: .8; } 100% { opacity: 0; transform: translateX(100vw); } }
-@keyframes contact-axis-arrive { 0% { opacity: .72; transform: translateX(0); } 88% { opacity: .45; } 100% { opacity: 0; transform: translateX(100vw); } }
-@keyframes contact-cover-depart { 0%,42% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
-@keyframes contact-cover-arrive { 0%,8% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
-@keyframes contact-source-shift {
-  0%,60% { opacity: 1; transform: translateX(0); }
-  100% { opacity: .38; transform: translateX(4vw); }
+.contact-flight__impact::before { width: 3.4rem; height: 1px; }
+.contact-flight__impact::after { width: 1px; height: 3.4rem; }
+.contact-flight__sweep {
+  position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: 1px; opacity: 0;
+  background: linear-gradient(transparent 5%,color-mix(in srgb,var(--accent) 42%,transparent) 30% 70%,transparent 95%);
+  box-shadow: 0 0 .9rem color-mix(in srgb,var(--accent) 16%,transparent);
+  will-change: transform, opacity;
 }
-@keyframes contact-destination-shift { 0% { opacity: .42; transform: translateX(-4vw); } 100% { opacity: 1; transform: translateX(0); } }
-@keyframes contact-impact-depart {
-  0%,49% { opacity: 0; transform: translate(-50%,-50%) scale(.15); box-shadow: 0 0 0 transparent; }
-  55% { opacity: 1; transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 1.8rem rgba(79,224,132,.72); }
-  67%,100% { opacity: 0; transform: translate(-50%,-50%) scale(2.1); box-shadow: 0 0 3rem rgba(79,224,132,0); }
+.contact-flight.is-departing { animation: contact-flight-depart 980ms linear both; }
+.contact-flight.is-departing .contact-flight__beam { animation: contact-flight-beam-out 980ms cubic-bezier(.2,.72,.2,1) both; }
+.contact-flight.is-departing .contact-flight__spark { animation: contact-flight-spark-out 980ms cubic-bezier(.2,.72,.2,1) both; }
+.contact-flight.is-departing .contact-flight__emitter { animation: contact-flight-emitter 980ms cubic-bezier(.16,1,.3,1) both; }
+.contact-flight.is-departing .contact-flight__impact { animation: contact-flight-impact-out 980ms cubic-bezier(.16,1,.3,1) both; }
+.contact-flight.is-departing .contact-flight__sweep { animation: contact-flight-sweep-out 980ms cubic-bezier(.65,0,.2,1) both; }
+.contact-flight.is-departing .contact-flight__veil { animation: contact-flight-veil-out 980ms cubic-bezier(.72,0,.24,1) both; }
+.contact-flight.is-arriving { animation: contact-flight-arrive 820ms linear both; }
+.contact-flight.is-arriving .contact-flight__beam { animation: contact-flight-beam-in 820ms cubic-bezier(.16,1,.3,1) both; }
+.contact-flight.is-arriving .contact-flight__spark { animation: contact-flight-spark-in 820ms cubic-bezier(.16,1,.3,1) both; }
+.contact-flight.is-arriving .contact-flight__impact { animation: contact-flight-impact-in 820ms cubic-bezier(.16,1,.3,1) both; }
+.contact-flight.is-arriving .contact-flight__sweep { animation: contact-flight-sweep-in 820ms cubic-bezier(.65,0,.2,1) both; }
+.contact-flight.is-arriving .contact-flight__veil { animation: contact-flight-veil-in 820ms cubic-bezier(.72,0,.24,1) both; }
+.portfolio-shell.contact-leaving { animation: contact-flight-source 980ms cubic-bezier(.55,0,.3,1) both; }
+.portfolio-shell.contact-arriving { animation: contact-flight-destination 820ms cubic-bezier(.16,1,.3,1) both; }
+@keyframes contact-flight-depart { 0% { opacity: 0; } 3%,100% { opacity: 1; } }
+@keyframes contact-flight-arrive { 0%,94% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes contact-flight-beam-out {
+  0%,8% { stroke-dashoffset: 1; opacity: 0; }
+  14% { opacity: .62; }
+  46% { stroke-dashoffset: 0; opacity: .62; }
+  57%,100% { stroke-dashoffset: 0; opacity: 0; }
 }
-@keyframes contact-impact-arrive {
-  0%,44% { opacity: 0; transform: translate(-50%,-50%) scale(.15); }
-  52% { opacity: .9; transform: translate(-50%,-50%) scale(.8); }
-  64%,100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
+@keyframes contact-flight-spark-out {
+  0%,10% { stroke-dashoffset: 1; opacity: 0; }
+  16%,43% { opacity: 1; }
+  51%,100% { stroke-dashoffset: 0; opacity: 0; }
 }
+@keyframes contact-flight-emitter {
+  0% { opacity: 0; transform: translate(-50%,-50%) rotate(45deg) scale(.5); }
+  8% { opacity: 1; transform: translate(-50%,-50%) rotate(45deg) scale(1); }
+  34% { opacity: 1; transform: translate(-50%,-50%) rotate(135deg) scale(.82); }
+  46%,100% { opacity: 0; transform: translate(-50%,-50%) rotate(225deg) scale(.18); }
+}
+@keyframes contact-flight-impact-out {
+  0%,40% { opacity: 0; transform: translate(-50%,-50%) scale(.1); box-shadow: 0 0 0 transparent; }
+  47% { opacity: 1; transform: translate(-50%,-50%) scale(1); box-shadow: 0 0 2rem rgba(79,224,132,.68); }
+  59%,100% { opacity: 0; transform: translate(-50%,-50%) scale(2.2); box-shadow: 0 0 3rem rgba(79,224,132,0); }
+}
+@keyframes contact-flight-sweep-out {
+  0%,46% { opacity: 0; transform: translateX(var(--flight-to-x)); }
+  52% { opacity: .82; }
+  100% { opacity: 0; transform: translateX(100vw); }
+}
+@keyframes contact-flight-veil-out { 0%,49% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
+@keyframes contact-flight-source { 0%,53% { opacity: 1; transform: translateX(0); } 100% { opacity: .38; transform: translateX(4vw); } }
+@keyframes contact-flight-beam-in {
+  0%,10% { stroke-dashoffset: 1; opacity: 0; }
+  18% { opacity: .58; }
+  58% { stroke-dashoffset: 0; opacity: .58; }
+  74%,100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes contact-flight-spark-in {
+  0%,12% { stroke-dashoffset: 1; opacity: 0; }
+  20%,56% { opacity: 1; }
+  70%,100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes contact-flight-impact-in {
+  0%,51% { opacity: 0; transform: translate(-50%,-50%) scale(.1); }
+  59% { opacity: .9; transform: translate(-50%,-50%) scale(.8); }
+  73%,100% { opacity: 0; transform: translate(-50%,-50%) scale(1.7); }
+}
+@keyframes contact-flight-sweep-in { 0% { opacity: .7; transform: translateX(0); } 92% { opacity: .35; } 100% { opacity: 0; transform: translateX(100vw); } }
+@keyframes contact-flight-veil-in { 0%,6% { clip-path: inset(0); } 100% { clip-path: inset(0 0 0 100%); } }
+@keyframes contact-flight-destination { 0% { opacity: .38; transform: translateX(-4vw); } 100% { opacity: 1; transform: translateX(0); } }
 
 /* Project inventory entrance */
 .archive-transition {
@@ -1867,7 +1898,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   }
 }
 .about-contact-cta {
-  position: relative;
+  position: relative; isolation: isolate;
   display: grid; grid-template-columns: .4rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
   width: min(22rem,100%); min-height: 3rem;
   margin: clamp(.35rem,1dvh,.65rem) auto 0;
@@ -1875,34 +1906,41 @@ body.home-page > #main.portfolio-main { display: flex; }
   border: 0; border-radius: 0;
   color: var(--text);
   background: transparent;
-  box-shadow: none;
   font: 500 clamp(.62rem,.72vw,.72rem)/1.25 var(--mono);
   letter-spacing: .14em; text-decoration: none; text-transform: uppercase;
-  transition: color 180ms ease, box-shadow 260ms ease;
+  transition: color 180ms ease;
 }
 .about-contact-cta::before,
 .about-contact-cta::after {
   content: ""; position: absolute; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg,
     transparent 0,
-    color-mix(in srgb,var(--text) 13%,transparent) 18%,
-    color-mix(in srgb,var(--text) 13%,transparent) 82%,
+    color-mix(in srgb,var(--text) 14%,transparent) 16%,
+    color-mix(in srgb,var(--text) 14%,transparent) 68%,
     transparent 100%);
-  opacity: .9; transition: opacity 180ms ease, background 260ms ease;
+  opacity: .9;
+  transform: scaleX(.96); transform-origin: left center;
+  transition: opacity 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1), background 260ms ease;
 }
 .about-contact-cta::before { top: 0; }
 .about-contact-cta::after { bottom: 0; }
 .about-contact-cta__signal {
+  position: relative;
   width: .28rem; height: .28rem; justify-self: center;
   background: color-mix(in srgb,var(--accent) 74%,var(--text));
   opacity: 1; transform: rotate(45deg); transform-origin: center;
-  transition: background-color 180ms ease, opacity 180ms ease, transform 320ms cubic-bezier(.16,1,.3,1);
+  box-shadow: 0 0 0 transparent;
+  transition: background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
 }
-.about-contact-cta__label { position: relative; z-index: 1; text-align: center; white-space: nowrap; }
+.about-contact-cta__label {
+  position: relative; z-index: 1; text-align: center; white-space: nowrap;
+  transition: transform 420ms cubic-bezier(.16,1,.3,1);
+}
 .about-contact-cta__arrow {
   position: relative; width: 1.25rem; height: 1px; justify-self: end;
   background: color-mix(in srgb,var(--text) 48%,transparent);
-  transition: width 280ms cubic-bezier(.16,1,.3,1), background-color 180ms ease;
+  transform: translateX(0);
+  transition: background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow::after {
   content: ""; position: absolute; right: 0; top: 50%; width: .38rem; height: .38rem;
@@ -1912,7 +1950,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:hover,
 .about-contact-cta:focus-visible {
   color: var(--accent);
-  box-shadow: none; outline: none;
+  outline: none;
 }
 .about-contact-cta:hover::before,
 .about-contact-cta:hover::after,
@@ -1921,16 +1959,21 @@ body.home-page > #main.portfolio-main { display: flex; }
   opacity: 1;
   background: linear-gradient(90deg,
     transparent 0,
-    color-mix(in srgb,var(--accent) 34%,transparent) 18%,
-    color-mix(in srgb,var(--accent) 34%,transparent) 82%,
+    color-mix(in srgb,var(--accent) 42%,transparent) 16%,
+    color-mix(in srgb,var(--accent) 42%,transparent) 72%,
     transparent 100%);
+  transform: scaleX(1);
 }
 .about-contact-cta:hover .about-contact-cta__signal,
 .about-contact-cta:focus-visible .about-contact-cta__signal {
-  background: var(--accent); opacity: 1; transform: rotate(135deg) scale(.78);
+  background: var(--accent);
+  transform: rotate(135deg) scale(.9);
+  box-shadow: 0 0 .7rem color-mix(in srgb,var(--accent) 46%,transparent);
 }
+.about-contact-cta:hover .about-contact-cta__label,
+.about-contact-cta:focus-visible .about-contact-cta__label { transform: translateX(.14rem); }
 .about-contact-cta:hover .about-contact-cta__arrow,
-.about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.5rem; background: var(--accent); }
+.about-contact-cta:focus-visible .about-contact-cta__arrow { background: var(--accent); transform: translateX(.22rem); }
 .info-contact-page .internal-main {
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
   padding: clamp(2rem,4.7dvh,2.75rem) var(--page-pad) 0;
