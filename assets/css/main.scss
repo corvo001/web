@@ -2095,11 +2095,12 @@ body.home-page > #main.portfolio-main { display: flex; }
     margin-bottom: clamp(.45rem,1.2dvh,.75rem);
     font-size: clamp(.95rem,4vw,1rem);
     line-height: 1.6;
+    transform: translate3d(0,1.25rem,0);
   }
   .info-about-page .about-process {
     left: 50%; width: 114%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
-    transform: translate(-50%,-.5rem);
+    transform: translate(-50%,.75rem);
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
