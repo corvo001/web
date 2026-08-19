@@ -29,8 +29,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactFlightDepartureDuration = 1080;
-  const contactFlightArrivalDuration = 900;
+  const contactFlightDepartureDuration = 940;
+  const contactFlightArrivalDuration = 840;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -431,8 +431,7 @@
     flight.setAttribute('aria-hidden', 'true');
     flight.innerHTML = `
       <span class="contact-flight__veil"></span>
-      <span class="contact-flight__axis"></span>
-      <span class="contact-flight__emitter"></span>`;
+      <span class="contact-flight__axis"></span>`;
     flight.style.setProperty('--flight-from-x', `${from.x}px`);
     flight.style.setProperty('--flight-from-y', `${from.y}px`);
     flight.style.setProperty('--flight-to-x', `${to.x}px`);
