@@ -1852,12 +1852,22 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .info-about-page .about-process {
   display: block;
-  width: 100%; max-width: 50rem; max-height: none;
+  width: 100%; max-width: 60rem; max-height: none;
   margin: 0 auto;
-  transform: translateY(-.5rem);
+  transform: none;
 }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: none;
+}
+@media (min-width: 701px) {
+  .info-about-page .about-process {
+    height: clamp(18rem,35.8dvh,20.15rem);
+  }
+  .info-about-page .about-process__visual {
+    position: absolute; left: 50%; top: 50%;
+    width: 100%; margin: 0;
+    transform: translate(-50%,-50%);
+  }
 }
 .about-contact-cta {
   position: relative;
@@ -2123,8 +2133,9 @@ body.home-page > #main.portfolio-main { display: flex; }
     line-height: 1.6;
   }
   .info-about-page .about-process {
-    width: 100%; max-width: 50rem; max-height: none;
+    left: 50%; width: 108%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
+    transform: translateX(-50%);
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
