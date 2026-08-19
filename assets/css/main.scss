@@ -614,7 +614,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   8% { opacity: .78; transform: translate3d(0,var(--flight-from-y),0); clip-path: inset(0 calc(100vw - var(--flight-from-x)) 0 var(--flight-from-x)); }
   30% { opacity: .82; transform: translate3d(0,var(--flight-from-y),0); clip-path: inset(0); }
   48%,78% { opacity: .76; transform: translate3d(0,50vh,0); clip-path: inset(0); }
-  100% { opacity: .28; transform: translate3d(-6vw,50vh,0); clip-path: inset(0); }
+  100% { opacity: .28; transform: translate3d(0,50vh,0); clip-path: inset(0); }
 }
 @keyframes contact-flight-veil-out {
   0%,55% { clip-path: inset(0 0 0 100%); }
