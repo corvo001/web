@@ -4,9 +4,9 @@
 
 # DANIEL CUERVO
 
-### SOFTWARE · INDUSTRIAL ROBOTICS
+### TECHNOLOGY WORKSHOP
 
-Ideas transformed into functional systems through code, creativity and experimentation.
+Ideas transformed into functional systems through code, creativity and work.
 
 [**ENTER PORTFOLIO**](https://corvo01.com)
 
