@@ -14,6 +14,12 @@ layout: portfolio-base
     {% if page.section == 'about' %}
       {{ section.body | markdownify }}
       {% include about-process.html lang=page.lang alt=section.visual_alt %}
+      {% if page.lang == 'en' %}
+        {% assign about_contact_url = '/en/contact/' %}
+      {% else %}
+        {% assign about_contact_url = '/es/contacto/' %}
+      {% endif %}
+      <a class="about-contact-cta" href="{{ about_contact_url | relative_url }}">{{ section.cta }}</a>
     {% else %}
       <div class="contact-card">
         <span class="contact-card__signal" aria-hidden="true"></span>

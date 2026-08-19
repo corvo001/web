@@ -23,8 +23,8 @@
   technologies: [Simulation, Real-time]
   repository: "https://github.com/corvo001/DysonSwarm"
   summary:
-    es: "Dyson Swarm es un simulador interactivo para diseñar y explorar enjambres de satélites alrededor de una estrella. Permite modificar su cantidad, escala y distribución orbital en tiempo real, observar métricas de cobertura y captación energética, y comparar diferentes arquitecturas de colectores solares a escala astronómica."
-    en: "Dyson Swarm is an interactive simulator for designing and exploring satellite swarms around a star. It allows their quantity, scale and orbital distribution to be adjusted in real time, exposes coverage and energy-capture metrics, and supports comparison between different astronomical-scale solar collector architectures."
+    es: "Dyson Swarm es un simulador interactivo para diseñar y explorar enjambres de satélites alrededor de una estrella. Permite modificar su cantidad, escala y distribución orbital en tiempo real, observar métricas de cobertura y comparar diferentes arquitecturas de colectores solares a escala astronómica."
+    en: "Dyson Swarm is an interactive simulator for designing and exploring satellite swarms around a star. It allows their quantity, scale and orbital distribution to be adjusted in real time, exposes coverage metrics, and supports comparison between different astronomical-scale solar collector architectures."
   gallery:
     - "/assets/images/swarm/DysonSwarm_2.png"
     - "/assets/images/swarm/DysonSwarm_3.png"
