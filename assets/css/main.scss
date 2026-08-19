@@ -1706,7 +1706,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .info-about-page .about-process {
   display: block;
   width: 100%; max-width: 50rem; max-height: none;
-  margin: 0;
+  margin: 0 auto;
   transform: translateY(-.5rem);
 }
 .info-about-page .about-process__visual {
