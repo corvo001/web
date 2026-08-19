@@ -579,15 +579,15 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   clip-path: inset(0 100% 0 0); will-change: clip-path;
 }
 .contact-flight__axis {
-  position: absolute; z-index: 3; left: var(--flight-from-x); top: 0;
-  width: calc(100vw - var(--flight-from-x)); height: 1px; opacity: 0;
+  position: absolute; z-index: 3; right: calc(100vw - var(--flight-from-x)); top: 0;
+  width: var(--flight-from-x); height: 1px; opacity: 0;
   background: linear-gradient(90deg,
-    color-mix(in srgb,var(--accent) 78%,var(--text)) 0,
-    color-mix(in srgb,var(--accent) 48%,transparent) 58%,
-    transparent 100%);
+    transparent 0,
+    color-mix(in srgb,var(--accent) 48%,transparent) 42%,
+    color-mix(in srgb,var(--accent) 78%,var(--text)) 100%);
   box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 18%,transparent);
   transform: translateY(var(--flight-from-y)) scaleX(0);
-  transform-origin: left center;
+  transform-origin: right center;
   will-change: transform,opacity;
 }
 .contact-flight__emitter {
@@ -603,7 +603,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .contact-flight.is-departing .contact-flight__veil { animation: contact-flight-veil-out 1080ms cubic-bezier(.72,0,.24,1) both; }
 .contact-flight.is-arriving { animation: contact-flight-arrive 900ms linear both; }
 .contact-flight.is-arriving .contact-flight__axis {
-  left: 0; width: 100vw; transform-origin: var(--flight-to-x) center;
+  right: 0; width: 100vw; transform-origin: var(--flight-to-x) center;
   animation: contact-flight-axis-in 900ms cubic-bezier(.16,1,.3,1) both;
 }
 .contact-flight.is-arriving .contact-flight__emitter { display: none; }
@@ -627,7 +627,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   84% { opacity: .42; transform: translateY(50vh) scaleX(1); }
   100% { opacity: 0; transform: translateY(50vh) scaleX(1); }
 }
-@keyframes contact-flight-veil-out { 0%,64% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0); } }
+@keyframes contact-flight-veil-out { 0%,64% { clip-path: inset(0 0 0 100%); } 100% { clip-path: inset(0); } }
 @keyframes contact-flight-source { 0%,66% { opacity: 1; transform: translateX(0); } 100% { opacity: .2; transform: translateX(-8vw); } }
 @keyframes contact-flight-axis-in {
   0% { opacity: 0; transform: translateY(50vh) scaleX(1); }
@@ -636,7 +636,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   76% { opacity: .68; transform: translateY(var(--flight-to-y)) scaleX(.002); }
   86%,100% { opacity: 0; transform: translateY(var(--flight-to-y)) scaleX(.002); }
 }
-@keyframes contact-flight-veil-in { 0%,9% { clip-path: inset(0); } 82%,100% { clip-path: inset(0 0 0 100%); } }
+@keyframes contact-flight-veil-in { 0%,9% { clip-path: inset(0); } 82%,100% { clip-path: inset(0 100% 0 0); } }
 @keyframes contact-flight-destination { 0% { opacity: .2; transform: translateX(8vw); } 100% { opacity: 1; transform: translateX(0); } }
 
 /* Project inventory entrance */

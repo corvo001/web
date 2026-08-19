@@ -160,10 +160,10 @@
     <link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/ibm-plex-mono-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/dune-rise.woff' | relative_url }}" as="font" type="font/woff" crossorigin>
-    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}-original-inverted1">
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}-mirrored-axis1">
   </head>
   <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">
     {{ content }}
-    <script src="{{ '/assets/js/portfolio.js' | relative_url }}?v={{ site.time | date: '%s' }}-original-inverted1" defer></script>
+    <script src="{{ '/assets/js/portfolio.js' | relative_url }}?v={{ site.time | date: '%s' }}-mirrored-axis1" defer></script>
   </body>
 </html>
