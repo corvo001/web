@@ -1809,6 +1809,9 @@ body.home-page > #main.portfolio-main { display: flex; }
     transform: translate(-50%,-50%);
   }
 }
+@media (min-width: 701px) and (min-height: 801px) {
+  .info-about-page .about-contact-cta { transform: translate3d(0,.45rem,0); }
+}
 .about-contact-cta {
   position: relative; isolation: isolate;
   display: grid; grid-template-columns: .4rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
@@ -2104,6 +2107,7 @@ body.home-page > #main.portfolio-main { display: flex; }
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.55rem,1.2dvh,.8rem);
     padding: .62rem .75rem; font-size: calc(clamp(.55rem,2.45vw,.64rem) + 1px); letter-spacing: .1em;
   }
+  .info-about-page .about-contact-cta { transform: translate3d(0,-3.25rem,0); }
   .about-contact-cta__arrow { width: .72rem; }
   .info-contact-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
