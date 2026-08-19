@@ -7,6 +7,7 @@
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
+  const contactTransitionQueryKey = '_contact_transition';
   let eyeTrackingLocked = false;
   let languageArrivalPlaying = false;
   let gateInitialStateHandled = false;
@@ -33,6 +34,12 @@
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
+
+  const currentUrl = new URL(window.location.href);
+  if (currentUrl.searchParams.has(contactTransitionQueryKey)) {
+    currentUrl.searchParams.delete(contactTransitionQueryKey);
+    window.history.replaceState(window.history.state, '', `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`);
+  }
 
   document.querySelectorAll('.about-process').forEach((process) => {
     const svg = process.querySelector('.about-process__visual');
@@ -422,7 +429,6 @@
     const flight = document.createElement('div');
     const route = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const beam = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    const spark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     flight.className = 'contact-flight';
     flight.setAttribute('aria-hidden', 'true');
     flight.innerHTML = `
@@ -432,16 +438,13 @@
     route.classList.add('contact-flight__route');
     route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
     route.setAttribute('preserveAspectRatio', 'none');
-    [beam, spark].forEach((line) => {
-      line.setAttribute('x1', from.x);
-      line.setAttribute('y1', from.y);
-      line.setAttribute('x2', to.x);
-      line.setAttribute('y2', to.y);
-      line.setAttribute('pathLength', '1');
-      route.appendChild(line);
-    });
+    beam.setAttribute('x1', from.x);
+    beam.setAttribute('y1', from.y);
+    beam.setAttribute('x2', to.x);
+    beam.setAttribute('y2', to.y);
+    beam.setAttribute('pathLength', '1');
+    route.appendChild(beam);
     beam.classList.add('contact-flight__beam');
-    spark.classList.add('contact-flight__spark');
     flight.insertBefore(route, flight.querySelector('.contact-flight__sweep'));
     flight.style.setProperty('--flight-from-x', `${from.x}px`);
     flight.style.setProperty('--flight-from-y', `${from.y}px`);
@@ -1477,7 +1480,8 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      warmNavigationPage(link);
+      target.searchParams.set(contactTransitionQueryKey, 'clean');
+      warmNavigationPage({ href: target.href });
       const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
       const from = signalRect
         ? { x: signalRect.left + (signalRect.width * .5), y: signalRect.top + (signalRect.height * .5) }
