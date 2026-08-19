@@ -1884,7 +1884,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   color: var(--text);
   background: transparent;
   font: 500 clamp(.62rem,.72vw,.72rem)/1.25 var(--mono);
-  letter-spacing: .14em; text-decoration: none; text-transform: uppercase;
+  letter-spacing: .14em; text-decoration: none; text-transform: none;
   transition: color 180ms ease;
 }
 .about-contact-cta::before,
