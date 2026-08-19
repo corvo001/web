@@ -1009,10 +1009,34 @@
   });
 
   document.querySelectorAll('[data-project-link]').forEach((link) => {
+    let touchInterestEngaged = false;
+    let touchInterestTimer = 0;
+    const showTouchInterest = (event) => {
+      if (event.pointerType === 'mouse') return;
+      window.clearTimeout(touchInterestTimer);
+      touchInterestEngaged = true;
+      link.classList.add('is-touch-interest');
+    };
+    const releaseTouchInterest = (event) => {
+      if (event.pointerType === 'mouse') return;
+      window.clearTimeout(touchInterestTimer);
+      if (event.type === 'pointercancel') {
+        touchInterestEngaged = false;
+        link.classList.remove('is-touch-interest');
+        return;
+      }
+      touchInterestTimer = window.setTimeout(() => {
+        touchInterestEngaged = false;
+        link.classList.remove('is-touch-interest');
+      }, 520);
+    };
     const warmProjectDestination = () => {
       warmProjectVideo(link);
       warmNavigationPage(link);
     };
+    link.addEventListener('pointerdown', showTouchInterest, { passive: true });
+    link.addEventListener('pointerup', releaseTouchInterest, { passive: true });
+    link.addEventListener('pointercancel', releaseTouchInterest, { passive: true });
     link.addEventListener('pointerenter', warmProjectDestination, { passive: true });
     link.addEventListener('focus', warmProjectDestination, { passive: true });
     link.addEventListener('touchstart', warmProjectDestination, { passive: true, once: true });
@@ -1024,6 +1048,9 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
+      if (touchInterestEngaged) {
+        await new Promise((resolve) => window.setTimeout(resolve, 300));
+      }
       freezeNavigationSource();
       const destinationReady = Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());

@@ -1532,7 +1532,10 @@ video.project-hero-image {
   .nav-links a { font-size: .64rem; }
   .display-name { font-size: clamp(1.5rem, 6vw, 2.85rem); letter-spacing: 0; }
   .hero-eyebrow { margin-top: clamp(.35rem,1.1dvh,.55rem); }
-  .hero-project__interest { display: none; }
+  .hero-project__interest {
+    display: block;
+    font-size: clamp(.58rem,2.6vw,.68rem);
+  }
   .portfolio-hero {
     min-height: 100svh;
     padding-top: clamp(7.5rem, 18svh, 10rem);
@@ -1967,7 +1970,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 
 @media (hover: none), (pointer: coarse) {
-  .hero-project.is-active .hero-project__interest { opacity: .72; transform: translate(-50%,0); }
+  .hero-project.is-active.is-touch-interest .hero-project__interest { opacity: .82; transform: translate(-50%,0); }
   .project-index-card:hover h2 {
     color: var(--text);
     letter-spacing: .09em;
