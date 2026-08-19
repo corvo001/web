@@ -1794,9 +1794,9 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .info-about-page .about-process {
   display: block;
-  width: 100%; max-width: 60rem; max-height: none;
-  margin: 0 auto;
-  transform: translateY(-.5rem);
+  left: 50%; width: 106%; max-width: 66rem; max-height: none;
+  margin: 0;
+  transform: translate(-50%,-.5rem);
 }
 .info-about-page .about-process__visual {
   width: 100%; height: auto; max-height: none;
@@ -1815,7 +1815,7 @@ body.home-page > #main.portfolio-main { display: flex; }
   position: relative; isolation: isolate;
   display: grid; grid-template-columns: .4rem minmax(0,1fr) 1.5rem; align-items: center; gap: .8rem;
   width: min(22rem,100%); min-height: 3rem;
-  margin: clamp(.35rem,1dvh,.65rem) auto 0;
+  margin: clamp(.7rem,1.5dvh,1rem) auto 0;
   padding: .7rem .85rem;
   border: 0; border-radius: 0;
   color: var(--text);
@@ -2096,14 +2096,14 @@ body.home-page > #main.portfolio-main { display: flex; }
     line-height: 1.6;
   }
   .info-about-page .about-process {
-    left: 50%; width: 108%; max-width: 50rem; max-height: none;
+    left: 50%; width: 114%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
     transform: translate(-50%,-.5rem);
   }
   .info-about-page .about-process__visual { max-height: none; }
   .about-contact-cta {
     grid-template-columns: .35rem minmax(0,1fr) 1.25rem; gap: .55rem;
-    width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.25rem,.8dvh,.45rem);
+    width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.55rem,1.2dvh,.8rem);
     padding: .62rem .75rem; font-size: calc(clamp(.55rem,2.45vw,.64rem) + 1px); letter-spacing: .1em;
   }
   .about-contact-cta__arrow { width: .72rem; }
