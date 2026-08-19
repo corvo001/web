@@ -29,8 +29,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactFlightDepartureDuration = 980;
-  const contactFlightArrivalDuration = 820;
+  const contactFlightDepartureDuration = 1080;
+  const contactFlightArrivalDuration = 900;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -427,26 +427,12 @@
 
   const createContactFlight = (from, to) => {
     const flight = document.createElement('div');
-    const route = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const beam = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     flight.className = 'contact-flight';
     flight.setAttribute('aria-hidden', 'true');
     flight.innerHTML = `
       <span class="contact-flight__veil"></span>
-      <span class="contact-flight__sweep"></span>
-      <span class="contact-flight__emitter"></span>
-      <span class="contact-flight__terminal"></span>`;
-    route.classList.add('contact-flight__route');
-    route.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`);
-    route.setAttribute('preserveAspectRatio', 'none');
-    beam.setAttribute('x1', from.x);
-    beam.setAttribute('y1', from.y);
-    beam.setAttribute('x2', to.x);
-    beam.setAttribute('y2', to.y);
-    beam.setAttribute('pathLength', '1');
-    route.appendChild(beam);
-    beam.classList.add('contact-flight__beam');
-    flight.insertBefore(route, flight.querySelector('.contact-flight__sweep'));
+      <span class="contact-flight__axis"></span>
+      <span class="contact-flight__emitter"></span>`;
     flight.style.setProperty('--flight-from-x', `${from.x}px`);
     flight.style.setProperty('--flight-from-y', `${from.y}px`);
     flight.style.setProperty('--flight-to-x', `${to.x}px`);
@@ -1481,7 +1467,7 @@
       event.preventDefault();
       if (navigationInProgress) return;
       navigationInProgress = true;
-      target.searchParams.set(contactTransitionQueryKey, 'minimal');
+      target.searchParams.set(contactTransitionQueryKey, 'axis');
       warmNavigationPage({ href: target.href });
       const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
       const from = signalRect
