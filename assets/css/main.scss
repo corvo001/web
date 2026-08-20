@@ -943,7 +943,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   display: grid; grid-template-columns: repeat(2,1fr); width: max-content; gap: clamp(1.2rem, 3vw, 3rem);
   transform: translate(-50%,-50%);
 }
-.nav-links a:first-child { justify-self: end; }
+.nav-links a:first-child { justify-self: end; left: 2px; }
 .nav-links a:last-child { justify-self: start; }
 .nav-links a, .language-switch {
   position: relative;
