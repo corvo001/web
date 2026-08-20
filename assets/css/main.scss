@@ -896,7 +896,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .nav-logo {
   --nav-pupil-x: 0px; --nav-pupil-y: 0px;
-  position: relative; display: flex; align-items: center; width: fit-content; text-decoration: none;
+  position: relative; grid-column: 1; display: flex; align-items: center; width: fit-content; text-decoration: none;
 }
 .nav-logo img {
   position: relative; z-index: 1; width: 2.25rem; height: 2.25rem; object-fit: contain;
@@ -916,7 +916,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   transform: translate(calc(-50% + var(--nav-pupil-x)), calc(-50% + var(--nav-pupil-y)));
   transition: transform 120ms cubic-bezier(.22,1,.36,1), background 180ms ease, box-shadow 180ms ease; pointer-events: none;
 }
-.nav-links { position: relative; z-index: 3; display: flex; gap: clamp(1.2rem, 3vw, 3rem); }
+.nav-links {
+  position: absolute; z-index: 3; left: 50vw; top: 50%;
+  display: flex; gap: clamp(1.2rem, 3vw, 3rem);
+  transform: translate(-50%,-50%);
+}
 .nav-links a, .language-switch {
   position: relative;
   color: var(--muted); font-size: .78rem; font-weight: 500; letter-spacing: .07em;
@@ -962,7 +966,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .nav-hover-locked .nav-logo:hover::before { opacity: 0; }
 .nav-hover-locked .nav-logo:hover img { transform: none; }
 .nav-hover-locked .nav-links a:focus-visible, .nav-hover-locked .language-switch:focus-visible { color: var(--text); }
-.language-switch { justify-self: end; min-width: 2.4rem; font-family: var(--mono); text-align: center; }
+.language-switch { grid-column: 3; justify-self: end; min-width: 2.4rem; font-family: var(--mono); text-align: center; }
 .language-switch::before {
   content: ""; position: absolute; left: 50%; top: 50%; bottom: auto; width: 2.7rem; height: 2.7rem;
   border: 1px solid transparent; border-top-color: color-mix(in srgb,var(--accent) 58%,transparent); border-right-color: color-mix(in srgb,var(--text) 18%,transparent); border-radius: 50%;
