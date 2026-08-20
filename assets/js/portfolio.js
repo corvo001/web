@@ -14,6 +14,8 @@
   let archiveArrivalPlaying = false;
   let projectArrivalPlaying = false;
   let navigationInProgress = false;
+  let eyeTrackingReleaseTimer = 0;
+  let eyeTrackingReleaseGeneration = 0;
   let lastPointerPosition = null;
   let updateEyeFromPointer = null;
   let frozenNavigationAnimations = [];
@@ -265,7 +267,10 @@
       .catch(() => {});
   }
 
-  eyeTrackingLocked = gate && document.documentElement.classList.contains('gate-natural-entry');
+  eyeTrackingLocked = Boolean(gate && (
+    document.documentElement.classList.contains('gate-natural-entry') ||
+    document.documentElement.classList.contains('language-return-settled')
+  ));
 
   const lockEyeAtRest = () => {
     if (!mark) return false;
@@ -276,6 +281,8 @@
     mark.style.setProperty('--py', '0px');
     return true;
   };
+
+  if (gate && document.documentElement.classList.contains('language-return-settled')) lockEyeAtRest();
 
   const setPupilTransitionGeometry = () => {
     const pupil = mark?.querySelector('.reactive-mark__pupil');
@@ -399,12 +406,13 @@
   };
 
   const setLanguageReturnStageGeometry = (stage) => {
-    const stageMark = stage?.querySelector('.reactive-mark');
-    if (!stageMark) return false;
-    const markRect = stageMark.getBoundingClientRect();
-    const centerX = markRect.left + (markRect.width * .5);
-    const centerY = markRect.top + (markRect.height * (456.5 / 1024));
-    const pupilRadius = Math.max(markRect.width * .016, 1);
+    const stagePupil = stage?.querySelector('.reactive-mark__pupil');
+    if (!stagePupil) return false;
+    const pupilRect = stagePupil.getBoundingClientRect();
+    if (!pupilRect.width || !pupilRect.height) return false;
+    const centerX = pupilRect.left + (pupilRect.width * .5);
+    const centerY = pupilRect.top + (pupilRect.height * .5);
+    const pupilRadius = Math.max(Math.min(pupilRect.width, pupilRect.height) * .5, 1);
     const coverRadius = Math.hypot(
       Math.max(centerX, window.innerWidth - centerX),
       Math.max(centerY, window.innerHeight - centerY)
@@ -536,8 +544,11 @@
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
+    window.clearTimeout(eyeTrackingReleaseTimer);
+    eyeTrackingReleaseTimer = 0;
+    eyeTrackingReleaseGeneration += 1;
     clearContactTransfer();
-    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-staging', 'navigation-source-frozen');
+    document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-staging', 'language-return-running', 'navigation-source-frozen');
     releaseNavigationSource();
     if (!document.documentElement.classList.contains('language-bridge-enter')) {
       ['--language-eye-x', '--language-eye-y', '--language-eye-body-y', '--language-eye-pupil-radius', '--language-eye-cover-radius'].forEach((property) => {
@@ -999,15 +1010,33 @@
     );
     document.body.classList.remove('gate-preparing', 'gate-exiting');
     document.documentElement.classList.add('gate-entrance-skip');
-    eyeTrackingLocked = false;
+    window.clearTimeout(eyeTrackingReleaseTimer);
+    const releaseGeneration = ++eyeTrackingReleaseGeneration;
+    eyeTrackingLocked = true;
+    lastPointerPosition = null;
+    lockEyeAtRest();
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      if (releaseGeneration !== eyeTrackingReleaseGeneration) return;
+      eyeTrackingReleaseTimer = window.setTimeout(() => {
+        if (releaseGeneration !== eyeTrackingReleaseGeneration) return;
+        lastPointerPosition = null;
+        mark?.classList.add('eye-tracking-resuming');
+        mark?.classList.remove('eye-geometry-locked');
+        eyeTrackingLocked = false;
+        window.setTimeout(() => mark?.classList.remove('eye-tracking-resuming'), 620);
+        eyeTrackingReleaseTimer = 0;
+      }, 320);
+    }));
     languageArrivalPlaying = false;
     navigationInProgress = false;
-    mark?.classList.remove('eye-geometry-locked');
   };
 
   const showNaturalGateEntrance = () => {
     if (!gate) return;
     gateInitialStateHandled = true;
+    window.clearTimeout(eyeTrackingReleaseTimer);
+    eyeTrackingReleaseTimer = 0;
+    eyeTrackingReleaseGeneration += 1;
     languageArrivalPlaying = false;
     navigationInProgress = false;
     sessionStorage.removeItem(languageBridgeKey);
@@ -1146,16 +1175,30 @@
       sessionStorage.removeItem(projectTransitionKey);
       const gateReady = warmNavigationPage(link);
       const stage = createLanguageReturnStage();
+      const stageReadiness = [];
+      if (document.fonts?.ready) stageReadiness.push(document.fonts.ready);
+      const stageImage = stage.querySelector('.reactive-mark__image');
+      if (stageImage?.decode) stageReadiness.push(stageImage.decode());
+      await Promise.allSettled(stageReadiness);
       await nextPaint();
+      // Lock scrolling and measure in the same task so no intermediate,
+      // scrollbar-shifted frame can be painted before the animation starts.
+      document.documentElement.classList.add('language-return-staging');
       if (!setLanguageReturnStageGeometry(stage)) {
+        document.documentElement.classList.remove('language-return-staging', 'language-return-running');
         stage.remove();
         window.location.assign(link.href);
         return;
       }
+      const refreshStageGeometry = () => setLanguageReturnStageGeometry(stage);
+      window.addEventListener('resize', refreshStageGeometry, { passive: true });
+      window.visualViewport?.addEventListener('resize', refreshStageGeometry, { passive: true });
       freezeNavigationSource();
       const departureReady = waitForMotion(document.body, 'animationend', languageReturnStageDuration, 'language-return-source-v5');
-      document.documentElement.classList.add('language-return-staging');
+      document.documentElement.classList.add('language-return-running');
       await Promise.allSettled([gateReady, departureReady]);
+      window.removeEventListener('resize', refreshStageGeometry);
+      window.visualViewport?.removeEventListener('resize', refreshStageGeometry);
       sessionStorage.setItem(languageReturnKey, JSON.stringify({
         version: 5,
         phase: 'settled',

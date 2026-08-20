@@ -151,6 +151,8 @@ html.language-bridge-enter.language-bridge-entering::before {
 }
 html.language-return-staging body {
   pointer-events: none; overflow: hidden;
+}
+html.language-return-running body {
   animation: language-return-source-v5 1320ms cubic-bezier(.4,0,.2,1) both;
   will-change: opacity, filter, transform;
 }
@@ -169,8 +171,8 @@ html.language-return-staging .language-return-stage { visibility: visible; }
   background: transparent;
 }
 .language-return-stage__gate .gate-inner {
-  opacity: 0; transform: scale(1.018); filter: blur(14px);
-  will-change: opacity, filter, transform;
+  opacity: 0; transform: none; filter: blur(14px);
+  will-change: opacity, filter;
 }
 .language-return-stage__gate .reactive-mark,
 .language-return-stage__gate .language-options { animation: none; }
@@ -189,13 +191,13 @@ html.language-return-staging .language-return-stage { visibility: visible; }
     inset 0 0 13px rgba(174,223,193,.62);
   will-change: width, height, opacity, box-shadow;
 }
-html.language-return-staging .language-return-stage::before {
+html.language-return-running .language-return-stage::before {
   animation: language-return-surface-v5 1320ms cubic-bezier(.4,0,.2,1) both;
 }
-html.language-return-staging .language-return-stage__gate .gate-inner {
+html.language-return-running .language-return-stage__gate .gate-inner {
   animation: language-return-gate-v5 1320ms cubic-bezier(.16,1,.3,1) both;
 }
-html.language-return-staging .language-return-stage__aperture {
+html.language-return-running .language-return-stage__aperture {
   animation: language-return-aperture-v5 1320ms cubic-bezier(.4,0,.2,1) both;
 }
 /* Capture the current document as a still frame before any navigation.
@@ -499,11 +501,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   82%,100% { opacity: 1; }
 }
 @keyframes language-return-gate-v5 {
-  0%,36% { opacity: 0; transform: scale(1.018); filter: blur(14px); }
+  0%,36% { opacity: 0; filter: blur(14px); }
   54% { opacity: .16; filter: blur(10px); }
-  70% { opacity: .58; transform: scale(1.008); filter: blur(5px); }
+  70% { opacity: .58; filter: blur(5px); }
   86% { opacity: .94; filter: blur(1.5px); }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  100% { opacity: 1; filter: blur(0); }
 }
 @keyframes language-return-aperture-v5 {
   0% {
