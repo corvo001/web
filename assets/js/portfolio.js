@@ -219,6 +219,24 @@
     video.load();
   };
 
+  const startProjectCardPreview = (video) => {
+    if (!(video instanceof HTMLVideoElement) || reduceMotion.matches || document.hidden) return;
+    ensureVideoSource(video);
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    const playAttempt = video.play();
+    if (playAttempt?.catch) playAttempt.catch(() => {});
+  };
+
+  const stopProjectCardPreview = (video) => {
+    if (!(video instanceof HTMLVideoElement)) return;
+    video.pause();
+  };
+
   const warmProjectVideo = (link) => {
     const source = link?.dataset.projectVideo;
     if (!source) return Promise.resolve(false);
@@ -1207,60 +1225,213 @@
     });
   });
 
+  const projectIndexControllers = new WeakMap();
+  let activeProjectIndexController = null;
+
   document.querySelectorAll('[data-project-link]').forEach((link) => {
+    const isIndexCard = link.classList.contains('project-index-card');
+    const media = link.querySelector('[data-project-media]');
+    const previewVideo = isIndexCard ? link.querySelector('video[data-project-media]') : null;
     let touchInterestEngaged = false;
     let touchInterestTimer = 0;
-    const resetTouchInterest = () => {
-      window.clearTimeout(touchInterestTimer);
-      touchInterestTimer = 0;
-      touchInterestEngaged = false;
-      link.classList.remove('is-touch-interest');
-    };
-    const showTouchInterest = (event) => {
-      if (event.pointerType === 'mouse') return;
-      window.clearTimeout(touchInterestTimer);
-      touchInterestEngaged = true;
-      link.classList.add('is-touch-interest');
-    };
-    const releaseTouchInterest = (event) => {
-      if (event.pointerType === 'mouse') return;
-      window.clearTimeout(touchInterestTimer);
-      if (event.type === 'pointercancel') {
-        resetTouchInterest();
-        return;
-      }
-      touchInterestTimer = window.setTimeout(() => {
-        touchInterestEngaged = false;
-        link.classList.remove('is-touch-interest');
-      }, 520);
-    };
+    let indexController = null;
+
     const warmProjectDestination = () => {
       warmProjectVideo(link);
       warmNavigationPage(link);
     };
-    link.addEventListener('pointerdown', showTouchInterest, { passive: true });
-    link.addEventListener('pointerup', releaseTouchInterest, { passive: true });
-    link.addEventListener('pointercancel', releaseTouchInterest, { passive: true });
+
+    if (isIndexCard) {
+      let hovered = false;
+      let focused = false;
+      let touching = false;
+      let touchActivationPending = false;
+      let touchGestureCancelled = false;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartScrollY = 0;
+      let touchPreviewTimer = 0;
+      let touchCancellationTimer = 0;
+
+      const resetTouchCancellation = () => {
+        window.clearTimeout(touchCancellationTimer);
+        touchCancellationTimer = 0;
+        touchGestureCancelled = false;
+      };
+
+      const syncPreview = () => {
+        const previewing = !document.hidden && !link.hidden && !link.classList.contains('is-launching') && (
+          hovered || focused || touching
+        );
+        if (!previewing) {
+          link.classList.remove('is-previewing');
+          stopProjectCardPreview(previewVideo);
+          if (activeProjectIndexController === indexController) activeProjectIndexController = null;
+          return;
+        }
+        if (activeProjectIndexController && activeProjectIndexController !== indexController) {
+          activeProjectIndexController.close();
+        }
+        activeProjectIndexController = indexController;
+        link.classList.add('is-previewing');
+        startProjectCardPreview(previewVideo);
+      };
+
+      indexController = {
+        close() {
+          window.clearTimeout(touchPreviewTimer);
+          touchPreviewTimer = 0;
+          resetTouchCancellation();
+          hovered = false;
+          focused = false;
+          touching = false;
+          touchActivationPending = false;
+          syncPreview();
+        },
+        preload() {
+          if (previewVideo && !reduceMotion.matches) ensureVideoSource(previewVideo);
+        },
+        replay() {
+          if (link.classList.contains('is-previewing')) startProjectCardPreview(previewVideo);
+        },
+        consumeTouchActivation() {
+          const touchActivation = { touch: touchActivationPending, cancelled: touchGestureCancelled };
+          touchActivationPending = false;
+          resetTouchCancellation();
+          return touchActivation;
+        },
+        cancelTouchGesture() {
+          window.clearTimeout(touchPreviewTimer);
+          window.clearTimeout(touchCancellationTimer);
+          touchActivationPending = false;
+          touchGestureCancelled = true;
+          touchCancellationTimer = window.setTimeout(resetTouchCancellation, 700);
+          touching = false;
+          syncPreview();
+        },
+        cancelIfScrolled() {
+          if (touching && Math.abs(window.scrollY - touchStartScrollY) > 14) this.cancelTouchGesture();
+        },
+        beginLaunch() {
+          window.clearTimeout(touchPreviewTimer);
+          touchActivationPending = false;
+          touching = true;
+        }
+      };
+      projectIndexControllers.set(link, indexController);
+
+      link.addEventListener('pointerenter', (event) => {
+        if (event.pointerType === 'touch') return;
+        hovered = true;
+        syncPreview();
+      });
+      link.addEventListener('pointerleave', (event) => {
+        if (event.pointerType === 'touch') return;
+        hovered = false;
+        syncPreview();
+      });
+      link.addEventListener('focus', () => {
+        window.requestAnimationFrame(() => {
+          focused = link.matches(':focus-visible');
+          syncPreview();
+        });
+      });
+      link.addEventListener('blur', () => { focused = false; syncPreview(); });
+      link.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse') return;
+        window.clearTimeout(touchPreviewTimer);
+        resetTouchCancellation();
+        touchActivationPending = true;
+        touchStartX = event.clientX;
+        touchStartY = event.clientY;
+        touchStartScrollY = window.scrollY;
+        touching = true;
+        syncPreview();
+      }, { passive: true });
+      link.addEventListener('pointermove', (event) => {
+        if (event.pointerType === 'mouse' || !touching) return;
+        if (Math.hypot(event.clientX - touchStartX, event.clientY - touchStartY) > 14) {
+          indexController.cancelTouchGesture();
+        }
+      }, { passive: true });
+      link.addEventListener('pointerup', (event) => {
+        if (event.pointerType === 'mouse') return;
+        window.clearTimeout(touchPreviewTimer);
+        touchPreviewTimer = window.setTimeout(() => {
+          touching = false;
+          syncPreview();
+        }, 540);
+      }, { passive: true });
+      link.addEventListener('pointercancel', (event) => {
+        if (event.pointerType === 'mouse') return;
+        indexController.cancelTouchGesture();
+      }, { passive: true });
+      link.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        indexController.close();
+        link.blur();
+      });
+      previewVideo?.addEventListener('canplay', () => indexController.replay());
+      indexController.close();
+    } else {
+      const resetTouchInterest = () => {
+        window.clearTimeout(touchInterestTimer);
+        touchInterestTimer = 0;
+        touchInterestEngaged = false;
+        link.classList.remove('is-touch-interest');
+      };
+      const showTouchInterest = (event) => {
+        if (event.pointerType === 'mouse') return;
+        window.clearTimeout(touchInterestTimer);
+        touchInterestEngaged = true;
+        link.classList.add('is-touch-interest');
+      };
+      const releaseTouchInterest = (event) => {
+        if (event.pointerType === 'mouse') return;
+        window.clearTimeout(touchInterestTimer);
+        if (event.type === 'pointercancel') {
+          resetTouchInterest();
+          return;
+        }
+        touchInterestTimer = window.setTimeout(resetTouchInterest, 520);
+      };
+      link.addEventListener('pointerdown', showTouchInterest, { passive: true });
+      link.addEventListener('pointerup', releaseTouchInterest, { passive: true });
+      link.addEventListener('pointercancel', releaseTouchInterest, { passive: true });
+      window.addEventListener('pageshow', resetTouchInterest);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) resetTouchInterest();
+      });
+      resetTouchInterest();
+    }
+
     link.addEventListener('pointerenter', warmProjectDestination, { passive: true });
     link.addEventListener('focus', warmProjectDestination, { passive: true });
-    link.addEventListener('touchstart', warmProjectDestination, { passive: true, once: true });
-    window.addEventListener('pageshow', resetTouchInterest);
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) resetTouchInterest();
-    });
-    resetTouchInterest();
+    if (!isIndexCard) link.addEventListener('touchstart', warmProjectDestination, { passive: true, once: true });
     link.addEventListener('click', async (event) => {
       if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
-      const media = link.querySelector('[data-project-media]');
-      if (!media || link.classList.contains('is-launching')) return;
+      if (!media) return;
+      if (link.classList.contains('is-launching') || navigationInProgress) {
+        event.preventDefault();
+        return;
+      }
+
+      let touchActivation = { touch: false, cancelled: false };
+      if (isIndexCard) {
+        touchActivation = indexController.consumeTouchActivation();
+        if (touchActivation.cancelled) {
+          event.preventDefault();
+          return;
+        }
+      }
 
       event.preventDefault();
-      if (navigationInProgress) return;
       navigationInProgress = true;
-      if (touchInterestEngaged) {
+      indexController?.beginLaunch();
+      const destinationReady = Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
+      if ((isIndexCard && touchActivation.touch) || (!isIndexCard && touchInterestEngaged)) {
         await new Promise((resolve) => window.setTimeout(resolve, 300));
       }
-      const destinationReady = Promise.allSettled([warmProjectVideo(link), warmNavigationPage(link)]);
       document.querySelectorAll('.archive-transition').forEach((transition) => transition.remove());
       sessionStorage.removeItem(archiveTransitionKey);
       const useDisplayFont = projectDisplayFontAvailable;
@@ -1277,6 +1448,10 @@
       });
     });
   });
+
+  window.addEventListener('scroll', () => activeProjectIndexController?.cancelIfScrolled(), { passive: true });
+  window.addEventListener('pageshow', () => activeProjectIndexController?.close());
+  document.addEventListener('visibilitychange', () => activeProjectIndexController?.close());
 
   document.querySelectorAll('[data-home-projects]').forEach((projects) => {
     const slides = [...projects.querySelectorAll('.hero-project')];
@@ -1405,8 +1580,7 @@
         const visible = category === 'ALL' || card.dataset.projectCategory === category;
         card.hidden = !visible;
         if (!visible) {
-          card.querySelector('video[data-project-media]')?.pause();
-          card.querySelector('.project-index-card__visual')?.classList.remove('is-proximity-active');
+          projectIndexControllers.get(card)?.close();
         }
         if (visible) visibleCount += 1;
       });
@@ -1438,132 +1612,16 @@
   });
 
   const indexCapsules = [...document.querySelectorAll('.project-index-card__visual')];
-  if (indexCapsules.length) {
-    const capsuleStates = new WeakMap();
-    const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    let lastCapsulePointer = null;
-    let capsulePointerFrame = 0;
-    const distanceToSegment = (point, start, end) => {
-      const segmentX = end.x - start.x;
-      const segmentY = end.y - start.y;
-      const lengthSquared = (segmentX * segmentX) + (segmentY * segmentY);
-      if (!lengthSquared) return Math.hypot(point.x - start.x, point.y - start.y);
-      const projection = Math.max(0, Math.min(1,
-        (((point.x - start.x) * segmentX) + ((point.y - start.y) * segmentY)) / lengthSquared
-      ));
-      return Math.hypot(
-        point.x - (start.x + (projection * segmentX)),
-        point.y - (start.y + (projection * segmentY))
-      );
-    };
-    const distanceToDiamond = (rect, point) => {
-      const centerX = rect.left + (rect.width / 2);
-      const centerY = rect.top + (rect.height / 2);
-      const halfWidth = rect.width / 2;
-      const halfHeight = rect.height / 2;
-      const normalizedDistance = (Math.abs(point.x - centerX) / halfWidth)
-        + (Math.abs(point.y - centerY) / halfHeight);
-      if (normalizedDistance <= 1) return 0;
-      const vertices = [
-        { x: centerX, y: rect.top },
-        { x: rect.right, y: centerY },
-        { x: centerX, y: rect.bottom },
-        { x: rect.left, y: centerY }
-      ];
-      return Math.min(...vertices.map((vertex, index) =>
-        distanceToSegment(point, vertex, vertices[(index + 1) % vertices.length])
-      ));
-    };
-    const updateCapsule = (capsule) => {
-      const state = capsuleStates.get(capsule);
-      const card = capsule.closest('.project-index-card');
-      const video = capsule.querySelector('video[data-project-media]');
-      if (!state || !card) return;
-      const active = !document.hidden && !card.hidden && !reduceMotion.matches && (
-        desktopPointer.matches
-          ? (state.pointerNear || state.hovered || state.focused)
-          : state.focused
-      );
-      capsule.classList.toggle('is-proximity-active', active);
-      if (active) warmProjectVideo(card);
-      video?.pause();
-    };
-
-    const updatePointerProximity = () => {
-      capsulePointerFrame = 0;
-      if (!desktopPointer.matches || !lastCapsulePointer) return;
-      indexCapsules.forEach((capsule) => {
-        const state = capsuleStates.get(capsule);
-        const card = capsule.closest('.project-index-card');
-        if (!state || !card || card.hidden) return;
-        const rect = capsule.getBoundingClientRect();
-        const activationRange = Math.min(52, Math.max(28, rect.width * .1));
-        const releaseRange = activationRange + 14;
-        const pointerDistance = distanceToDiamond(rect, lastCapsulePointer);
-        const pointerNear = pointerDistance <= (state.pointerNear ? releaseRange : activationRange);
-        if (pointerNear === state.pointerNear) return;
-        state.pointerNear = pointerNear;
-        updateCapsule(capsule);
+  if (indexCapsules.length && 'IntersectionObserver' in window) {
+    const capsuleObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const card = entry.target.closest('.project-index-card');
+        const controller = projectIndexControllers.get(card);
+        if (entry.isIntersecting) controller?.preload();
+        else controller?.close();
       });
-    };
-    const schedulePointerProximity = () => {
-      if (!capsulePointerFrame) capsulePointerFrame = window.requestAnimationFrame(updatePointerProximity);
-    };
-
-    indexCapsules.forEach((capsule) => {
-      const card = capsule.closest('.project-index-card');
-      const video = capsule.querySelector('video[data-project-media]');
-      const state = { near: false, pointerNear: false, hovered: false, focused: false };
-      capsuleStates.set(capsule, state);
-      video?.pause();
-
-      capsule.addEventListener('pointerenter', () => { state.hovered = true; updateCapsule(capsule); });
-      capsule.addEventListener('pointerleave', () => { state.hovered = false; updateCapsule(capsule); });
-      card?.addEventListener('focus', () => { state.focused = true; updateCapsule(capsule); });
-      card?.addEventListener('blur', () => { state.focused = false; updateCapsule(capsule); });
-    });
-
-    if ('IntersectionObserver' in window) {
-      const capsuleObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          const state = capsuleStates.get(entry.target);
-          if (!state) return;
-          state.near = entry.isIntersecting;
-          updateCapsule(entry.target);
-        });
-      }, { rootMargin: '-22% 0px -22% 0px', threshold: 0.15 });
-      indexCapsules.forEach((capsule) => capsuleObserver.observe(capsule));
-    }
-
-    window.addEventListener('pointermove', (event) => {
-      lastCapsulePointer = { x: event.clientX, y: event.clientY };
-      schedulePointerProximity();
-    }, { passive: true });
-    window.addEventListener('scroll', schedulePointerProximity, { passive: true });
-    document.documentElement.addEventListener('pointerleave', () => {
-      lastCapsulePointer = null;
-      indexCapsules.forEach((capsule) => {
-        const state = capsuleStates.get(capsule);
-        if (!state?.pointerNear) return;
-        state.pointerNear = false;
-        updateCapsule(capsule);
-      });
-    });
-    desktopPointer.addEventListener?.('change', () => {
-      indexCapsules.forEach((capsule) => {
-        const state = capsuleStates.get(capsule);
-        if (state) state.pointerNear = false;
-        updateCapsule(capsule);
-      });
-      schedulePointerProximity();
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      indexCapsules.forEach((capsule) => {
-        if (document.hidden) capsule.querySelector('video[data-project-media]')?.pause();
-        else updateCapsule(capsule);
-      });
-    });
+    }, { rootMargin: '30% 0px', threshold: 0.08 });
+    indexCapsules.forEach((capsule) => capsuleObserver.observe(capsule));
   }
 
   document.querySelectorAll('[data-work-entry]').forEach((link) => {
