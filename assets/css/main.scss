@@ -370,7 +370,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .language-options a:hover strong::after, .language-options a:focus-visible strong::after {
   opacity: 1; animation: language-trail-dot 2.4s linear 420ms infinite;
 }
-.language-divider { width: 1px; height: 1.25rem; background: var(--line); }
+.language-divider { width: 1px; height: 1.25rem; margin-bottom: .975rem; background: var(--line); }
 
 .pupil-transition {
   position: fixed; z-index: 100; inset: 0;
@@ -1706,6 +1706,7 @@ video.project-hero-image {
   .language-options a { gap: 1.35rem; padding: .7rem .15rem 1rem; }
   .language-options a span { font-size: clamp(.48rem, 2.15vw, .58rem); letter-spacing: .065em; }
   .language-options a strong { font-size: .92rem; }
+  .language-divider { margin-bottom: .835rem; }
   .portfolio-nav { grid-template-columns: 1fr auto 1fr; }
   .nav-links { justify-content: center; gap: clamp(.8rem,4vw,1.1rem); }
   .nav-links a { font-size: .64rem; }
