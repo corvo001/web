@@ -1242,6 +1242,7 @@
     };
 
     if (isIndexCard) {
+      const hoverTarget = link.querySelector('.project-index-card__aperture') || link;
       let hovered = false;
       let focused = false;
       let touching = false;
@@ -1320,12 +1321,12 @@
       };
       projectIndexControllers.set(link, indexController);
 
-      link.addEventListener('pointerenter', (event) => {
+      hoverTarget.addEventListener('pointerenter', (event) => {
         if (event.pointerType === 'touch') return;
         hovered = true;
         syncPreview();
       });
-      link.addEventListener('pointerleave', (event) => {
+      hoverTarget.addEventListener('pointerleave', (event) => {
         if (event.pointerType === 'touch') return;
         hovered = false;
         syncPreview();
