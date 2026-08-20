@@ -450,7 +450,8 @@
     const targetX = Math.min(Math.max(metrics.targetX ?? centerX, 0), viewportWidth);
     const targetY = Math.min(Math.max(metrics.targetY ?? centerY, 0), viewportHeight);
     const handoffOriginX = hasReceiver ? 0 : centerX;
-    const handoffOriginY = centerY;
+    const compactHandoff = hasReceiver && window.matchMedia('(max-width: 700px)').matches;
+    const handoffOriginY = compactHandoff ? targetY : centerY;
     root.style.setProperty('--contact-transfer-center-shift', `${-centerX}px`);
     root.style.setProperty('--contact-transfer-exit-shift', `${-(centerX + viewportWidth)}px`);
     root.style.setProperty('--contact-transfer-receiver-shift', `${targetX - centerX - viewportWidth}px`);
