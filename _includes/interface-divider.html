@@ -10,21 +10,20 @@
       <stop class="interface-divider__stop interface-divider__stop--edge" offset="1"/>
     </linearGradient>
     <path id="interface-path-{{ include.position }}" pathLength="1440" d="M0 11H342c54 0 70-2 112-2s62 4 104 4 62-3 104-3c24 0 34-2 54-2s30 6 50 6 30-3 54-3c42 0 62-2 104-2s62 4 104 4 66-2 126-2h286"/>
-    {% if include.position == 'footer' %}<path id="interface-cursor-path-footer" pathLength="1" d="M662.716 8.094H1396.814"/>{% endif %}
   </defs>
   <use class="interface-divider__line" href="#interface-path-{{ include.position }}"/>
   <use class="interface-divider__signal" href="#interface-path-{{ include.position }}" stroke="url(#interface-signal-{{ include.position }})"/>
   <path class="interface-divider__cursor-glow" d="M0-3.5V3.5">
     <animate attributeName="opacity" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.18;.34;.44;.5;.56;.66;.82;1" values="0;0;.02;.18;.72;.18;.02;0;0"/>
-    <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto"{% if include.position == 'footer' %} calcMode="linear" keyPoints="0;1;1" keyTimes="0;.5;1"{% endif %}>
-      <mpath href="{% if include.position == 'footer' %}#interface-cursor-path-footer{% else %}#interface-path-{{ include.position }}{% endif %}"/>
+    <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto">
+      <mpath href="#interface-path-{{ include.position }}"/>
     </animateMotion>
   </path>
   <path class="interface-divider__cursor" d="M0-2.5V2.5">
-    <animate attributeName="opacity" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.18;.34;.44;.5;.56;.66;.82;1" values="{% if include.position == 'footer' %}0;0;.06;.3;.82;.3;.06;0;0{% else %}.04;.05;.09;.3;.82;.3;.09;.05;.04{% endif %}"/>
+    <animate attributeName="opacity" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.18;.34;.44;.5;.56;.66;.82;1" values=".04;.05;.09;.3;.82;.3;.09;.05;.04"/>
     <animate attributeName="stroke-width" dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" keyTimes="0;.34;.5;.66;1" values=".7;.8;1.35;.8;.7"/>
-    <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto"{% if include.position == 'footer' %} calcMode="linear" keyPoints="0;1;1" keyTimes="0;.5;1"{% endif %}>
-      <mpath href="{% if include.position == 'footer' %}#interface-cursor-path-footer{% else %}#interface-path-{{ include.position }}{% endif %}"/>
+    <animateMotion dur="14s" begin="{% if include.position == 'footer' %}-7s{% else %}0s{% endif %}" repeatCount="indefinite" rotate="auto">
+      <mpath href="#interface-path-{{ include.position }}"/>
     </animateMotion>
   </path>
 </svg>

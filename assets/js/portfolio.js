@@ -449,13 +449,15 @@
     const hasReceiver = Number.isFinite(metrics.targetX) && Number.isFinite(metrics.targetY);
     const targetX = Math.min(Math.max(metrics.targetX ?? centerX, 0), viewportWidth);
     const targetY = Math.min(Math.max(metrics.targetY ?? centerY, 0), viewportHeight);
+    const handoffOriginX = hasReceiver ? 0 : centerX;
+    const handoffOriginY = centerY;
     root.style.setProperty('--contact-transfer-center-shift', `${-centerX}px`);
     root.style.setProperty('--contact-transfer-exit-shift', `${-(centerX + viewportWidth)}px`);
     root.style.setProperty('--contact-transfer-receiver-shift', `${targetX - centerX - viewportWidth}px`);
-    root.style.setProperty('--contact-transfer-packet-x', `${centerX}px`);
-    root.style.setProperty('--contact-transfer-packet-y', `${centerY}px`);
-    root.style.setProperty('--contact-transfer-packet-dx', `${targetX - centerX}px`);
-    root.style.setProperty('--contact-transfer-packet-dy', `${targetY - centerY}px`);
+    root.style.setProperty('--contact-transfer-packet-x', `${handoffOriginX}px`);
+    root.style.setProperty('--contact-transfer-packet-y', `${handoffOriginY}px`);
+    root.style.setProperty('--contact-transfer-packet-dx', `${targetX - handoffOriginX}px`);
+    root.style.setProperty('--contact-transfer-packet-dy', `${targetY - handoffOriginY}px`);
     if (hasReceiver) root.classList.add('has-contact-receiver');
 
     const vector = root.querySelector('.contact-transfer__vector');
@@ -475,8 +477,8 @@
     });
     spineTop.setAttribute('y2', 0);
     spineBottom.setAttribute('y2', viewportHeight);
-    handoff.setAttribute('x1', centerX);
-    handoff.setAttribute('y1', centerY);
+    handoff.setAttribute('x1', handoffOriginX);
+    handoff.setAttribute('y1', handoffOriginY);
     handoff.setAttribute('x2', targetX);
     handoff.setAttribute('y2', targetY);
     document.documentElement.appendChild(root);
