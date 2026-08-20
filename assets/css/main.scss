@@ -2235,11 +2235,15 @@ body.home-page > #main.portfolio-main { display: flex; }
     transform: translate3d(0,2.25rem,0);
   }
   .info-about-page .about-process {
-    left: 50%; width: 114%; max-width: 50rem; max-height: none;
+    left: 50%; width: 120%; max-width: 50rem; max-height: none;
     margin-top: max(0px,calc(clamp(.5rem,1.5vw,1rem) - 3px));
     transform: translate(-50%,-.5rem);
   }
-  .info-about-page .about-process__visual { max-height: none; }
+  .info-about-page .about-process__visual {
+    position: absolute; left: 50%; top: calc(50% - .8rem);
+    width: 112%; height: auto; max-height: none;
+    transform: translate(-50%,-50%);
+  }
   .about-contact-cta {
     grid-template-columns: .35rem minmax(0,1fr) 1.25rem; gap: .55rem;
     width: min(20rem,100%); min-height: 2.8rem; margin-top: clamp(.55rem,1.2dvh,.8rem);
@@ -2268,8 +2272,11 @@ body.home-page > #main.portfolio-main { display: flex; }
   .info-page .internal-header { margin-bottom: .45rem; }
   .info-page .internal-header h1 { font-size: clamp(2.25rem,min(8vw,10dvh),4.5rem); }
   .info-page .internal-copy { font-size: clamp(.76rem,min(1.35vw,1.8dvh),.95rem); line-height: 1.4; }
-  .info-about-page .about-process,
-  .info-about-page .about-process__visual { max-height: 27dvh; }
+  .info-about-page .about-process { max-height: 27dvh; }
+  .info-about-page .about-process__visual {
+    top: calc(50% + .8rem);
+    max-height: none;
+  }
 }
 
 @media (hover: none), (pointer: coarse) {
