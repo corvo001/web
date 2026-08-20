@@ -1,6 +1,4 @@
-{% assign t = site.data.translations[page.lang] %}
 <footer class="portfolio-footer portfolio-footer--minimal">
   {% include interface-divider.html position='footer' %}
-  <span>{{ t.footer }}</span>
-  <span>© {{ site.time | date: '%Y' }}</span>
+  <span class="portfolio-footer__copyright">© {{ site.time | date: '%Y' }}</span>
 </footer>

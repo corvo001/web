@@ -43,7 +43,6 @@ es:
     pause: "Pausar vídeo"
     progress: "Progreso del vídeo"
     fullscreen: "Ver a pantalla completa"
-  footer: "Portfolio técnico"
 
 en:
   language_name: "English"
@@ -90,4 +89,3 @@ en:
     pause: "Pause video"
     progress: "Video progress"
     fullscreen: "View fullscreen"
-  footer: "Technical portfolio"
