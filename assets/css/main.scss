@@ -2139,6 +2139,11 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 
 @media (hover: none), (pointer: coarse) {
+  .hero-project.is-active:hover .hero-project__interest,
+  .hero-project.is-active:focus-visible .hero-project__interest {
+    opacity: 0;
+    transform: translate(-50%,.75rem);
+  }
   .hero-project.is-active.is-touch-interest .hero-project__interest { opacity: .82; transform: translate(-50%,0); }
   .project-index-card:hover h2 {
     color: var(--text);
