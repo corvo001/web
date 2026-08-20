@@ -918,7 +918,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .nav-links {
   position: absolute; z-index: 3; left: 50vw; top: 50%;
-  display: grid; grid-template-columns: repeat(2,1fr); gap: clamp(1.2rem, 3vw, 3rem);
+  display: grid; grid-template-columns: repeat(2,1fr); width: max-content; gap: clamp(1.2rem, 3vw, 3rem);
   transform: translate(-50%,-50%);
 }
 .nav-links a:first-child { justify-self: end; }
