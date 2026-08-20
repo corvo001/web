@@ -2020,7 +2020,7 @@ body.home-page > #main.portfolio-main { display: flex; }
     --interface-footer-size: clamp(4.25rem,9.5dvh,5rem);
   }
   body.home-page { --interface-frame-inline: 0rem; }
-  .home-page .portfolio-hero { --hall-label-center-adjust: 0rem; }
+  .home-page .portfolio-hero { --hall-label-center-adjust: .4rem; }
   .home-page .hero-projects {
     touch-action: pan-y;
     overscroll-behavior-inline: contain;
