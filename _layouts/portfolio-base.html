@@ -9,8 +9,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% unless active_body_class == 'language-page' %}
-    <style>html.page-transition-boot{background:#090b0a}html.page-transition-boot body{opacity:0;animation:none}@media(prefers-color-scheme:light){html.page-transition-boot{background:#f3f4ef}}</style>
+    <style>html.page-transition-boot,html.contact-transfer-boot{background:#090b0a}html.contact-transfer-boot{overflow:hidden}html.page-transition-boot body,html.contact-transfer-boot body{opacity:0;animation:none}@media(prefers-color-scheme:light){html.page-transition-boot,html.contact-transfer-boot{background:#f3f4ef}}</style>
     <script>
+      try {
+        const contactTransferKey = 'portfolio-contact-transfer-v1';
+        const contactTransfer = JSON.parse(sessionStorage.getItem(contactTransferKey) || 'null');
+        const isExpectedContact = contactTransfer?.type === 'about-contact' &&
+          contactTransfer?.version === 1 &&
+          contactTransfer?.phase === 'handoff' &&
+          contactTransfer?.path === window.location.pathname;
+        const isRecentContact = Date.now() - Number(contactTransfer?.startedAt || 0) < 8000;
+        const contactMotionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isExpectedContact && isRecentContact && contactMotionAllowed) {
+          sessionStorage.removeItem('portfolio-page-transition');
+          document.documentElement.classList.remove('page-transition-boot');
+          document.documentElement.classList.add('contact-transfer-boot');
+          window.setTimeout(() => {
+            if (!document.documentElement.classList.contains('contact-transfer-boot')) return;
+            document.documentElement.classList.remove('contact-transfer-boot');
+            sessionStorage.removeItem(contactTransferKey);
+          }, 4000);
+        } else {
+          sessionStorage.removeItem(contactTransferKey);
+        }
+      } catch (error) {
+        try { sessionStorage.removeItem('portfolio-contact-transfer-v1'); } catch (storageError) { /* Storage can be disabled. */ }
+      }
       try {
         const pageTransition = JSON.parse(sessionStorage.getItem('portfolio-page-transition') || 'null');
         const isExpectedPage = pageTransition?.path === window.location.pathname;

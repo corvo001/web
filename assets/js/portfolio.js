@@ -7,6 +7,7 @@
   const projectTransitionKey = 'portfolio-project-transition';
   const archiveTransitionKey = 'portfolio-archive-transition';
   const pageTransitionKey = 'portfolio-page-transition';
+  const contactTransferKey = 'portfolio-contact-transfer-v1';
   let eyeTrackingLocked = false;
   let languageArrivalPlaying = false;
   let gateInitialStateHandled = false;
@@ -18,8 +19,8 @@
   let frozenNavigationAnimations = [];
   let frozenNavigationSvgs = [];
   let frozenNavigationStyleElements = [];
-  let contactAxisState = 'idle';
-  let contactAxisGeneration = 0;
+  let contactTransferState = 'idle';
+  let contactTransferGeneration = 0;
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
   const languageReturnStageDuration = 1320;
@@ -30,8 +31,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactAxisDepartureDuration = 1080;
-  const contactAxisArrivalDuration = 640;
+  const contactTransferDepartureDuration = 900;
+  const contactTransferArrivalDuration = 520;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -420,13 +421,22 @@
     catch (error) { return null; }
   };
 
-  const createContactAxis = (metrics = {}) => {
+  const readContactTransfer = () => {
+    try { return JSON.parse(sessionStorage.getItem(contactTransferKey) || 'null'); }
+    catch (error) { return null; }
+  };
+
+  const createContactTransfer = (metrics = {}) => {
     const root = document.createElement('div');
-    root.className = 'contact-axis-v4';
+    root.className = 'contact-transfer';
     root.setAttribute('aria-hidden', 'true');
     root.innerHTML = `
-      <span class="contact-axis-v4__veil"></span>
-      <span class="contact-axis-v4__line"></span>`;
+      <svg class="contact-transfer__vector" preserveAspectRatio="none" focusable="false">
+        <line class="contact-transfer__beam" pathLength="1"></line>
+        <line class="contact-transfer__spine contact-transfer__spine--top" pathLength="1"></line>
+        <line class="contact-transfer__spine contact-transfer__spine--bottom" pathLength="1"></line>
+      </svg>
+      <span class="contact-transfer__cover"><span class="contact-transfer__fill"></span></span>`;
 
     const viewportWidth = Math.max(window.innerWidth, 1);
     const viewportHeight = Math.max(window.innerHeight, 1);
@@ -434,49 +444,58 @@
     const centerY = viewportHeight * .5;
     const originX = Math.min(Math.max(metrics.x ?? centerX, 0), viewportWidth);
     const originY = Math.min(Math.max(metrics.y ?? centerY, 0), viewportHeight);
-    const deltaX = centerX - originX;
-    const deltaY = centerY - originY;
-    const travel = Math.max(Math.hypot(deltaX, deltaY), 1);
-    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-    const verticalAngle = 90 + Math.round((angle - 90) / 360) * 360;
-    root.style.setProperty('--contact-axis-origin-x', `${originX}px`);
-    root.style.setProperty('--contact-axis-origin-y', `${originY}px`);
-    root.style.setProperty('--contact-axis-center-x', `${centerX}px`);
-    root.style.setProperty('--contact-axis-center-y', `${centerY}px`);
-    root.style.setProperty('--contact-axis-travel', `${travel}`);
-    root.style.setProperty('--contact-axis-angle', `${angle}deg`);
-    root.style.setProperty('--contact-axis-vertical-angle', `${verticalAngle}deg`);
-    root.style.setProperty('--contact-axis-height', `${viewportHeight}px`);
-    root.style.setProperty('--contact-axis-height-scale', `${viewportHeight}`);
+    root.style.setProperty('--contact-transfer-center-shift', `${-centerX}px`);
+    root.style.setProperty('--contact-transfer-exit-shift', `${-(centerX + viewportWidth)}px`);
+
+    const vector = root.querySelector('.contact-transfer__vector');
+    const beam = root.querySelector('.contact-transfer__beam');
+    const spineTop = root.querySelector('.contact-transfer__spine--top');
+    const spineBottom = root.querySelector('.contact-transfer__spine--bottom');
+    vector.setAttribute('viewBox', `0 0 ${viewportWidth} ${viewportHeight}`);
+    beam.setAttribute('x1', originX);
+    beam.setAttribute('y1', originY);
+    beam.setAttribute('x2', centerX);
+    beam.setAttribute('y2', centerY);
+    [spineTop, spineBottom].forEach((spine) => {
+      spine.setAttribute('x1', centerX);
+      spine.setAttribute('y1', centerY);
+      spine.setAttribute('x2', centerX);
+    });
+    spineTop.setAttribute('y2', 0);
+    spineBottom.setAttribute('y2', viewportHeight);
     document.documentElement.appendChild(root);
     return root;
   };
 
-  const clearContactAxis = () => {
-    contactAxisGeneration += 1;
-    contactAxisState = 'idle';
-    document.body?.classList.remove('contact-axis-v4-leaving', 'contact-axis-v4-arriving');
-    document.querySelectorAll('.contact-axis-v4').forEach((transition) => transition.remove());
-    document.querySelectorAll('.about-contact-cta.is-transitioning').forEach((link) => link.classList.remove('is-transitioning'));
+  const clearContactTransfer = () => {
+    contactTransferGeneration += 1;
+    contactTransferState = 'idle';
+    document.body?.classList.remove('contact-transfer-leaving', 'contact-transfer-arriving');
+    document.querySelectorAll('.contact-transfer').forEach((transition) => transition.remove());
+    document.querySelectorAll('.about-contact-cta.is-contact-transferring').forEach((link) => link.classList.remove('is-contact-transferring'));
   };
 
-  const runContactDeparture = async (transition, link) => {
-    const generation = ++contactAxisGeneration;
-    contactAxisState = 'departing';
-    link.classList.add('is-transitioning');
-    document.body.classList.add('contact-axis-v4-leaving');
+  const runContactTransferDeparture = async (transition, link) => {
+    const generation = ++contactTransferGeneration;
+    contactTransferState = 'preparing';
     await nextPaint();
+    if (generation !== contactTransferGeneration) return { status: 'cancelled', generation };
+    if (!transition.isConnected) return { status: 'failed', generation };
+    link.classList.add('is-contact-transferring');
+    document.body.classList.add('contact-transfer-leaving');
     transition.classList.add('is-departing');
-    await waitForMotion(transition, 'animationend', contactAxisDepartureDuration, 'contact-axis-v4-depart');
-    if (generation !== contactAxisGeneration || !transition.isConnected) return false;
-    contactAxisState = 'covered';
-    return true;
+    contactTransferState = 'departing';
+    await waitForMotion(transition, 'animationend', contactTransferDepartureDuration, 'contact-transfer-departure-clock');
+    if (generation !== contactTransferGeneration) return { status: 'cancelled', generation };
+    if (!transition.isConnected) return { status: 'failed', generation };
+    contactTransferState = 'covered';
+    return { status: 'completed', generation };
   };
 
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
-    clearContactAxis();
+    clearContactTransfer();
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-staging', 'navigation-source-frozen');
     releaseNavigationSource();
     if (!document.documentElement.classList.contains('language-bridge-enter')) {
@@ -493,30 +512,51 @@
     document.querySelectorAll('[data-project-link].is-launching').forEach((link) => link.classList.remove('is-launching'));
   };
 
+  const showContactTransferArrival = async () => {
+    if (!document.documentElement.classList.contains('contact-transfer-boot')) return;
+    const transfer = readContactTransfer();
+    try { sessionStorage.removeItem(contactTransferKey); }
+    catch (error) { /* The critical boot timeout remains the final fallback. */ }
+    const isExpectedArrival = transfer?.type === 'about-contact' &&
+      transfer?.version === 1 &&
+      transfer?.phase === 'handoff' &&
+      transfer?.path === window.location.pathname &&
+      document.body.classList.contains('info-contact-page');
+    if (reduceMotion.matches || !isExpectedArrival) {
+      document.body.classList.add('page-arrival-complete');
+      document.documentElement.classList.remove('contact-transfer-boot');
+      return;
+    }
+
+    const generation = ++contactTransferGeneration;
+    let transition;
+    try {
+      transition = createContactTransfer();
+      contactTransferState = 'arriving';
+      transition.classList.add('is-arrival-ready');
+      await nextPaint();
+      if (generation !== contactTransferGeneration || !transition.isConnected) return;
+      document.body.classList.add('contact-transfer-arriving');
+      transition.classList.add('is-arriving');
+      document.documentElement.classList.remove('contact-transfer-boot');
+      await waitForMotion(transition, 'animationend', contactTransferArrivalDuration, 'contact-transfer-arrival-clock');
+    } catch (error) {
+      /* Reveal the destination immediately if the visual handoff cannot start. */
+    } finally {
+      document.documentElement.classList.remove('contact-transfer-boot');
+      clearContactTransfer();
+      document.body.classList.add('page-arrival-complete');
+    }
+  };
+
   const showPageArrival = async () => {
+    if (document.documentElement.classList.contains('contact-transfer-boot')) return;
     if (!document.documentElement.classList.contains('page-transition-boot')) return;
     const pageTransition = readPageTransition();
     sessionStorage.removeItem(pageTransitionKey);
     if (reduceMotion.matches) {
       document.body.classList.add('page-arrival-complete');
       document.documentElement.classList.remove('page-transition-boot');
-      return;
-    }
-    if (pageTransition?.type === 'contact-axis-v4' && pageTransition?.version === 4 && document.body.classList.contains('info-contact-page')) {
-      let transition;
-      contactAxisState = 'arriving';
-      try {
-        transition = createContactAxis();
-        document.body.classList.add('contact-axis-v4-arriving');
-        await nextPaint();
-        transition.classList.add('is-arriving');
-        document.documentElement.classList.remove('page-transition-boot');
-        await waitForMotion(transition, 'animationend', contactAxisArrivalDuration, 'contact-axis-v4-arrive');
-      } finally {
-        document.documentElement.classList.remove('page-transition-boot');
-        clearContactAxis();
-        document.body.classList.add('page-arrival-complete');
-      }
       return;
     }
     document.body.classList.add('page-arriving');
@@ -943,7 +983,15 @@
         document.documentElement.classList.add('archive-entry-boot');
       }
       resetNavigationState();
+      if (event.persisted) {
+        const pendingContactTransfer = readContactTransfer();
+        if (pendingContactTransfer?.sourcePath === window.location.pathname) {
+          try { sessionStorage.removeItem(contactTransferKey); }
+          catch (error) { /* Storage may be disabled. */ }
+        }
+      }
       showLanguageArrival();
+      showContactTransferArrival();
       showPageArrival();
       showProjectArrival();
       resumeProjectVideos();
@@ -1506,37 +1554,51 @@
       link.addEventListener(eventName, () => { warmNavigationPage(link); }, { passive: true, once: true });
     });
     link.addEventListener('click', async (event) => {
-      if (reduceMotion.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+      if (reduceMotion.matches || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
       const target = new URL(link.href, window.location.href);
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
-      if (navigationInProgress || contactAxisState !== 'idle') return;
+      if (navigationInProgress || contactTransferState !== 'idle') return;
       navigationInProgress = true;
       try {
         warmNavigationPage({ href: target.href });
         const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
-        const linkRect = link.getBoundingClientRect();
-        const transition = createContactAxis({
-          x: signalRect ? signalRect.left + (signalRect.width * .5) : linkRect.left,
-          y: signalRect ? signalRect.top + (signalRect.height * .5) : linkRect.top + (linkRect.height * .5)
+        if (!signalRect || !Number.isFinite(signalRect.left) || !Number.isFinite(signalRect.top)) {
+          window.location.assign(target.href);
+          return;
+        }
+        const transition = createContactTransfer({
+          x: signalRect.left + (signalRect.width * .5),
+          y: signalRect.top + (signalRect.height * .5)
         });
         document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
         sessionStorage.removeItem(archiveTransitionKey);
         sessionStorage.removeItem(projectTransitionKey);
-        const departureCompleted = await runContactDeparture(transition, link);
-        if (!departureCompleted) {
+        sessionStorage.removeItem(pageTransitionKey);
+        sessionStorage.removeItem(contactTransferKey);
+        const departureResult = await runContactTransferDeparture(transition, link);
+        if (departureResult.status !== 'completed') {
+          if (departureResult.generation !== contactTransferGeneration) return;
+          clearContactTransfer();
           navigationInProgress = false;
+          if (departureResult.status === 'failed') window.location.assign(target.href);
           return;
         }
-        sessionStorage.setItem(pageTransitionKey, JSON.stringify({
-          type: 'contact-axis-v4',
-          version: 4,
-          path: target.pathname,
-          startedAt: Date.now()
-        }));
+        try {
+          sessionStorage.setItem(contactTransferKey, JSON.stringify({
+            type: 'about-contact',
+            version: 1,
+            phase: 'handoff',
+            sourcePath: window.location.pathname,
+            path: target.pathname,
+            startedAt: Date.now()
+          }));
+        } catch (error) { /* A covered source can still navigate without an animated arrival. */ }
         window.location.assign(target.href);
       } catch (error) {
-        clearContactAxis();
+        try { sessionStorage.removeItem(contactTransferKey); }
+        catch (storageError) { /* Storage may be disabled. */ }
+        clearContactTransfer();
         navigationInProgress = false;
         window.location.assign(target.href);
       }
