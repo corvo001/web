@@ -570,10 +570,12 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 
 /* About → contact. The button's diamond emits one horizontal trace. The same
-   trace contracts at the viewport axis, unfolds vertically and sweeps left. */
+   trace contracts, travels to the viewport centre, unfolds and sweeps left. */
 .contact-axis-v4 {
   --contact-axis-origin-x: 50vw;
   --contact-axis-origin-y: 50vh;
+  --contact-axis-center-x: 50vw;
+  --contact-axis-center-y: 50vh;
   --contact-axis-run: 1;
   --contact-axis-height: 100vh;
   --contact-axis-height-scale: 1;
@@ -591,12 +593,12 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   will-change: transform,opacity;
 }
 .contact-axis-v4__line {
-  position: absolute; z-index: 3; left: -1px; top: -.5px;
-  width: 1px; height: 1px; opacity: 0;
-  background: color-mix(in srgb,var(--accent) 68%,var(--text));
+  position: absolute; z-index: 3; left: -1px; top: -.25px;
+  width: 1px; height: .5px; opacity: 0;
+  background: color-mix(in srgb,var(--accent) 58%,var(--text));
   transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) scaleX(0);
   transform-origin: right center;
-  box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 22%,transparent);
+  box-shadow: 0 0 .14rem color-mix(in srgb,var(--accent) 10%,transparent);
   will-change: transform,opacity;
 }
 .contact-axis-v4.is-departing { animation: contact-axis-v4-depart 1080ms linear both; }
@@ -615,7 +617,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   animation: contact-axis-v4-reveal 640ms cubic-bezier(.16,1,.3,1) both;
 }
 .contact-axis-v4.is-arriving .contact-axis-v4__line {
-  opacity: .28;
+  opacity: .18;
   transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
   animation: contact-axis-v4-arrival-line 640ms cubic-bezier(.16,1,.3,1) both;
 }
@@ -633,41 +635,46 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
     transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(0);
   }
   12% {
-    opacity: .9;
+    opacity: .78;
     transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(1);
     animation-timing-function: cubic-bezier(.16,1,.3,1);
   }
   36%,42% {
-    opacity: .88;
-    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(0) scaleX(var(--contact-axis-run));
+    opacity: .8;
+    transform: translate3d(var(--contact-axis-center-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(var(--contact-axis-run));
   }
   42% { animation-timing-function: cubic-bezier(.55,0,.24,1); }
   50% {
-    opacity: .88;
-    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(0) scaleX(1);
+    opacity: .78;
+    transform: translate3d(var(--contact-axis-center-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(1);
+    animation-timing-function: cubic-bezier(.22,1,.36,1);
   }
-  52% {
-    opacity: .88;
-    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(90deg) scaleX(1);
+  60% {
+    opacity: .76;
+    transform: translate3d(var(--contact-axis-center-x),var(--contact-axis-center-y),0) rotate(0) scaleX(1);
+  }
+  62% {
+    opacity: .76;
+    transform: translate3d(var(--contact-axis-center-x),var(--contact-axis-center-y),0) rotate(90deg) scaleX(1);
     animation-timing-function: cubic-bezier(.16,1,.3,1);
   }
-  68%,72% {
-    opacity: .82;
-    transform: translate3d(50vw,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  76%,80% {
+    opacity: .72;
+    transform: translate3d(var(--contact-axis-center-x),var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
   }
-  72% { animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  80% { animation-timing-function: cubic-bezier(.55,0,.3,1); }
   100% {
-    opacity: .2;
+    opacity: .18;
     transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
   }
 }
 @keyframes contact-axis-v4-cover {
-  0%,64% { opacity: 0; transform: translate3d(0,0,0); }
-  72% { opacity: .96; transform: translate3d(0,0,0); animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  0%,76% { opacity: 0; transform: translate3d(0,0,0); }
+  80% { opacity: .96; transform: translate3d(0,0,0); animation-timing-function: cubic-bezier(.55,0,.3,1); }
   100% { opacity: 1; transform: translate3d(-50vw,0,0); }
 }
 @keyframes contact-axis-v4-source {
-  0%,72% { opacity: 1; transform: translate3d(0,0,0); }
+  0%,80% { opacity: 1; transform: translate3d(0,0,0); }
   100% { opacity: .08; transform: translate3d(-7vw,0,0); }
 }
 @keyframes contact-axis-v4-arrive {
@@ -680,7 +687,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 @keyframes contact-axis-v4-arrival-line {
   0% {
-    opacity: .28;
+    opacity: .18;
     transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
   }
   34%,100% {

@@ -430,12 +430,15 @@
 
     const viewportWidth = Math.max(window.innerWidth, 1);
     const viewportHeight = Math.max(window.innerHeight, 1);
-    const fallbackX = viewportWidth * .5;
-    const originX = Math.min(Math.max(metrics.x ?? fallbackX, 0), viewportWidth * .5);
-    const originY = Math.min(Math.max(metrics.y ?? (viewportHeight * .5), 0), viewportHeight);
+    const centerX = viewportWidth * .5;
+    const centerY = viewportHeight * .5;
+    const originX = Math.min(Math.max(metrics.x ?? centerX, 0), centerX);
+    const originY = Math.min(Math.max(metrics.y ?? centerY, 0), viewportHeight);
     root.style.setProperty('--contact-axis-origin-x', `${originX}px`);
     root.style.setProperty('--contact-axis-origin-y', `${originY}px`);
-    root.style.setProperty('--contact-axis-run', `${Math.max((viewportWidth * .5) - originX, 1)}`);
+    root.style.setProperty('--contact-axis-center-x', `${centerX}px`);
+    root.style.setProperty('--contact-axis-center-y', `${centerY}px`);
+    root.style.setProperty('--contact-axis-run', `${Math.max(centerX - originX, 1)}`);
     root.style.setProperty('--contact-axis-height', `${viewportHeight}px`);
     root.style.setProperty('--contact-axis-height-scale', `${viewportHeight}`);
     document.documentElement.appendChild(root);
