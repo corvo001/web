@@ -63,8 +63,11 @@
                     </svg>
                   </i>
                 </span>
-                <i class="project-index-card__lock" aria-hidden="true"></i>
-                <i class="project-index-card__enter" aria-hidden="true"></i>
+                <svg class="project-index-card__lock" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+                  <path class="project-index-card__lock-half project-index-card__lock-half--left" d="M14 3 3 14 14 25"/>
+                  <path class="project-index-card__lock-half project-index-card__lock-half--right" d="M14 3 25 14 14 25"/>
+                  <circle class="project-index-card__lock-core" cx="14" cy="14" r="1.35"/>
+                </svg>
               </div>
               <div class="project-index-card__info">
                 <span>{{ project.year }}</span>
