@@ -2237,8 +2237,8 @@ body.home-page > #main.portfolio-main { display: flex; }
     transform: translate(-50%,-.5rem);
   }
   .info-about-page .about-process__visual {
-    position: absolute; left: 50%; top: calc(50% - .8rem);
-    width: 112%; height: auto; max-height: none;
+    position: absolute; left: 50%; top: calc(50% - 1.5rem);
+    width: 106%; height: auto; max-height: none;
     transform: translate(-50%,-50%);
   }
   .about-contact-cta {
