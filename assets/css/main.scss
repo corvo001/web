@@ -575,6 +575,11 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 .contact-transfer {
   --contact-transfer-center-shift: -50vw;
   --contact-transfer-exit-shift: -150vw;
+  --contact-transfer-receiver-shift: -150vw;
+  --contact-transfer-packet-x: 50vw;
+  --contact-transfer-packet-y: 50vh;
+  --contact-transfer-packet-dx: 0px;
+  --contact-transfer-packet-dy: 0px;
   position: fixed; z-index: 2147483647; inset: 0; overflow: hidden;
   pointer-events: none; opacity: 1; isolation: isolate; contain: strict;
   color: color-mix(in srgb,var(--accent) 62%,var(--text));
@@ -586,7 +591,8 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   will-change: transform;
 }
 .contact-transfer__beam,
-.contact-transfer__spine {
+.contact-transfer__spine,
+.contact-transfer__handoff {
   fill: none; stroke: currentColor; stroke-width: .75;
   vector-effect: non-scaling-stroke; shape-rendering: geometricPrecision;
   stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0;
@@ -594,6 +600,7 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .contact-transfer__beam { stroke-linecap: round; }
 .contact-transfer__spine { stroke-linecap: butt; }
+.contact-transfer__handoff { stroke-linecap: round; }
 .contact-transfer__cover {
   position: absolute; z-index: 2; left: 50%; top: 0;
   width: 100%; height: 100%;
@@ -605,6 +612,14 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   background: var(--ink);
   transform: scaleX(0); transform-origin: left center;
   backface-visibility: hidden; will-change: transform;
+}
+.contact-transfer__packet {
+  position: absolute; z-index: 4;
+  left: var(--contact-transfer-packet-x); top: var(--contact-transfer-packet-y);
+  width: 3px; aspect-ratio: 1; opacity: 0;
+  background: currentColor;
+  transform: translate(-50%,-50%) rotate(45deg) scale(.45);
+  will-change: transform,opacity;
 }
 .contact-transfer.is-departing {
   animation: contact-transfer-departure-clock 900ms linear both;
@@ -631,15 +646,22 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
 }
 .contact-transfer.is-arrival-ready .contact-transfer__fill { transform: scaleX(1); }
 .contact-transfer.is-arriving {
-  animation: contact-transfer-arrival-clock 520ms linear both;
+  animation: contact-transfer-arrival-clock 720ms linear both;
 }
-.contact-transfer.is-arriving .contact-transfer__vector { display: none; }
+.contact-transfer.is-arriving .contact-transfer__beam,
+.contact-transfer.is-arriving .contact-transfer__spine { display: none; }
+.contact-transfer.has-contact-receiver.is-arriving .contact-transfer__handoff {
+  animation: contact-transfer-handoff 720ms linear both;
+}
+.contact-transfer.has-contact-receiver.is-arriving .contact-transfer__packet {
+  animation: contact-transfer-packet 720ms linear both;
+}
 .contact-transfer.is-arriving .contact-transfer__cover {
-  animation: contact-transfer-reveal 520ms cubic-bezier(.76,0,.24,1) both;
+  animation: contact-transfer-reveal 720ms linear both;
 }
 .portfolio-shell.contact-transfer-arriving {
   overflow: hidden; backface-visibility: hidden; will-change: transform,opacity;
-  animation: contact-transfer-destination 520ms cubic-bezier(.76,0,.24,1) both;
+  animation: contact-transfer-destination 720ms linear both;
 }
 @keyframes contact-transfer-departure-clock { from { opacity: 1; } to { opacity: 1; } }
 @keyframes contact-transfer-beam {
@@ -676,12 +698,48 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   100% { opacity: 0; }
 }
 @keyframes contact-transfer-reveal {
-  0% { opacity: 1; transform: translate3d(var(--contact-transfer-center-shift),0,0); }
-  82%,100% { opacity: 1; transform: translate3d(var(--contact-transfer-exit-shift),0,0); }
+  0% {
+    opacity: 1; transform: translate3d(var(--contact-transfer-center-shift),0,0);
+    animation-timing-function: cubic-bezier(.76,0,.24,1);
+  }
+  64% {
+    opacity: 1; transform: translate3d(var(--contact-transfer-receiver-shift),0,0);
+    animation-timing-function: cubic-bezier(.55,0,.3,1);
+  }
+  86%,100% { opacity: 1; transform: translate3d(var(--contact-transfer-exit-shift),0,0); }
+}
+@keyframes contact-transfer-handoff {
+  0%,30% { opacity: 0; stroke-dashoffset: 1; }
+  36% { opacity: .72; stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.16,1,.3,1); }
+  66% { opacity: .72; stroke-dashoffset: 0; }
+  70% { opacity: .18; stroke-dashoffset: 0; }
+  74%,100% { opacity: 0; stroke-dashoffset: 0; }
+}
+@keyframes contact-transfer-packet {
+  0%,34% {
+    opacity: 0;
+    transform: translate(-50%,-50%) rotate(45deg) scale(.45);
+  }
+  36% {
+    opacity: .86;
+    transform: translate(-50%,-50%) rotate(45deg) scale(.45);
+    animation-timing-function: cubic-bezier(.16,1,.3,1);
+  }
+  66% {
+    opacity: .86;
+    transform: translate(calc(-50% + var(--contact-transfer-packet-dx)),calc(-50% + var(--contact-transfer-packet-dy))) rotate(225deg) scale(.78);
+  }
+  70%,100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--contact-transfer-packet-dx)),calc(-50% + var(--contact-transfer-packet-dy))) rotate(225deg) scale(.2);
+  }
 }
 @keyframes contact-transfer-destination {
-  0% { opacity: 1; transform: translate3d(5vw,0,0); }
-  88%,100% { opacity: 1; transform: translate3d(0,0,0); }
+  0% {
+    opacity: 1; transform: translate3d(5vw,0,0);
+    animation-timing-function: cubic-bezier(.16,1,.3,1);
+  }
+  44%,100% { opacity: 1; transform: translate3d(0,0,0); }
 }
 
 /* Project inventory entrance */
@@ -2063,6 +2121,12 @@ body.home-page > #main.portfolio-main { display: flex; }
   box-shadow: 0 0 .5rem color-mix(in srgb,var(--accent) 62%,transparent);
   animation: contact-card-signal 5.8s cubic-bezier(.4,0,.2,1) infinite;
 }
+.contact-card.is-contact-receiver-armed .contact-card__signal {
+  top: .35rem; opacity: 0; animation: none;
+}
+.contact-card.is-contact-receiving .contact-card__signal {
+  animation: contact-card-receive 1200ms linear both;
+}
 .info-contact-page .contact-links {
   --contact-line-left: 1.1rem;
   --contact-line-right: .35rem;
@@ -2121,6 +2185,13 @@ body.home-page > #main.portfolio-main { display: flex; }
   20% { opacity: .78; }
   48% { top: calc(100% - .87rem); opacity: .78; }
   54%,100% { top: calc(100% - .87rem); opacity: 0; }
+}
+@keyframes contact-card-receive {
+  0%,39.5% { top: .35rem; opacity: 0; }
+  42% { top: .35rem; opacity: .24; }
+  46% { top: .35rem; opacity: .78; }
+  92% { top: calc(100% - .87rem); opacity: .78; }
+  98%,100% { top: calc(100% - .87rem); opacity: 0; }
 }
 .home-page .portfolio-footer,
 .info-page .portfolio-footer,

@@ -32,7 +32,7 @@
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
   const contactTransferDepartureDuration = 900;
-  const contactTransferArrivalDuration = 520;
+  const contactTransferArrivalDuration = 720;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -435,8 +435,10 @@
         <line class="contact-transfer__beam" pathLength="1"></line>
         <line class="contact-transfer__spine contact-transfer__spine--top" pathLength="1"></line>
         <line class="contact-transfer__spine contact-transfer__spine--bottom" pathLength="1"></line>
+        <line class="contact-transfer__handoff" pathLength="1"></line>
       </svg>
-      <span class="contact-transfer__cover"><span class="contact-transfer__fill"></span></span>`;
+      <span class="contact-transfer__cover"><span class="contact-transfer__fill"></span></span>
+      <span class="contact-transfer__packet"></span>`;
 
     const viewportWidth = Math.max(window.innerWidth, 1);
     const viewportHeight = Math.max(window.innerHeight, 1);
@@ -444,13 +446,23 @@
     const centerY = viewportHeight * .5;
     const originX = Math.min(Math.max(metrics.x ?? centerX, 0), viewportWidth);
     const originY = Math.min(Math.max(metrics.y ?? centerY, 0), viewportHeight);
+    const hasReceiver = Number.isFinite(metrics.targetX) && Number.isFinite(metrics.targetY);
+    const targetX = Math.min(Math.max(metrics.targetX ?? centerX, 0), viewportWidth);
+    const targetY = Math.min(Math.max(metrics.targetY ?? centerY, 0), viewportHeight);
     root.style.setProperty('--contact-transfer-center-shift', `${-centerX}px`);
     root.style.setProperty('--contact-transfer-exit-shift', `${-(centerX + viewportWidth)}px`);
+    root.style.setProperty('--contact-transfer-receiver-shift', `${targetX - centerX - viewportWidth}px`);
+    root.style.setProperty('--contact-transfer-packet-x', `${centerX}px`);
+    root.style.setProperty('--contact-transfer-packet-y', `${centerY}px`);
+    root.style.setProperty('--contact-transfer-packet-dx', `${targetX - centerX}px`);
+    root.style.setProperty('--contact-transfer-packet-dy', `${targetY - centerY}px`);
+    if (hasReceiver) root.classList.add('has-contact-receiver');
 
     const vector = root.querySelector('.contact-transfer__vector');
     const beam = root.querySelector('.contact-transfer__beam');
     const spineTop = root.querySelector('.contact-transfer__spine--top');
     const spineBottom = root.querySelector('.contact-transfer__spine--bottom');
+    const handoff = root.querySelector('.contact-transfer__handoff');
     vector.setAttribute('viewBox', `0 0 ${viewportWidth} ${viewportHeight}`);
     beam.setAttribute('x1', originX);
     beam.setAttribute('y1', originY);
@@ -463,16 +475,24 @@
     });
     spineTop.setAttribute('y2', 0);
     spineBottom.setAttribute('y2', viewportHeight);
+    handoff.setAttribute('x1', centerX);
+    handoff.setAttribute('y1', centerY);
+    handoff.setAttribute('x2', targetX);
+    handoff.setAttribute('y2', targetY);
     document.documentElement.appendChild(root);
     return root;
   };
 
-  const clearContactTransfer = () => {
+  const clearContactTransfer = ({ preserveReceiver = false } = {}) => {
     contactTransferGeneration += 1;
     contactTransferState = 'idle';
     document.body?.classList.remove('contact-transfer-leaving', 'contact-transfer-arriving');
     document.querySelectorAll('.contact-transfer').forEach((transition) => transition.remove());
     document.querySelectorAll('.about-contact-cta.is-contact-transferring').forEach((link) => link.classList.remove('is-contact-transferring'));
+    document.querySelectorAll('.contact-card.is-contact-receiver-armed').forEach((card) => card.classList.remove('is-contact-receiver-armed'));
+    if (!preserveReceiver) {
+      document.querySelectorAll('.contact-card.is-contact-receiving').forEach((card) => card.classList.remove('is-contact-receiving'));
+    }
   };
 
   const runContactTransferDeparture = async (transition, link) => {
@@ -530,21 +550,59 @@
 
     const generation = ++contactTransferGeneration;
     let transition;
+    let receiver;
+    let receiverSignal;
+    let receiverPrepared = false;
+    let receiverRunning = false;
+    let viewportChanged = false;
+    const arrivalViewport = { width: window.innerWidth, height: window.innerHeight };
+    let resolveViewportChange;
+    const viewportChange = new Promise((resolve) => { resolveViewportChange = resolve; });
+    const abortOnViewportChange = () => {
+      if (window.innerWidth === arrivalViewport.width && window.innerHeight === arrivalViewport.height) return;
+      viewportChanged = true;
+      resolveViewportChange();
+    };
+    window.addEventListener('resize', abortOnViewportChange);
     try {
-      transition = createContactTransfer();
+      receiver = document.querySelector('.contact-card');
+      receiverSignal = receiver?.querySelector('.contact-card__signal');
+      receiver?.classList.add('is-contact-receiver-armed');
+      const receiverRect = receiverSignal?.getBoundingClientRect();
+      receiverPrepared = Boolean(receiverRect && Number.isFinite(receiverRect.left) && Number.isFinite(receiverRect.top));
+      transition = createContactTransfer(receiverPrepared ? {
+        targetX: receiverRect.left + (receiverRect.width * .5),
+        targetY: receiverRect.top + (receiverRect.height * .5)
+      } : {});
       contactTransferState = 'arriving';
       transition.classList.add('is-arrival-ready');
       await nextPaint();
       if (generation !== contactTransferGeneration || !transition.isConnected) return;
+      if (receiverPrepared) {
+        receiver?.classList.remove('is-contact-receiver-armed');
+        receiver?.classList.add('is-contact-receiving');
+        receiverRunning = true;
+        void waitForMotion(receiverSignal, 'animationend', 1200, 'contact-card-receive').then(() => {
+          receiver?.classList.remove('is-contact-receiving');
+        });
+      }
       document.body.classList.add('contact-transfer-arriving');
       transition.classList.add('is-arriving');
       document.documentElement.classList.remove('contact-transfer-boot');
-      await waitForMotion(transition, 'animationend', contactTransferArrivalDuration, 'contact-transfer-arrival-clock');
+      await Promise.race([
+        waitForMotion(transition, 'animationend', contactTransferArrivalDuration, 'contact-transfer-arrival-clock'),
+        viewportChange
+      ]);
+      if (viewportChanged) {
+        receiver?.classList.remove('is-contact-receiving');
+        receiverRunning = false;
+      }
     } catch (error) {
       /* Reveal the destination immediately if the visual handoff cannot start. */
     } finally {
+      window.removeEventListener('resize', abortOnViewportChange);
       document.documentElement.classList.remove('contact-transfer-boot');
-      clearContactTransfer();
+      clearContactTransfer({ preserveReceiver: receiverRunning });
       document.body.classList.add('page-arrival-complete');
     }
   };
