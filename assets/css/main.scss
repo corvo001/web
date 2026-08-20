@@ -2279,6 +2279,13 @@ body.home-page > #main.portfolio-main { display: flex; }
   }
 }
 
+@media (max-width: 350px) and (max-height: 620px) {
+  .info-about-page .about-process__visual {
+    top: calc(50% - .75rem);
+    width: 96%;
+  }
+}
+
 @media (hover: none), (pointer: coarse) {
   .hero-project.is-active:hover .hero-project__interest,
   .hero-project.is-active:focus-visible .hero-project__interest {
