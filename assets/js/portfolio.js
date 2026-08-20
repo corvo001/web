@@ -18,8 +18,8 @@
   let frozenNavigationAnimations = [];
   let frozenNavigationSvgs = [];
   let frozenNavigationStyleElements = [];
-  let contactShiftState = 'idle';
-  let contactShiftGeneration = 0;
+  let contactAxisState = 'idle';
+  let contactAxisGeneration = 0;
   const eyePrepareDuration = 360;
   const eyeDiveDuration = 860;
   const languageReturnStageDuration = 1320;
@@ -30,8 +30,8 @@
   const archiveCycleDuration = 1600;
   const archiveHandoffDuration = 880;
   const pageDepartureDuration = 460;
-  const contactShiftDepartureDuration = 980;
-  const contactShiftArrivalDuration = 720;
+  const contactAxisDepartureDuration = 1080;
+  const contactAxisArrivalDuration = 640;
   let projectDisplayFontAvailable = false;
   const warmedProjectVideos = new Map();
   const warmedNavigationPages = new Map();
@@ -420,54 +420,53 @@
     catch (error) { return null; }
   };
 
-  const createContactShift = (metrics = {}, arriving = false) => {
+  const createContactAxis = (metrics = {}) => {
     const root = document.createElement('div');
-    root.className = 'contact-shift-v3';
+    root.className = 'contact-axis-v4';
     root.setAttribute('aria-hidden', 'true');
-    root.innerHTML = arriving
-      ? '<span class="contact-shift-v3__veil"></span>'
-      : `
-        <span class="contact-shift-v3__veil"></span>
-        <span class="contact-shift-v3__axis"></span>
-        <span class="contact-shift-v3__node"></span>`;
+    root.innerHTML = `
+      <span class="contact-axis-v4__veil"></span>
+      <span class="contact-axis-v4__line"></span>`;
 
-    if (!arriving) {
-      const viewportWidth = Math.max(window.innerWidth, 1);
-      root.style.setProperty('--contact-origin-left', `${metrics.left || 0}px`);
-      root.style.setProperty('--contact-origin-y', `${metrics.y || (window.innerHeight * .5)}px`);
-      root.style.setProperty('--contact-origin-scale', `${Math.max((metrics.width || 1) / viewportWidth, .001)}`);
-      root.style.setProperty('--contact-node-x', `${metrics.nodeX ?? metrics.left ?? 0}px`);
-    }
-
+    const viewportWidth = Math.max(window.innerWidth, 1);
+    const viewportHeight = Math.max(window.innerHeight, 1);
+    const fallbackX = viewportWidth * .5;
+    const originX = Math.min(Math.max(metrics.x ?? fallbackX, 0), viewportWidth * .5);
+    const originY = Math.min(Math.max(metrics.y ?? (viewportHeight * .5), 0), viewportHeight);
+    root.style.setProperty('--contact-axis-origin-x', `${originX}px`);
+    root.style.setProperty('--contact-axis-origin-y', `${originY}px`);
+    root.style.setProperty('--contact-axis-run', `${Math.max((viewportWidth * .5) - originX, 1)}`);
+    root.style.setProperty('--contact-axis-height', `${viewportHeight}px`);
+    root.style.setProperty('--contact-axis-height-scale', `${viewportHeight}`);
     document.documentElement.appendChild(root);
     return root;
   };
 
-  const clearContactShift = () => {
-    contactShiftGeneration += 1;
-    contactShiftState = 'idle';
-    document.body?.classList.remove('contact-shift-v3-leaving', 'contact-shift-v3-arriving');
-    document.querySelectorAll('.contact-shift-v3, .contact-engine-v2').forEach((transition) => transition.remove());
+  const clearContactAxis = () => {
+    contactAxisGeneration += 1;
+    contactAxisState = 'idle';
+    document.body?.classList.remove('contact-axis-v4-leaving', 'contact-axis-v4-arriving');
+    document.querySelectorAll('.contact-axis-v4').forEach((transition) => transition.remove());
     document.querySelectorAll('.about-contact-cta.is-transitioning').forEach((link) => link.classList.remove('is-transitioning'));
   };
 
   const runContactDeparture = async (transition, link) => {
-    const generation = ++contactShiftGeneration;
-    contactShiftState = 'departing';
+    const generation = ++contactAxisGeneration;
+    contactAxisState = 'departing';
     link.classList.add('is-transitioning');
-    document.body.classList.add('contact-shift-v3-leaving');
+    document.body.classList.add('contact-axis-v4-leaving');
     await nextPaint();
     transition.classList.add('is-departing');
-    await waitForMotion(transition, 'animationend', contactShiftDepartureDuration, 'contact-shift-v3-depart');
-    if (generation !== contactShiftGeneration || !transition.isConnected) return false;
-    contactShiftState = 'covered';
+    await waitForMotion(transition, 'animationend', contactAxisDepartureDuration, 'contact-axis-v4-depart');
+    if (generation !== contactAxisGeneration || !transition.isConnected) return false;
+    contactAxisState = 'covered';
     return true;
   };
 
   const resetNavigationState = () => {
     navigationInProgress = false;
     languageArrivalPlaying = false;
-    clearContactShift();
+    clearContactAxis();
     document.documentElement.classList.remove('gate-preparing', 'gate-exiting', 'language-return-staging', 'navigation-source-frozen');
     releaseNavigationSource();
     if (!document.documentElement.classList.contains('language-bridge-enter')) {
@@ -493,19 +492,19 @@
       document.documentElement.classList.remove('page-transition-boot');
       return;
     }
-    if (pageTransition?.type === 'contact-shift-v3' && document.body.classList.contains('info-contact-page')) {
+    if (pageTransition?.type === 'contact-axis-v4' && pageTransition?.version === 4 && document.body.classList.contains('info-contact-page')) {
       let transition;
-      contactShiftState = 'arriving';
+      contactAxisState = 'arriving';
       try {
-        transition = createContactShift({}, true);
-        document.body.classList.add('contact-shift-v3-arriving');
+        transition = createContactAxis();
+        document.body.classList.add('contact-axis-v4-arriving');
         await nextPaint();
         transition.classList.add('is-arriving');
         document.documentElement.classList.remove('page-transition-boot');
-        await waitForMotion(transition, 'animationend', contactShiftArrivalDuration, 'contact-shift-v3-arrive');
+        await waitForMotion(transition, 'animationend', contactAxisArrivalDuration, 'contact-axis-v4-arrive');
       } finally {
         document.documentElement.classList.remove('page-transition-boot');
-        clearContactShift();
+        clearContactAxis();
         document.body.classList.add('page-arrival-complete');
       }
       return;
@@ -1501,17 +1500,15 @@
       const target = new URL(link.href, window.location.href);
       if (target.pathname === window.location.pathname) return;
       event.preventDefault();
-      if (navigationInProgress || contactShiftState !== 'idle') return;
+      if (navigationInProgress || contactAxisState !== 'idle') return;
       navigationInProgress = true;
       try {
         warmNavigationPage({ href: target.href });
-        const linkRect = link.getBoundingClientRect();
         const signalRect = link.querySelector('.about-contact-cta__signal')?.getBoundingClientRect();
-        const transition = createContactShift({
-          left: linkRect.left,
-          width: linkRect.width,
-          y: linkRect.top + (linkRect.height * .5),
-          nodeX: signalRect ? signalRect.left + (signalRect.width * .5) : linkRect.left
+        const linkRect = link.getBoundingClientRect();
+        const transition = createContactAxis({
+          x: signalRect ? signalRect.left + (signalRect.width * .5) : linkRect.left,
+          y: signalRect ? signalRect.top + (signalRect.height * .5) : linkRect.top + (linkRect.height * .5)
         });
         document.querySelectorAll('.archive-transition, .project-portal-backdrop, .project-world-signal, .project-world-title').forEach((element) => element.remove());
         sessionStorage.removeItem(archiveTransitionKey);
@@ -1522,13 +1519,14 @@
           return;
         }
         sessionStorage.setItem(pageTransitionKey, JSON.stringify({
-          type: 'contact-shift-v3',
+          type: 'contact-axis-v4',
+          version: 4,
           path: target.pathname,
           startedAt: Date.now()
         }));
         window.location.assign(target.href);
       } catch (error) {
-        clearContactShift();
+        clearContactAxis();
         navigationInProgress = false;
         window.location.assign(target.href);
       }

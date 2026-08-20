@@ -569,127 +569,127 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* About → contact. One shared timeline turns the button into an axis, moves that
-   axis to the viewport centre, then carries the interface towards the left. */
-.contact-shift-v3 {
-  --contact-origin-left: 0px;
-  --contact-origin-y: 50vh;
-  --contact-origin-scale: .2;
-  --contact-node-x: 0px;
+/* About → contact. The button's diamond emits one horizontal trace. The same
+   trace contracts at the viewport axis, unfolds vertically and sweeps left. */
+.contact-axis-v4 {
+  --contact-axis-origin-x: 50vw;
+  --contact-axis-origin-y: 50vh;
+  --contact-axis-run: 1;
+  --contact-axis-height: 100vh;
+  --contact-axis-height-scale: 1;
   position: fixed; z-index: 2147483647; inset: 0; overflow: hidden;
   pointer-events: none; opacity: 0; isolation: isolate; contain: strict;
   transform: translateZ(0); backface-visibility: hidden;
 }
-.contact-shift-v3__veil {
-  position: absolute; z-index: 1; inset: 0;
+.contact-axis-v4__veil {
+  position: absolute; z-index: 1; left: 50%; top: 0;
+  width: 100vw; height: 100%; opacity: 0;
   background: linear-gradient(90deg,
-    color-mix(in srgb,var(--accent) 4%,var(--ink)) 0,
+    color-mix(in srgb,var(--accent) 5%,var(--ink)) 0,
     var(--ink) clamp(1.5rem,4vw,4rem));
-  clip-path: inset(0 0 0 100%);
-  will-change: clip-path;
-}
-.contact-shift-v3__axis {
-  position: absolute; z-index: 3; left: 0; top: 0;
-  width: 100vw; height: 1px; opacity: 0;
-  background: linear-gradient(90deg,
-    transparent 0,
-    color-mix(in srgb,var(--accent) 58%,var(--text)) 8%,
-    color-mix(in srgb,var(--accent) 68%,var(--text)) 50%,
-    color-mix(in srgb,var(--accent) 34%,transparent) 88%,
-    transparent 100%);
-  transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
-  transform-origin: left center;
+  transform: translate3d(0,0,0);
   will-change: transform,opacity;
 }
-.contact-shift-v3__node {
-  position: absolute; z-index: 4; left: 0; top: 0;
-  width: .28rem; aspect-ratio: 1; opacity: 0;
-  background: color-mix(in srgb,var(--accent) 86%,var(--text));
-  transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(.55);
-  transform-origin: center;
-  box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 24%,transparent);
+.contact-axis-v4__line {
+  position: absolute; z-index: 3; left: -1px; top: -.5px;
+  width: 1px; height: 1px; opacity: 0;
+  background: color-mix(in srgb,var(--accent) 68%,var(--text));
+  transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) scaleX(0);
+  transform-origin: right center;
+  box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 22%,transparent);
   will-change: transform,opacity;
 }
-.contact-shift-v3.is-departing { animation: contact-shift-v3-depart 980ms linear both; }
-.contact-shift-v3.is-departing .contact-shift-v3__axis { animation: contact-shift-v3-axis 980ms cubic-bezier(.16,1,.3,1) both; }
-.contact-shift-v3.is-departing .contact-shift-v3__node { animation: contact-shift-v3-node 980ms cubic-bezier(.16,1,.3,1) both; }
-.contact-shift-v3.is-departing .contact-shift-v3__veil { animation: contact-shift-v3-cover 980ms cubic-bezier(.72,0,.24,1) both; }
-.portfolio-shell.contact-shift-v3-leaving {
+.contact-axis-v4.is-departing { animation: contact-axis-v4-depart 1080ms linear both; }
+.contact-axis-v4.is-departing .contact-axis-v4__line { animation: contact-axis-v4-line 1080ms linear both; }
+.contact-axis-v4.is-departing .contact-axis-v4__veil { animation: contact-axis-v4-cover 1080ms linear both; }
+.portfolio-shell.contact-axis-v4-leaving {
   overflow: hidden; backface-visibility: hidden; will-change: transform,opacity;
-  animation: contact-shift-v3-source 980ms cubic-bezier(.55,0,.3,1) both;
+  animation: contact-axis-v4-source 1080ms linear both;
 }
-.contact-shift-v3.is-arriving {
+.contact-axis-v4.is-arriving {
   opacity: 1;
-  animation: contact-shift-v3-arrive 720ms linear both;
+  animation: contact-axis-v4-arrive 640ms linear both;
 }
-.contact-shift-v3.is-arriving .contact-shift-v3__veil {
-  clip-path: inset(0);
-  background: linear-gradient(270deg,
-    color-mix(in srgb,var(--accent) 4%,var(--ink)) 0,
-    var(--ink) clamp(1.5rem,4vw,4rem));
-  animation: contact-shift-v3-reveal 720ms cubic-bezier(.72,0,.24,1) both;
+.contact-axis-v4.is-arriving .contact-axis-v4__veil {
+  left: 0; opacity: 1; transform: none;
+  animation: contact-axis-v4-reveal 640ms cubic-bezier(.16,1,.3,1) both;
 }
-.portfolio-shell.contact-shift-v3-arriving {
+.contact-axis-v4.is-arriving .contact-axis-v4__line {
+  opacity: .28;
+  transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  animation: contact-axis-v4-arrival-line 640ms cubic-bezier(.16,1,.3,1) both;
+}
+.portfolio-shell.contact-axis-v4-arriving {
   overflow: hidden; backface-visibility: hidden; will-change: transform,opacity;
-  animation: contact-shift-v3-destination 720ms cubic-bezier(.16,1,.3,1) both;
+  animation: contact-axis-v4-destination 640ms cubic-bezier(.16,1,.3,1) both;
 }
-@keyframes contact-shift-v3-depart {
+@keyframes contact-axis-v4-depart {
   0% { opacity: 0; }
   2%,100% { opacity: 1; }
 }
-@keyframes contact-shift-v3-axis {
-  0%,17% {
+@keyframes contact-axis-v4-line {
+  0%,8% {
     opacity: 0;
-    transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
+    transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(0);
   }
-  23% {
-    opacity: .76;
-    transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
+  12% {
+    opacity: .9;
+    transform: translate3d(var(--contact-axis-origin-x),var(--contact-axis-origin-y),0) rotate(0) scaleX(1);
+    animation-timing-function: cubic-bezier(.16,1,.3,1);
   }
-  43%,48% {
-    opacity: .78;
-    transform: translate3d(var(--contact-origin-left),50vh,0) scaleX(var(--contact-origin-scale));
+  36%,42% {
+    opacity: .88;
+    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(0) scaleX(var(--contact-axis-run));
   }
-  70% { opacity: .72; transform: translate3d(0,50vh,0) scaleX(1); }
-  84% { opacity: .42; transform: translate3d(-2vw,50vh,0) scaleX(1); }
-  100% { opacity: 0; transform: translate3d(-10vw,50vh,0) scaleX(1); }
+  42% { animation-timing-function: cubic-bezier(.55,0,.24,1); }
+  50% {
+    opacity: .88;
+    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(0) scaleX(1);
+  }
+  52% {
+    opacity: .88;
+    transform: translate3d(50vw,var(--contact-axis-origin-y),0) rotate(90deg) scaleX(1);
+    animation-timing-function: cubic-bezier(.16,1,.3,1);
+  }
+  68%,72% {
+    opacity: .82;
+    transform: translate3d(50vw,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  }
+  72% { animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  100% {
+    opacity: .2;
+    transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  }
 }
-@keyframes contact-shift-v3-node {
-  0% {
-    opacity: 0;
-    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(.55);
-  }
-  5% {
-    opacity: 1;
-    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(1);
-  }
-  14% {
-    opacity: .84;
-    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(0) scale(2.1,.16);
-  }
-  23%,100% {
-    opacity: 0;
-    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(0) scale(3,.06);
-  }
+@keyframes contact-axis-v4-cover {
+  0%,64% { opacity: 0; transform: translate3d(0,0,0); }
+  72% { opacity: .96; transform: translate3d(0,0,0); animation-timing-function: cubic-bezier(.55,0,.3,1); }
+  100% { opacity: 1; transform: translate3d(-50vw,0,0); }
 }
-@keyframes contact-shift-v3-cover {
-  0%,66% { clip-path: inset(0 0 0 100%); }
-  100% { clip-path: inset(0); }
+@keyframes contact-axis-v4-source {
+  0%,72% { opacity: 1; transform: translate3d(0,0,0); }
+  100% { opacity: .08; transform: translate3d(-7vw,0,0); }
 }
-@keyframes contact-shift-v3-source {
-  0%,67% { opacity: 1; transform: translate3d(0,0,0); }
-  100% { opacity: .16; transform: translate3d(-8vw,0,0); }
-}
-@keyframes contact-shift-v3-arrive {
-  0%,92% { opacity: 1; }
+@keyframes contact-axis-v4-arrive {
+  0%,94% { opacity: 1; }
   100% { opacity: 0; }
 }
-@keyframes contact-shift-v3-reveal {
-  0%,8% { clip-path: inset(0); }
-  100% { clip-path: inset(0 100% 0 0); }
+@keyframes contact-axis-v4-reveal {
+  0%,8% { opacity: 1; }
+  100% { opacity: 0; }
 }
-@keyframes contact-shift-v3-destination {
-  0% { opacity: .16; transform: translate3d(8vw,0,0); }
+@keyframes contact-axis-v4-arrival-line {
+  0% {
+    opacity: .28;
+    transform: translate3d(0,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  }
+  34%,100% {
+    opacity: 0;
+    transform: translate3d(-3vw,var(--contact-axis-height),0) rotate(90deg) scaleX(var(--contact-axis-height-scale));
+  }
+}
+@keyframes contact-axis-v4-destination {
+  0% { opacity: .08; transform: translate3d(7vw,0,0); }
   100% { opacity: 1; transform: translate3d(0,0,0); }
 }
 
@@ -1926,14 +1926,14 @@ body.home-page > #main.portfolio-main { display: flex; }
 }
 .about-contact-cta::before,
 .about-contact-cta::after {
-  content: ""; position: absolute; left: 0; right: 0; height: 1px;
+  content: ""; position: absolute; z-index: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg,
     transparent 0,
-    color-mix(in srgb,var(--text) 14%,transparent) 16%,
-    color-mix(in srgb,var(--text) 14%,transparent) 68%,
+    color-mix(in srgb,var(--text) 22%,transparent) 15%,
+    color-mix(in srgb,var(--text) 22%,transparent) 72%,
     transparent 100%);
-  opacity: .76;
-  transform: scaleX(.96); transform-origin: center;
+  opacity: .82;
+  transform: translateZ(0) scaleX(.98); transform-origin: center;
   transition:
     top 220ms cubic-bezier(.16,1,.3,1),
     bottom 220ms cubic-bezier(.16,1,.3,1),
@@ -1943,7 +1943,7 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta::before { top: 0; }
 .about-contact-cta::after { bottom: 0; }
 .about-contact-cta__signal {
-  position: relative;
+  position: relative; z-index: 1;
   width: .28rem; height: .28rem; justify-self: center;
   background: color-mix(in srgb,var(--accent) 74%,var(--text));
   opacity: 1; transform: rotate(45deg); transform-origin: center;
@@ -1959,15 +1959,16 @@ body.home-page > #main.portfolio-main { display: flex; }
     transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow {
-  position: relative; width: .78rem; height: 1px; justify-self: end;
-  background: color-mix(in srgb,var(--text) 48%,transparent);
-  transform: translateX(0);
-  transition: opacity 160ms ease, width 420ms cubic-bezier(.16,1,.3,1), background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
+  position: relative; z-index: 1;
+  width: .4rem; height: .4rem; justify-self: end;
+  border-top: 1px solid currentColor; border-right: 1px solid currentColor;
+  background: none;
+  opacity: .74;
+  transform: translateX(-.08rem) rotate(45deg);
+  transition: opacity 160ms ease, color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow::after {
-  content: ""; position: absolute; right: 0; top: 50%; width: .38rem; height: .38rem;
-  border-top: 1px solid currentColor; border-right: 1px solid currentColor;
-  transform: translateY(-50%) rotate(45deg);
+  content: none;
 }
 .about-contact-cta:hover,
 .about-contact-cta:focus-visible {
@@ -1990,17 +1991,17 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:hover .about-contact-cta__label,
 .about-contact-cta:focus-visible .about-contact-cta__label { transform: translateX(.1rem); }
 .about-contact-cta:hover .about-contact-cta__arrow,
-.about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.25rem; background: var(--accent); transform: translateX(.22rem); }
+.about-contact-cta:focus-visible .about-contact-cta__arrow {
+  opacity: 1; background: none; transform: translateX(.2rem) rotate(45deg);
+}
 .about-contact-cta.is-transitioning {
   pointer-events: none;
   color: var(--accent);
 }
-.about-contact-cta.is-transitioning::before { top: 50%; opacity: .42; transform: scaleX(.9); }
-.about-contact-cta.is-transitioning::after { bottom: 50%; opacity: .42; transform: scaleX(.9); }
+.about-contact-cta.is-transitioning::before { opacity: 0; transform: scaleX(.94); }
+.about-contact-cta.is-transitioning::after { opacity: 0; transform: scaleX(.94); }
 .about-contact-cta.is-transitioning .about-contact-cta__signal {
-  opacity: 0;
-  transform: rotate(45deg) scale(.18);
-  box-shadow: none;
+  animation: contact-axis-v4-origin-release 520ms cubic-bezier(.16,1,.3,1) both;
 }
 .about-contact-cta.is-transitioning .about-contact-cta__label {
   opacity: 0;
@@ -2009,9 +2010,14 @@ body.home-page > #main.portfolio-main { display: flex; }
   transform: translateX(-.45rem);
 }
 .about-contact-cta.is-transitioning .about-contact-cta__arrow {
-  width: 1.8rem;
   opacity: 0;
-  transform: translateX(.7rem);
+  transform: translateX(.55rem) rotate(45deg);
+}
+@keyframes contact-axis-v4-origin-release {
+  0% { opacity: 1; transform: rotate(45deg) scale(1); box-shadow: 0 0 0 transparent; }
+  32% { opacity: 1; transform: rotate(45deg) scale(1.38); box-shadow: 0 0 .55rem color-mix(in srgb,var(--accent) 34%,transparent); }
+  62% { opacity: 1; transform: rotate(45deg) scale(1.08); box-shadow: 0 0 .32rem color-mix(in srgb,var(--accent) 24%,transparent); }
+  100% { opacity: 0; transform: rotate(45deg) scale(.28); box-shadow: none; }
 }
 .info-contact-page .internal-main {
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
@@ -2233,7 +2239,7 @@ body.home-page > #main.portfolio-main { display: flex; }
     padding: .62rem .75rem; font-size: calc(clamp(.55rem,2.45vw,.64rem) + 1px); letter-spacing: .1em;
   }
   .info-about-page .about-contact-cta { transform: translate3d(0,-4.25rem,0); }
-  .about-contact-cta__arrow { width: .72rem; }
+  .about-contact-cta__arrow { width: .38rem; height: .38rem; }
   .info-contact-page .internal-main {
     padding: clamp(2rem,4.7dvh,2.75rem) 1rem 0;
   }
