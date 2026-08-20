@@ -1828,7 +1828,7 @@ video.project-hero-image {
 
 .portfolio-footer { position: relative; display: flex; justify-content: space-between; gap: 2rem; padding: 2rem var(--page-pad); color: var(--muted); font: .68rem/1.5 var(--mono); text-transform: uppercase; }
 .portfolio-footer--minimal { justify-content: flex-end; }
-.portfolio-footer__copyright { margin-left: auto; text-align: right; }
+.portfolio-footer__copyright { margin-inline: auto; text-align: center; }
 
 @media (max-width: 700px) {
   html, body, .language-page { width: 100%; max-width: 100%; overflow-x: hidden; }
