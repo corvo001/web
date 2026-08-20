@@ -14,8 +14,10 @@
         const pageTransition = JSON.parse(sessionStorage.getItem('portfolio-page-transition') || 'null');
         const isExpectedPage = pageTransition?.path === window.location.pathname;
         const isRecentTransition = Date.now() - Number(pageTransition?.startedAt || 0) < 8000;
-        if (isExpectedPage && isRecentTransition) {
+        const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isExpectedPage && isRecentTransition && motionAllowed) {
           document.documentElement.classList.add('page-transition-boot');
+          window.setTimeout(() => document.documentElement.classList.remove('page-transition-boot'), 4000);
         } else {
           sessionStorage.removeItem('portfolio-page-transition');
         }
@@ -160,10 +162,10 @@
     <link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/ibm-plex-mono-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/dune-rise.woff' | relative_url }}" as="font" type="font/woff" crossorigin>
-    <link rel="stylesheet" href="{{ '/assets/css/main-contact-engine-v2-about-spacing-v2.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/main-contact-shift-v3.css' | relative_url }}">
   </head>
   <body class="portfolio-shell{% if active_body_class %} {{ active_body_class }}{% endif %}">
     {{ content }}
-    <script src="{{ '/assets/js/portfolio-contact-engine-v2-touch-interest.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/portfolio-contact-shift-v3.js' | relative_url }}" defer></script>
   </body>
 </html>

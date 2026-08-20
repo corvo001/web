@@ -569,38 +569,129 @@ html.gate-natural-entry .language-options { animation: gate-copy 520ms 1180ms cu
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Contact engine v2. JavaScript owns the timeline; CSS only defines its layers. */
-.contact-engine-v2 {
+/* About → contact. One shared timeline turns the button into an axis, moves that
+   axis to the viewport centre, then carries the interface towards the left. */
+.contact-shift-v3 {
+  --contact-origin-left: 0px;
+  --contact-origin-y: 50vh;
+  --contact-origin-scale: .2;
+  --contact-node-x: 0px;
   position: fixed; z-index: 2147483647; inset: 0; overflow: hidden;
-  pointer-events: none; opacity: 0; isolation: isolate;
+  pointer-events: none; opacity: 0; isolation: isolate; contain: strict;
   transform: translateZ(0); backface-visibility: hidden;
 }
-.contact-engine-v2__veil {
-  position: absolute; z-index: 1; inset: 0; background: var(--ink);
-  clip-path: inset(0 0 0 100%); will-change: clip-path;
-}
-.contact-engine-v2__line {
-  position: absolute; z-index: 3; top: 0; left: var(--contact-origin-x);
-  width: calc(100vw - var(--contact-origin-x)); height: 1px; opacity: 0;
+.contact-shift-v3__veil {
+  position: absolute; z-index: 1; inset: 0;
   background: linear-gradient(90deg,
-    color-mix(in srgb,var(--accent) 78%,var(--text)) 0,
-    color-mix(in srgb,var(--accent) 48%,transparent) 58%,
+    color-mix(in srgb,var(--accent) 4%,var(--ink)) 0,
+    var(--ink) clamp(1.5rem,4vw,4rem));
+  clip-path: inset(0 0 0 100%);
+  will-change: clip-path;
+}
+.contact-shift-v3__axis {
+  position: absolute; z-index: 3; left: 0; top: 0;
+  width: 100vw; height: 1px; opacity: 0;
+  background: linear-gradient(90deg,
+    transparent 0,
+    color-mix(in srgb,var(--accent) 58%,var(--text)) 8%,
+    color-mix(in srgb,var(--accent) 68%,var(--text)) 50%,
+    color-mix(in srgb,var(--accent) 34%,transparent) 88%,
     transparent 100%);
-  box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 18%,transparent);
-  transform: translate3d(0,var(--contact-origin-y),0) scaleX(0);
+  transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
   transform-origin: left center;
-  will-change: left,width,transform,opacity;
+  will-change: transform,opacity;
 }
-.contact-engine-v2__core {
-  position: absolute; z-index: 4; left: var(--contact-origin-x); top: var(--contact-origin-y);
-  width: .34rem; aspect-ratio: 1; background: var(--accent); opacity: 0;
-  transform: translate(-50%,-50%) rotate(45deg) scale(.5);
-  box-shadow: 0 0 .6rem color-mix(in srgb,var(--accent) 34%,transparent);
+.contact-shift-v3__node {
+  position: absolute; z-index: 4; left: 0; top: 0;
+  width: .28rem; aspect-ratio: 1; opacity: 0;
+  background: color-mix(in srgb,var(--accent) 86%,var(--text));
+  transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(.55);
+  transform-origin: center;
+  box-shadow: 0 0 .42rem color-mix(in srgb,var(--accent) 24%,transparent);
+  will-change: transform,opacity;
 }
-.contact-engine-v2.is-arriving { opacity: 1; }
-.contact-engine-v2.is-arriving .contact-engine-v2__veil { clip-path: inset(0); }
-.contact-engine-v2.is-arriving .contact-engine-v2__line,
-.contact-engine-v2.is-arriving .contact-engine-v2__core { display: none; }
+.contact-shift-v3.is-departing { animation: contact-shift-v3-depart 980ms linear both; }
+.contact-shift-v3.is-departing .contact-shift-v3__axis { animation: contact-shift-v3-axis 980ms cubic-bezier(.16,1,.3,1) both; }
+.contact-shift-v3.is-departing .contact-shift-v3__node { animation: contact-shift-v3-node 980ms cubic-bezier(.16,1,.3,1) both; }
+.contact-shift-v3.is-departing .contact-shift-v3__veil { animation: contact-shift-v3-cover 980ms cubic-bezier(.72,0,.24,1) both; }
+.portfolio-shell.contact-shift-v3-leaving {
+  overflow: hidden; backface-visibility: hidden; will-change: transform,opacity;
+  animation: contact-shift-v3-source 980ms cubic-bezier(.55,0,.3,1) both;
+}
+.contact-shift-v3.is-arriving {
+  opacity: 1;
+  animation: contact-shift-v3-arrive 720ms linear both;
+}
+.contact-shift-v3.is-arriving .contact-shift-v3__veil {
+  clip-path: inset(0);
+  background: linear-gradient(270deg,
+    color-mix(in srgb,var(--accent) 4%,var(--ink)) 0,
+    var(--ink) clamp(1.5rem,4vw,4rem));
+  animation: contact-shift-v3-reveal 720ms cubic-bezier(.72,0,.24,1) both;
+}
+.portfolio-shell.contact-shift-v3-arriving {
+  overflow: hidden; backface-visibility: hidden; will-change: transform,opacity;
+  animation: contact-shift-v3-destination 720ms cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes contact-shift-v3-depart {
+  0% { opacity: 0; }
+  2%,100% { opacity: 1; }
+}
+@keyframes contact-shift-v3-axis {
+  0%,17% {
+    opacity: 0;
+    transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
+  }
+  23% {
+    opacity: .76;
+    transform: translate3d(var(--contact-origin-left),var(--contact-origin-y),0) scaleX(var(--contact-origin-scale));
+  }
+  43%,48% {
+    opacity: .78;
+    transform: translate3d(var(--contact-origin-left),50vh,0) scaleX(var(--contact-origin-scale));
+  }
+  70% { opacity: .72; transform: translate3d(0,50vh,0) scaleX(1); }
+  84% { opacity: .42; transform: translate3d(-2vw,50vh,0) scaleX(1); }
+  100% { opacity: 0; transform: translate3d(-10vw,50vh,0) scaleX(1); }
+}
+@keyframes contact-shift-v3-node {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(.55);
+  }
+  5% {
+    opacity: 1;
+    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(45deg) scale(1);
+  }
+  14% {
+    opacity: .84;
+    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(0) scale(2.1,.16);
+  }
+  23%,100% {
+    opacity: 0;
+    transform: translate3d(var(--contact-node-x),var(--contact-origin-y),0) translate(-50%,-50%) rotate(0) scale(3,.06);
+  }
+}
+@keyframes contact-shift-v3-cover {
+  0%,66% { clip-path: inset(0 0 0 100%); }
+  100% { clip-path: inset(0); }
+}
+@keyframes contact-shift-v3-source {
+  0%,67% { opacity: 1; transform: translate3d(0,0,0); }
+  100% { opacity: .16; transform: translate3d(-8vw,0,0); }
+}
+@keyframes contact-shift-v3-arrive {
+  0%,92% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes contact-shift-v3-reveal {
+  0%,8% { clip-path: inset(0); }
+  100% { clip-path: inset(0 100% 0 0); }
+}
+@keyframes contact-shift-v3-destination {
+  0% { opacity: .16; transform: translate3d(8vw,0,0); }
+  100% { opacity: 1; transform: translate3d(0,0,0); }
+}
 
 /* Project inventory entrance */
 .archive-transition {
@@ -1837,9 +1928,13 @@ body.home-page > #main.portfolio-main { display: flex; }
     color-mix(in srgb,var(--text) 14%,transparent) 16%,
     color-mix(in srgb,var(--text) 14%,transparent) 68%,
     transparent 100%);
-  opacity: .9;
-  transform: scaleX(.96); transform-origin: left center;
-  transition: opacity 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1), background 260ms ease;
+  opacity: .76;
+  transform: scaleX(.96); transform-origin: center;
+  transition:
+    top 220ms cubic-bezier(.16,1,.3,1),
+    bottom 220ms cubic-bezier(.16,1,.3,1),
+    opacity 180ms ease,
+    transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta::before { top: 0; }
 .about-contact-cta::after { bottom: 0; }
@@ -1849,17 +1944,21 @@ body.home-page > #main.portfolio-main { display: flex; }
   background: color-mix(in srgb,var(--accent) 74%,var(--text));
   opacity: 1; transform: rotate(45deg); transform-origin: center;
   box-shadow: 0 0 0 transparent;
-  transition: background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
+  transition: opacity 160ms ease, background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease;
 }
 .about-contact-cta__label {
   position: relative; z-index: 1; text-align: center; white-space: nowrap;
-  transition: transform 420ms cubic-bezier(.16,1,.3,1);
+  transition:
+    opacity 160ms ease,
+    filter 200ms ease,
+    letter-spacing 300ms cubic-bezier(.16,1,.3,1),
+    transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow {
   position: relative; width: .78rem; height: 1px; justify-self: end;
   background: color-mix(in srgb,var(--text) 48%,transparent);
   transform: translateX(0);
-  transition: width 420ms cubic-bezier(.16,1,.3,1), background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
+  transition: opacity 160ms ease, width 420ms cubic-bezier(.16,1,.3,1), background-color 180ms ease, transform 420ms cubic-bezier(.16,1,.3,1);
 }
 .about-contact-cta__arrow::after {
   content: ""; position: absolute; right: 0; top: 50%; width: .38rem; height: .38rem;
@@ -1876,23 +1975,40 @@ body.home-page > #main.portfolio-main { display: flex; }
 .about-contact-cta:focus-visible::before,
 .about-contact-cta:focus-visible::after {
   opacity: 1;
-  background: linear-gradient(90deg,
-    transparent 0,
-    color-mix(in srgb,var(--accent) 42%,transparent) 16%,
-    color-mix(in srgb,var(--accent) 42%,transparent) 72%,
-    transparent 100%);
   transform: scaleX(1);
 }
 .about-contact-cta:hover .about-contact-cta__signal,
 .about-contact-cta:focus-visible .about-contact-cta__signal {
   background: var(--accent);
-  transform: rotate(135deg) scale(.9);
-  box-shadow: 0 0 .7rem color-mix(in srgb,var(--accent) 46%,transparent);
+  transform: rotate(45deg) scale(1.08);
+  box-shadow: 0 0 .45rem color-mix(in srgb,var(--accent) 28%,transparent);
 }
 .about-contact-cta:hover .about-contact-cta__label,
-.about-contact-cta:focus-visible .about-contact-cta__label { transform: translateX(.14rem); }
+.about-contact-cta:focus-visible .about-contact-cta__label { transform: translateX(.1rem); }
 .about-contact-cta:hover .about-contact-cta__arrow,
 .about-contact-cta:focus-visible .about-contact-cta__arrow { width: 1.25rem; background: var(--accent); transform: translateX(.22rem); }
+.about-contact-cta.is-transitioning {
+  pointer-events: none;
+  color: var(--accent);
+}
+.about-contact-cta.is-transitioning::before { top: 50%; opacity: .42; transform: scaleX(.9); }
+.about-contact-cta.is-transitioning::after { bottom: 50%; opacity: .42; transform: scaleX(.9); }
+.about-contact-cta.is-transitioning .about-contact-cta__signal {
+  opacity: 0;
+  transform: rotate(45deg) scale(.18);
+  box-shadow: none;
+}
+.about-contact-cta.is-transitioning .about-contact-cta__label {
+  opacity: 0;
+  filter: blur(1.5px);
+  letter-spacing: .22em;
+  transform: translateX(-.45rem);
+}
+.about-contact-cta.is-transitioning .about-contact-cta__arrow {
+  width: 1.8rem;
+  opacity: 0;
+  transform: translateX(.7rem);
+}
 .info-contact-page .internal-main {
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
   padding: clamp(2rem,4.7dvh,2.75rem) var(--page-pad) 0;
