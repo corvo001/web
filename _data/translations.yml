@@ -20,7 +20,7 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "CREACIÓN | INSTALACIÓN | MANTENIMIENTO"
+    subtitle: "INFORMÁTICA | ELECTRÓNICA | ELECTRICIDAD"
     body: |
       Soy Daniel Cuervo y me dedico a la **creatividad tecnológica**.
     cta: "¿Qué quieres hacer?"
@@ -66,7 +66,7 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "CREATION | INSTALLATION | MAINTENANCE"
+    subtitle: "COMPUTING | ELECTRONICS | ELECTRICITY"
     body: |
       I’m Daniel Cuervo, and I work in **technological creativity**.
     cta: "What do you want to do?"
