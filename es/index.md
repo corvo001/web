@@ -1,7 +1,7 @@
 ---
 layout: portfolio
 lang: es
-title: "Portfolio"
+title: "Corvo"
 body_class: home-page
 permalink: /es/
 ---
