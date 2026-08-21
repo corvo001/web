@@ -11,7 +11,9 @@
 {% assign person_id = root_url | append: '#daniel-cuervo' %}
 {% assign seo_title = page.title | append: ' — ' | append: site.title %}
 {% assign seo_description = t.seo.home_description %}
-{% if active_body_class == 'home-page' or active_body_class == 'language-page' %}
+{% if active_body_class == 'language-page' %}
+  {% assign seo_title = identity.brand.name %}
+{% elsif active_body_class == 'home-page' %}
   {% assign seo_title = t.seo.home_title %}
 {% elsif page.layout == 'project' %}
   {% assign seo_project_list = site.data.projects | where: 'id', page.project_id %}
