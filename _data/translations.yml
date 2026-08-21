@@ -31,6 +31,7 @@ es:
   project:
     gallery: "Galería"
     repository: "Ver repositorio"
+    repository_unavailable: "Repositorio no disponible"
     category: "Categoría"
     terms:
       "SOFTWARE": "SOFTWARE"
@@ -77,6 +78,7 @@ en:
   project:
     gallery: "Gallery"
     repository: "View repository"
+    repository_unavailable: "Repository unavailable"
     category: "Category"
     terms:
       "SOFTWARE": "SOFTWARE"

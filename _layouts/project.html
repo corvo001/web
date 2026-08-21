@@ -48,7 +48,9 @@ body_class: project-page
       </div>
     </section>
   {% endif %}
-  {% if project.repository != '' %}
+  {% if project.repository_unavailable %}
+    <div class="project-repository"><span class="project-repository__status">{{ t.project.repository_unavailable }}</span></div>
+  {% elsif project.repository != '' %}
     <div class="project-repository"><a href="{{ project.repository }}">{{ t.project.repository }} <span aria-hidden="true">↗</span></a></div>
   {% endif %}
 </main>
