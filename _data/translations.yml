@@ -9,6 +9,13 @@ es:
   hero:
     eyebrow: "TALLER TECNOLÓGICO"
     interest: "¿TE INTERESA?"
+  seo:
+    home_title: "Corvo — Daniel Cuervo | Taller Tecnológico"
+    home_description: "Corvo es el taller tecnológico de Daniel Cuervo: informática, electrónica y electricidad aplicadas a proyectos de software, robótica y experimentación."
+    work_description: "Proyectos de Corvo, el taller tecnológico de Daniel Cuervo: software, sistemas interactivos, geometría fractal y experimentación técnica."
+    about_description: "Conoce a Daniel Cuervo, creador de Corvo, un taller tecnológico dedicado a la informática, la electrónica y la electricidad."
+    contact_description: "Contacta con Daniel Cuervo para proyectos y colaboraciones de software, electrónica, robótica y tecnología a través de Corvo."
+    person_description: "Daniel Cuervo es el creador de Corvo, un taller tecnológico dedicado a la informática, la electrónica y la electricidad."
   work:
     title: "PROYECTOS"
     archive: "BIENVENIDO"
@@ -56,6 +63,13 @@ en:
   hero:
     eyebrow: "TECH WORKSHOP"
     interest: "INTERESTED?"
+  seo:
+    home_title: "Corvo — Daniel Cuervo | Technology Workshop"
+    home_description: "Corvo is Daniel Cuervo's technology workshop: computing, electronics and electricity applied to software, robotics and experimental projects."
+    work_description: "Projects from Corvo, Daniel Cuervo's technology workshop: software, interactive systems, fractal geometry and technical experimentation."
+    about_description: "Meet Daniel Cuervo, creator of Corvo, a technology workshop focused on computing, electronics and electricity."
+    contact_description: "Contact Daniel Cuervo about software, electronics, robotics and technology projects or collaborations through Corvo."
+    person_description: "Daniel Cuervo is the creator of Corvo, a technology workshop focused on computing, electronics and electricity."
   work:
     title: "PROJECTS"
     archive: "WELCOME"

@@ -1,0 +1,12 @@
+brand:
+  name: "Corvo"
+  alternate_names:
+    - "Corvo01"
+    - "corvo01.com"
+
+person:
+  name: "Daniel Cuervo"
+  alternate_name: "Corvo"
+  same_as:
+    - "https://www.linkedin.com/in/danielcuervor/"
+    - "https://github.com/corvo001"

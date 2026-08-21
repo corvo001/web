@@ -2,6 +2,28 @@
 {% if page.layout == 'info-page' and page.section %}
   {% assign active_body_class = 'info-page info-' | append: page.section | append: '-page' %}
 {% endif %}
+{% assign page_lang = page.lang | default: 'es' %}
+{% assign t = site.data.translations[page_lang] %}
+{% assign identity = site.data.identity %}
+{% assign root_url = '/' | absolute_url %}
+{% assign canonical_url = page.url | absolute_url %}
+{% assign website_id = root_url | append: '#website' %}
+{% assign person_id = root_url | append: '#daniel-cuervo' %}
+{% assign seo_title = page.title | append: ' — ' | append: site.title %}
+{% assign seo_description = t.seo.home_description %}
+{% if active_body_class == 'home-page' or active_body_class == 'language-page' %}
+  {% assign seo_title = t.seo.home_title %}
+{% elsif page.layout == 'project' %}
+  {% assign seo_project_list = site.data.projects | where: 'id', page.project_id %}
+  {% assign seo_project = seo_project_list | first %}
+  {% assign seo_description = seo_project.summary[page_lang] %}
+{% elsif page.section == 'about' %}
+  {% assign seo_description = t.seo.about_description %}
+{% elsif page.section == 'contact' %}
+  {% assign seo_description = t.seo.contact_description %}
+{% elsif active_body_class == 'work-page' %}
+  {% assign seo_description = t.seo.work_description %}
+{% endif %}
 {% assign asset_version = site.time | date: '%s' %}
 <!doctype html>
 <html lang="{{ page.lang | default: 'es' }}">
@@ -141,15 +163,25 @@
       } catch (error) {}
     </script>
     {% endif %}
-    <title>{% if page.title and page.title != site.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
-    <meta name="description" content="Corvo">
-    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <title>{{ seo_title }}</title>
+    <meta name="description" content="{{ seo_description | strip_html | strip_newlines }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% if page.translation_key %}
+      {% assign language_alternates = site.pages | where: 'translation_key', page.translation_key %}
+      {% for alternate in language_alternates %}<link rel="alternate" hreflang="{{ alternate.lang }}" href="{{ alternate.url | absolute_url }}">
+      {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ root_url }}">
+    {% elsif page.url == '/' %}
+    <link rel="alternate" hreflang="es" href="{{ '/es/' | absolute_url }}">
+    <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ root_url }}">
+    {% endif %}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Corvo">
     <meta property="og:title" content="Corvo">
     <meta property="og:description" content="Corvo">
-    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:url" content="{{ canonical_url }}">
     <meta property="og:locale" content="{% if page.lang == 'en' %}en_US{% else %}es_ES{% endif %}">
+    <meta property="og:locale:alternate" content="{% if page.lang == 'en' %}es_ES{% else %}en_US{% endif %}">
     <meta property="og:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta property="og:image:url" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta property="og:image:secure_url" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
@@ -162,6 +194,56 @@
     <meta name="twitter:description" content="Corvo">
     <meta name="twitter:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta name="twitter:image:alt" content="Corvo">
+    {% if active_body_class == 'home-page' or active_body_class == 'language-page' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": {{ website_id | jsonify }},
+          "url": {{ root_url | jsonify }},
+          "name": {{ identity.brand.name | jsonify }},
+          "alternateName": {{ identity.brand.alternate_names | jsonify }},
+          "description": {{ t.seo.home_description | jsonify }},
+          "inLanguage": ["es", "en"],
+          "publisher": { "@id": {{ person_id | jsonify }} }
+        },
+        {
+          "@type": "Person",
+          "@id": {{ person_id | jsonify }},
+          "name": {{ identity.person.name | jsonify }},
+          "alternateName": {{ identity.person.alternate_name | jsonify }},
+          "url": {{ root_url | jsonify }},
+          "description": {{ t.seo.person_description | jsonify }},
+          "sameAs": {{ identity.person.same_as | jsonify }}
+        }
+      ]
+    }
+    </script>
+    {% elsif page.section == 'about' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "@id": {{ canonical_url | append: '#profile' | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "name": {{ seo_title | jsonify }},
+      "description": {{ seo_description | jsonify }},
+      "inLanguage": {{ page_lang | jsonify }},
+      "isPartOf": { "@id": {{ website_id | jsonify }} },
+      "mainEntity": {
+        "@type": "Person",
+        "@id": {{ person_id | jsonify }},
+        "name": {{ identity.person.name | jsonify }},
+        "alternateName": {{ identity.person.alternate_name | jsonify }},
+        "url": {{ root_url | jsonify }},
+        "description": {{ t.seo.person_description | jsonify }},
+        "sameAs": {{ identity.person.same_as | jsonify }}
+      }
+    }
+    </script>
+    {% endif %}
     <link rel="icon" href="{{ '/assets/images/favicon-v7.ico' | relative_url }}" sizes="any">
     <link rel="icon" href="{{ '/assets/images/favicon-v7.svg' | relative_url }}" type="image/svg+xml" sizes="any">
     <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v7.png' | relative_url }}" sizes="180x180">
