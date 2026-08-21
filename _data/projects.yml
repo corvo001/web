@@ -35,8 +35,7 @@
   category: "SOFTWARE"
   image: "/assets/images/union/Imagen-del-proyecto.png"
   technologies: [Fractals, Real-time]
-  repository: ""
-  repository_unavailable: true
+  repository: "https://github.com/corvo001/UNION-showcase"
   summary:
     es: "UNION es un motor experimental para generar, transformar y analizar geometrías fractales en tiempo real. Combina funciones matemáticas, deformaciones y morfología dinámica en un entorno manipulable, pensado para descubrir patrones y explorar aplicaciones de la geometría compleja en investigación, arte generativo y prototipado visual."
     en: "UNION is an experimental engine for generating, transforming and analysing fractal geometries in real time. It combines mathematical functions, deformation and dynamic morphology in a manipulable environment built to uncover patterns and explore complex geometry across research, generative art and visual prototyping."
