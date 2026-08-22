@@ -12,7 +12,8 @@
 {% assign search_image_id = root_url | append: '#primaryimage' %}
 {% assign search_image_url = '/assets/images/corvo-google-preview-v1.png' | absolute_url %}
 {% assign webpage_id = canonical_url | append: '#webpage' %}
-{% assign seo_title = page.title | append: ' — ' | append: site.title %}
+{% assign seo_brand = identity.social_preview.title | default: site.title %}
+{% assign seo_title = seo_brand | append: ' · ' | append: page.title %}
 {% assign seo_description = t.seo.home_description %}
 {% if active_body_class == 'language-page' %}
   {% assign seo_title = page.title %}
