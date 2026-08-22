@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="assets/images/logo-readme.png" width="150" alt="Daniel Cuervo logo">
+<img src="assets/images/logo-readme.png" width="150" alt="CORVO logo">
 
-# DANIEL CUERVO
+# CORVO
 
-### TECHNOLOGY WORKSHOP
+### SIGNATURE TECHNOLOGY
 
-Ideas transformed into functional systems through code, creativity and work.
+Software and robotics projects by Daniel Cuervo Ríos.
 
 [**ENTER PORTFOLIO**](https://corvo01.com)
 

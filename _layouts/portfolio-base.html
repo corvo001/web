@@ -8,25 +8,29 @@
 {% assign root_url = '/' | absolute_url %}
 {% assign canonical_url = page.url | absolute_url %}
 {% assign website_id = root_url | append: '#website' %}
-{% assign person_id = root_url | append: '#daniel-cuervo' %}
+{% assign person_id = root_url | append: '#daniel-cuervo-rios' %}
 {% assign search_image_id = root_url | append: '#primaryimage' %}
 {% assign search_image_url = '/assets/images/corvo-google-preview-v1.png' | absolute_url %}
 {% assign webpage_id = canonical_url | append: '#webpage' %}
 {% assign seo_title = page.title | append: ' — ' | append: site.title %}
 {% assign seo_description = t.seo.home_description %}
 {% if active_body_class == 'language-page' %}
-  {% assign seo_title = identity.brand.name %}
+  {% assign seo_title = t.seo.home_title %}
 {% elsif active_body_class == 'home-page' %}
   {% assign seo_title = t.seo.home_title %}
 {% elsif page.layout == 'project' %}
   {% assign seo_project_list = site.data.projects | where: 'id', page.project_id %}
   {% assign seo_project = seo_project_list | first %}
-  {% assign seo_description = seo_project.summary[page_lang] %}
+  {% assign seo_description = seo_project.seo_description[page_lang] | default: seo_project.summary[page_lang] %}
+  {% assign seo_project_image_url = seo_project.image | absolute_url %}
 {% elsif page.section == 'about' %}
+  {% assign seo_title = t.seo.about_title %}
   {% assign seo_description = t.seo.about_description %}
 {% elsif page.section == 'contact' %}
+  {% assign seo_title = t.seo.contact_title %}
   {% assign seo_description = t.seo.contact_description %}
 {% elsif active_body_class == 'work-page' %}
+  {% assign seo_title = t.seo.work_title %}
   {% assign seo_description = t.seo.work_description %}
 {% endif %}
 {% assign asset_version = site.time | date: '%s' %}
@@ -168,36 +172,39 @@
       } catch (error) {}
     </script>
     {% endif %}
-    <title>{{ seo_title }}</title>
-    <meta name="description" content="{{ seo_description | strip_html | strip_newlines }}">
+    <title>{{ seo_title | escape }}</title>
+    <meta name="description" content="{{ seo_description | strip_html | strip_newlines | escape }}">
+    <meta name="author" content="{{ identity.person.name | escape }}">
+    {% if page.layout == 'project' and seo_project.hidden %}<meta name="robots" content="noindex,follow">
+    {% else %}<meta name="robots" content="index,follow,max-image-preview:large">{% endif %}
     <link rel="canonical" href="{{ canonical_url }}">
     {% if page.translation_key %}
       {% assign language_alternates = site.pages | where: 'translation_key', page.translation_key %}
       {% for alternate in language_alternates %}<link rel="alternate" hreflang="{{ alternate.lang }}" href="{{ alternate.url | absolute_url }}">
-      {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ root_url }}">
+      {% endfor %}{% if page.translation_key == 'home' %}<link rel="alternate" hreflang="x-default" href="{{ root_url }}">{% endif %}
     {% elsif page.url == '/' %}
     <link rel="alternate" hreflang="es" href="{{ '/es/' | absolute_url }}">
     <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
     <link rel="alternate" hreflang="x-default" href="{{ root_url }}">
     {% endif %}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Corvo">
+    <meta property="og:title" content="{{ identity.brand.name | escape }}">
     <meta property="og:description" content="&#8203;">
     <meta property="og:url" content="{{ canonical_url }}">
-    <meta property="og:locale" content="{% if page.lang == 'en' %}en_US{% else %}es_ES{% endif %}">
-    <meta property="og:locale:alternate" content="{% if page.lang == 'en' %}es_ES{% else %}en_US{% endif %}">
+    <meta property="og:locale" content="{% if page.lang == 'en' %}en_GB{% else %}es_ES{% endif %}">
+    <meta property="og:locale:alternate" content="{% if page.lang == 'en' %}es_ES{% else %}en_GB{% endif %}">
     <meta property="og:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta property="og:image:url" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta property="og:image:secure_url" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Daniel Cuervo">
+    <meta property="og:image:alt" content="Daniel Cuervo — CORVO">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Corvo">
+    <meta name="twitter:title" content="{{ identity.brand.name | escape }}">
     <meta name="twitter:description" content="&#8203;">
     <meta name="twitter:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
-    <meta name="twitter:image:alt" content="Daniel Cuervo">
+    <meta name="twitter:image:alt" content="Daniel Cuervo — CORVO">
     {% if active_body_class == 'home-page' or active_body_class == 'language-page' %}
     <script type="application/ld+json">
     {
@@ -208,10 +215,9 @@
           "@id": {{ website_id | jsonify }},
           "url": {{ root_url | jsonify }},
           "name": {{ identity.brand.name | jsonify }},
-          "alternateName": {{ identity.brand.alternate_names | jsonify }},
-          "description": {{ t.seo.home_description | jsonify }},
           "inLanguage": ["es", "en"],
           "image": { "@id": {{ search_image_id | jsonify }} },
+          "creator": { "@id": {{ person_id | jsonify }} },
           "publisher": { "@id": {{ person_id | jsonify }} }
         },
         {
@@ -221,7 +227,8 @@
           "contentUrl": {{ search_image_url | jsonify }},
           "width": 1200,
           "height": 1200,
-          "caption": {{ identity.brand.name | jsonify }}
+          "caption": {{ identity.brand.name | jsonify }},
+          "representativeOfPage": true
         },
         {
           "@type": "WebPage",
@@ -229,8 +236,9 @@
           "url": {{ canonical_url | jsonify }},
           "name": {{ seo_title | jsonify }},
           "description": {{ seo_description | jsonify }},
-          "inLanguage": {{ page_lang | jsonify }},
+          "inLanguage": {% if active_body_class == 'language-page' %}["es", "en"]{% else %}{{ page_lang | jsonify }}{% endif %},
           "isPartOf": { "@id": {{ website_id | jsonify }} },
+          "author": { "@id": {{ person_id | jsonify }} },
           "primaryImageOfPage": { "@id": {{ search_image_id | jsonify }} }
         },
         {
@@ -239,7 +247,7 @@
           "name": {{ identity.person.name | jsonify }},
           "alternateName": {{ identity.person.alternate_name | jsonify }},
           "url": {{ root_url | jsonify }},
-          "description": {{ t.seo.person_description | jsonify }},
+          "knowsAbout": ["Software", "Robotics"],
           "sameAs": {{ identity.person.same_as | jsonify }}
         }
       ]
@@ -262,7 +270,108 @@
         "name": {{ identity.person.name | jsonify }},
         "alternateName": {{ identity.person.alternate_name | jsonify }},
         "url": {{ root_url | jsonify }},
-        "description": {{ t.seo.person_description | jsonify }},
+        "knowsAbout": ["Software", "Robotics"],
+        "sameAs": {{ identity.person.same_as | jsonify }}
+      }
+    }
+    </script>
+    {% elsif page.layout == 'project' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": {{ webpage_id | jsonify }},
+          "url": {{ canonical_url | jsonify }},
+          "name": {{ seo_title | jsonify }},
+          "description": {{ seo_description | jsonify }},
+          "inLanguage": {{ page_lang | jsonify }},
+          "isPartOf": { "@id": {{ website_id | jsonify }} },
+          "author": { "@id": {{ person_id | jsonify }} },
+          "mainEntity": { "@id": {{ canonical_url | append: '#project' | jsonify }} },
+          "primaryImageOfPage": {{ seo_project_image_url | jsonify }}
+        },
+        {
+          "@type": "CreativeWork",
+          "@id": {{ canonical_url | append: '#project' | jsonify }},
+          "url": {{ canonical_url | jsonify }},
+          "name": {{ seo_project.name | jsonify }},
+          "description": {{ seo_description | jsonify }},
+          "inLanguage": {{ page_lang | jsonify }},
+          "image": {{ seo_project_image_url | jsonify }},
+          "genre": {{ seo_project.category | jsonify }},
+          "keywords": {{ seo_project.technologies | jsonify }},
+          "copyrightYear": {{ seo_project.year | plus: 0 }},
+          "creator": { "@id": {{ person_id | jsonify }} },
+          "isPartOf": { "@id": {{ website_id | jsonify }} }
+        },
+        {
+          "@type": "Person",
+          "@id": {{ person_id | jsonify }},
+          "name": {{ identity.person.name | jsonify }},
+          "alternateName": {{ identity.person.alternate_name | jsonify }},
+          "url": {{ root_url | jsonify }},
+          "knowsAbout": ["Software", "Robotics"],
+          "sameAs": {{ identity.person.same_as | jsonify }}
+        }
+      ]
+    }
+    </script>
+    {% elsif active_body_class == 'work-page' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": {{ webpage_id | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "name": {{ seo_title | jsonify }},
+      "description": {{ seo_description | jsonify }},
+      "inLanguage": {{ page_lang | jsonify }},
+      "isPartOf": { "@id": {{ website_id | jsonify }} },
+      "author": {
+        "@type": "Person",
+        "@id": {{ person_id | jsonify }},
+        "name": {{ identity.person.name | jsonify }},
+        "url": {{ root_url | jsonify }}
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {% assign item_position = 0 %}
+          {% for project in site.data.projects %}
+            {% unless project.hidden %}
+              {% assign item_position = item_position | plus: 1 %}
+              {% if page_lang == 'es' %}{% assign item_url = '/es/proyectos/' | append: project.id | append: '/' %}{% else %}{% assign item_url = '/en/work/' | append: project.id | append: '/' %}{% endif %}
+              {% if item_position > 1 %},{% endif %}{
+                "@type": "ListItem",
+                "position": {{ item_position }},
+                "name": {{ project.name | jsonify }},
+                "url": {{ item_url | absolute_url | jsonify }}
+              }
+            {% endunless %}
+          {% endfor %}
+        ]
+      }
+    }
+    </script>
+    {% elsif page.section == 'contact' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "@id": {{ webpage_id | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "name": {{ seo_title | jsonify }},
+      "description": {{ seo_description | jsonify }},
+      "inLanguage": {{ page_lang | jsonify }},
+      "isPartOf": { "@id": {{ website_id | jsonify }} },
+      "about": {
+        "@type": "Person",
+        "@id": {{ person_id | jsonify }},
+        "name": {{ identity.person.name | jsonify }},
+        "alternateName": {{ identity.person.alternate_name | jsonify }},
+        "url": {{ root_url | jsonify }},
         "sameAs": {{ identity.person.same_as | jsonify }}
       }
     }

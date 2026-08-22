@@ -6,3 +6,11 @@ unless Object.method_defined?(:tainted?)
     end
   end
 end
+
+unless String.method_defined?(:untaint)
+  class String
+    def untaint
+      self
+    end
+  end
+end

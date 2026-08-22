@@ -25,7 +25,7 @@ layout: portfolio-base
             {% else %}
               <img class="hero-project__media" src="{{ project.image | relative_url }}" alt=""{% if visible_project_index == 0 %} fetchpriority="high"{% else %} loading="lazy"{% endif %} data-project-media>
             {% endif %}
-            <span class="hero-project__interest">{{ t.hero.interest }}</span>
+            <span class="hero-project__interest" aria-hidden="true">{{ project.name }} · {{ project.year }}</span>
             <h3 class="visually-hidden">{{ project.name }}</h3>
           </a>
           {% assign visible_project_index = visible_project_index | plus: 1 %}

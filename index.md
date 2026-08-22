@@ -1,5 +1,5 @@
 ---
 layout: language-selector
-title: "Corvo"
+title: "CORVO"
 permalink: /
 ---

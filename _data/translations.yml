@@ -7,15 +7,17 @@ es:
     contact: "CONTACTO"
   gate_prompt: "Selecciona un idioma"
   hero:
-    eyebrow: "TALLER TECNOLÓGICO"
-    interest: "¿TE INTERESA?"
+    eyebrow: "TECNOLOGÍA DE AUTOR"
   seo:
-    home_title: "Corvo - Taller Tecnológico"
+    home_title: "CORVO — Tecnología de autor | Daniel Cuervo Ríos"
     home_description: "Proyectos de software y robótica."
-    work_description: "Proyectos de Corvo, el taller tecnológico de Daniel Cuervo: software, sistemas interactivos, geometría fractal y experimentación técnica."
-    about_description: "Conoce a Daniel Cuervo, creador de Corvo, un taller tecnológico dedicado a la informática, la electrónica y la electricidad."
-    contact_description: "Contacta con Daniel Cuervo para proyectos y colaboraciones de software, electrónica, robótica y tecnología a través de Corvo."
-    person_description: "Daniel Cuervo es el creador de Corvo, un taller tecnológico dedicado a la informática, la electrónica y la electricidad."
+    work_title: "Proyectos de software y robótica | CORVO"
+    work_description: "Proyectos de software y robótica creados por Daniel Cuervo Ríos bajo el nombre CORVO."
+    about_title: "Daniel Cuervo Ríos | Software y robótica | CORVO"
+    about_description: "Daniel Cuervo Ríos reúne bajo el nombre CORVO sus proyectos de software y robótica y su visión de la tecnología de autor."
+    contact_title: "Contacto con Daniel Cuervo Ríos | CORVO"
+    contact_description: "Contacto de Daniel Cuervo Ríos para proyectos y colaboraciones de software y robótica."
+    person_description: "Daniel Cuervo Ríos crea proyectos de software y robótica bajo el nombre CORVO."
   work:
     title: "PROYECTOS"
     archive: "BIENVENIDO"
@@ -27,14 +29,14 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "INFORMÁTICA | ELECTRÓNICA | ELECTRICIDAD"
+    subtitle: "SOFTWARE | ROBÓTICA"
     body: |
-      Soy Daniel Cuervo y me dedico a la **tecnología**.
-    cta: "¿Qué quieres hacer?"
-    visual_alt: "Una idea atraviesa software, robótica y experimentación hasta convertirse en una herramienta clara con identidad propia."
+      Soy Daniel Cuervo Ríos. **CORVO** reúne mis proyectos de **software y robótica**.
+    cta: "HABLEMOS"
+    visual_alt: "Una idea atraviesa software y robótica hasta convertirse en una herramienta funcional con identidad propia."
   contact:
     title: "CONTACTO"
-    intro: "DISPONIBLE CUANDO ME NECESITES"
+    intro: "CONTACTO DIRECTO"
   project:
     gallery: "Galería"
     repository: "Ver repositorio"
@@ -42,7 +44,7 @@ es:
     category: "Categoría"
     terms:
       "SOFTWARE": "SOFTWARE"
-      "HARDWARE": "HARDWARE"
+      "ROBOTICS": "ROBÓTICA"
       "Simulation": "SIMULACIÓN"
       "Real-time": "TIEMPO REAL"
       "Fractals": "FRACTALES"
@@ -61,15 +63,17 @@ en:
     contact: "CONTACT"
   gate_prompt: "Select a language"
   hero:
-    eyebrow: "TECH WORKSHOP"
-    interest: "INTERESTED?"
+    eyebrow: "SIGNATURE TECHNOLOGY"
   seo:
-    home_title: "Corvo - Technology Workshop"
+    home_title: "CORVO — Signature Technology | Daniel Cuervo Ríos"
     home_description: "Software and robotics projects."
-    work_description: "Projects from Corvo, Daniel Cuervo's technology workshop: software, interactive systems, fractal geometry and technical experimentation."
-    about_description: "Meet Daniel Cuervo, creator of Corvo, a technology workshop focused on computing, electronics and electricity."
-    contact_description: "Contact Daniel Cuervo about software, electronics, robotics and technology projects or collaborations through Corvo."
-    person_description: "Daniel Cuervo is the creator of Corvo, a technology workshop focused on computing, electronics and electricity."
+    work_title: "Software and robotics projects | CORVO"
+    work_description: "Software and robotics projects created by Daniel Cuervo Ríos under the CORVO name."
+    about_title: "Daniel Cuervo Ríos | Software and robotics | CORVO"
+    about_description: "Daniel Cuervo Ríos brings together his software and robotics projects and his signature approach to technology under the CORVO name."
+    contact_title: "Contact Daniel Cuervo Ríos | CORVO"
+    contact_description: "Contact Daniel Cuervo Ríos about software and robotics projects or collaborations."
+    person_description: "Daniel Cuervo Ríos creates software and robotics projects under the CORVO name."
   work:
     title: "PROJECTS"
     archive: "WELCOME"
@@ -81,14 +85,14 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "COMPUTING | ELECTRONICS | ELECTRICITY"
+    subtitle: "SOFTWARE | ROBOTICS"
     body: |
-      I’m Daniel Cuervo, and I work in **technology**.
-    cta: "What do you want to do?"
-    visual_alt: "An idea moves through software, robotics and experimentation until it becomes a clear tool with an identity of its own."
+      I’m Daniel Cuervo Ríos. **CORVO** brings together my **software and robotics** projects.
+    cta: "GET IN TOUCH"
+    visual_alt: "An idea moves through software and robotics until it becomes a functional tool with an identity of its own."
   contact:
     title: "CONTACT"
-    intro: "AVAILABLE WHENEVER YOU NEED"
+    intro: "DIRECT CONTACT"
   project:
     gallery: "Gallery"
     repository: "View repository"
@@ -96,7 +100,7 @@ en:
     category: "Category"
     terms:
       "SOFTWARE": "SOFTWARE"
-      "HARDWARE": "HARDWARE"
+      "ROBOTICS": "ROBOTICS"
       "Simulation": "SIMULATION"
       "Real-time": "REAL-TIME"
       "Fractals": "FRACTALS"

@@ -1,9 +1,12 @@
 {% assign t = site.data.translations[page.lang] %}
+{% capture visible_category_string %}{% for project in site.data.projects %}{% unless project.hidden %}|{{ project.category }}{% endunless %}{% endfor %}{% endcapture %}
+{% assign visible_categories = visible_category_string | remove_first: '|' | split: '|' | uniq %}
 <section class="project-index" aria-labelledby="work-title">
   <header class="project-index__header">
     <h1 id="work-title">{{ t.work.title }}</h1>
   </header>
   <div class="project-index__body">
+    {% if visible_categories.size > 1 %}
     <aside class="project-index__filters" aria-label="{{ t.work.filter }}">
       <details class="project-filter" data-project-filter data-project-filter-current="ALL">
         <summary aria-label="{{ t.work.filter }}">
@@ -16,16 +19,16 @@
             <button type="button" data-project-filter-value="ALL" aria-pressed="true">
               <strong>{{ t.work.all }}</strong><i aria-hidden="true"></i>
             </button>
-            <button type="button" data-project-filter-value="SOFTWARE" aria-pressed="false">
-              <strong>{{ t.project.terms.SOFTWARE }}</strong><i aria-hidden="true"></i>
-            </button>
-            <button type="button" data-project-filter-value="HARDWARE" aria-pressed="false">
-              <strong>{{ t.project.terms.HARDWARE }}</strong><i aria-hidden="true"></i>
-            </button>
+            {% for category in visible_categories %}
+              <button type="button" data-project-filter-value="{{ category }}" aria-pressed="false">
+                <strong>{{ t.project.terms[category] | default: category }}</strong><i aria-hidden="true"></i>
+              </button>
+            {% endfor %}
           </div>
         </div>
       </details>
     </aside>
+    {% endif %}
     <div class="project-index__collection">
       <div class="project-index__grid" data-project-index-grid>
         {% for project in site.data.projects %}

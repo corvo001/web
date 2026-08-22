@@ -715,7 +715,7 @@
       <span class="archive-transition__handoff"></span>
       <span class="archive-transition__shutter archive-transition__shutter--left"></span>
       <span class="archive-transition__shutter archive-transition__shutter--right"></span>
-      <span class="archive-transition__meta">CORVO 001</span>
+      <span class="archive-transition__meta">CORVO</span>
       <strong class="archive-transition__title">${label}</strong>
       <span class="archive-transition__status">${authorizedLabel}</span>`;
     document.documentElement.appendChild(transition);

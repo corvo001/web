@@ -9,6 +9,9 @@
   summary:
     es: "AIDEN es una plataforma modular de investigación OSINT diseñada para descubrir, correlacionar y organizar información pública procedente de distintas fuentes. Su arquitectura integra herramientas especializadas dentro de un flujo reproducible, facilitando el análisis de identidades, relaciones y resultados sin perder trazabilidad durante la investigación."
     en: "AIDEN is a modular OSINT research platform designed to discover, correlate and organise public information from multiple sources. Its architecture brings specialist tools into one reproducible workflow, making it easier to analyse identities, relationships and results while preserving traceability throughout an investigation."
+  seo_description:
+    es: "AIDEN es una plataforma modular de investigación OSINT que descubre, correlaciona y organiza información pública con trazabilidad."
+    en: "AIDEN is a modular OSINT research platform for discovering, correlating and organising public information with traceability."
   gallery:
     - "/assets/images/aiden/aiden-results-graph.jpg"
     - "/assets/images/aiden/aiden-maigret-terminal.jpg"
@@ -25,6 +28,9 @@
   summary:
     es: "Dyson Swarm es un simulador interactivo para diseñar y explorar enjambres de satélites alrededor de una estrella. Permite modificar su cantidad, escala y distribución orbital en tiempo real, observar métricas de cobertura y comparar diferentes arquitecturas de colectores solares a escala astronómica."
     en: "Dyson Swarm is an interactive simulator for designing and exploring satellite swarms around a star. It allows their quantity, scale and orbital distribution to be adjusted in real time, exposes coverage metrics, and supports comparison between different astronomical-scale solar collector architectures."
+  seo_description:
+    es: "DYSON SWARM es un simulador interactivo para diseñar enjambres de satélites y comparar arquitecturas de colectores solares alrededor de una estrella."
+    en: "DYSON SWARM is an interactive simulator for designing satellite swarms and comparing solar-collector architectures around a star."
   gallery:
     - "/assets/images/swarm/DysonSwarm_2.png"
     - "/assets/images/swarm/DysonSwarm_3.png"
@@ -39,6 +45,9 @@
   summary:
     es: "UNION es un motor experimental para generar, transformar y analizar geometrías fractales en tiempo real. Combina funciones matemáticas, deformaciones y morfología dinámica en un entorno manipulable, pensado para descubrir patrones y explorar aplicaciones de la geometría compleja en investigación, arte generativo y prototipado visual."
     en: "UNION is an experimental engine for generating, transforming and analysing fractal geometries in real time. It combines mathematical functions, deformation and dynamic morphology in a manipulable environment built to uncover patterns and explore complex geometry across research, generative art and visual prototyping."
+  seo_description:
+    es: "UNION es un motor interactivo para generar, transformar y analizar geometrías fractales en tiempo real mediante deformación y morfología dinámica."
+    en: "UNION is an interactive engine for generating, transforming and analysing fractal geometry in real time through deformation and dynamic morphology."
   gallery:
     - "/assets/images/union/capture_144410.png"
     - "/assets/images/union/capture_144459.png"

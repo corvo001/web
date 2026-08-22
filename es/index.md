@@ -2,7 +2,7 @@
 layout: portfolio
 lang: es
 translation_key: home
-title: "Corvo"
+title: "CORVO"
 body_class: home-page
 permalink: /es/
 ---
