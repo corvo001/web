@@ -41,8 +41,8 @@
   category: "SOFTWARE"
   image: "/assets/images/union/Imagen-del-proyecto.png"
   preview_image: "/assets/images/union/union-preview-card-7df0a8fb.jpg"
-  video: "/assets/videos/union-preview-7df0a8fb.webm"
-  preview_video: "/assets/videos/union-preview-7df0a8fb.webm"
+  video: "/assets/videos/union-preview-13a319b4.webm"
+  preview_video: "/assets/videos/union-preview-13a319b4.webm"
   technologies: [Fractals, Real-time]
   repository: "https://github.com/corvo001/UNION-showcase"
   summary:

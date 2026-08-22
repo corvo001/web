@@ -5,6 +5,7 @@ body_class: project-page
 {% assign t = site.data.translations[page.lang] %}
 {% assign project_list = site.data.projects | where: 'id', page.project_id %}
 {% assign project = project_list | first %}
+{% assign project_poster = project.preview_image | default: project.image %}
 {% assign localized_category = t.project.terms[project.category] | default: project.category %}
 <a class="skip-link" href="#main">{{ t.skip }}</a>
 {% include portfolio-nav.html %}
@@ -13,9 +14,9 @@ body_class: project-page
     <span class="technical-meta">{{ localized_category }} / {{ project.year }}</span>
     <h1 class="project-display">{{ project.name }}</h1>
   </header>
-  <div class="project-hero-media" style="--project-poster: url('{{ project.image | relative_url }}')" data-project-hero data-project-id="{{ project.id }}">
+  <div class="project-hero-media" style="--project-poster: url('{{ project_poster | relative_url }}')" data-project-hero data-project-id="{{ project.id }}">
     {% if project.video %}
-      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline autoplay preload="auto" fetchpriority="high" aria-label="{{ project.name }}" data-project-hero-media></video>
+      <video class="project-hero-image" src="{{ project.video | relative_url }}" poster="{{ project_poster | relative_url }}" muted loop playsinline autoplay preload="auto" fetchpriority="high" aria-label="{{ project.name }}" data-project-hero-media></video>
       <div class="project-video-controls" data-project-video-controls hidden>
         <button class="project-video-toggle" type="button" aria-label="{{ t.project.pause }}" data-project-video-toggle data-label-play="{{ t.project.play }}" data-label-pause="{{ t.project.pause }}">
           <span class="project-video-toggle__icon" aria-hidden="true"></span>

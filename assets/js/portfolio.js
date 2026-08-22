@@ -1493,9 +1493,27 @@
     });
   });
 
+  const closeProjectIndexPreviews = (immediate = false) => {
+    document.querySelectorAll('.project-index-card').forEach((card) => {
+      card.classList.toggle('is-preview-resetting', immediate);
+      projectIndexControllers.get(card)?.close();
+    });
+    activeProjectIndexController = null;
+  };
+  const restoreProjectIndexTransitions = () => {
+    document.querySelectorAll('.project-index-card.is-preview-resetting').forEach((card) => card.classList.remove('is-preview-resetting'));
+  };
+
   window.addEventListener('scroll', () => activeProjectIndexController?.cancelIfScrolled(), { passive: true });
-  window.addEventListener('pageshow', () => activeProjectIndexController?.close());
-  document.addEventListener('visibilitychange', () => activeProjectIndexController?.close());
+  window.addEventListener('pagehide', () => closeProjectIndexPreviews(true));
+  window.addEventListener('pageshow', () => {
+    closeProjectIndexPreviews(true);
+    window.requestAnimationFrame(restoreProjectIndexTransitions);
+  });
+  document.addEventListener('visibilitychange', () => {
+    closeProjectIndexPreviews(document.hidden);
+    if (!document.hidden) window.requestAnimationFrame(restoreProjectIndexTransitions);
+  });
 
   document.querySelectorAll('[data-home-projects]').forEach((projects) => {
     const slides = [...projects.querySelectorAll('.hero-project')];
