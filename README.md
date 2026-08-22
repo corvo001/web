@@ -6,7 +6,7 @@
 
 ### SIGNATURE TECHNOLOGY
 
-Software and robotics projects by Daniel Cuervo Ríos.
+Software and robotics projects by Daniel Cuervo.
 
 [**ENTER**](https://corvo01.com)
 
