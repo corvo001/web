@@ -1,6 +1,10 @@
 brand:
   name: "CORVO"
 
+social_preview:
+  title: "Corvo"
+  description: "Signature Technology"
+
 person:
   name: "Daniel Cuervo Ríos"
   alternate_name: "Daniel Cuervo"

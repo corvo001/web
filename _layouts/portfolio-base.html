@@ -188,8 +188,8 @@
     <link rel="alternate" hreflang="x-default" href="{{ root_url }}">
     {% endif %}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ identity.brand.name | escape }}">
-    <meta property="og:description" content="&#8203;">
+    <meta property="og:title" content="{{ identity.social_preview.title | escape }}">
+    <meta property="og:description" content="{{ identity.social_preview.description | escape }}">
     <meta property="og:url" content="{{ canonical_url }}">
     <meta property="og:locale" content="{% if page.lang == 'en' %}en_GB{% else %}es_ES{% endif %}">
     <meta property="og:locale:alternate" content="{% if page.lang == 'en' %}es_ES{% else %}en_GB{% endif %}">
@@ -201,8 +201,8 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Daniel Cuervo — CORVO">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ identity.brand.name | escape }}">
-    <meta name="twitter:description" content="&#8203;">
+    <meta name="twitter:title" content="{{ identity.social_preview.title | escape }}">
+    <meta name="twitter:description" content="{{ identity.social_preview.description | escape }}">
     <meta name="twitter:image" content="{{ '/assets/images/social-preview-v17.jpg' | absolute_url }}">
     <meta name="twitter:image:alt" content="Daniel Cuervo — CORVO">
     {% if active_body_class == 'home-page' or active_body_class == 'language-page' %}
