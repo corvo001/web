@@ -8,6 +8,6 @@
 
 Software and robotics projects by Daniel Cuervo Ríos.
 
-[**ENTER PORTFOLIO**](https://corvo01.com)
+[**ENTER**](https://corvo01.com)
 
 </div>
