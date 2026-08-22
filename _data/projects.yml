@@ -40,6 +40,8 @@
   year: "2025"
   category: "SOFTWARE"
   image: "/assets/images/union/Imagen-del-proyecto.png"
+  video: "/assets/videos/union-preview.webm"
+  preview_video: "/assets/videos/union-preview.webm"
   technologies: [Fractals, Real-time]
   repository: "https://github.com/corvo001/UNION-showcase"
   summary:
