@@ -41,9 +41,10 @@
             <a class="project-index-card" href="{{ project_url | relative_url }}" data-project-link data-project-id="{{ project.id }}" data-project-category="{{ project.category }}"{% if project.video %} data-project-video="{{ project.video | relative_url }}"{% endif %}>
               <div class="project-index-card__visual">
                 {% assign card_video = project.preview_video | default: project.video %}
+                {% assign card_poster = project.preview_image | default: project.image %}
                 <span class="project-index-card__aperture">
                   {% if card_video %}
-                    <video class="project-index-card__media" data-src="{{ card_video | relative_url }}" poster="{{ project.image | relative_url }}" muted loop playsinline preload="none" data-project-media></video>
+                    <video class="project-index-card__media" data-src="{{ card_video | relative_url }}" poster="{{ card_poster | relative_url }}" muted loop playsinline preload="none" data-project-media></video>
                   {% else %}
                     <img class="project-index-card__media" src="{{ project.image | relative_url }}" alt="" loading="lazy" data-project-media>
                   {% endif %}

@@ -40,6 +40,7 @@
   year: "2025"
   category: "SOFTWARE"
   image: "/assets/images/union/Imagen-del-proyecto.png"
+  preview_image: "/assets/images/union/union-preview-card-7df0a8fb.jpg"
   video: "/assets/videos/union-preview-7df0a8fb.webm"
   preview_video: "/assets/videos/union-preview-7df0a8fb.webm"
   technologies: [Fractals, Real-time]
