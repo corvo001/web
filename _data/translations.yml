@@ -30,10 +30,10 @@ es:
     empty: "Todavía no hay proyectos en esta categoría."
   about:
     title: "SOBRE MÍ"
-    subtitle: "SOFTWARE | ROBÓTICA"
+    subtitle: "INFORMÁTICA | ELECTRÓNICA | ELECTRICIDAD"
     body: |
-      Soy Daniel Cuervo Ríos. **CORVO** reúne mis proyectos de **software y robótica**.
-    cta: "HABLEMOS"
+      Soy Daniel Cuervo y me dedico a la **tecnología**.
+    cta: "¿Qué quieres hacer?"
     visual_alt: "Una idea atraviesa software y robótica hasta convertirse en una herramienta funcional con identidad propia."
   contact:
     title: "CONTACTO"
@@ -87,10 +87,10 @@ en:
     empty: "There are no projects in this category yet."
   about:
     title: "ABOUT"
-    subtitle: "SOFTWARE | ROBOTICS"
+    subtitle: "COMPUTING | ELECTRONICS | ELECTRICITY"
     body: |
-      I’m Daniel Cuervo Ríos. **CORVO** brings together my **software and robotics** projects.
-    cta: "GET IN TOUCH"
+      I’m Daniel Cuervo, and I work in **technology**.
+    cta: "What do you want to do?"
     visual_alt: "An idea moves through software and robotics until it becomes a functional tool with an identity of its own."
   contact:
     title: "CONTACT"
