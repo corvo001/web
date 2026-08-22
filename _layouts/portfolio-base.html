@@ -9,6 +9,9 @@
 {% assign canonical_url = page.url | absolute_url %}
 {% assign website_id = root_url | append: '#website' %}
 {% assign person_id = root_url | append: '#daniel-cuervo' %}
+{% assign search_image_id = root_url | append: '#primaryimage' %}
+{% assign search_image_url = '/assets/images/corvo-google-preview-v1.png' | absolute_url %}
+{% assign webpage_id = canonical_url | append: '#webpage' %}
 {% assign seo_title = page.title | append: ' — ' | append: site.title %}
 {% assign seo_description = t.seo.home_description %}
 {% if active_body_class == 'language-page' %}
@@ -208,7 +211,27 @@
           "alternateName": {{ identity.brand.alternate_names | jsonify }},
           "description": {{ t.seo.home_description | jsonify }},
           "inLanguage": ["es", "en"],
+          "image": { "@id": {{ search_image_id | jsonify }} },
           "publisher": { "@id": {{ person_id | jsonify }} }
+        },
+        {
+          "@type": "ImageObject",
+          "@id": {{ search_image_id | jsonify }},
+          "url": {{ search_image_url | jsonify }},
+          "contentUrl": {{ search_image_url | jsonify }},
+          "width": 1200,
+          "height": 1200,
+          "caption": {{ identity.brand.name | jsonify }}
+        },
+        {
+          "@type": "WebPage",
+          "@id": {{ webpage_id | jsonify }},
+          "url": {{ canonical_url | jsonify }},
+          "name": {{ seo_title | jsonify }},
+          "description": {{ seo_description | jsonify }},
+          "inLanguage": {{ page_lang | jsonify }},
+          "isPartOf": { "@id": {{ website_id | jsonify }} },
+          "primaryImageOfPage": { "@id": {{ search_image_id | jsonify }} }
         },
         {
           "@type": "Person",
@@ -245,9 +268,9 @@
     }
     </script>
     {% endif %}
-    <link rel="icon" href="{{ '/assets/images/favicon-v7.ico' | relative_url }}" sizes="any">
-    <link rel="icon" href="{{ '/assets/images/favicon-v7.svg' | relative_url }}" type="image/svg+xml" sizes="any">
-    <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v7.png' | relative_url }}" sizes="180x180">
+    <link rel="icon" href="{{ '/assets/images/favicon-v8.svg' | relative_url }}" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="{{ '/assets/images/favicon-v8.ico' | relative_url }}" sizes="64x64 48x48 32x32 16x16">
+    <link rel="apple-touch-icon" href="{{ '/assets/images/apple-touch-icon-v8.png' | relative_url }}" sizes="180x180">
     {% if active_body_class == 'language-page' %}
     <link rel="preload" href="{{ '/assets/images/logo-original-transparent.png' | relative_url }}?v=228737cd" as="image" fetchpriority="high">
     {% endif %}
