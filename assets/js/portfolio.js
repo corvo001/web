@@ -1527,10 +1527,12 @@
     let swipeStartY = 0;
     let swipeTracking = false;
     let suppressProjectClickUntil = 0;
+    let transitionPending = false;
     const history = [active];
     const controls = projects.parentElement?.querySelector('.hero-project-controls');
     const previous = controls?.querySelector('[data-home-project-previous]');
     const next = controls?.querySelector('[data-home-project-next]');
+    const scheduledVideoPauses = new WeakMap();
 
     slides.forEach((slide) => {
       const video = slide.querySelector('video[data-project-media]');
@@ -1550,38 +1552,158 @@
       });
     });
 
-    const show = (index) => {
+    const cancelScheduledVideoPause = (video) => {
+      const pending = scheduledVideoPauses.get(video);
+      if (!pending) return;
+      window.clearTimeout(pending.timeout);
+      pending.slide.removeEventListener('transitionend', pending.onTransitionEnd);
+      scheduledVideoPauses.delete(video);
+    };
+    const pauseVideoAfterFade = (slide, video) => {
+      cancelScheduledVideoPause(video);
+      if (reduceMotion.matches) {
+        clearProjectVideoRetries(video);
+        video.pause();
+        return;
+      }
+      const finish = () => {
+        cancelScheduledVideoPause(video);
+        if (slide.classList.contains('is-active') || slide.classList.contains('is-preparing')) return;
+        clearProjectVideoRetries(video);
+        video.pause();
+      };
+      const onTransitionEnd = (event) => {
+        if (event.target === slide && event.propertyName === 'opacity') finish();
+      };
+      const timeout = window.setTimeout(finish, 1250);
+      scheduledVideoPauses.set(video, { slide, timeout, onTransitionEnd });
+      slide.addEventListener('transitionend', onTransitionEnd);
+    };
+    const waitForMovingVideoFrame = (video) => new Promise((resolve) => {
+      if (!(video instanceof HTMLVideoElement)) {
+        resolve(true);
+        return;
+      }
+
+      let settled = false;
+      let frameRequest = 0;
+      let animationFrame = 0;
+      let fallbackStarted = false;
+      let presentedMediaTime = null;
+      let observedPlaybackTime = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+      const finish = (ready) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        video.removeEventListener('loadeddata', beginFrameCheck);
+        video.removeEventListener('playing', beginFrameCheck);
+        if (frameRequest && video.cancelVideoFrameCallback) video.cancelVideoFrameCallback(frameRequest);
+        if (animationFrame) window.cancelAnimationFrame(animationFrame);
+        resolve(ready);
+      };
+      const fallbackCheck = () => {
+        const playbackTime = Number.isFinite(video.currentTime) ? video.currentTime : observedPlaybackTime;
+        if (!video.paused && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && Math.abs(playbackTime - observedPlaybackTime) > .001) {
+          nextPaint().then(() => finish(true));
+          return;
+        }
+        observedPlaybackTime = playbackTime;
+        animationFrame = window.requestAnimationFrame(fallbackCheck);
+      };
+      const frameCheck = (_now, metadata) => {
+        const mediaTime = Number.isFinite(metadata?.mediaTime) ? metadata.mediaTime : video.currentTime;
+        if (!video.paused && presentedMediaTime !== null && Math.abs(mediaTime - presentedMediaTime) > .001) {
+          finish(true);
+          return;
+        }
+        presentedMediaTime = mediaTime;
+        frameRequest = video.requestVideoFrameCallback(frameCheck);
+      };
+      function beginFrameCheck() {
+        if (settled || fallbackStarted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+        fallbackStarted = true;
+        if (video.requestVideoFrameCallback) frameRequest = video.requestVideoFrameCallback(frameCheck);
+        else animationFrame = window.requestAnimationFrame(fallbackCheck);
+      }
+
+      const timeout = window.setTimeout(() => finish(false), 3000);
+      video.addEventListener('loadeddata', beginFrameCheck);
+      video.addEventListener('playing', beginFrameCheck);
+      beginFrameCheck();
+    });
+    const syncControls = () => {
+      if (previous) previous.disabled = transitionPending || historyIndex === 0;
+      if (next) next.disabled = transitionPending;
+    };
+    const show = async (index) => {
+      if (transitionPending || index === active || !slides[index]) return false;
+      transitionPending = true;
+      syncControls();
+
+      const outgoingIndex = active;
+      const incomingSlide = slides[index];
+      const incomingVideo = incomingSlide.querySelector('video');
+      incomingSlide.classList.add('is-preparing');
+      if (incomingVideo) {
+        cancelScheduledVideoPause(incomingVideo);
+        ensureVideoSource(incomingVideo);
+        primeProjectVideo(incomingVideo);
+        const frameReady = await waitForMovingVideoFrame(incomingVideo);
+        if (!frameReady || document.hidden) {
+          incomingSlide.classList.remove('is-preparing');
+          clearProjectVideoRetries(incomingVideo);
+          incomingVideo.pause();
+          transitionPending = false;
+          syncControls();
+          return false;
+        }
+      } else {
+        await nextPaint();
+      }
+
       active = index;
       slides.forEach((slide, slideIndex) => {
         const isActive = slideIndex === active;
         const video = slide.querySelector('video');
+        slide.classList.remove('is-preparing');
         slide.classList.toggle('is-active', isActive);
         slide.setAttribute('aria-hidden', String(!isActive));
         slide.tabIndex = isActive ? 0 : -1;
         if (video) {
           if (isActive) {
+            cancelScheduledVideoPause(video);
             ensureVideoSource(video);
             primeProjectVideo(video);
+          } else if (slideIndex === outgoingIndex) {
+            pauseVideoAfterFade(slide, video);
           } else {
+            cancelScheduledVideoPause(video);
             clearProjectVideoRetries(video);
             video.pause();
           }
         }
       });
-      if (previous) previous.disabled = historyIndex === 0;
+      transitionPending = false;
+      syncControls();
+      return true;
     };
-    const chooseNext = () => {
+    const chooseNext = async () => {
+      if (transitionPending) return;
       const offset = 1 + Math.floor(Math.random() * (slides.length - 1));
       const newProject = (active + offset) % slides.length;
+      const shown = await show(newProject);
+      if (!shown) return;
       history.splice(historyIndex + 1);
       history.push(newProject);
       historyIndex += 1;
-      show(newProject);
+      syncControls();
     };
-    const choosePrevious = () => {
-      if (historyIndex === 0) return;
+    const choosePrevious = async () => {
+      if (transitionPending || historyIndex === 0) return;
+      const shown = await show(history[historyIndex - 1]);
+      if (!shown) return;
       historyIndex -= 1;
-      show(history[historyIndex]);
+      syncControls();
     };
     const softenDuringScroll = () => {
       projects.classList.add('is-scroll-softened');
@@ -1591,7 +1713,30 @@
       }, 280);
     };
 
-    show(active);
+    slides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === active;
+      const video = slide.querySelector('video');
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', String(!isActive));
+      slide.tabIndex = isActive ? 0 : -1;
+      if (!video) return;
+      if (isActive) {
+        ensureVideoSource(video);
+        primeProjectVideo(video);
+      } else {
+        clearProjectVideoRetries(video);
+        video.pause();
+      }
+    });
+    syncControls();
+    const warmInactiveVideos = () => {
+      slides.forEach((slide, slideIndex) => {
+        if (slideIndex === active) return;
+        const video = slide.querySelector('video');
+        if (video) ensureVideoSource(video);
+      });
+    };
+    window.requestAnimationFrame(warmInactiveVideos);
     previous?.addEventListener('click', choosePrevious);
     next?.addEventListener('click', chooseNext);
     projects.addEventListener('touchstart', (event) => {

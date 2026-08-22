@@ -1048,6 +1048,9 @@ html[lang="es"] .nav-links a:last-child { left: -2px; }
   color: var(--text); text-decoration: none; opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity 1100ms ease, visibility 1100ms ease;
 }
+.hero-project.is-preparing {
+  visibility: visible; opacity: 0; pointer-events: none; transition: none;
+}
 .hero-project.is-active { opacity: 1; visibility: visible; pointer-events: auto; }
 .hero-project::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
