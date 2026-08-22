@@ -15,7 +15,7 @@
 {% assign seo_title = page.title | append: ' — ' | append: site.title %}
 {% assign seo_description = t.seo.home_description %}
 {% if active_body_class == 'language-page' %}
-  {% assign seo_title = t.seo.home_title %}
+  {% assign seo_title = page.title %}
 {% elsif active_body_class == 'home-page' %}
   {% assign seo_title = t.seo.home_title %}
 {% elsif page.layout == 'project' %}
